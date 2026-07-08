@@ -52,11 +52,11 @@ export default function Header() {
     <>
       {/* Sticky Header */}
       <header
-        className={`fixed top-0 left-0 w-full flex items-center z-[10000] transition-all duration-300 ${menuOpen
+        className={`fixed top-0 left-0 w-full flex items-center z-[9000] transition-all duration-300 ${menuOpen
           ? 'bg-transparent border-b border-transparent h-20'
           : scrolled
-            ? 'bg-white/92 h-[70px] shadow-[0_4px_30px_rgba(0,0,0,0.02)] border-b border-[var(--color-border)]/40 backdrop-blur-md'
-            : 'bg-white/80 h-20 border-b border-[var(--color-border)]/40 backdrop-blur-md'
+            ? 'bg-transparent h-[70px] shadow-[0_4px_30px_rgba(0,0,0,0.02)] border-b border-[var(--color-border)]/40 backdrop-blur-md'
+            : 'bg-transparent h-20 border-b border-[var(--color-border)]/40 backdrop-blur-md'
           } ${hideHeader && !menuOpen ? '-translate-y-full' : 'translate-y-0'}`}
       >
         <div className="header-container flex justify-between items-center w-full px-6 md:px-10">
@@ -87,15 +87,15 @@ export default function Header() {
 
       {/* Universal Hamburger Menu Overlay */}
       <div
-        className={`fixed inset-0 w-full h-screen  bg-white backdrop-blur-4xl z-[9999] flex items-center justify-center transition-all duration-500 ${menuOpen ? 'opacity-90 pointer-events-auto visible' : 'opacity-0 pointer-events-none invisible'
+        className={`fixed inset-0 w-full h-screen bg-white/60 backdrop-blur-3xl z-[8999] flex items-center justify-center transition-all duration-500 ${menuOpen ? 'opacity-100 pointer-events-auto visible' : 'opacity-0 pointer-events-none invisible'
           }`}
       >
         <div className={`hb-menu-container w-full px-10 md:px-20 grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr] gap-10 md:gap-20 items-center transition-transform duration-700 ${menuOpen ? 'translate-y-0' : 'translate-y-10'}`}>
           <nav className="hb-nav-links flex flex-col gap-4">
             {['About', 'Articles', 'Journey', 'Community', 'Newsletter', 'Digital Magazine'].map((label, i) => {
               const isPublication = label === 'Digital Magazine';
-              const href = isPublication 
-                ? '/publication' 
+              const href = isPublication
+                ? '/publication'
                 : `/#${label.toLowerCase().replace('journey', 'timeline').replace('newsletter', 'contact').replace('community', 'events')}`;
               return (
                 <a
