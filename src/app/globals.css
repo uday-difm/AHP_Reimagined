@@ -33,6 +33,7 @@
   --animate-float-blobs-3: float-blobs 22s infinite alternate ease-in-out 5s;
   --animate-pulse-slow: pulse-dot 1.8s infinite ease-in-out;
   --animate-marquee: marquee 35s linear infinite;
+  --animate-float-phone: float-phone 6s infinite ease-in-out;
 
   @keyframes float-blobs {
     0% {
@@ -76,6 +77,18 @@
 
     100% {
       transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  @keyframes float-phone {
+    0% {
+      transform: translate3d(0, 0, 0);
+    }
+    50% {
+      transform: translate3d(0, -12px, 0);
+    }
+    100% {
+      transform: translate3d(0, 0, 0);
     }
   }
 }
@@ -155,4 +168,13 @@
 @utility reveal-active {
   opacity: 1 !important;
   transform: none !important;
+}
+
+@utility container {
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
+  width: 100%;
+  max-width: 1200px;
 }
