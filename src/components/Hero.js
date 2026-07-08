@@ -32,10 +32,10 @@ export default function Hero() {
               <span className="badge-meta text-[11.5px] text-muted">Medically Reviewed • Oct 12, 2026</span>
             </div>
             <h1 className="hero-title font-heading font-extrabold text-[48px] md:text-[92px] text-primary leading-[1.05] tracking-[-2px] flex flex-col reveal-text">
-              <span>Building</span>
-              <span className="italic-serif font-serif italic font-normal pl-5 text-accent">wellness</span>
-              <span>into</span>
-              <span className="text-outline text-transparent [-webkit-text-stroke:1.5px_var(--color-primary)] tracking-[-1px]">your Life</span>
+              <span>Building wellness</span>
+
+              <span>into your Life</span>
+
             </h1>
           </div>
           <div className="hero-desc-col pb-3 flex flex-col gap-6 reveal-fade">
