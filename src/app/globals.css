@@ -33,6 +33,7 @@
   --animate-float-blobs-3: float-blobs 22s infinite alternate ease-in-out 5s;
   --animate-pulse-slow: pulse-dot 1.8s infinite ease-in-out;
   --animate-marquee: marquee 35s linear infinite;
+  --animate-float-phone: float-phone 6s infinite ease-in-out;
 
   @keyframes float-blobs {
     0% { transform: translate(0, 0) scale(1) rotate(0deg); }
@@ -48,6 +49,11 @@
   @keyframes marquee {
     0% { transform: translate3d(0, 0, 0); }
     100% { transform: translate3d(-50%, 0, 0); }
+  }
+  @keyframes float-phone {
+    0% { transform: translate3d(0, 0, 0); }
+    50% { transform: translate3d(0, -12px, 0); }
+    100% { transform: translate3d(0, 0, 0); }
   }
 }
 
@@ -65,6 +71,15 @@
     line-height: 1.6;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
   }
 }
 
@@ -123,7 +138,14 @@
   transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@utility reveal-active {
+.active.reveal-text,
+.active.reveal-slide,
+.active.reveal-scale,
+.active.reveal-fade,
+.reveal-active.reveal-text,
+.reveal-active.reveal-slide,
+.reveal-active.reveal-scale,
+.reveal-active.reveal-fade {
   opacity: 1 !important;
   transform: none !important;
 }

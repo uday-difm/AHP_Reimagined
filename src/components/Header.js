@@ -57,7 +57,7 @@ export default function Header() {
         } ${hideHeader ? '-translate-y-full' : 'translate-y-0'}`}
       >
         <div className="header-container flex justify-between items-center w-full max-w-[1200px] mx-auto px-6 md:px-10">
-          <a href="#" className="logo-link flex items-center">
+          <a href="/" className="logo-link flex items-center">
             <Image
               src="/images/Logo-web.png"
               alt="A Health Place Logo"
@@ -70,16 +70,16 @@ export default function Header() {
 
           {/* Desktop Nav */}
           <nav className="nav-desktop hidden md:flex items-center gap-8">
-            <a href="#about" className="nav-item text-sm font-medium text-secondary relative py-1.5 transition-colors hover:text-primary after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all after:duration-300 hover:after:w-full">About</a>
-            <a href="#articles" className="nav-item text-sm font-medium text-secondary relative py-1.5 transition-colors hover:text-primary after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all after:duration-300 hover:after:w-full">Articles</a>
-            <a href="#timeline" className="nav-item text-sm font-medium text-secondary relative py-1.5 transition-colors hover:text-primary after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all after:duration-300 hover:after:w-full">Journey</a>
-            <a href="#events" className="nav-item text-sm font-medium text-secondary relative py-1.5 transition-colors hover:text-primary after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all after:duration-300 hover:after:w-full">Community</a>
-            <a href="#contact" className="nav-item text-sm font-medium text-secondary relative py-1.5 transition-colors hover:text-primary after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all after:duration-300 hover:after:w-full">Newsletter</a>
+            <a href="/#about" className="nav-item text-sm font-medium text-secondary relative py-1.5 transition-colors hover:text-primary after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all after:duration-300 hover:after:w-full">About</a>
+            <a href="/#articles" className="nav-item text-sm font-medium text-secondary relative py-1.5 transition-colors hover:text-primary after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all after:duration-300 hover:after:w-full">Articles</a>
+            <a href="/#timeline" className="nav-item text-sm font-medium text-secondary relative py-1.5 transition-colors hover:text-primary after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all after:duration-300 hover:after:w-full">Journey</a>
+            <a href="/#events" className="nav-item text-sm font-medium text-secondary relative py-1.5 transition-colors hover:text-primary after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all after:duration-300 hover:after:w-full">Community</a>
+            <a href="/#contact" className="nav-item text-sm font-medium text-secondary relative py-1.5 transition-colors hover:text-primary after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all after:duration-300 hover:after:w-full">Newsletter</a>
           </nav>
 
           {/* Action Button */}
           <div className="header-actions flex items-center gap-4 mr-[70px] md:mr-0">
-            <a href="#contact" className="btn-primary hover-glow bg-primary text-white px-6 py-3 rounded-full font-semibold text-[13.5px] border border-primary hover:bg-transparent hover:text-primary transition-all duration-500 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(26,26,46,0.12)]">
+            <a href="/#contact" className="btn-primary hover-glow bg-primary text-white px-6 py-3 rounded-full font-semibold text-[13.5px] border border-primary hover:bg-transparent hover:text-primary transition-all duration-500 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(26,26,46,0.12)]">
               Subscribe
             </a>
           </div>
@@ -110,7 +110,7 @@ export default function Header() {
             {['About', 'Articles', 'Journey', 'Community', 'Newsletter'].map((label, i) => (
               <a
                 key={i}
-                href={`#${label.toLowerCase().replace('journey', 'timeline').replace('newsletter', 'contact').replace('community', 'events')}`}
+                href={`/#${label.toLowerCase().replace('journey', 'timeline').replace('newsletter', 'contact').replace('community', 'events')}`}
                 onClick={() => setMenuOpen(false)}
                 style={{ transitionDelay: `${i * 0.1}s` }}
                 className={`hb-nav-item font-heading font-extrabold text-[36px] sm:text-[48px] md:text-[64px] text-primary no-underline leading-[1.1] tracking-[-2px] inline-block hover:text-accent hover:translate-x-3 transition-all duration-500 ${

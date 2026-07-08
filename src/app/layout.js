@@ -1,5 +1,7 @@
 import { Inter, Outfit, Playfair_Display } from "next/font/google";
 import "./globals.css";
+import CustomCursor from "@/components/CustomCursor";
+import BackdropBlobs from "@/components/BackdropBlobs";
 
 const inter = Inter({
   variable: "--font-body",
@@ -29,6 +31,8 @@ export default function RootLayout({ children }) {
       className={`${inter.variable} ${outfit.variable} ${playfair.variable}`}
     >
       <body>
+        <CustomCursor />
+        <BackdropBlobs />
         {children}
       </body>
     </html>

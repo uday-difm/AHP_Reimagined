@@ -1,8 +1,6 @@
 'use client';
 
 import { useEffect } from 'react';
-import CustomCursor from '@/components/CustomCursor';
-import BackdropBlobs from '@/components/BackdropBlobs';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import About from '@/components/About';
@@ -20,7 +18,7 @@ export default function Home() {
     const revealCallback = (entries, observer) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('reveal-active');
+          entry.target.classList.add('active');
           observer.unobserve(entry.target);
         }
       });
@@ -38,9 +36,6 @@ export default function Home() {
 
   return (
     <>
-      {/* Global Animation Utilities */}
-      <CustomCursor />
-      <BackdropBlobs />
 
       {/* Persistent Navigation */}
       <Header />
