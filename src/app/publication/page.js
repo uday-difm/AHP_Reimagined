@@ -20,10 +20,34 @@ const trustBadges = [
 ];
 
 const recentIssues = [
-  { season: 'WINTER 2023', title: 'The Sleep Revolution', img: '/images/mag_sleep.png' },
-  { season: 'FALL 2023',   title: 'Holistic Nutrition',   img: '/images/mag_nutrition.png' },
-  { season: 'SUMMER 2023', title: 'The Strength Within',  img: '/images/mag_strength.png' },
-  { season: 'SPRING 2023', title: 'Digital Detox',        img: '/images/mag_detox.png' },
+  {
+    season: 'WINTER 2023',
+    title: 'The Sleep Revolution',
+    slug: 'the-sleep-revolution',
+    img: '/images/mag_sleep.png',
+    contents: ['Glymphatic Clearance', 'Sleep Cycle Science', 'Behavioral Routines', 'Circadian Alignments']
+  },
+  {
+    season: 'FALL 2023',
+    title: 'Holistic Nutrition',
+    slug: 'holistic-nutrition',
+    img: '/images/mag_nutrition.png',
+    contents: ['Gut Microbiome Health', 'Prebiotics & Fibers', 'Mindful Eating Keys', 'Caloric Realignment']
+  },
+  {
+    season: 'SUMMER 2023',
+    title: 'The Strength Within',
+    slug: 'the-strength-within',
+    img: '/images/mag_strength.png',
+    contents: ['Muscular Longevity', 'Postural Alignments', 'Core Stabilization', 'Mobility & Energy']
+  },
+  {
+    season: 'SPRING 2023',
+    title: 'Digital Detox',
+    slug: 'digital-detox',
+    img: '/images/mag_detox.png',
+    contents: ['Screen Exhaustion', 'Prefrontal Decompress', 'App Boundaries', 'Attention Currencies']
+  },
 ];
 
 function CookieConsent() {
@@ -116,22 +140,56 @@ export default function PublicationPage() {
         <div className="container">
           <div className="flex flex-col md:flex-row items-center gap-14">
 
-            {/* Left — 3D Magazine Cover */}
-            <div className="flex-shrink-0 reveal-scale">
-              <Link href="/article/the-mindfulness-issue" className="relative w-[220px] md:w-[260px] group cursor-pointer block">
-                <div className="absolute inset-0 translate-x-3.5 translate-y-3.5 bg-black/10 rounded-2xl blur-md transition-transform duration-500 group-hover:translate-x-5 group-hover:translate-y-5" />
-                <div className="absolute inset-0 translate-x-2 translate-y-1.5 bg-accent/15 rounded-2xl transition-transform duration-500 group-hover:scale-105" />
-                <div className="relative rounded-2xl overflow-hidden shadow-[0_20px_48px_rgba(0,0,0,0.06)] border border-white/60 transition-transform duration-500 group-hover:scale-[1.03] group-hover:-translate-y-2">
+            {/* Left — 3D Magazine Cover (Flipping on Hover) */}
+            <div className="flex-shrink-0 reveal-scale [perspective:1000px] w-[220px] md:w-[260px] h-[290px] md:h-[340px] relative group cursor-pointer">
+              
+              {/* Shadow and Background glows that shift slightly */}
+              <div className="absolute inset-0 translate-x-3.5 translate-y-3.5 bg-black/10 rounded-2xl blur-md transition-transform duration-500 group-hover:translate-x-5 group-hover:translate-y-5" />
+              <div className="absolute inset-0 translate-x-2 translate-y-1.5 bg-accent/15 rounded-2xl transition-transform duration-500 group-hover:scale-105" />
+
+              {/* The Flipping Card */}
+              <div className="w-full h-full relative transition-transform duration-[800ms] [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
+                
+                {/* Front Face (Cover Image) */}
+                <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] rounded-2xl overflow-hidden shadow-2xl border border-white/60">
                   <Image
                     src="/images/mag_mindfulness.png"
                     alt="The Mindfulness Issue – Spring 2024"
-                    width={260}
-                    height={340}
-                    className="w-full object-cover"
+                    fill
+                    sizes="(max-width: 768px) 220px, 260px"
+                    className="object-cover"
                     priority
                   />
                 </div>
-              </Link>
+
+                {/* Back Face (Table of Contents / Editorial summary) */}
+                <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)] bg-[#1e4a45] rounded-2xl p-6 text-white flex flex-col justify-between shadow-2xl border border-white/20 select-none">
+                  <div className="flex flex-col gap-4 text-left">
+                    <div className="border-b border-white/25 pb-3">
+                      <span className="text-[10px] font-bold text-accent uppercase tracking-[2px] block mb-1">EDITORIAL BOARD</span>
+                      <h4 className="font-heading font-extrabold text-[15px] md:text-[17px] text-white tracking-[-0.5px]">Spring 2024 Issue</h4>
+                    </div>
+                    
+                    <div className="flex flex-col gap-2.5">
+                      <span className="text-[11px] text-white/50 font-bold uppercase tracking-[1px] block">Inside This Issue:</span>
+                      <ul className="text-[12.5px] leading-relaxed text-white/90 list-disc pl-4 space-y-1.5 font-medium">
+                        <li>Neuroscience of Focus</li>
+                        <li>Anxiety Somatic Resets</li>
+                        <li>Circadian Rhythms & Sleep</li>
+                        <li>Dosha-Balanced Nutrition</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <Link 
+                    href="/article/the-mindfulness-issue"
+                    className="w-full text-center bg-white text-primary font-bold text-[12px] py-2.5 rounded-full hover:bg-accent hover:text-white transition-all duration-300 shadow-md no-underline block"
+                  >
+                    Read Digital Issue →
+                  </Link>
+                </div>
+
+              </div>
             </div>
 
             {/* Right — Info */}
@@ -172,13 +230,12 @@ export default function PublicationPage() {
         </div>
       </section>
 
-      {/* Trust Badges Bar */}
+      {/* Trust Badges Bar (Text Only) */}
       <div className="bg-white border-y border-slate-200/50 shadow-[0_2px_12px_rgba(0,0,0,0.01)] py-5 relative">
         <div className="container">
           <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16">
             {trustBadges.map((b, i) => (
               <div key={i} className="flex items-center gap-2.5">
-                <span className="text-lg">{b.icon}</span>
                 <span className="text-[#2a5a52] text-[11px] font-bold uppercase tracking-wider">{b.label}</span>
               </div>
             ))}
@@ -202,31 +259,64 @@ export default function PublicationPage() {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-8">
             {recentIssues.map((issue, i) => {
-              const slug = issue.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+              const slug = issue.slug || issue.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
               return (
-                <Link
+                <div
                   key={i}
-                  href={`/article/${slug}`}
                   ref={el => cardRefs.current[i] = el}
                   onMouseMove={(e) => handleCardMouseMove(e, i)}
                   onMouseLeave={() => handleCardMouseLeave(i)}
                   style={{ transitionDelay: `${i * 0.1}s` }}
-                  className="project-card tilt-card bg-bg-light rounded-[20px] overflow-hidden border border-slate-200 transition-all duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer flex flex-col h-full [transform-style:preserve-3d] [perspective:1000px] hover:border-accent/30 hover:shadow-[0_16px_40px_rgba(31,185,251,0.05)] reveal-slide p-4 no-underline animate-hover"
+                  className="project-card tilt-card bg-bg-light rounded-[20px] overflow-hidden border border-slate-200 transition-all duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer flex flex-col [transform-style:preserve-3d] [perspective:1000px] hover:border-accent/30 hover:shadow-[0_16px_40px_rgba(31,185,251,0.05)] reveal-slide p-4 min-h-[360px] md:min-h-[420px] group relative"
                 >
-                  <div className="relative rounded-xl overflow-hidden shadow-[0_10px_24px_rgba(0,0,0,0.03)] border border-slate-100 transition-all duration-500 mb-4 [transform:translateZ(20px)]">
-                    <Image
-                      src={issue.img}
-                      alt={issue.title}
-                      width={220}
-                      height={290}
-                      className="w-full object-cover"
-                    />
+                  {/* The Flipping Card Wrapper */}
+                  <div className="w-full h-full relative transition-transform duration-[800ms] [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] flex flex-col flex-grow">
+                    
+                    {/* Front Face */}
+                    <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] flex flex-col justify-between">
+                      <div className="relative rounded-xl overflow-hidden shadow-[0_10px_24px_rgba(0,0,0,0.03)] border border-slate-100 transition-all duration-500 mb-4 flex-grow h-[220px] md:h-[280px]">
+                        <Image
+                          src={issue.img}
+                          alt={issue.title}
+                          fill
+                          sizes="(max-width: 768px) 50vw, 25vw"
+                          className="object-cover"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1.5 mt-auto">
+                        <p className="text-accent text-[10px] font-bold uppercase tracking-wider">{issue.season}</p>
+                        <p className="text-primary font-heading font-semibold text-sm leading-snug">{issue.title}</p>
+                      </div>
+                    </div>
+
+                    {/* Back Face */}
+                    <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)] bg-[#1e4a45] rounded-xl p-5 text-white flex flex-col justify-between shadow-2xl border border-white/20 select-none">
+                      <div className="flex flex-col gap-3 text-left">
+                        <div className="border-b border-white/20 pb-2.5">
+                          <span className="text-[9px] font-bold text-accent uppercase tracking-[1.5px] block mb-0.5">{issue.season}</span>
+                          <h4 className="font-heading font-extrabold text-[13px] md:text-[14px] text-white leading-tight">{issue.title}</h4>
+                        </div>
+                        
+                        <div className="flex flex-col gap-2">
+                          <span className="text-[10px] text-white/50 font-bold uppercase tracking-[1px] block">Inside:</span>
+                          <ul className="text-[11px] md:text-[12px] leading-relaxed text-white/90 list-disc pl-3.5 space-y-1 font-medium">
+                            {issue.contents.map((item, idx) => (
+                              <li key={idx}>{item}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+
+                      <Link 
+                        href={`/article/${slug}`}
+                        className="w-full text-center bg-white text-primary font-bold text-[10.5px] py-2 rounded-full hover:bg-accent hover:text-white transition-all duration-300 shadow-md no-underline block"
+                      >
+                        Read Issue →
+                      </Link>
+                    </div>
+
                   </div>
-                  <div className="[transform:translateZ(10px)] flex flex-col gap-1.5 flex-grow">
-                    <p className="text-accent text-[10px] font-bold uppercase tracking-wider">{issue.season}</p>
-                    <p className="text-primary font-heading font-semibold text-sm leading-snug group-hover:text-accent transition-colors">{issue.title}</p>
-                  </div>
-                </Link>
+                </div>
               );
             })}
           </div>
