@@ -118,7 +118,7 @@ export default function PublicationPage() {
 
             {/* Left — 3D Magazine Cover */}
             <div className="flex-shrink-0 reveal-scale">
-              <div className="relative w-[220px] md:w-[260px] group cursor-pointer">
+              <Link href="/article/the-mindfulness-issue" className="relative w-[220px] md:w-[260px] group cursor-pointer block">
                 <div className="absolute inset-0 translate-x-3.5 translate-y-3.5 bg-black/10 rounded-2xl blur-md transition-transform duration-500 group-hover:translate-x-5 group-hover:translate-y-5" />
                 <div className="absolute inset-0 translate-x-2 translate-y-1.5 bg-accent/15 rounded-2xl transition-transform duration-500 group-hover:scale-105" />
                 <div className="relative rounded-2xl overflow-hidden shadow-[0_20px_48px_rgba(0,0,0,0.06)] border border-white/60 transition-transform duration-500 group-hover:scale-[1.03] group-hover:-translate-y-2">
@@ -131,7 +131,7 @@ export default function PublicationPage() {
                     priority
                   />
                 </div>
-              </div>
+              </Link>
             </div>
 
             {/* Right — Info */}
@@ -150,12 +150,12 @@ export default function PublicationPage() {
               </p>
 
               <div className="flex flex-wrap gap-4 mb-10">
-                <button className="btn-primary hover-glow bg-primary text-white px-7 py-3.5 rounded-full font-bold text-[13.5px] border border-primary hover:bg-transparent hover:text-primary transition-all duration-500 hover:-translate-y-0.5 shadow-md cursor-pointer">
+                <Link href="/article/the-mindfulness-issue" className="btn-primary hover-glow bg-primary text-white px-7 py-3.5 rounded-full font-bold text-[13.5px] border border-primary hover:bg-transparent hover:text-primary transition-all duration-500 hover:-translate-y-0.5 shadow-md cursor-pointer flex items-center justify-center no-underline">
                   Read Digital Issue
-                </button>
-                <button className="border-2 border-primary/20 text-primary hover:border-primary font-bold text-[13.5px] px-7 py-3.5 rounded-full hover:bg-primary hover:text-white transition-all duration-500 hover:-translate-y-0.5 cursor-pointer">
+                </Link>
+                <a href="#recent-issues" className="border-2 border-primary/20 text-primary hover:border-primary font-bold text-[13.5px] px-7 py-3.5 rounded-full hover:bg-primary hover:text-white transition-all duration-500 hover:-translate-y-0.5 cursor-pointer flex items-center justify-center no-underline">
                   Browse Archive
-                </button>
+                </a>
               </div>
 
               <div className="flex flex-wrap gap-10 pt-8 border-t border-slate-200">
@@ -187,7 +187,7 @@ export default function PublicationPage() {
       </div>
 
       {/* Recent Issues Gallery */}
-      <section className="py-20 bg-white rounded-t-[40px] shadow-[0_-20px_40px_rgba(0,0,0,0.01)] relative">
+      <section id="recent-issues" className="py-20 bg-white rounded-t-[40px] shadow-[0_-20px_40px_rgba(0,0,0,0.01)] relative">
         <div className="container">
           <div className="flex items-start justify-between mb-10 reveal-slide">
             <div>
@@ -201,30 +201,34 @@ export default function PublicationPage() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-8">
-            {recentIssues.map((issue, i) => (
-              <div
-                key={i}
-                ref={el => cardRefs.current[i] = el}
-                onMouseMove={(e) => handleCardMouseMove(e, i)}
-                onMouseLeave={() => handleCardMouseLeave(i)}
-                style={{ transitionDelay: `${i * 0.1}s` }}
-                className="project-card tilt-card bg-bg-light rounded-[20px] overflow-hidden border border-slate-200 transition-all duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer flex flex-col h-full [transform-style:preserve-3d] [perspective:1000px] hover:border-accent/30 hover:shadow-[0_16px_40px_rgba(31,185,251,0.05)] reveal-slide p-4"
-              >
-                <div className="relative rounded-xl overflow-hidden shadow-[0_10px_24px_rgba(0,0,0,0.03)] border border-slate-100 transition-all duration-500 mb-4 [transform:translateZ(20px)]">
-                  <Image
-                    src={issue.img}
-                    alt={issue.title}
-                    width={220}
-                    height={290}
-                    className="w-full object-cover"
-                  />
-                </div>
-                <div className="[transform:translateZ(10px)] flex flex-col gap-1.5 flex-grow">
-                  <p className="text-accent text-[10px] font-bold uppercase tracking-wider">{issue.season}</p>
-                  <p className="text-primary font-heading font-semibold text-sm leading-snug group-hover:text-accent transition-colors">{issue.title}</p>
-                </div>
-              </div>
-            ))}
+            {recentIssues.map((issue, i) => {
+              const slug = issue.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+              return (
+                <Link
+                  key={i}
+                  href={`/article/${slug}`}
+                  ref={el => cardRefs.current[i] = el}
+                  onMouseMove={(e) => handleCardMouseMove(e, i)}
+                  onMouseLeave={() => handleCardMouseLeave(i)}
+                  style={{ transitionDelay: `${i * 0.1}s` }}
+                  className="project-card tilt-card bg-bg-light rounded-[20px] overflow-hidden border border-slate-200 transition-all duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer flex flex-col h-full [transform-style:preserve-3d] [perspective:1000px] hover:border-accent/30 hover:shadow-[0_16px_40px_rgba(31,185,251,0.05)] reveal-slide p-4 no-underline animate-hover"
+                >
+                  <div className="relative rounded-xl overflow-hidden shadow-[0_10px_24px_rgba(0,0,0,0.03)] border border-slate-100 transition-all duration-500 mb-4 [transform:translateZ(20px)]">
+                    <Image
+                      src={issue.img}
+                      alt={issue.title}
+                      width={220}
+                      height={290}
+                      className="w-full object-cover"
+                    />
+                  </div>
+                  <div className="[transform:translateZ(10px)] flex flex-col gap-1.5 flex-grow">
+                    <p className="text-accent text-[10px] font-bold uppercase tracking-wider">{issue.season}</p>
+                    <p className="text-primary font-heading font-semibold text-sm leading-snug group-hover:text-accent transition-colors">{issue.title}</p>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>
