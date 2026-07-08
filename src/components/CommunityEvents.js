@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import Link from 'next/link';
 
 export default function CommunityEvents() {
   return (
@@ -12,9 +11,9 @@ export default function CommunityEvents() {
             <p className="community-text text-[16px] leading-[1.7] text-secondary">
               We hold regular group nature walks, online yoga classes, and stress management seminars hosted by clinical professionals to keep you connected.
             </p>
-            <Link href="/publication" className="btn-text text-sm font-bold text-primary no-underline inline-flex items-center gap-2 hover:translate-x-1 transition-all duration-300">
+            <a href="#" className="btn-text text-sm font-bold text-primary no-underline inline-flex items-center gap-2 hover:translate-x-1 transition-all duration-300">
               View publication archives <span className="arrow transition-transform duration-300">→</span>
-            </Link>
+            </a>
           </div>
 
           <div className="community-featured reveal-scale">
