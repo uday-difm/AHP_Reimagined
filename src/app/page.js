@@ -585,28 +585,22 @@ export default function Home() {
       </section>
 
       {/* Timeline Section */}
-      <section id="timeline" className="timeline-section py-[100px] bg-bg-timeline rounded-t-[40px] relative">
+      <section id="timeline" className="timeline-section py-[100px] bg-bg-timeline rounded-t-[40px] relative overflow-hidden">
         <div className="container">
           <div className="section-title-center text-center max-w-[600px] mx-auto mb-16 reveal-slide">
             <span className="section-tag text-[11px] font-bold tracking-[2px] text-accent uppercase mb-3 block">MILESTONES</span>
             <h2 className="section-title text-white-section font-heading font-extrabold text-[32px] md:text-[44px] text-primary tracking-[-1px]">Our medical advisory journey</h2>
           </div>
 
-          {/* Interactive Horizontal Slider */}
-          <div className="timeline-slider-container relative overflow-hidden mt-12 pb-8 cursor-grab active:cursor-grabbing reveal-scale">
-            <div
-              ref={sliderRef}
-              onMouseDown={handleSliderMouseDown}
-              onMouseUp={handleSliderMouseUp}
-              onMouseLeave={handleSliderMouseUp}
-              onMouseMove={handleSliderMouseMove}
-              onScroll={handleSliderScroll}
-              className="timeline-slider-track flex gap-8 overflow-x-auto scrollbar-none transition-transform duration-500 select-none"
-            >
+          {/* Infinite Marquee Container */}
+          <div className="timeline-marquee-container relative w-full overflow-hidden mt-12 pb-8 reveal-scale">
+            <div className="flex gap-8 w-max animate-marquee hover:[animation-play-state:paused] py-2">
+              
+              {/* First Set of Slides */}
               {timelineSlides.map((slide, i) => (
                 <div
-                  key={i}
-                  className="timeline-slide flex-[0_0_380px] bg-white rounded-[24px] p-8 shadow-[0_10px_30px_rgba(0,0,0,0.02)] flex flex-col gap-5 select-none"
+                  key={`first-${i}`}
+                  className="timeline-slide flex-[0_0_380px] bg-white rounded-[24px] p-8 shadow-[0_10px_30px_rgba(0,0,0,0.02)] border border-slate-100 flex flex-col gap-5 select-none"
                 >
                   <div className="slide-header flex justify-between items-center border-b border-slate-200 pb-3">
                     <span className="slide-year font-heading font-extrabold text-[28px] text-primary">{slide.year}</span>
@@ -627,32 +621,33 @@ export default function Home() {
                   </div>
                 </div>
               ))}
-            </div>
 
-            {/* Slider Controls */}
-            <div className="slider-controls mt-10 flex items-center justify-between gap-10">
-              <div className="progress-bar-bg flex-grow h-1 bg-primary/10 rounded-full relative overflow-hidden">
+              {/* Second Set of Slides (Duplicated for seamless loop) */}
+              {timelineSlides.map((slide, i) => (
                 <div
-                  className="progress-bar-fill absolute top-0 left-0 h-full bg-primary rounded-full transition-all duration-300"
-                  style={{ width: progressWidth }}
-                />
-              </div>
-              <div className="slider-buttons flex gap-4">
-                <button
-                  onClick={slideLeft}
-                  className="slider-btn bg-white border border-slate-200 text-primary w-12 h-12 rounded-full flex items-center justify-center cursor-pointer transition-transform hover:bg-primary hover:text-white hover:scale-105"
-                  aria-label="Previous Slide"
+                  key={`second-${i}`}
+                  className="timeline-slide flex-[0_0_380px] bg-white rounded-[24px] p-8 shadow-[0_10px_30px_rgba(0,0,0,0.02)] border border-slate-100 flex flex-col gap-5 select-none"
                 >
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-                </button>
-                <button
-                  onClick={slideRight}
-                  className="slider-btn bg-white border border-slate-200 text-primary w-12 h-12 rounded-full flex items-center justify-center cursor-pointer transition-transform hover:bg-primary hover:text-white hover:scale-105"
-                  aria-label="Next Slide"
-                >
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </button>
-              </div>
+                  <div className="slide-header flex justify-between items-center border-b border-slate-200 pb-3">
+                    <span className="slide-year font-heading font-extrabold text-[28px] text-primary">{slide.year}</span>
+                    <span className="slide-phase text-[11px] font-bold text-accent bg-accent/10 px-2.5 py-1 rounded-full uppercase">{slide.phase}</span>
+                  </div>
+                  <div className="slide-body flex flex-col gap-3">
+                    <h4 className="slide-title font-heading font-bold text-[16px] text-primary">{slide.title}</h4>
+                    <p className="slide-desc text-[13px] text-secondary leading-relaxed">{slide.desc}</p>
+                    <div className="slide-image relative mt-2 h-[140px] rounded-xl overflow-hidden">
+                      <Image
+                        src={slide.img}
+                        alt={slide.title}
+                        fill
+                        className="object-cover"
+                        sizes="380px"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+
             </div>
           </div>
         </div>
