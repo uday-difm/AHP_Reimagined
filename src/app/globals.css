@@ -84,9 +84,11 @@
     0% {
       transform: translate3d(0, 0, 0);
     }
+
     50% {
       transform: translate3d(0, -12px, 0);
     }
+
     100% {
       transform: translate3d(0, 0, 0);
     }
@@ -176,5 +178,4 @@
   padding-left: 2.5rem;
   padding-right: 2.5rem;
   width: 100%;
-  max-width: 1200px;
 }
