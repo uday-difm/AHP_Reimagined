@@ -60,7 +60,7 @@ export default function Header() {
           } ${hideHeader && !menuOpen ? '-translate-y-full' : 'translate-y-0'}`}
       >
         <div className="header-container flex justify-between items-center w-full px-6 md:px-10">
-          <a href="#" className="logo-link flex items-center">
+          <a href="/" className="logo-link flex items-center">
             <Image
               src="/images/Logo-web.png"
               alt="A Health Place Logo"
@@ -92,18 +92,24 @@ export default function Header() {
       >
         <div className={`hb-menu-container w-full px-10 md:px-20 grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr] gap-10 md:gap-20 items-center transition-transform duration-700 ${menuOpen ? 'translate-y-0' : 'translate-y-10'}`}>
           <nav className="hb-nav-links flex flex-col gap-4">
-            {['About', 'Articles', 'Journey', 'Community', 'Newsletter'].map((label, i) => (
-              <a
-                key={i}
-                href={`#${label.toLowerCase().replace('journey', 'timeline').replace('newsletter', 'contact').replace('community', 'events')}`}
-                onClick={() => setMenuOpen(false)}
-                style={{ transitionDelay: `${i * 0.1}s` }}
-                className={`hb-nav-item font-heading font-extrabold text-[36px] sm:text-[48px] md:text-[64px] text-primary no-underline leading-[1.1] tracking-[-2px] inline-block hover:text-accent hover:translate-x-3 transition-all duration-500 ${menuOpen ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'
-                  }`}
-              >
-                {label}
-              </a>
-            ))}
+            {['About', 'Articles', 'Journey', 'Community', 'Newsletter', 'Digital Magazine'].map((label, i) => {
+              const isPublication = label === 'Digital Magazine';
+              const href = isPublication 
+                ? '/publication' 
+                : `/#${label.toLowerCase().replace('journey', 'timeline').replace('newsletter', 'contact').replace('community', 'events')}`;
+              return (
+                <a
+                  key={i}
+                  href={href}
+                  onClick={() => setMenuOpen(false)}
+                  style={{ transitionDelay: `${i * 0.1}s` }}
+                  className={`hb-nav-item font-heading font-extrabold text-[36px] sm:text-[48px] md:text-[64px] text-primary no-underline leading-[1.1] tracking-[-2px] inline-block hover:text-accent hover:translate-x-3 transition-all duration-500 ${menuOpen ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'
+                    }`}
+                >
+                  {label}
+                </a>
+              );
+            })}
           </nav>
           <div className={`hb-meta-panel flex flex-col gap-10 border-l-0 md:border-l border-primary/10 pl-0 md:pl-16 transition-all duration-500 delay-400 ${menuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[30px]'}`}>
             <div className="hb-meta-section">
