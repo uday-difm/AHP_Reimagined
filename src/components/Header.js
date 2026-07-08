@@ -66,7 +66,7 @@ export default function Header() {
               alt="A Health Place Logo"
               width={360}
               height={100}
-              className="logo-img h-9 w-auto object-contain block transition-transform duration-300 hover:scale-[1.03]"
+              className="logo-img h-16 w-auto object-contain block transition-transform duration-300 hover:scale-[1.03]"
               priority
             />
           </a>
