@@ -9,10 +9,12 @@ export default function CustomCursor() {
   useEffect(() => {
     const handleMouseHover = (e) => {
       const target = e.target.closest('a, button, [role="button"], input, textarea, .tilt-card');
-      if (target) {
-        document.body.classList.add('hover-link');
-      } else {
-        document.body.classList.remove('hover-link');
+      if (cursorRef.current) {
+        if (target) {
+          cursorRef.current.classList.add('custom-cursor-hover');
+        } else {
+          cursorRef.current.classList.remove('custom-cursor-hover');
+        }
       }
     };
 
@@ -67,12 +69,10 @@ export default function CustomCursor() {
     <>
       <div
         ref={cursorRef}
-        id="custom-cursor"
-        className="fixed top-0 left-0 w-8 h-8 border-[1.5px] border-accent rounded-full pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 mix-blend-difference hidden lg:block"
+        className="custom-cursor hidden lg:block"
       />
       <div
         ref={cursorDotRef}
-        id="custom-cursor-dot"
         className="fixed top-0 left-0 w-1.5 h-1.5 bg-accent rounded-full pointer-events-none z-[10000] -translate-x-1/2 -translate-y-1/2 hidden lg:block"
       />
     </>

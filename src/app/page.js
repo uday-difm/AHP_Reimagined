@@ -20,7 +20,7 @@ export default function Home() {
     const revealCallback = (entries, observer) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('active');
+          entry.target.classList.add('reveal-active');
           observer.unobserve(entry.target);
         }
       });

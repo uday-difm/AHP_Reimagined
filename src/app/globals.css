@@ -51,23 +51,25 @@
   }
 }
 
-/* Custom Base Overrides */
-html {
-  scroll-behavior: smooth;
-  overflow-x: hidden;
+/* Tailwind Base Layer Customizations */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background-color: var(--color-bg-light);
+    color: var(--color-secondary);
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
 }
 
-body {
-  font-family: var(--font-body);
-  background-color: var(--color-bg-light);
-  color: var(--color-secondary);
-  line-height: 1.6;
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-}
-
-/* Custom Cursor (Desktops only) */
-#custom-cursor {
+/* Custom Tailwind v4 Utilities */
+@utility custom-cursor {
   position: fixed;
   top: 0;
   left: 0;
@@ -85,46 +87,43 @@ body {
   mix-blend-mode: difference;
 }
 
-#custom-cursor-dot {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 6px;
-  height: 6px;
-  background-color: var(--color-accent);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 10000;
-  transform: translate(-50%, -50%);
+@utility custom-cursor-hover {
+  width: 56px !important;
+  height: 56px !important;
+  background-color: rgba(31, 185, 251, 0.15) !important;
+  border-color: var(--color-accent) !important;
 }
 
-body.hover-link #custom-cursor {
-  width: 56px;
-  height: 56px;
-  background-color: rgba(31, 185, 251, 0.15);
-  border-color: var(--color-accent);
-}
-
-@media (max-width: 1024px) {
-  #custom-cursor, #custom-cursor-dot {
-    display: none;
-  }
-}
-
-/* Scroll reveals (triggered via React Intersection Observer adding 'active' class) */
-.reveal-text, .reveal-slide, .reveal-scale, .reveal-fade {
+@utility reveal-base {
   opacity: 0;
   transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.reveal-text { transform: translateY(60px); }
-.reveal-slide { transform: translateY(40px); }
-.reveal-scale { transform: scale(0.95) translateY(30px); }
-.reveal-fade { transform: translateY(20px); }
 
-.active.reveal-text,
-.active.reveal-slide,
-.active.reveal-scale,
-.active.reveal-fade {
-  opacity: 1;
-  transform: none;
+@utility reveal-text {
+  opacity: 0;
+  transform: translateY(60px);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@utility reveal-slide {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@utility reveal-scale {
+  opacity: 0;
+  transform: scale(0.95) translateY(30px);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@utility reveal-fade {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@utility reveal-active {
+  opacity: 1 !important;
+  transform: none !important;
 }
