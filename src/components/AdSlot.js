@@ -66,7 +66,7 @@ export default function AdSlot({ zone, layout = 'strip' }) {
   // Float variant — small sidebar-style CTA that text flows around
   if (layout === 'float') {
     return (
-      <a href="/#contact"
+      <a href="/info?tab=support"
         className="float-right clear-right ml-6 mb-4 w-[180px] flex flex-col gap-2 bg-bg-light border border-slate-200/80 rounded-xl p-4 no-underline hover:border-accent/30 hover:shadow-[0_4px_16px_rgba(31,185,251,0.06)] transition-all duration-300 group">
         <span className="text-[9px] font-bold text-accent uppercase tracking-[1.5px]">Partner with us</span>
         <p className="text-[12px] font-semibold text-primary leading-snug group-hover:text-accent transition-colors">
@@ -81,7 +81,7 @@ export default function AdSlot({ zone, layout = 'strip' }) {
   return (
     <div className="w-full flex items-center justify-between px-1 py-2 my-1">
       <span className="text-[9px] font-semibold text-slate-300 uppercase tracking-[2px]">Ad space</span>
-      <a href="/#contact"
+      <a href="/info?tab=support"
         className="text-[9px] font-semibold text-muted hover:text-accent uppercase tracking-[1px] transition-colors duration-200">
         Advertise with us →
       </a>
