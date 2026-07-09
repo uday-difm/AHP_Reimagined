@@ -80,7 +80,7 @@ export default function Header() {
           {/* Actions wrapper */}
           <div className="flex items-center gap-3 z-[10000]">
             <Search />
-            
+
             {/* Hamburger Menu Button */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
