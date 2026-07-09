@@ -110,6 +110,10 @@
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
   }
+
+  .blob {
+    will-change: transform;
+  }
 }
 
 /* Custom Tailwind v4 Utilities */

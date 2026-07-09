@@ -36,8 +36,7 @@ export default function CustomCursor() {
       mouseY = e.clientY;
 
       if (cursorDotRef.current) {
-        cursorDotRef.current.style.left = `${mouseX}px`;
-        cursorDotRef.current.style.top = `${mouseY}px`;
+        cursorDotRef.current.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
       }
     };
 
@@ -49,8 +48,7 @@ export default function CustomCursor() {
       cursorY += dy * inertiaSpeed;
 
       if (cursorRef.current) {
-        cursorRef.current.style.left = `${cursorX}px`;
-        cursorRef.current.style.top = `${cursorY}px`;
+        cursorRef.current.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%)`;
       }
 
       requestAnimationFrame(updateCursor);
@@ -70,10 +68,12 @@ export default function CustomCursor() {
       <div
         ref={cursorRef}
         className="custom-cursor hidden lg:block"
+        style={{ willChange: 'transform' }}
       />
       <div
         ref={cursorDotRef}
         className="fixed top-0 left-0 w-1.5 h-1.5 bg-accent rounded-full pointer-events-none z-[10000] -translate-x-1/2 -translate-y-1/2 hidden lg:block"
+        style={{ willChange: 'transform' }}
       />
     </>
   );

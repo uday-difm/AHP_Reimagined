@@ -1,6 +1,3 @@
-'use client';
-
-import { useEffect } from 'react';
 import CustomCursor from '@/components/CustomCursor';
 import BackdropBlobs from '@/components/BackdropBlobs';
 import Header from '@/components/Header';
@@ -11,35 +8,14 @@ import TimelineMarquee from '@/components/TimelineMarquee';
 import CommunityEvents from '@/components/CommunityEvents';
 import Newsletter from '@/components/Newsletter';
 import Footer from '@/components/Footer';
+import ScrollReveal from '@/components/ScrollReveal';
 
 export default function Home() {
-  // Global scroll reveal intersection observer setup
-  useEffect(() => {
-    const revealElements = document.querySelectorAll('.reveal-text, .reveal-slide, .reveal-scale, .reveal-fade');
-
-    const revealCallback = (entries, observer) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('reveal-active');
-          observer.unobserve(entry.target);
-        }
-      });
-    };
-
-    const observer = new IntersectionObserver(revealCallback, {
-      root: null,
-      threshold: 0.15,
-      rootMargin: '0px 0px -50px 0px',
-    });
-
-    revealElements.forEach(el => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <>
       {/* Global Animation Utilities */}
       <CustomCursor />
+      <ScrollReveal />
       <BackdropBlobs />
 
       {/* Persistent Navigation */}
@@ -60,3 +36,4 @@ export default function Home() {
     </>
   );
 }
+

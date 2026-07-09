@@ -9,10 +9,18 @@ export default function Hero() {
     const parallaxImg = document.querySelector('.parallax-img');
     if (!parallaxImg) return;
 
+    let ticking = false;
+
     const handleParallax = () => {
-      const scrollPos = window.scrollY;
-      const yTranslate = scrollPos * 0.12;
-      parallaxImg.style.transform = `translateY(${yTranslate}px) scale(1.05)`;
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollPos = window.scrollY;
+          const yTranslate = scrollPos * 0.12;
+          parallaxImg.style.transform = `translate3d(0, ${yTranslate}px, 0) scale(1.05)`;
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
     window.addEventListener('scroll', handleParallax, { passive: true });
@@ -58,6 +66,7 @@ export default function Hero() {
               fill
               priority
               className="parallax-img object-cover transition-transform duration-100 ease-out scale-[1.05]"
+              style={{ willChange: 'transform' }}
               sizes="100vw"
             />
           </div>
