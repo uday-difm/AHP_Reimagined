@@ -41,11 +41,14 @@ export default function Header() {
   useEffect(() => {
     if (menuOpen) {
       document.body.classList.add('hb-no-scroll');
+      document.documentElement.classList.add('hb-no-scroll');
     } else {
       document.body.classList.remove('hb-no-scroll');
+      document.documentElement.classList.remove('hb-no-scroll');
     }
     return () => {
       document.body.classList.remove('hb-no-scroll');
+      document.documentElement.classList.remove('hb-no-scroll');
     };
   }, [menuOpen]);
 
