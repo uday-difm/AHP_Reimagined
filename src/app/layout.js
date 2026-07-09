@@ -1,3 +1,4 @@
+import { headers } from "next/headers";
 import AuthProvider from "@/components/providers/SessionProvider";
 import ThemeProvider from "@/components/providers/ThemeProvider";
 import SessionTimeoutHandler from "@/components/utils/SessionTimeoutHandler";
@@ -6,7 +7,9 @@ import "@/core/listeners";
 
 import { Inter, Outfit, Playfair_Display } from "next/font/google";
 import "./globals.css";
+import { getLayoutData } from "@/services/layout.service";
 import CookieBanner from "@/components/CookieBanner";
+import { GlobalAnalytics } from "@yourcompany/global-backend-next/components";
 
 const inter = Inter({
   variable: "--font-body",
@@ -29,7 +32,48 @@ export const metadata = {
   description: "A Health Place - Empathetic, medically accurate health guides covering physical wellness, mental health, insurance, and holistic lifestyle guidelines.",
 };
 
-export default function RootLayout({ children }) {
+function isDashboardPath(pathname) {
+  return (
+    pathname.startsWith("/dashboard") ||
+    pathname.startsWith("/crm") ||
+    pathname.startsWith("/login") ||
+    pathname.startsWith("/forgot-password") ||
+    pathname.startsWith("/reset-password") ||
+    pathname.startsWith("/maintenance") ||
+    pathname.startsWith("/preview")
+  );
+}
+
+export default async function RootLayout({ children }) {
+  const headersList = await headers();
+  const pathname = headersList.get("x-pathname") || "";
+  const layout = await getLayoutData();
+
+  if (isDashboardPath(pathname)) {
+    return (
+      <html lang="en" suppressHydrationWarning>
+        <head />
+        <body className={`${inter.variable} ${outfit.variable} ${playfair.variable}`}>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <AuthProvider>
+              <SessionTimeoutHandler timeoutMinutes={30} />
+              {children}
+              <Toaster richColors position="top-right" closeButton />
+            </AuthProvider>
+          </ThemeProvider>
+        </body>
+      </html>
+    );
+  }
+
+  const complianceSettings = {
+    cookieConsentEnabled: true,
+    cookieText: "We use cookies to enhance your browsing experience, serve personalized content, and analyze our traffic.",
+    cookieButtonText: "Accept All",
+    cookieDeclineButtonText: "Reject All",
+    ...(layout?.rawSettings?.compliance || {})
+  };
+
   return (
     <html
       lang="en"
@@ -39,9 +83,10 @@ export default function RootLayout({ children }) {
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <AuthProvider>
             <SessionTimeoutHandler timeoutMinutes={30} />
-        {children}
-        <CookieBanner />
-                  <Toaster richColors position="top-right" closeButton />
+            <GlobalAnalytics settings={layout?.rawSettings} />
+            {children}
+            <CookieBanner complianceSettings={complianceSettings} />
+            <Toaster richColors position="top-right" closeButton />
           </AuthProvider>
         </ThemeProvider>
       </body>
