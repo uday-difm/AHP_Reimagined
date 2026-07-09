@@ -486,7 +486,7 @@ export default function PublicationPage() {
               )}
               <p className="text-[#3a2520]/60 text-[11px] mt-4">
                 By subscribing, you agree to our{' '}
-                <Link href="#" className="underline hover:text-primary">Privacy Policy</Link>.
+                <Link href="/info?tab=legal&doc=privacy" className="underline hover:text-primary">Privacy Policy</Link>.
                 You can unsubscribe at any time.
               </p>
             </div>
@@ -519,7 +519,7 @@ export default function PublicationPage() {
           <p className="text-secondary text-[14px] md:text-[15px] leading-relaxed mb-6">
             Every article in &quot;A Health Place&quot; digital magazine undergoes a rigorous verification process by our board-certified Medical Review Committee to ensure you receive the most accurate, up-to-date health information.
           </p>
-          <Link href="#" className="inline-flex items-center gap-1.5 text-accent-green text-sm font-bold hover:underline">
+          <Link href="/info?tab=board" className="inline-flex items-center gap-1.5 text-accent-green text-sm font-bold hover:underline">
             Meet our Medical Review Board <span className="arrow">→</span>
           </Link>
         </div>
