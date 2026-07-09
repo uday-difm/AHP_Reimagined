@@ -7,6 +7,7 @@ import About from '@/components/About';
 import ArticlesGrid from '@/components/ArticlesGrid';
 import TimelineMarquee from '@/components/TimelineMarquee';
 import CommunityEvents from '@/components/CommunityEvents';
+import ServicesBanner from '@/components/ServicesBanner';
 import Newsletter from '@/components/Newsletter';
 import Footer from '@/components/Footer';
 import ScrollReveal from '@/components/ScrollReveal';
@@ -35,6 +36,7 @@ export default function Home() {
         <AdSlot zone="homepage-about-bottom" />
         <CommunityEvents />
         <AdSlot zone="homepage-events-bottom" />
+        <ServicesBanner />
         <Newsletter />
       </main>
 

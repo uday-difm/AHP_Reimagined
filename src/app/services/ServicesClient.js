@@ -2,10 +2,11 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { useSearchParams } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AdSlot from '@/components/AdSlot';
-import { Search, ChevronRight, HelpCircle, Star, X, CheckCircle, Mail, ArrowLeft } from 'lucide-react';
+import { Search, ChevronRight, HelpCircle, Star, X, CheckCircle, Mail, ArrowLeft, ShieldAlert } from 'lucide-react';
 
 const STANDARD_PACKAGES = [
   {
@@ -24,6 +25,7 @@ const STANDARD_PACKAGES = [
     price: '$599',
     ctaButtonText: 'Secure Cover Spot',
     category: 'Premium Editorial',
+    badge: 'Most Popular',
     img: '/images/mag_sleep.png',
   },
   {
@@ -56,7 +58,8 @@ const STANDARD_PACKAGES = [
     price: '$179',
     ctaButtonText: 'Order Article',
     category: 'Standard Editorial',
-    img: '/images/ayurveda.png',
+    badge: 'Best Seller',
+    img: '/images/mag_nutrition.png',
   },
   {
     id: 's4',
@@ -72,7 +75,7 @@ const STANDARD_PACKAGES = [
     price: '$249',
     ctaButtonText: 'Schedule Q&A Interview',
     category: 'Standard Editorial',
-    img: '/images/holistic.png',
+    img: '/images/service_interview_mockup.png', // Premium editorial interview Q&A layout image
   },
   {
     id: 's5',
@@ -87,7 +90,7 @@ const STANDARD_PACKAGES = [
     price: '$99 - $249',
     ctaButtonText: 'Book Ad Space',
     category: 'Display Ads',
-    img: '/images/disease.png',
+    img: '/images/mag_mindfulness.png',
   },
   {
     id: 's6',
@@ -102,7 +105,7 @@ const STANDARD_PACKAGES = [
     price: '$99',
     ctaButtonText: 'Order Web Post',
     category: 'Web SEO Placement',
-    img: '/images/hero_exercise.png',
+    img: '/images/mag_phone.png',
   },
   {
     id: 's7',
@@ -116,13 +119,57 @@ const STANDARD_PACKAGES = [
     price: 'From $499',
     ctaButtonText: 'Inquire Partnering',
     category: 'Custom Brand Trades',
-    img: '/images/mag_detox.png',
+    img: '/images/service_partnership_mockup.png', // Premium event and partnership graphic
+  },
+];
+
+const HIDDEN_PACKAGES = [
+  {
+    id: 'h1',
+    title: 'Featured Partner Placement',
+    dropdownVal: 'Featured Partner Placement ($299)',
+    description: "Get Ranked. Get Recognized. Position your practice or brand inside one of our curated \"Featured Partners\" roundups — a high-visibility, sponsored placement designed to put you in front of readers actively looking for trusted names in health.",
+    includes: [
+      'Inclusion in 1 upcoming "Featured Partners" roundup/directory page (clearly labeled Sponsored/Featured Partner).',
+      'Client bio (up to 150 words) and headshot.',
+      '1 permanent contextual link.',
+      'Social distribution: 1 Instagram/Facebook feed post + 2 Stories.',
+      '30 days as a highlighted website feature.'
+    ],
+    price: '$299',
+    ctaButtonText: 'Book Partner Slot',
+    category: 'Confidential Placements',
+    img: '/images/service_partner_roundup_mockup.png', // Certified directory listing mockup
+  },
+  {
+    id: 'h2',
+    title: 'Annual PR Partnership Retainer',
+    dropdownVal: 'Annual PR Partnership Retainer ($1499)',
+    description: "Stop Chasing Press. Have It On Retainer. One-off features get you a moment. A retainer gets you a presence — consistent visibility, built into your marketing calendar all year long, without renegotiating every quarter.",
+    includes: [
+      '1 Front Cover feature + 1 additional standalone piece during the year.',
+      'Web features: monthly short feature article (12/year total).',
+      'Social placement per feature: 1 feed post + 2 Stories + 1 Reel at time of each publish (annualized: 12 feed posts, 24 Stories, 12 Reels).',
+      'Full badge rights web + print use.',
+      'Priority access to Media & Event Partnerships.',
+      'Homepage pinning included on the cover feature (30 days).',
+      'All Year Round website placement.'
+    ],
+    price: 'From $1499 / Year',
+    ctaButtonText: 'Inquire Retainer',
+    category: 'Confidential Retainers',
+    img: '/images/service_pr_retainer_mockup.png', // Premium corporate dark-teal retainer folder
   },
 ];
 
 export default function ServicesClient() {
+  const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFaq, setActiveFaq] = useState(null);
+
+  // Check secret URL key parameter e.g. /services?secret=true or /services?show=confidential
+  const showSecret = searchParams.get('secret') === 'true' || searchParams.get('show') === 'confidential';
+  const packagesList = showSecret ? [...STANDARD_PACKAGES, ...HIDDEN_PACKAGES] : STANDARD_PACKAGES;
 
   // Form Modal States
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -142,7 +189,7 @@ export default function ServicesClient() {
   const [timeline, setTimeline] = useState('Immediate (Next Upcoming Digital/Web Issue Layout)');
   const [story, setStory] = useState('');
 
-  const filteredServices = STANDARD_PACKAGES.filter((s) =>
+  const filteredServices = packagesList.filter((s) =>
     s.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     s.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -157,11 +204,14 @@ export default function ServicesClient() {
 
   const handleDropdownChange = (val) => {
     setMediaPackage(val);
-    // Sync the selectedService object if the dropdown choice changes inside the form view
-    const matched = STANDARD_PACKAGES.find(p => p.dropdownVal === val);
+    const matched = packagesList.find(p => p.dropdownVal === val);
     if (matched) {
       setSelectedService(matched);
     }
+  };
+
+  const getSelectedPackageIncludes = () => {
+    return selectedService.includes || null;
   };
 
   const handleFormSubmit = async (e) => {
@@ -215,6 +265,8 @@ export default function ServicesClient() {
     }
   ];
 
+  const currentIncludes = getSelectedPackageIncludes();
+
   return (
     <div className="min-h-screen bg-bg-light flex flex-col justify-between">
       <Header />
@@ -250,12 +302,24 @@ export default function ServicesClient() {
           </div>
         </section>
 
+        {/* Secret Mode Banner Indicator */}
+        {showSecret && (
+          <section className="container mb-8">
+            <div className="bg-[#fff9e6] border border-amber-200 text-amber-800 rounded-2xl p-4 flex items-center gap-3 shadow-sm select-none animate-slide-up">
+              <ShieldAlert className="w-5 h-5 shrink-0 text-amber-600" />
+              <span className="text-[12.5px] font-bold">
+                Confidential Placements Active: You are currently viewing all 9 editorial packages (including 2 exclusive retainers).
+              </span>
+            </div>
+          </section>
+        )}
+
         {/* Ad Space */}
         <section className="container mb-12">
           <AdSlot zone="services-top" />
         </section>
 
-        {/* Services List Grid (3 columns, smaller cards) */}
+        {/* Services List Grid */}
         <section className="container mb-20">
           {filteredServices.length === 0 ? (
             <div className="text-center py-20 bg-white border border-slate-200/50 rounded-[32px] shadow-sm">
@@ -264,10 +328,13 @@ export default function ServicesClient() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredServices.map((service) => {
+                const isSecretItem = service.id.startsWith('h');
                 return (
                   <div
                     key={service.id}
-                    className="bg-white rounded-[24px] overflow-hidden border border-slate-200/60 flex flex-col justify-between transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-2 hover:border-[#0f4c4e]/30 hover:shadow-[0_20px_45px_rgba(15,76,78,0.08)] group"
+                    className={`bg-white rounded-[24px] overflow-hidden flex flex-col justify-between transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-2 hover:shadow-[0_20px_45px_rgba(15,76,78,0.08)] group ${
+                      isSecretItem ? 'border-2 border-amber-200/60 hover:border-amber-400/50' : 'border border-slate-200/60 hover:border-[#0f4c4e]/30'
+                    }`}
                   >
                     <div>
                       {/* Cover image & category */}
@@ -279,9 +346,18 @@ export default function ServicesClient() {
                           className="object-cover transition-transform duration-500 group-hover:scale-105"
                           sizes="(max-width: 768px) 100vw, 33vw"
                         />
-                        <span className="absolute top-4 left-4 px-3 py-1.5 rounded-full text-[8.5px] font-bold uppercase tracking-[1px] bg-[#f0f6f3] text-[#0f4c4e]">
+                        <span className={`absolute top-4 left-4 px-3 py-1.5 rounded-full text-[8.5px] font-bold uppercase tracking-[1px] ${
+                          isSecretItem ? 'bg-amber-100 text-amber-800' : 'bg-[#f0f6f3] text-[#0f4c4e]'
+                        }`}>
                           {service.category}
                         </span>
+                        
+                        {/* Best Seller / Most Popular visual badge on the top right */}
+                        {service.badge && (
+                          <span className="absolute top-4 right-4 px-3.5 py-1.5 rounded-full text-[8.5px] font-extrabold uppercase tracking-[1px] bg-accent text-primary shadow-sm animate-pulse">
+                            {service.badge}
+                          </span>
+                        )}
                       </div>
 
                       {/* Content block */}
@@ -381,6 +457,11 @@ export default function ServicesClient() {
                   <span className="absolute top-4 left-4 px-3.5 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-[1px] bg-[#0f4c4e] text-white shadow-md">
                     {selectedService.category}
                   </span>
+                  {selectedService.badge && (
+                    <span className="absolute top-4 right-4 px-3.5 py-1.5 rounded-full text-[9px] font-extrabold uppercase tracking-[1px] bg-accent text-primary shadow-md">
+                      {selectedService.badge}
+                    </span>
+                  )}
                 </div>
 
                 <div className="flex flex-col gap-2">
@@ -548,15 +629,11 @@ export default function ServicesClient() {
                     onChange={(e) => handleDropdownChange(e.target.value)}
                     className="border border-slate-200 rounded-xl px-4 py-3 text-[13px] focus:outline-none focus:border-accent text-primary bg-white font-medium"
                   >
-                    <option value="Front Cover Feature Package ($599)">Front Cover Feature Package ($599)</option>
-                    <option value="Back Cover Feature Package ($399)">Back Cover Feature Package ($399)</option>
-                    <option value="Interview Feature ($249)">Interview Feature ($249)</option>
-                    <option value="Article Feature ($179)">Article Feature ($179)</option>
-                    <option value="Magazine Advertisement Space Double Spread ($249)">Magazine Advertisement Space Double Spread ($249)</option>
-                    <option value="Magazine Advertisement Space Full Page ($199)">Magazine Advertisement Space Full Page ($199)</option>
-                    <option value="Magazine Advertisement Space Half Page ($99)">Magazine Advertisement Space Half Page ($99)</option>
-                    <option value="Website Feature / Guest Post ($99)">Website Feature / Guest Post ($99)</option>
-                    <option value="Media & Event Partnership Inquiry">Media & Event Partnership Inquiry</option>
+                    {packagesList.map((pkg) => (
+                      <option key={pkg.id} value={pkg.dropdownVal}>
+                        {pkg.dropdownVal}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
