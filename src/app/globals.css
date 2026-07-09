@@ -192,6 +192,23 @@
     transform: translateY(24px) scale(0.98);
     opacity: 0;
   }
+
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@utility animate-slide-up {
+  animation: slide-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(24px) scale(0.98);
+    opacity: 0;
+  }
+
   to {
     transform: translateY(0) scale(1);
     opacity: 1;

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Search from '@/components/Search';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -70,23 +71,28 @@ export default function Header() {
               priority
             />
           </a>
-           {/* Desktop Nav */}
+          {/* Desktop Nav */}
           <nav className="nav-desktop flex items-center gap-4 md:gap-8 flex-1 justify-center">
             <a href="/" className="nav-item text-xs md:text-sm font-medium text-secondary relative py-1.5 transition-colors hover:text-primary after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all after:duration-300 hover:after:w-full">Home</a>
             <a href="/publication" className="nav-item text-xs md:text-sm font-medium text-secondary relative py-1.5 transition-colors hover:text-primary after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all after:duration-300 hover:after:w-full">Publication</a>
           </nav>
 
-          {/* Hamburger Menu Button */}
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className={`relative w-12 h-12 rounded-full flex flex-col justify-center items-center gap-1.25 cursor-pointer z-[10000] shadow-[0_4px_20px_rgba(0,0,0,0.05)] transition-all duration-500 border ${menuOpen ? 'bg-primary border-primary' : 'bg-white/90 border-[var(--color-border)]/80 hover:scale-105 hover:border-accent hover:shadow-[0_6px_24px_rgba(31,185,251,0.12)]'
-              }`}
-            aria-label="Toggle Menu"
-          >
-            <span className={`w-[20px] h-[2px] rounded-sm transition-all duration-500 origin-center ${menuOpen ? 'bg-white translate-y-[6px] rotate-45' : 'bg-primary'}`} />
-            <span className={`w-[20px] h-[2px] rounded-sm transition-all duration-500 ${menuOpen ? 'opacity-0 scale-x-0' : 'bg-primary'}`} />
-            <span className={`w-[20px] h-[2px] rounded-sm transition-all duration-500 origin-center ${menuOpen ? 'bg-white -translate-y-[6px] -rotate-45' : 'bg-primary'}`} />
-          </button>
+          {/* Actions wrapper */}
+          <div className="flex items-center gap-3 z-[10000]">
+            <Search />
+            
+            {/* Hamburger Menu Button */}
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className={`relative w-12 h-12 rounded-full flex flex-col justify-center items-center gap-1.25 cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.05)] transition-all duration-500 border ${menuOpen ? 'bg-primary border-primary' : 'bg-white/90 border-[var(--color-border)]/80 hover:scale-105 hover:border-accent hover:shadow-[0_6px_24px_rgba(31,185,251,0.12)]'
+                }`}
+              aria-label="Toggle Menu"
+            >
+              <span className={`w-[20px] h-[2px] rounded-sm transition-all duration-500 origin-center ${menuOpen ? 'bg-white translate-y-[6px] rotate-45' : 'bg-primary'}`} />
+              <span className={`w-[20px] h-[2px] rounded-sm transition-all duration-500 ${menuOpen ? 'opacity-0 scale-x-0' : 'bg-primary'}`} />
+              <span className={`w-[20px] h-[2px] rounded-sm transition-all duration-500 origin-center ${menuOpen ? 'bg-white -translate-y-[6px] -rotate-45' : 'bg-primary'}`} />
+            </button>
+          </div>
         </div>
       </header>
 
@@ -123,7 +129,7 @@ export default function Header() {
                   "Small Changes Big Impact"
                 </h1>
                 <p className="hb-sub-text text-[28px] md:text-[33px] lg:text-[38px] tracking-[1px] mt-2 md:mt-3 font-normal pl-1 leading-[1.1]">
-                  Start today—your future self will thank you."
+                  Start today—your future self will thank you.
                 </p>
               </div>
             </div>

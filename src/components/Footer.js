@@ -20,6 +20,18 @@ export default function Footer() {
               </div>
             </Link>
             <p className="footer-tagline text-[14px] text-white/60 leading-relaxed max-w-[320px]">Empowering individuals with reliable, medically verified guides to navigate daily physical and emotional health.</p>
+            <div className="issn-barcode mt-2 opacity-85 hover:opacity-100 transition-opacity">
+              <a href="https://portal.issn.org/resource/ISSN/3066-5027" target="_blank" rel="noopener noreferrer" className="inline-block">
+                <Image
+                  src="https://earthbyhumans.s3-eu-central-2.ionoscloud.com/statics/EBH-ISSN.jpg"
+                  alt="ISSN Barcode"
+                  width={140}
+                  height={70}
+                  className="h-12 w-auto object-contain rounded"
+                  unoptimized
+                />
+              </a>
+            </div>
           </div>
 
           {/* Links Grid */}
