@@ -105,27 +105,6 @@ const recentIssues = [
     contents: ['Predictive Diagnostics', 'Personalized Bio-data', 'Wearable Integrations', 'AI Longevity Coding']
   }
 ];
-
-
-function CookieConsent() {
-  const [visible, setVisible] = useState(true);
-  if (!visible) return null;
-  return (
-    <div className="fixed bottom-0 left-0 right-0 z-[999] bg-[#4cc4c4] py-4.5 px-6 shadow-[0_-4px_24px_rgba(0,0,0,0.08)]">
-      <div className="container flex flex-wrap items-center gap-4 justify-between">
-        <p className="text-white text-[13.5px] font-medium flex-1 min-w-[280px]">
-          We use cookies to improve your digital reading experience. By continuing, you agree to our cookie policy.
-        </p>
-        <div className="flex items-center gap-3">
-          <button onClick={() => setVisible(false)} className="bg-[#a3cb43] text-white font-bold text-xs px-5 py-2.5 rounded-full hover:bg-[#8db535] transition-colors cursor-pointer">Ok</button>
-          <button onClick={() => setVisible(false)} className="bg-[#a3cb43]/20 border border-[#a3cb43]/40 text-white font-bold text-xs px-5 py-2.5 rounded-full hover:bg-[#a3cb43]/30 transition-colors cursor-pointer">Privacy Policy</button>
-          <button onClick={() => setVisible(false)} className="text-white font-bold text-base leading-none pl-2 hover:opacity-75 transition-opacity cursor-pointer">✕</button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function PublicationPage() {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
@@ -232,7 +211,7 @@ export default function PublicationPage() {
   };
 
   return (
-    <div className="min-h-screen bg-bg-light relative pb-10">
+    <div className="min-h-screen bg-bg-light relative">
       <Header />
 
       {/* Hero — Current Issue */}
@@ -242,14 +221,14 @@ export default function PublicationPage() {
 
             {/* Left — 3D Magazine Cover (Flipping on Hover) */}
             <div className="flex-shrink-0 reveal-scale [perspective:1000px] w-[220px] md:w-[260px] h-[290px] md:h-[340px] relative group cursor-pointer">
-              
+
               {/* Shadow and Background glows that shift slightly */}
               <div className="absolute inset-0 translate-x-3.5 translate-y-3.5 bg-black/10 rounded-2xl blur-md transition-transform duration-500 group-hover:translate-x-5 group-hover:translate-y-5" />
               <div className="absolute inset-0 translate-x-2 translate-y-1.5 bg-accent/15 rounded-2xl transition-transform duration-500 group-hover:scale-105" />
 
               {/* The Flipping Card */}
               <div className="w-full h-full relative transition-transform duration-[800ms] [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
-                
+
                 {/* Front Face (Cover Image) */}
                 <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] rounded-2xl overflow-hidden shadow-2xl border border-white/60">
                   <Image
@@ -269,7 +248,7 @@ export default function PublicationPage() {
                       <span className="text-[10px] font-bold text-accent uppercase tracking-[2px] block mb-1">EDITORIAL BOARD</span>
                       <h4 className="font-heading font-extrabold text-[15px] md:text-[17px] text-white tracking-[-0.5px]">Spring 2024 Issue</h4>
                     </div>
-                    
+
                     <div className="flex flex-col gap-2.5">
                       <span className="text-[11px] text-white/50 font-bold uppercase tracking-[1px] block">Inside This Issue:</span>
                       <ul className="text-[12.5px] leading-relaxed text-white/90 list-disc pl-4 space-y-1.5 font-medium">
@@ -281,7 +260,7 @@ export default function PublicationPage() {
                     </div>
                   </div>
 
-                  <Link 
+                  <Link
                     href="/article/the-mindfulness-issue"
                     className="w-full text-center bg-white text-primary font-bold text-[12px] py-2.5 rounded-full hover:bg-accent hover:text-white transition-all duration-300 shadow-md no-underline block"
                   >
@@ -371,7 +350,7 @@ export default function PublicationPage() {
                 >
                   {/* The Flipping Card Wrapper */}
                   <div className="w-full h-full relative transition-transform duration-[800ms] [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] flex flex-col flex-grow">
-                    
+
                     {/* Front Face */}
                     <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] flex flex-col justify-between">
                       <div className="relative rounded-xl overflow-hidden shadow-[0_10px_24px_rgba(0,0,0,0.03)] border border-slate-100 transition-all duration-500 mb-4 flex-grow h-[220px] md:h-[280px]">
@@ -396,7 +375,7 @@ export default function PublicationPage() {
                           <span className="text-[9px] font-bold text-accent uppercase tracking-[1.5px] block mb-0.5">{issue.season}</span>
                           <h4 className="font-heading font-extrabold text-[13px] md:text-[14px] text-white leading-tight">{issue.title}</h4>
                         </div>
-                        
+
                         <div className="flex flex-col gap-2">
                           <span className="text-[10px] text-white/50 font-bold uppercase tracking-[1px] block">Inside:</span>
                           <ul className="text-[11px] md:text-[12px] leading-relaxed text-white/90 list-disc pl-3.5 space-y-1 font-medium">
@@ -407,7 +386,7 @@ export default function PublicationPage() {
                         </div>
                       </div>
 
-                      <Link 
+                      <Link
                         href={`/article/${slug}`}
                         className="w-full text-center bg-white text-primary font-bold text-[10.5px] py-2 rounded-full hover:bg-accent hover:text-white transition-all duration-300 shadow-md no-underline block"
                       >
@@ -428,8 +407,8 @@ export default function PublicationPage() {
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
                 className={`flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 text-primary transition-all duration-300 font-bold text-sm cursor-pointer select-none
-                  ${currentPage === 1 
-                    ? 'opacity-40 cursor-not-allowed border-slate-100 text-slate-400' 
+                  ${currentPage === 1
+                    ? 'opacity-40 cursor-not-allowed border-slate-100 text-slate-400'
                     : 'hover:border-accent hover:bg-accent/5 hover:text-accent active:scale-95'}`}
                 aria-label="Previous Page"
               >
@@ -456,8 +435,8 @@ export default function PublicationPage() {
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
                 className={`flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 text-primary transition-all duration-300 font-bold text-sm cursor-pointer select-none
-                  ${currentPage === totalPages 
-                    ? 'opacity-40 cursor-not-allowed border-slate-100 text-slate-400' 
+                  ${currentPage === totalPages
+                    ? 'opacity-40 cursor-not-allowed border-slate-100 text-slate-400'
                     : 'hover:border-accent hover:bg-accent/5 hover:text-accent active:scale-95'}`}
                 aria-label="Next Page"
               >
@@ -470,7 +449,7 @@ export default function PublicationPage() {
 
       {/* Terracotta Subscribe CTA */}
       <section className="container my-14 reveal-scale">
-        <div 
+        <div
           ref={subscribeCardRef}
           onMouseMove={handleSubscribeMouseMove}
           onMouseLeave={handleSubscribeMouseLeave}
@@ -513,7 +492,7 @@ export default function PublicationPage() {
             </div>
 
             {/* Mobile/Tablet Mockup (Interactive cursor tracking shifts applied here) */}
-            <div 
+            <div
               style={phoneTransform}
               className="flex-shrink-0 relative w-[220px] md:w-[260px] hidden md:block select-none [transform-style:preserve-3d]"
             >
@@ -547,7 +526,6 @@ export default function PublicationPage() {
       </section>
 
       <Footer />
-      <CookieConsent />
     </div>
   );
 }
