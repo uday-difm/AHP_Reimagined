@@ -2,6 +2,7 @@ import CustomCursor from '@/components/CustomCursor';
 import BackdropBlobs from '@/components/BackdropBlobs';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
+import Marquee from '@/components/Marquee';
 import About from '@/components/About';
 import ArticlesGrid from '@/components/ArticlesGrid';
 import TimelineMarquee from '@/components/TimelineMarquee';
@@ -24,6 +25,7 @@ export default function Home() {
 
       {/* Modular Page Sections */}
       <main className="w-full">
+        <Marquee />
         <Hero />
         <AdSlot zone="homepage-hero-bottom" />
         <ArticlesGrid />

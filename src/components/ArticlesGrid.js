@@ -4,54 +4,38 @@ import { useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const articles = [
+const magazines = [
   {
     id: 1,
-    category: 'Ayurveda',
-    badgeClass: 'bg-[var(--color-badge-yellow-bg)] text-[var(--color-badge-yellow-text)]',
-    title: 'Ayurvedic Secrets for Better Digestion',
-    desc: 'Discover ancient dietary guidelines for optimizing digestive health and maintaining balance.',
-    img: '/images/ayurveda.png',
+    category: 'Sleep',
+    badgeClass: 'bg-[var(--color-badge-blue-bg)] text-[var(--color-badge-blue-text)]',
+    title: 'The Sleep Revolution',
+    desc: 'Diving into physical sleep quality, REM cycles, and how daily brain recovery shapes cognitive health.',
+    img: '/images/mag_sleep.png',
   },
   {
     id: 2,
-    category: 'Modern Health',
-    badgeClass: 'bg-[var(--color-badge-blue-bg)] text-[var(--color-badge-blue-text)]',
-    title: 'How AI is Changing Healthcare',
-    desc: 'Explore how artificial intelligence is streamlining diagnostics, surgery, and patient care.',
-    img: '/images/disease.png',
+    category: 'Nutrition',
+    badgeClass: 'bg-[var(--color-badge-yellow-bg)] text-[var(--color-badge-yellow-text)]',
+    title: 'Holistic Nutrition',
+    desc: 'Understanding gut-brain axis pathways, balanced meal preparations, and clean biophilic diets.',
+    img: '/images/mag_nutrition.png',
   },
   {
     id: 3,
-    category: 'Holistic',
-    badgeClass: 'bg-[var(--color-badge-green-bg)] text-[var(--color-badge-green-text)]',
-    title: 'Breathwork vs. Meditation for Anxiety',
-    desc: 'Find out which mindfulness practices work best for quieting your specific anxiety loops.',
-    img: '/images/holistic.png',
+    category: 'Strength',
+    badgeClass: 'bg-[var(--color-badge-red-bg)] text-[var(--color-badge-red-text)]',
+    title: 'The Strength Within',
+    desc: 'Certified clinical routines, posture alignment standards, and functional energy maintenance guides.',
+    img: '/images/mag_strength.png',
   },
   {
     id: 4,
     category: 'Mental Health',
     badgeClass: 'bg-[var(--color-badge-purple-bg)] text-[var(--color-badge-purple-text)]',
-    title: 'Exercise for Better Mental Health',
-    desc: 'Science-backed evidence showing how regular movement rewires the brain for resilience.',
-    img: '/images/hero_exercise.png',
-  },
-  {
-    id: 5,
-    category: 'Physical Health',
-    badgeClass: 'bg-[var(--color-badge-red-bg)] text-[var(--color-badge-red-text)]',
-    title: 'How Inactivity Impacts Physical Health',
-    desc: 'Research linking modern sedentary lifestyles to cardiovascular risks and joint stiffness.',
-    img: '/images/physical_health.png',
-  },
-  {
-    id: 6,
-    category: 'Hospice Care',
-    badgeClass: 'bg-[var(--color-badge-green-bg)] text-[var(--color-badge-green-text)]',
-    title: 'When Is the Right Time for Hospice Care?',
-    desc: 'Compassionate guidelines on when to seek specialized, medical-supported end-of-life care.',
-    img: '/images/hero_hospice.png',
+    title: 'Digital Detox',
+    desc: 'Setting boundaries with tech to eliminate micro-anxiety loops and restore daily cognitive clarity.',
+    img: '/images/mag_detox.png',
   },
 ];
 
@@ -71,7 +55,7 @@ export default function ArticlesGrid() {
     const px = (x / width) - 0.5;
     const py = (y / height) - 0.5;
 
-    const maxTilt = 12;
+    const maxTilt = 10;
     const tiltX = -py * maxTilt;
     const tiltY = px * maxTilt;
 
@@ -88,17 +72,16 @@ export default function ArticlesGrid() {
     <section id="articles" className="projects-section py-[100px] bg-white rounded-t-[40px] shadow-[0_-20px_40px_rgba(0,0,0,0.01)]">
       <div className="container">
         <div className="section-title-center text-center max-w-[600px] mx-auto mb-16 reveal-slide">
-          <span className="section-tag text-[11px] font-bold tracking-[2px] text-accent uppercase mb-3 block">EXPERT-BACKED GUIDES</span>
-          <h2 className="section-title font-heading font-extrabold text-[32px] md:text-[44px] text-primary tracking-[-1px]">Latest Articles</h2>
+          <span className="section-tag text-[11px] font-bold tracking-[2px] text-accent uppercase mb-3 block">DIGITAL ISSUES</span>
+          <h2 className="section-title font-heading font-extrabold text-[32px] md:text-[44px] text-primary tracking-[-1px]">Latest Magazines</h2>
         </div>
 
-        <div className="projects-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {articles.map((art, i) => {
-            const slug = art.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        <div className="projects-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          {magazines.map((art, i) => {
             return (
               <Link
                 key={art.id}
-                href={`/blogs/${slug}`}
+                href="/publication"
                 ref={el => cardRefs.current[i] = el}
                 onMouseMove={(e) => handleMouseMove(e, i)}
                 onMouseLeave={() => handleMouseLeave(i)}
@@ -111,7 +94,7 @@ export default function ArticlesGrid() {
                     alt={art.title}
                     fill
                     className="project-img object-cover transition-transform duration-500 hover:scale-106"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    sizes="(max-width: 640px) 100vw, 25vw"
                   />
                   <span className={`project-badge absolute top-4 left-4 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-[0.5px] ${art.badgeClass}`}>
                     {art.category}

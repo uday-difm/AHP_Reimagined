@@ -31,7 +31,7 @@ const trendingArticles = [
 
 export default function Hero() {
   return (
-    <section className="hero-section pt-[140px] pb-20 relative overflow-hidden">
+    <section className="hero-section pt-8 pb-20 relative overflow-hidden">
       {/* Decorative gradient circle flare blur */}
       <div className="absolute w-[450px] h-[450px] md:w-[800px] md:h-[800px] rounded-full bg-gradient-to-tr from-accent/20 to-purple-500/15 top-[-60px] md:top-[-120px] right-[-120px] md:right-[-250px] pointer-events-none z-0 blur-xl" />
 
@@ -55,7 +55,7 @@ export default function Hero() {
               Building wellness into your Life
             </h1>
             <p className="text-secondary text-[14.5px] leading-relaxed max-w-2xl">
-              Discover practical techniques to integrate mindfulness into your busy schedule, reducing stress and improving overall well-being.
+              Discover practical techniques to integrate mindfulness into your busy schedule, reducing stress and improving overall well-being<Link href="/services" className="hover:text-accent transition-colors cursor-default select-none">.</Link>
             </p>
           </div>
 
