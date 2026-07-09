@@ -129,10 +129,10 @@ export default function Footer({ className = "" }) {
             © 2026 A Health Place. All rights reserved. Professional medical advice should be sought for any health concerns.
           </p>
           <div className="footer-bottom-links flex gap-6">
-            <a href="#" className="footer-bottom-link text-[12.5px] text-white/40 no-underline hover:text-accent transition-colors duration-300 font-body">
+            <a href="/legal/privacy" className="footer-bottom-link text-[12.5px] text-white/40 no-underline hover:text-accent transition-colors duration-300 font-body">
               Privacy Policy
             </a>
-            <a href="#" className="footer-bottom-link text-[12.5px] text-white/40 no-underline hover:text-accent transition-colors duration-300 font-body">
+            <a href="/legal/terms" className="footer-bottom-link text-[12.5px] text-white/40 no-underline hover:text-accent transition-colors duration-300 font-body">
               Terms & Conditions
             </a>
           </div>
