@@ -117,13 +117,10 @@ export default function Header() {
             })}
           </nav>
           <div className={`hb-meta-panel flex flex-col gap-10 border-l-0 md:border-l border-primary/10 pl-0 md:pl-16 transition-all duration-500 delay-400 ${menuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[30px]'}`}>
-            <div className="hb-meta-section">
-              <h4 className="hb-meta-title font-heading text-[12px] font-bold uppercase tracking-[2px] text-accent mb-2">Our Philosophy</h4>
-              <p className="hb-meta-text text-[15px] text-[#555565] leading-relaxed">Empowering you with calm, clear, and medically accurate information to support your holistic lifestyle.</p>
-            </div>
-            <div className="hb-meta-section">
-              <h4 className="hb-meta-title font-heading text-[12px] font-bold uppercase tracking-[2px] text-accent mb-2">Explore Categories</h4>
-              <p className="hb-meta-text text-[15px] text-[#555565] leading-relaxed">Physical Health • Mental Health • Holistic & Ayurveda • Insurance • Life Stages</p>
+            <div className="hb-quote-section">
+              <p className="hb-quote-text font-heading text-[20px] md:text-[24px] font-semibold text-accent leading-relaxed italic">
+                "Small changes, big impact. Start today—your future self will thank you."
+              </p>
             </div>
           </div>
         </div>
