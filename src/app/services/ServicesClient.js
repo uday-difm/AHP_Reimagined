@@ -162,13 +162,13 @@ const HIDDEN_PACKAGES = [
   },
 ];
 
-export default function ServicesClient() {
+export default function ServicesClient({ showConfidential = false }) {
   const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFaq, setActiveFaq] = useState(null);
 
-  // Check secret URL key parameter e.g. /services?secret=true or /services?show=confidential
-  const showSecret = searchParams.get('secret') === 'true' || searchParams.get('show') === 'confidential';
+  // Check showConfidential prop or query parameters
+  const showSecret = showConfidential || searchParams.get('secret') === 'true' || searchParams.get('show') === 'confidential';
   const packagesList = showSecret ? [...STANDARD_PACKAGES, ...HIDDEN_PACKAGES] : STANDARD_PACKAGES;
 
   // Form Modal States
@@ -302,17 +302,6 @@ export default function ServicesClient() {
           </div>
         </section>
 
-        {/* Secret Mode Banner Indicator */}
-        {showSecret && (
-          <section className="container mb-8">
-            <div className="bg-[#fff9e6] border border-amber-200 text-amber-800 rounded-2xl p-4 flex items-center gap-3 shadow-sm select-none animate-slide-up">
-              <ShieldAlert className="w-5 h-5 shrink-0 text-amber-600" />
-              <span className="text-[12.5px] font-bold">
-                Confidential Placements Active: You are currently viewing all 9 editorial packages (including 2 exclusive retainers).
-              </span>
-            </div>
-          </section>
-        )}
 
         {/* Ad Space */}
         <section className="container mb-12">
@@ -328,13 +317,10 @@ export default function ServicesClient() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredServices.map((service) => {
-                const isSecretItem = service.id.startsWith('h');
                 return (
                   <div
                     key={service.id}
-                    className={`bg-white rounded-[24px] overflow-hidden flex flex-col justify-between transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-2 hover:shadow-[0_20px_45px_rgba(15,76,78,0.08)] group ${
-                      isSecretItem ? 'border-2 border-amber-200/60 hover:border-amber-400/50' : 'border border-slate-200/60 hover:border-[#0f4c4e]/30'
-                    }`}
+                    className="bg-white rounded-[24px] overflow-hidden flex flex-col justify-between transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-2 hover:shadow-[0_20px_45px_rgba(15,76,78,0.08)] group border border-slate-200/60 hover:border-[#0f4c4e]/30"
                   >
                     <div>
                       {/* Cover image & category */}
@@ -346,9 +332,7 @@ export default function ServicesClient() {
                           className="object-cover transition-transform duration-500 group-hover:scale-105"
                           sizes="(max-width: 768px) 100vw, 33vw"
                         />
-                        <span className={`absolute top-4 left-4 px-3 py-1.5 rounded-full text-[8.5px] font-bold uppercase tracking-[1px] ${
-                          isSecretItem ? 'bg-amber-100 text-amber-800' : 'bg-[#f0f6f3] text-[#0f4c4e]'
-                        }`}>
+                        <span className="absolute top-4 left-4 px-3 py-1.5 rounded-full text-[8.5px] font-bold uppercase tracking-[1px] bg-[#f0f6f3] text-[#0f4c4e]">
                           {service.category}
                         </span>
                         
