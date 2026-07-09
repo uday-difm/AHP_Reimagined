@@ -1,5 +1,6 @@
 import { Inter, Outfit, Playfair_Display } from "next/font/google";
 import "./globals.css";
+import CookieBanner from "@/components/CookieBanner";
 
 const inter = Inter({
   variable: "--font-body",
@@ -30,6 +31,7 @@ export default function RootLayout({ children }) {
     >
       <body>
         {children}
+        <CookieBanner />
       </body>
     </html>
   );

@@ -117,8 +117,8 @@ export default function Header() {
             })}
           </nav>
           <div className={`hb-meta-panel flex flex-col gap-10 border-l-0 md:border-l border-primary/10 pl-0 md:pl-16 transition-all duration-500 delay-400 ${menuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[30px]'}`}>
-            <div className="hb-quote-section">
-              <p className="hb-quote-text font-heading text-[20px] md:text-[24px] font-semibold text-accent leading-relaxed italic">
+            <div className="hb-quote-section flex items-center justify-center py-6 px-4 md:px-6">
+              <p className="hb-quote-text font-heading text-[26px] md:text-[32px] lg:text-[36px] font-bold leading-snug italic text-center bg-gradient-to-r from-accent via-[#1fb9fb] to-primary bg-clip-text text-transparent drop-shadow-lg hover:scale-105 transition-transform duration-300">
                 "Small changes, big impact. Start today—your future self will thank you."
               </p>
             </div>
