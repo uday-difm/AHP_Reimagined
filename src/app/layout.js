@@ -1,3 +1,9 @@
+import AuthProvider from "@/components/providers/SessionProvider";
+import ThemeProvider from "@/components/providers/ThemeProvider";
+import SessionTimeoutHandler from "@/components/utils/SessionTimeoutHandler";
+import { Toaster } from "sonner";
+import "@/core/listeners";
+
 import { Inter, Outfit, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import CookieBanner from "@/components/CookieBanner";
@@ -28,10 +34,16 @@ export default function RootLayout({ children }) {
     <html
       lang="en"
       className={`${inter.variable} ${outfit.variable} ${playfair.variable}`}
-    >
+     suppressHydrationWarning>
       <body>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <AuthProvider>
+            <SessionTimeoutHandler timeoutMinutes={30} />
         {children}
         <CookieBanner />
+                  <Toaster richColors position="top-right" closeButton />
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

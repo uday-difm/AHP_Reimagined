@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* ─── Tailwind v4: use class-based dark mode (for next-themes compatibility) ─── */
+@variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-heading: 'Outfit', sans-serif;
   --font-body: 'Inter', sans-serif;

@@ -1,0 +1,12 @@
+[2026-07-09T04:10:50.746Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-09T04:10:50.746Z] [Auth] Request Host: localhost:3000
+[2026-07-09T04:10:50.747Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
+[2026-07-09T04:10:50.747Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-09T04:10:50.752Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-09T04:10:50.755Z] [Auth] Authentication failed with error: Invalid credentials
+[2026-07-09T04:11:28.104Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-09T04:11:28.105Z] [Auth] Request Host: localhost:3000
+[2026-07-09T04:11:28.105Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
+[2026-07-09T04:11:28.106Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-09T04:11:28.110Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-09T04:11:28.411Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrczol170001uhusthekq9b5
