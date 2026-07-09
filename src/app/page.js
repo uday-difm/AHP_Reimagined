@@ -24,9 +24,9 @@ export default function Home() {
       {/* Modular Page Sections */}
       <main className="w-full">
         <Hero />
-        <About />
         <ArticlesGrid />
         <TimelineMarquee />
+        <About />
         <CommunityEvents />
         <Newsletter />
       </main>

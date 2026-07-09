@@ -35,10 +35,7 @@ export default function Hero() {
       <div className="container hero-container flex flex-col gap-[60px] relative z-10">
         <div className="hero-text-grid grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr] gap-10 md:gap-[40px] items-end">
           <div className="hero-title-col">
-            <div className="hero-badge-row flex flex-wrap items-center gap-3 mb-5 reveal-fade">
-              <span className="badge-mindfulness bg-badge-blue-bg text-badge-blue-text font-bold text-[11px] tracking-[1px] px-3.5 py-1.5 rounded-full border border-accent/20">MINDFULNESS</span>
-              <span className="badge-meta text-[11.5px] text-muted">Medically Reviewed • Oct 12, 2026</span>
-            </div>
+
             <h1 className="hero-title font-heading font-extrabold text-[48px] md:text-[92px] text-primary leading-[1.05] tracking-[-2px] flex flex-col reveal-text">
               <span>Building wellness</span>
 
