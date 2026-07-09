@@ -78,7 +78,7 @@ export default async function RootLayout({ children }) {
     <html
       lang="en"
       className={`${inter.variable} ${outfit.variable} ${playfair.variable}`}
-     suppressHydrationWarning>
+      suppressHydrationWarning>
       <body>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <AuthProvider>
