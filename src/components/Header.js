@@ -116,17 +116,14 @@ export default function Header() {
               );
             })}
           </nav>
-          <div className={`hb-meta-panel flex flex-col gap-10 border-l-0 md:border-l border-primary/10 pl-0 md:pl-16 transition-all duration-500 delay-400 ${menuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[30px]'}`}>
-            <div className="hb-quote-section flex items-center justify-center py-6 px-4 md:px-6">
-              <div className="hb-quote-text flex flex-col gap-2 text-center hover:scale-105 transition-transform duration-300">
-                <p className="font-heading text-[32px] md:text-[40px] lg:text-[44px] font-bold leading-snug italic bg-gradient-to-r from-accent via-[#1fb9fb] to-primary bg-clip-text text-transparent drop-shadow-lg">
-                  "Small changes, big impact.
-                </p>
-                <p className="font-heading text-[24px] md:text-[28px] lg:text-[32px] font-bold leading-snug italic bg-gradient-to-r from-accent via-[#1fb9fb] to-primary bg-clip-text text-transparent drop-shadow-lg">
-                  Start today—your future self will
-                </p>
-                <p className="font-heading text-[18px] md:text-[22px] lg:text-[26px] font-bold leading-snug italic bg-gradient-to-r from-accent via-[#1fb9fb] to-primary bg-clip-text text-transparent drop-shadow-lg">
-                  thank you."
+          <div className={`hb-meta-panel flex flex-col gap-10 border-l-0 md:border-l border-primary/10 pl-0 md:pl-12 transition-all duration-500 delay-400 ${menuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[30px]'}`}>
+            <div className="hb-quote-section flex items-start justify-start py-10 px-6 md:px-8 max-w-[650px]">
+              <div className="hb-quote-container font-['Optima',_'Candara',_'Noto_Sans',_sans-serif] text-[#1a1a1a] py-10 leading-[1.1] uppercase">
+                <h1 className="hb-main-text text-[48px] md:text-[60px] lg:text-[70px] tracking-[3px] font-normal m-0 leading-[1.1]">
+                  "Small Changes Big Impact"
+                </h1>
+                <p className="hb-sub-text text-[28px] md:text-[33px] lg:text-[38px] tracking-[1px] mt-2 md:mt-3 font-normal pl-1 leading-[1.1]">
+                  Start today—your future self will thank you."
                 </p>
               </div>
             </div>
