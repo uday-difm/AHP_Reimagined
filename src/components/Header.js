@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Search from '@/components/Search';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -40,11 +41,14 @@ export default function Header() {
   useEffect(() => {
     if (menuOpen) {
       document.body.classList.add('hb-no-scroll');
+      document.documentElement.classList.add('hb-no-scroll');
     } else {
       document.body.classList.remove('hb-no-scroll');
+      document.documentElement.classList.remove('hb-no-scroll');
     }
     return () => {
       document.body.classList.remove('hb-no-scroll');
+      document.documentElement.classList.remove('hb-no-scroll');
     };
   }, [menuOpen]);
 
@@ -77,6 +81,7 @@ export default function Header() {
             <a href="/publication" className="nav-item text-xs md:text-sm font-medium text-secondary relative py-1.5 transition-colors hover:text-primary after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all after:duration-300 hover:after:w-full">Publication</a>
           </nav>
 
+<<<<<<< HEAD
           {/* Hamburger Menu Button */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
@@ -87,6 +92,24 @@ export default function Header() {
             <span className={`w-[20px] h-[2px] rounded-full transition-all duration-300 bg-[#1a1a2e] ${menuOpen ? 'opacity-0' : ''}`} />
             <span className={`w-[20px] h-[2px] rounded-full transition-all duration-300 origin-center bg-[#1a1a2e] ${menuOpen ? '-translate-y-[7px] -rotate-45' : ''}`} />
           </button>
+=======
+          {/* Actions wrapper */}
+          <div className="flex items-center gap-3 z-[10000]">
+            <Search />
+
+            {/* Hamburger Menu Button */}
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className={`relative w-12 h-12 rounded-full flex flex-col justify-center items-center gap-1.25 cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.05)] transition-all duration-500 border ${menuOpen ? 'bg-primary border-primary' : 'bg-white/90 border-[var(--color-border)]/80 hover:scale-105 hover:border-accent hover:shadow-[0_6px_24px_rgba(31,185,251,0.12)]'
+                }`}
+              aria-label="Toggle Menu"
+            >
+              <span className={`w-[20px] h-[2px] rounded-sm transition-all duration-500 origin-center ${menuOpen ? 'bg-white translate-y-[6px] rotate-45' : 'bg-primary'}`} />
+              <span className={`w-[20px] h-[2px] rounded-sm transition-all duration-500 ${menuOpen ? 'opacity-0 scale-x-0' : 'bg-primary'}`} />
+              <span className={`w-[20px] h-[2px] rounded-sm transition-all duration-500 origin-center ${menuOpen ? 'bg-white -translate-y-[6px] -rotate-45' : 'bg-primary'}`} />
+            </button>
+          </div>
+>>>>>>> bf38231681f88ecf733afa8ed699b8f762e2e1ba
         </div>
       </header>
 
@@ -97,6 +120,7 @@ export default function Header() {
       >
         <div className={`hb-menu-container w-full px-10 md:px-20 grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr] gap-10 md:gap-20 items-center transition-transform duration-700 ${menuOpen ? 'translate-y-0' : 'translate-y-10'}`}>
           <nav className="hb-nav-links flex flex-col gap-4">
+<<<<<<< HEAD
             {['Home', 'About', 'Articles', 'Journey', 'Community', 'Newsletter', 'Publication'].map((label, i) => {
               let href = '/';
               if (label === 'Home') href = '/';
@@ -108,6 +132,16 @@ export default function Header() {
                   .replace('community', 'events');
                 href = `/#${labelLower}`;
               }
+=======
+            {['About', 'Blogs', 'Journey', 'Community', 'Newsletter', 'Digital Magazine'].map((label, i) => {
+              const isPublication = label === 'Digital Magazine';
+              const isBlogs = label === 'Blogs';
+              const href = isPublication
+                ? '/publication'
+                : isBlogs
+                  ? '/blogs'
+                  : `/#${label.toLowerCase().replace('journey', 'timeline').replace('newsletter', 'contact').replace('community', 'events')}`;
+>>>>>>> bf38231681f88ecf733afa8ed699b8f762e2e1ba
               return (
                 <a
                   key={i}

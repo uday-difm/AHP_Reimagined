@@ -9,6 +9,7 @@ import CommunityEvents from '@/components/CommunityEvents';
 import Newsletter from '@/components/Newsletter';
 import Footer from '@/components/Footer';
 import ScrollReveal from '@/components/ScrollReveal';
+import AdSlot from '@/components/AdSlot';
 
 export default function Home() {
   return (
@@ -24,10 +25,14 @@ export default function Home() {
       {/* Modular Page Sections */}
       <main className="w-full">
         <Hero />
+        <AdSlot zone="homepage-hero-bottom" />
         <ArticlesGrid />
+        <AdSlot zone="homepage-articles-bottom" />
         <TimelineMarquee />
         <About />
+        <AdSlot zone="homepage-about-bottom" />
         <CommunityEvents />
+        <AdSlot zone="homepage-events-bottom" />
         <Newsletter />
       </main>
 

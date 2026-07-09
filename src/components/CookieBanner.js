@@ -90,7 +90,7 @@ export default function CookieBanner({ complianceSettings }) {
   const cookieText = complianceSettings?.cookieText || "We use cookies to enhance your browsing experience, serve personalized content, and analyze our traffic.";
   const acceptText = complianceSettings?.cookieButtonText || "Accept All";
   const declineText = complianceSettings?.cookieDeclineButtonText || "Reject All";
-  const privacyLink = complianceSettings?.cookiePrivacyLink || "#";
+  const privacyLink = complianceSettings?.cookiePrivacyLink || "/info?tab=legal&doc=privacy";
 
   return (
     <div className="fixed bottom-6 left-6 right-6 md:left-auto md:right-8 md:max-w-md bg-white/80 backdrop-blur-xl border border-slate-200/80 rounded-2xl p-6 shadow-[0_20px_50px_rgba(0,0,0,0.12)] z-[9999] animate-slide-up">

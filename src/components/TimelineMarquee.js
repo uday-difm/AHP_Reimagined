@@ -172,7 +172,7 @@ export default function TimelineMarquee() {
                   style={{ width: `${100 / visibleCards}%` }}
                 >
                   <Link
-                    href={`/article/${slide.slug}`}
+                    href={`/blogs/${slide.slug}`}
                     className="timeline-slide block bg-white rounded-[24px] p-8 shadow-[0_10px_30px_rgba(0,0,0,0.02)] border border-slate-100 flex flex-col gap-5 select-none no-underline hover:shadow-[0_16px_40px_rgba(31,185,251,0.08)] hover:scale-[1.01] transition-all duration-300 h-full"
                   >
                     <div className="slide-header flex justify-center items-center gap-3.5 border-b border-slate-200 pb-3">
