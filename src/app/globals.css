@@ -179,6 +179,10 @@
   transform: none !important;
 }
 
+@utility animate-marquee {
+  animation: var(--animate-marquee);
+}
+
 @utility container {
   margin-left: auto;
   margin-right: auto;
