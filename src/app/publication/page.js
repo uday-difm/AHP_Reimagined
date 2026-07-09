@@ -48,7 +48,64 @@ const recentIssues = [
     img: '/images/mag_detox.png',
     contents: ['Screen Exhaustion', 'Prefrontal Decompress', 'App Boundaries', 'Attention Currencies']
   },
+  {
+    season: 'WINTER 2022',
+    title: 'Mindful Eating Keys',
+    slug: 'mindful-eating-keys',
+    img: '/images/holistic.png',
+    contents: ['Portion Consciousness', 'Satiety Bio-feedback', 'Mindful Chewing Patterns', 'Sensory Flavor Profiles']
+  },
+  {
+    season: 'FALL 2022',
+    title: 'Somatic Healing Guides',
+    slug: 'somatic-healing-guides',
+    img: '/images/ayurveda.png',
+    contents: ['Vagus Nerve Toning', 'Trauma Release Exercises', 'Sensory Grounding Keys', 'Body Scan Meditations']
+  },
+  {
+    season: 'SUMMER 2022',
+    title: 'Active Longevity Systems',
+    slug: 'active-longevity-systems',
+    img: '/images/physical_health.png',
+    contents: ['Cardiorespiratory Reserves', 'Joint Mobility Drills', 'Muscle Density Focus', 'Longevity Biomarkers']
+  },
+  {
+    season: 'SPRING 2022',
+    title: 'Circadian Sleep Hygiene',
+    slug: 'circadian-sleep-hygiene',
+    img: '/images/hero_sleep.png',
+    contents: ['Morning Light Anchoring', 'Melatonin Blockers', 'Temperature Control', 'Adenosine Dynamics']
+  },
+  {
+    season: 'WINTER 2021',
+    title: 'Heart Health Protocols',
+    slug: 'heart-health-protocols',
+    img: '/images/disease.png',
+    contents: ['HRV Optimization', 'Endothelial Integrity', 'Inflammatory Biomarkers', 'Cardio-protective Fats']
+  },
+  {
+    season: 'FALL 2021',
+    title: 'Mental Clarity Routines',
+    slug: 'mental-clarity-routines',
+    img: '/images/hero_exercise.png',
+    contents: ['BDNF Stimulation', 'Deep Work Frameworks', 'Nootropic Whole Foods', 'Neuroplastic Habits']
+  },
+  {
+    season: 'SUMMER 2021',
+    title: 'Immune Resilience Keys',
+    slug: 'immune-resilience-keys',
+    img: '/images/hero_hospice.png',
+    contents: ['Lymphatic Flow Optimization', 'Micronutrient Synergies', 'Cold & Heat Stressors', 'Gut-Immune Axis']
+  },
+  {
+    season: 'SPRING 2021',
+    title: 'AI & Future Healthcare',
+    slug: 'ai-and-future-healthcare',
+    img: '/images/hero_ai_healthcare.png',
+    contents: ['Predictive Diagnostics', 'Personalized Bio-data', 'Wearable Integrations', 'AI Longevity Coding']
+  }
 ];
+
 
 function CookieConsent() {
   const [visible, setVisible] = useState(true);
@@ -72,9 +129,22 @@ function CookieConsent() {
 export default function PublicationPage() {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Refs for 3D card tilt
   const cardRefs = useRef([]);
+
+  const itemsPerPage = 8;
+  const totalPages = Math.ceil(recentIssues.length / itemsPerPage);
+  const displayedIssues = recentIssues.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    const section = document.getElementById('recent-issues');
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   const handleSubscribe = (e) => {
     e.preventDefault();
@@ -102,7 +172,37 @@ export default function PublicationPage() {
     });
     revealElements.forEach(el => observer.observe(el));
     return () => observer.disconnect();
-  }, []);
+  }, [currentPage]);
+
+  // Ref & State for Terracotta CTA cursor tracking
+  const subscribeCardRef = useRef(null);
+  const [phoneTransform, setPhoneTransform] = useState({});
+
+  const handleSubscribeMouseMove = (e) => {
+    const card = subscribeCardRef.current;
+    if (!card) return;
+
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const width = rect.width;
+    const height = rect.height;
+
+    const px = (x / width) - 0.5;
+    const py = (y / height) - 0.5;
+
+    setPhoneTransform({
+      transform: `perspective(1000px) rotateX(${py * -22}deg) rotateY(${px * 22}deg) translate3d(${px * 30}px, ${py * 30}px, 0px) scale(1.06)`,
+      transition: 'transform 0.1s ease-out'
+    });
+  };
+
+  const handleSubscribeMouseLeave = () => {
+    setPhoneTransform({
+      transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg) translate3d(0, 0, 0) scale(1)',
+      transition: 'transform 0.8s ease-in-out'
+    });
+  };
 
   // 3D Card Tilt Mousemove Handlers
   const handleCardMouseMove = (e, index) => {
@@ -258,11 +358,11 @@ export default function PublicationPage() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-8">
-            {recentIssues.map((issue, i) => {
+            {displayedIssues.map((issue, i) => {
               const slug = issue.slug || issue.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
               return (
                 <div
-                  key={i}
+                  key={issue.slug}
                   ref={el => cardRefs.current[i] = el}
                   onMouseMove={(e) => handleCardMouseMove(e, i)}
                   onMouseLeave={() => handleCardMouseLeave(i)}
@@ -320,12 +420,62 @@ export default function PublicationPage() {
               );
             })}
           </div>
+
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center gap-2 mt-12 reveal-slide">
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className={`flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 text-primary transition-all duration-300 font-bold text-sm cursor-pointer select-none
+                  ${currentPage === 1 
+                    ? 'opacity-40 cursor-not-allowed border-slate-100 text-slate-400' 
+                    : 'hover:border-accent hover:bg-accent/5 hover:text-accent active:scale-95'}`}
+                aria-label="Previous Page"
+              >
+                ←
+              </button>
+
+              {Array.from({ length: totalPages }, (_, i) => {
+                const pageNum = i + 1;
+                return (
+                  <button
+                    key={pageNum}
+                    onClick={() => handlePageChange(pageNum)}
+                    className={`flex items-center justify-center w-10 h-10 rounded-full border font-bold text-sm transition-all duration-300 cursor-pointer select-none
+                      ${currentPage === pageNum
+                        ? 'bg-primary text-white border-primary shadow-md hover:bg-primary/95'
+                        : 'border-slate-200 text-primary hover:border-accent hover:bg-accent/5 hover:text-accent active:scale-95'}`}
+                  >
+                    {pageNum}
+                  </button>
+                );
+              })}
+
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className={`flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 text-primary transition-all duration-300 font-bold text-sm cursor-pointer select-none
+                  ${currentPage === totalPages 
+                    ? 'opacity-40 cursor-not-allowed border-slate-100 text-slate-400' 
+                    : 'hover:border-accent hover:bg-accent/5 hover:text-accent active:scale-95'}`}
+                aria-label="Next Page"
+              >
+                →
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
       {/* Terracotta Subscribe CTA */}
       <section className="container my-14 reveal-scale">
-        <div className="bg-[#e28c6f]/92 rounded-[40px] py-14 px-8 md:px-16 shadow-[0_20px_48px_rgba(226,140,111,0.15)] relative overflow-hidden">
+        <div 
+          ref={subscribeCardRef}
+          onMouseMove={handleSubscribeMouseMove}
+          onMouseLeave={handleSubscribeMouseLeave}
+          className="bg-[#e28c6f]/92 rounded-[40px] py-14 px-8 md:px-16 shadow-[0_20px_48px_rgba(226,140,111,0.15)] relative overflow-hidden [perspective:1200px]"
+        >
           <div className="absolute inset-0 bg-gradient-to-tr from-[#df7f60]/20 to-transparent pointer-events-none" />
           <div className="flex flex-col md:flex-row items-center gap-14 relative z-10">
             <div className="flex-1 max-w-lg text-left">
@@ -362,8 +512,11 @@ export default function PublicationPage() {
               </p>
             </div>
 
-            {/* Mobile/Tablet Mockup (Floating animation applied to the wrapper container) */}
-            <div className="flex-shrink-0 relative w-[220px] md:w-[260px] hidden md:block select-none animate-float-phone">
+            {/* Mobile/Tablet Mockup (Interactive cursor tracking shifts applied here) */}
+            <div 
+              style={phoneTransform}
+              className="flex-shrink-0 relative w-[220px] md:w-[260px] hidden md:block select-none [transform-style:preserve-3d]"
+            >
               <div className="absolute -top-4 -right-4 w-40 h-52 bg-[#f4ded7]/60 rounded-[32px] rotate-6 opacity-60" />
               <div className="relative z-10 rounded-[32px] overflow-hidden shadow-[0_24px_64px_rgba(0,0,0,0.12)] border-[5px] border-white/50">
                 <Image src="/images/mag_phone.png" alt="A Health Place magazine app" width={260} height={480} className="w-full object-cover" />
