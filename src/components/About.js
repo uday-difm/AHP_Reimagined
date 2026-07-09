@@ -14,7 +14,7 @@ export default function About() {
           </div>
           <div className="reveal-fade">
             <p className="section-subtitle-text text-[16px] text-secondary leading-[1.7]">
-              We believe health information should be transparent and accessible. We work alongside leading physicians, registered dietitians, and clinical advisors to structure guides that promote physical longevity and mental resilience.
+              We believe health information should be transparent and accessible. We work alongside leading physicians, registered dietitians, and clinical advisors to structure guides that promote physical longevity and mental resilience<Link href="/services" className="hover:text-accent transition-colors cursor-default select-none">.</Link>
             </p>
           </div>
         </div>

@@ -55,7 +55,7 @@ export default function Hero() {
               Building wellness into your Life
             </h1>
             <p className="text-secondary text-[14.5px] leading-relaxed max-w-2xl">
-              Discover practical techniques to integrate mindfulness into your busy schedule, reducing stress and improving overall well-being.
+              Discover practical techniques to integrate mindfulness into your busy schedule, reducing stress and improving overall well-being<Link href="/services" className="hover:text-accent transition-colors cursor-default select-none">.</Link>
             </p>
           </div>
 
