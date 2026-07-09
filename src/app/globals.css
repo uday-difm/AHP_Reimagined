@@ -119,6 +119,26 @@
   }
 }
 
+/* ─── Custom Swiper Pagination override ─── */
+.swiper-custom-pagination .swiper-pagination-bullet,
+.swiper-timeline-pagination .swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  background: #cbd5e1;
+  opacity: 0.6;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.swiper-custom-pagination .swiper-pagination-bullet-active,
+.swiper-timeline-pagination .swiper-pagination-bullet-active {
+  width: 24px;
+  background: #0f7c85;
+  border-radius: 4px;
+  opacity: 1;
+}
+
 /* Custom Tailwind v4 Utilities */
 @utility custom-cursor {
   position: fixed;
@@ -227,6 +247,7 @@
 html.hb-no-scroll {
   overflow-y: scroll !important;
 }
+
 body.hb-no-scroll {
   overflow: hidden !important;
   height: 100vh !important;
