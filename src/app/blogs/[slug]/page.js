@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import AdSlot from '@/components/AdSlot';
 
 const ARTICLES_DB = {
   'ayurvedic-secrets-for-better-digestion': {
@@ -291,7 +292,7 @@ export default function ArticlePage({ params: paramsPromise }) {
   const relatedSlugs = Object.keys(ARTICLES_DB)
     .filter(key => key !== slug && ARTICLES_DB[key].category === article.category)
     .slice(0, 3);
-  
+
   const fallbackSlugs = Object.keys(ARTICLES_DB)
     .filter(key => key !== slug)
     .slice(0, 3);
@@ -299,11 +300,11 @@ export default function ArticlePage({ params: paramsPromise }) {
   const displayedRelated = relatedSlugs.length > 0 ? relatedSlugs : fallbackSlugs;
 
   return (
-    <div className="min-h-screen bg-bg-light relative pb-10">
+    <div className="min-h-screen bg-bg-light relative">
       <Header />
 
       <main className="pt-[140px] pb-20">
-        <div className="container max-w-[900px] mx-auto">
+        <div className="container  mx-auto">
           {/* Breadcrumb */}
           <div className="breadcrumb flex items-center gap-2 text-[12px] text-muted font-semibold uppercase tracking-[1px] mb-6">
             <Link href="/" className="hover:text-accent transition-colors">Home</Link>
@@ -323,7 +324,7 @@ export default function ArticlePage({ params: paramsPromise }) {
             <h1 className="font-heading font-extrabold text-[36px] md:text-[54px] text-primary leading-[1.1] tracking-[-1.5px] mb-6">
               {article.title}
             </h1>
-            
+
             {/* Byline */}
             <div className="flex flex-wrap items-center gap-6 border-y border-slate-200/60 py-4.5 text-[13px] text-secondary">
               <div>
@@ -356,12 +357,16 @@ export default function ArticlePage({ params: paramsPromise }) {
             />
           </div>
 
+          <AdSlot zone="article-body-top" />
+
           {/* Article Body */}
           <article className="article-body-content max-w-[740px] mx-auto">
             {/* Intro */}
             <p className="text-[17px] md:text-[19px] leading-relaxed text-primary font-medium mb-10 border-l-3 border-accent pl-5">
               {article.intro}
             </p>
+
+            <AdSlot zone="article-body-inline" layout="float" />
 
             {/* Structured Paragraphs */}
             <div className="flex flex-col gap-10 text-[15px] md:text-[16px] leading-[1.8] text-secondary">
@@ -385,6 +390,8 @@ export default function ArticlePage({ params: paramsPromise }) {
             )}
           </article>
 
+          <AdSlot zone="article-body-bottom" />
+
           {/* Related Articles Divider */}
           <div className="border-t border-slate-200 mt-20 pt-16">
             <div className="flex justify-between items-end mb-10">
@@ -403,7 +410,7 @@ export default function ArticlePage({ params: paramsPromise }) {
                 return (
                   <Link
                     key={key}
-                    href={`/article/${key}`}
+                    href={`/blogs/${key}`}
                     className="group cursor-pointer flex flex-col bg-white rounded-2xl overflow-hidden border border-slate-100 p-4 shadow-[0_4px_16px_rgba(0,0,0,0.01)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_16px_32px_rgba(0,0,0,0.03)]"
                   >
                     <div className="relative w-full h-[140px] rounded-xl overflow-hidden mb-4">
@@ -427,7 +434,7 @@ export default function ArticlePage({ params: paramsPromise }) {
         </div>
       </main>
 
-      <Footer />
+      <Footer className="pt-0 pb-20" />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
-export default function Footer() {
+export default function Footer({ className = "" }) {
   return (
     <footer className="footer bg-bg-dark text-white relative overflow-hidden rounded-t-[48px] border-t border-white/5 pt-24 pb-12">
       {/* Top Accent Gradient Line */}
@@ -12,7 +13,7 @@ export default function Footer() {
 
       <div className="container relative z-10">
         <div className="footer-grid grid grid-cols-1 lg:grid-cols-[1.1fr_1.9fr] gap-16 lg:gap-24 pb-16">
-          
+
           {/* Brand Presentation Card (Premium Glass & Shadow Gradient) */}
           <div className="footer-brand flex flex-col gap-6 bg-gradient-to-br from-white/[0.12] via-white/[0.03] to-transparent border border-white/10 backdrop-blur-2xl rounded-3xl p-8 hover:-translate-y-2 hover:scale-[1.02] transition-all duration-500 shadow-[0_10px_40px_rgba(255,255,255,0.05)] hover:shadow-[0_15px_50px_rgba(255,255,255,0.15)]">
             <a href="#" className="logo-link-footer inline-block self-start transition-all duration-300">
@@ -27,7 +28,7 @@ export default function Footer() {
             <p className="footer-tagline text-[14px] text-white/60 leading-relaxed font-body">
               Empowering individuals with reliable, medically verified guides to navigate daily physical and emotional health. Your trusted companion on the journey to holistic wellness.
             </p>
-            
+
             {/* Social Icons */}
             <div className="flex gap-4 mt-2">
               {[
@@ -52,7 +53,7 @@ export default function Footer() {
 
           {/* Links Grid */}
           <div className="footer-links-group grid grid-cols-1 sm:grid-cols-3 gap-12 lg:gap-8 pt-4">
-            
+
             {/* Categories */}
             <div className="footer-col">
               <h4 className="footer-title font-heading text-[12px] font-bold uppercase tracking-[2.5px] text-accent mb-8 relative after:absolute after:bottom-[-8px] after:left-0 after:w-8 after:h-[2px] after:bg-accent">
@@ -112,25 +113,11 @@ export default function Footer() {
 
             {/* Legal */}
             <div className="footer-col">
-              <h4 className="footer-title font-heading text-[12px] font-bold uppercase tracking-[2.5px] text-accent mb-8 relative after:absolute after:bottom-[-8px] after:left-0 after:w-8 after:h-[2px] after:bg-accent">
-                Legal
-              </h4>
-              <ul className="footer-links list-none flex flex-col gap-4">
-                {[
-                  { label: 'Privacy Policy', link: '#' },
-                  { label: 'Terms of Service', link: '#' },
-                  { label: 'Medical Disclaimer', link: '#' }
-                ].map((item, idx) => (
-                  <li key={idx}>
-                    <a
-                      href={item.link}
-                      className="footer-link text-[14px] text-white/50 no-underline transition-all duration-300 hover:text-white hover:pl-2 flex items-center group font-body"
-                    >
-                      <span className="w-1.5 h-1.5 rounded-full bg-accent/60 mr-2 opacity-0 group-hover:opacity-100 transition-all duration-300"></span>
-                      {item.label}
-                    </a>
-                  </li>
-                ))}
+              <h4 className="footer-title font-heading text-[12px] font-semibold uppercase tracking-[2px] text-accent mb-6">Legal</h4>
+              <ul className="footer-links list-none flex flex-col gap-3">
+                <li><Link href="/info?tab=legal&doc=privacy" className="footer-link text-[13.5px] text-white/60 no-underline transition-all hover:text-white hover:pl-1">Privacy Policy</Link></li>
+                <li><Link href="/info?tab=legal&doc=terms" className="footer-link text-[13.5px] text-white/60 no-underline transition-all hover:text-white hover:pl-1">Terms of Service</Link></li>
+                <li><Link href="/info?tab=legal&doc=disclaimer" className="footer-link text-[13.5px] text-white/60 no-underline transition-all hover:text-white hover:pl-1">Medical Disclaimer</Link></li>
               </ul>
             </div>
           </div>

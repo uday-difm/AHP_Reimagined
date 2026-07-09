@@ -5,6 +5,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import CustomCursor from '@/components/CustomCursor';
+import ScrollReveal from '@/components/ScrollReveal';
+import BackdropBlobs from '@/components/BackdropBlobs';
 
 const stats = [
   { value: '145k+', label: 'Active Readers' },
@@ -212,6 +215,11 @@ export default function PublicationPage() {
 
   return (
     <div className="min-h-screen bg-bg-light relative">
+      {/* Global Animation Utilities */}
+      <CustomCursor />
+      <ScrollReveal />
+      <BackdropBlobs />
+
       <Header />
 
       {/* Hero — Current Issue */}
@@ -261,7 +269,7 @@ export default function PublicationPage() {
                   </div>
 
                   <Link
-                    href="/article/the-mindfulness-issue"
+                    href="/blogs/the-mindfulness-issue"
                     className="w-full text-center bg-white text-primary font-bold text-[12px] py-2.5 rounded-full hover:bg-accent hover:text-white transition-all duration-300 shadow-md no-underline block"
                   >
                     Read Digital Issue →
@@ -287,7 +295,7 @@ export default function PublicationPage() {
               </p>
 
               <div className="flex flex-wrap gap-4 mb-10">
-                <Link href="/article/the-mindfulness-issue" className="btn-primary hover-glow bg-primary text-white px-7 py-3.5 rounded-full font-bold text-[13.5px] border border-primary hover:bg-transparent hover:text-primary transition-all duration-500 hover:-translate-y-0.5 shadow-md cursor-pointer flex items-center justify-center no-underline">
+                <Link href="/blogs/the-mindfulness-issue" className="btn-primary hover-glow bg-primary text-white px-7 py-3.5 rounded-full font-bold text-[13.5px] border border-primary hover:bg-transparent hover:text-primary transition-all duration-500 hover:-translate-y-0.5 shadow-md cursor-pointer flex items-center justify-center no-underline">
                   Read Digital Issue
                 </Link>
                 <a href="#recent-issues" className="border-2 border-primary/20 text-primary hover:border-primary font-bold text-[13.5px] px-7 py-3.5 rounded-full hover:bg-primary hover:text-white transition-all duration-500 hover:-translate-y-0.5 cursor-pointer flex items-center justify-center no-underline">
@@ -387,7 +395,7 @@ export default function PublicationPage() {
                       </div>
 
                       <Link
-                        href={`/article/${slug}`}
+                        href={`/blogs/${slug}`}
                         className="w-full text-center bg-white text-primary font-bold text-[10.5px] py-2 rounded-full hover:bg-accent hover:text-white transition-all duration-300 shadow-md no-underline block"
                       >
                         Read Issue →
@@ -486,7 +494,7 @@ export default function PublicationPage() {
               )}
               <p className="text-[#3a2520]/60 text-[11px] mt-4">
                 By subscribing, you agree to our{' '}
-                <Link href="#" className="underline hover:text-primary">Privacy Policy</Link>.
+                <Link href="/info?tab=legal&doc=privacy" className="underline hover:text-primary">Privacy Policy</Link>.
                 You can unsubscribe at any time.
               </p>
             </div>
@@ -519,7 +527,7 @@ export default function PublicationPage() {
           <p className="text-secondary text-[14px] md:text-[15px] leading-relaxed mb-6">
             Every article in &quot;A Health Place&quot; digital magazine undergoes a rigorous verification process by our board-certified Medical Review Committee to ensure you receive the most accurate, up-to-date health information.
           </p>
-          <Link href="#" className="inline-flex items-center gap-1.5 text-accent-green text-sm font-bold hover:underline">
+          <Link href="/info?tab=board" className="inline-flex items-center gap-1.5 text-accent-green text-sm font-bold hover:underline">
             Meet our Medical Review Board <span className="arrow">→</span>
           </Link>
         </div>
