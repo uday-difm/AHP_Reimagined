@@ -222,3 +222,13 @@
 @utility animate-slide-up {
   animation: slide-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* ─── Scroll Locking for Navigation Overlays ─── */
+html.hb-no-scroll {
+  overflow-y: scroll !important;
+}
+body.hb-no-scroll {
+  overflow: hidden !important;
+  height: 100vh !important;
+  touch-action: none;
+}

@@ -2,6 +2,19 @@
 
 import { useEffect, useRef } from 'react';
 
+// Persist mouse position globally so that the cursor doesn't jump to (0,0) on page/tab navigation remounts
+let globalMousePosition = { x: 0, y: 0 };
+let globalHasMoved = false;
+
+if (typeof window !== 'undefined') {
+  const trackMouseGlobal = (e) => {
+    globalMousePosition.x = e.clientX;
+    globalMousePosition.y = e.clientY;
+    globalHasMoved = true;
+  };
+  window.addEventListener('mousemove', trackMouseGlobal);
+}
+
 export default function CustomCursor() {
   const cursorRef = useRef(null);
   const cursorDotRef = useRef(null);
@@ -25,15 +38,21 @@ export default function CustomCursor() {
   }, []);
 
   useEffect(() => {
-    let mouseX = 0;
-    let mouseY = 0;
-    let cursorX = 0;
-    let cursorY = 0;
+    let mouseX = globalMousePosition.x;
+    let mouseY = globalMousePosition.y;
+    let cursorX = globalMousePosition.x;
+    let cursorY = globalMousePosition.y;
     const inertiaSpeed = 0.12;
 
     const handleMouseMove = (e) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
+      globalMousePosition.x = mouseX;
+      globalMousePosition.y = mouseY;
+      globalHasMoved = true;
+
+      if (cursorRef.current) cursorRef.current.style.opacity = '1';
+      if (cursorDotRef.current) cursorDotRef.current.style.opacity = '1';
 
       if (cursorDotRef.current) {
         cursorDotRef.current.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
@@ -68,13 +87,22 @@ export default function CustomCursor() {
       <div
         ref={cursorRef}
         className="custom-cursor hidden lg:block"
-        style={{ willChange: 'transform' }}
+        style={{
+          willChange: 'transform',
+          transform: globalHasMoved ? `translate3d(${globalMousePosition.x}px, ${globalMousePosition.y}px, 0) translate(-50%, -50%)` : undefined,
+          opacity: globalHasMoved ? 1 : 0
+        }}
       />
       <div
         ref={cursorDotRef}
         className="fixed top-0 left-0 w-1.5 h-1.5 bg-accent rounded-full pointer-events-none z-[100000] -translate-x-1/2 -translate-y-1/2 hidden lg:block"
-        style={{ willChange: 'transform' }}
+        style={{
+          willChange: 'transform',
+          transform: globalHasMoved ? `translate3d(${globalMousePosition.x}px, ${globalMousePosition.y}px, 0) translate(-50%, -50%)` : undefined,
+          opacity: globalHasMoved ? 1 : 0
+        }}
       />
     </>
   );
 }
+

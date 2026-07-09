@@ -5,6 +5,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import CustomCursor from '@/components/CustomCursor';
+import ScrollReveal from '@/components/ScrollReveal';
+import BackdropBlobs from '@/components/BackdropBlobs';
 
 const stats = [
   { value: '145k+', label: 'Active Readers' },
@@ -212,6 +215,11 @@ export default function PublicationPage() {
 
   return (
     <div className="min-h-screen bg-bg-light relative">
+      {/* Global Animation Utilities */}
+      <CustomCursor />
+      <ScrollReveal />
+      <BackdropBlobs />
+
       <Header />
 
       {/* Hero — Current Issue */}
