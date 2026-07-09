@@ -59,7 +59,7 @@ export default function Header() {
             : 'bg-transparent h-20 border-b border-[var(--color-border)]/40 backdrop-blur-md'
           } ${hideHeader && !menuOpen ? '-translate-y-full' : 'translate-y-0'}`}
       >
-        <div className="header-container flex justify-between items-center w-full px-6 md:px-10">
+        <div className="header-container flex justify-between items-center w-full max-w-[1200px] mx-auto px-6 md:px-10">
           <a href="/" className="logo-link flex items-center">
             <Image
               src="/images/Logo-web.png"
@@ -70,6 +70,7 @@ export default function Header() {
               priority
             />
           </a>
+
           {/* Desktop Nav */}
           <nav className="nav-desktop flex items-center gap-4 md:gap-8 flex-1 justify-center">
             <a href="/" className="nav-item text-xs md:text-sm font-medium text-secondary relative py-1.5 transition-colors hover:text-primary after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all after:duration-300 hover:after:w-full">Home</a>
@@ -79,13 +80,12 @@ export default function Header() {
           {/* Hamburger Menu Button */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className={`relative w-12 h-12 rounded-full flex flex-col justify-center items-center gap-1.25 cursor-pointer z-[10000] shadow-[0_4px_20px_rgba(0,0,0,0.05)] transition-all duration-500 border ${menuOpen ? 'bg-primary border-primary' : 'bg-white/90 border-[var(--color-border)]/80 hover:scale-105 hover:border-accent hover:shadow-[0_6px_24px_rgba(31,185,251,0.12)]'
-              }`}
+            className="relative w-12 h-12 rounded-full flex flex-col justify-center items-center gap-[5px] cursor-pointer z-[10000] shadow-[0_2px_12px_rgba(0,0,0,0.06)] bg-[#ffffff] transition-all hover:scale-105 hover:shadow-[0_4px_16px_rgba(0,0,0,0.1)] border border-gray-100"
             aria-label="Toggle Menu"
           >
-            <span className={`w-[20px] h-[2px] rounded-sm transition-all duration-500 origin-center ${menuOpen ? 'bg-white translate-y-[6px] rotate-45' : 'bg-primary'}`} />
-            <span className={`w-[20px] h-[2px] rounded-sm transition-all duration-500 ${menuOpen ? 'opacity-0 scale-x-0' : 'bg-primary'}`} />
-            <span className={`w-[20px] h-[2px] rounded-sm transition-all duration-500 origin-center ${menuOpen ? 'bg-white -translate-y-[6px] -rotate-45' : 'bg-primary'}`} />
+            <span className={`w-[20px] h-[2px] rounded-full transition-all duration-300 origin-center bg-[#1a1a2e] ${menuOpen ? 'translate-y-[7px] rotate-45' : ''}`} />
+            <span className={`w-[20px] h-[2px] rounded-full transition-all duration-300 bg-[#1a1a2e] ${menuOpen ? 'opacity-0' : ''}`} />
+            <span className={`w-[20px] h-[2px] rounded-full transition-all duration-300 origin-center bg-[#1a1a2e] ${menuOpen ? '-translate-y-[7px] -rotate-45' : ''}`} />
           </button>
         </div>
       </header>
@@ -97,11 +97,17 @@ export default function Header() {
       >
         <div className={`hb-menu-container w-full px-10 md:px-20 grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr] gap-10 md:gap-20 items-center transition-transform duration-700 ${menuOpen ? 'translate-y-0' : 'translate-y-10'}`}>
           <nav className="hb-nav-links flex flex-col gap-4">
-            {['About', 'Articles', 'Journey', 'Community', 'Newsletter', 'Digital Magazine'].map((label, i) => {
-              const isPublication = label === 'Digital Magazine';
-              const href = isPublication
-                ? '/publication'
-                : `/#${label.toLowerCase().replace('journey', 'timeline').replace('newsletter', 'contact').replace('community', 'events')}`;
+            {['Home', 'About', 'Articles', 'Journey', 'Community', 'Newsletter', 'Publication'].map((label, i) => {
+              let href = '/';
+              if (label === 'Home') href = '/';
+              else if (label === 'Publication') href = '/publication';
+              else {
+                const labelLower = label.toLowerCase()
+                  .replace('journey', 'timeline')
+                  .replace('newsletter', 'contact')
+                  .replace('community', 'events');
+                href = `/#${labelLower}`;
+              }
               return (
                 <a
                   key={i}
