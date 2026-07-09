@@ -1,9 +1,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-export default function Footer() {
+export default function Footer({ className = "" }) {
   return (
-    <footer className="footer bg-bg-dark text-white py-20 rounded-t-[40px]">
+    <footer className={`footer bg-bg-dark text-white rounded-t-[40px] ${className || 'py-20'}`}>
       <div className="container">
         <div className="footer-grid grid grid-cols-1 md:grid-cols-[0.8fr_1.2fr] gap-20 border-b border-white/8 pb-15">
           {/* Logo and Info */}

@@ -9,9 +9,9 @@ import ScrollReveal from '@/components/ScrollReveal';
 import BackdropBlobs from '@/components/BackdropBlobs';
 import Image from 'next/image';
 import Link from 'next/link';
-import { 
-  BookOpen, 
-  Search, 
+import {
+  BookOpen,
+  Search,
   ChevronRight
 } from 'lucide-react';
 
@@ -22,6 +22,7 @@ const mockArticles = [
     title: 'Ayurvedic Secrets for Better Digestion (Demo Data)',
     desc: 'Discover ancient dietary guidelines for optimizing digestive health and maintaining balance.',
     img: '/images/ayurveda.png',
+    slug: 'ayurvedic-secrets-for-better-digestion',
   },
   {
     id: 'mock-2',
@@ -29,6 +30,7 @@ const mockArticles = [
     title: 'How Inactivity Impacts Physical Health (Demo Data)',
     desc: 'Research linking modern sedentary lifestyles to cardiovascular risks and joint stiffness.',
     img: '/images/physical_health.png',
+    slug: 'how-inactivity-impacts-physical-health',
   },
   {
     id: 'mock-3',
@@ -36,6 +38,7 @@ const mockArticles = [
     title: 'Exercise for Better Mental Health (Demo Data)',
     desc: 'Science-backed evidence showing how regular movement rewires the brain for resilience.',
     img: '/images/hero_exercise.png',
+    slug: 'exercise-for-better-mental-health',
   },
   {
     id: 'mock-4',
@@ -43,20 +46,23 @@ const mockArticles = [
     title: 'Breathwork vs. Meditation for Anxiety (Demo Data)',
     desc: 'Find out which mindfulness practices work best for quieting your specific anxiety loops.',
     img: '/images/holistic.png',
+    slug: 'breathwork-vs-meditation-for-anxiety',
   },
   {
     id: 'mock-5',
     category: 'Insurance Mappings',
-    title: 'Navigating Wellness and Insurance Coverage (Demo Data)',
-    desc: 'A comprehensive guide on mapping preventive care, therapy, and alternative treatments to standard insurance plans.',
-    img: '/images/hero_sleep.png',
+    title: 'Holistic Nutrition (Demo Data)',
+    desc: 'A comprehensive guide on gut health, natural digestion, and diet optimization.',
+    img: '/images/mag_nutrition.png',
+    slug: 'holistic-nutrition',
   },
   {
     id: 'mock-6',
     category: 'Physical Health',
-    title: 'Understanding Sleep Cycle Optimization (Demo Data)',
+    title: 'The Sleep Revolution (Demo Data)',
     desc: 'How aligning with your circadian rhythm improves physical recovery and endocrine balance.',
     img: '/images/mag_sleep.png',
+    slug: 'the-sleep-revolution',
   }
 ];
 
@@ -86,13 +92,13 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
   // Derive articles list from DB or fall back to demo articles
   const displayArticles = initialPosts.length > 0
     ? initialPosts.map(p => ({
-        id: p.id,
-        category: p.categories?.[0]?.name || 'General',
-        title: p.title,
-        desc: p.excerpt || 'Read our medically vetted guide.',
-        img: p.featuredImage?.url || '/images/holistic.png',
-        slug: p.slug
-      }))
+      id: p.id,
+      category: p.categories?.[0]?.name || 'General',
+      title: p.title,
+      desc: p.excerpt || 'Read our medically vetted guide.',
+      img: p.featuredImage?.url || '/images/holistic.png',
+      slug: p.slug
+    }))
     : mockArticles;
 
   const handleCategoryFilter = (cat) => {
@@ -108,13 +114,13 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
 
   const filteredArticles = displayArticles.filter(art => {
     const matchesFilter = categoryFilter === 'All' || art.category === categoryFilter;
-    const matchesSearch = art.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          art.desc.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = art.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      art.desc.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesFilter && matchesSearch;
   });
 
   return (
-    <div className="min-h-screen bg-bg-light relative pb-10">
+    <div className="min-h-screen bg-bg-light relative">
       <CustomCursor />
       <ScrollReveal />
       <BackdropBlobs />
@@ -128,7 +134,7 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
             Explore Wellness Guides
           </h1>
           <p className="text-secondary text-[15px] max-w-xl mx-auto mb-8 reveal-slide">
-            Read our medically vetted articles and health guides created to keep you informed about physical and emotional wellness.
+            Read our medically vetted blogs and health guides created to keep you informed about physical and emotional wellness.
           </p>
 
           {/* Category Filter Box */}
@@ -137,11 +143,10 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
               <button
                 key={cat}
                 onClick={() => handleCategoryFilter(cat)}
-                className={`px-5 py-3 rounded-xl font-bold text-[13px] transition-all cursor-pointer ${
-                  categoryFilter === cat
-                    ? 'bg-primary text-white shadow-sm'
-                    : 'text-secondary hover:bg-slate-100 hover:text-primary'
-                }`}
+                className={`px-5 py-3 rounded-xl font-bold text-[13px] transition-all cursor-pointer ${categoryFilter === cat
+                  ? 'bg-primary text-white shadow-sm'
+                  : 'text-secondary hover:bg-slate-100 hover:text-primary'
+                  }`}
               >
                 {cat}
               </button>
@@ -155,7 +160,7 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
         <div className="space-y-10 reveal-fade">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-slate-200">
             <h2 className="text-primary font-heading font-bold text-xl tracking-[-0.5px]">
-              {categoryFilter === 'All' ? 'All Guides' : categoryFilter}
+              {categoryFilter === 'All' ? 'All Blogs' : categoryFilter}
             </h2>
 
             {/* Search Input */}
@@ -163,7 +168,7 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
               <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
               <input
                 type="text"
-                placeholder="Search articles..."
+                placeholder="Search blogs..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs outline-none focus:ring-1 focus:ring-accent focus:border-accent"
@@ -174,7 +179,7 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
           {/* Grid of Articles */}
           {filteredArticles.length === 0 ? (
             <div className="text-center py-20 bg-white border border-slate-200/50 rounded-3xl">
-              <p className="text-slate-400 font-medium">No articles found matching this selection.</p>
+              <p className="text-slate-400 font-medium">No blogs found matching this selection.</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -183,7 +188,7 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
                 return (
                   <Link
                     key={art.id}
-                    href={`/article/${slug}`}
+                    href={`/blogs/${slug}`}
                     className="group bg-white rounded-2xl overflow-hidden border border-slate-200 transition-all duration-300 hover:shadow-lg hover:border-accent/30 flex flex-col h-full no-underline"
                   >
                     <div className="relative w-full h-[200px] overflow-hidden">
@@ -216,7 +221,7 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
         </div>
       </main>
 
-      <Footer />
+      <Footer className="pt-0 pb-20" />
     </div>
   );
 }

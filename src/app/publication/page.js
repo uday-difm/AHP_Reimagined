@@ -261,7 +261,7 @@ export default function PublicationPage() {
                   </div>
 
                   <Link
-                    href="/article/the-mindfulness-issue"
+                    href="/blogs/the-mindfulness-issue"
                     className="w-full text-center bg-white text-primary font-bold text-[12px] py-2.5 rounded-full hover:bg-accent hover:text-white transition-all duration-300 shadow-md no-underline block"
                   >
                     Read Digital Issue →
@@ -287,7 +287,7 @@ export default function PublicationPage() {
               </p>
 
               <div className="flex flex-wrap gap-4 mb-10">
-                <Link href="/article/the-mindfulness-issue" className="btn-primary hover-glow bg-primary text-white px-7 py-3.5 rounded-full font-bold text-[13.5px] border border-primary hover:bg-transparent hover:text-primary transition-all duration-500 hover:-translate-y-0.5 shadow-md cursor-pointer flex items-center justify-center no-underline">
+                <Link href="/blogs/the-mindfulness-issue" className="btn-primary hover-glow bg-primary text-white px-7 py-3.5 rounded-full font-bold text-[13.5px] border border-primary hover:bg-transparent hover:text-primary transition-all duration-500 hover:-translate-y-0.5 shadow-md cursor-pointer flex items-center justify-center no-underline">
                   Read Digital Issue
                 </Link>
                 <a href="#recent-issues" className="border-2 border-primary/20 text-primary hover:border-primary font-bold text-[13.5px] px-7 py-3.5 rounded-full hover:bg-primary hover:text-white transition-all duration-500 hover:-translate-y-0.5 cursor-pointer flex items-center justify-center no-underline">
@@ -387,7 +387,7 @@ export default function PublicationPage() {
                       </div>
 
                       <Link
-                        href={`/article/${slug}`}
+                        href={`/blogs/${slug}`}
                         className="w-full text-center bg-white text-primary font-bold text-[10.5px] py-2 rounded-full hover:bg-accent hover:text-white transition-all duration-300 shadow-md no-underline block"
                       >
                         Read Issue →

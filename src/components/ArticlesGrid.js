@@ -98,7 +98,7 @@ export default function ArticlesGrid() {
             return (
               <Link
                 key={art.id}
-                href={`/article/${slug}`}
+                href={`/blogs/${slug}`}
                 ref={el => cardRefs.current[i] = el}
                 onMouseMove={(e) => handleMouseMove(e, i)}
                 onMouseLeave={() => handleMouseLeave(i)}

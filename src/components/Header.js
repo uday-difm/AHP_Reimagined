@@ -103,11 +103,14 @@ export default function Header() {
       >
         <div className={`hb-menu-container w-full px-10 md:px-20 grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr] gap-10 md:gap-20 items-center transition-transform duration-700 ${menuOpen ? 'translate-y-0' : 'translate-y-10'}`}>
           <nav className="hb-nav-links flex flex-col gap-4">
-            {['About', 'Articles', 'Journey', 'Community', 'Newsletter', 'Digital Magazine'].map((label, i) => {
+            {['About', 'Blogs', 'Journey', 'Community', 'Newsletter', 'Digital Magazine'].map((label, i) => {
               const isPublication = label === 'Digital Magazine';
+              const isBlogs = label === 'Blogs';
               const href = isPublication
                 ? '/publication'
-                : `/#${label.toLowerCase().replace('journey', 'timeline').replace('newsletter', 'contact').replace('community', 'events')}`;
+                : isBlogs
+                  ? '/blogs'
+                  : `/#${label.toLowerCase().replace('journey', 'timeline').replace('newsletter', 'contact').replace('community', 'events')}`;
               return (
                 <a
                   key={i}

@@ -300,7 +300,7 @@ export default function ArticlePage({ params: paramsPromise }) {
   const displayedRelated = relatedSlugs.length > 0 ? relatedSlugs : fallbackSlugs;
 
   return (
-    <div className="min-h-screen bg-bg-light relative pb-10">
+    <div className="min-h-screen bg-bg-light relative">
       <Header />
 
       <main className="pt-[140px] pb-20">
@@ -410,7 +410,7 @@ export default function ArticlePage({ params: paramsPromise }) {
                 return (
                   <Link
                     key={key}
-                    href={`/article/${key}`}
+                    href={`/blogs/${key}`}
                     className="group cursor-pointer flex flex-col bg-white rounded-2xl overflow-hidden border border-slate-100 p-4 shadow-[0_4px_16px_rgba(0,0,0,0.01)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_16px_32px_rgba(0,0,0,0.03)]"
                   >
                     <div className="relative w-full h-[140px] rounded-xl overflow-hidden mb-4">
@@ -434,7 +434,7 @@ export default function ArticlePage({ params: paramsPromise }) {
         </div>
       </main>
 
-      <Footer />
+      <Footer className="pt-0 pb-20" />
     </div>
   );
 }

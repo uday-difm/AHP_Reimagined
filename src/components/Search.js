@@ -191,7 +191,7 @@ export default function Search() {
                 {allResults.map((art) => (
                   <Link
                     key={art.slug}
-                    href={`/article/${art.slug}`}
+                    href={`/blogs/${art.slug}`}
                     onClick={() => setIsOpen(false)}
                     className="flex items-center gap-4 bg-white border border-slate-100 rounded-2xl p-4 shadow-[0_4px_16px_rgba(0,0,0,0.01)] hover:border-accent/25 hover:shadow-[0_8px_24px_rgba(31,185,251,0.04)] hover:-translate-y-[2px] transition-all duration-300 no-underline group"
                   >
