@@ -118,9 +118,17 @@ export default function Header() {
           </nav>
           <div className={`hb-meta-panel flex flex-col gap-10 border-l-0 md:border-l border-primary/10 pl-0 md:pl-16 transition-all duration-500 delay-400 ${menuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[30px]'}`}>
             <div className="hb-quote-section flex items-center justify-center py-6 px-4 md:px-6">
-              <p className="hb-quote-text font-heading text-[26px] md:text-[32px] lg:text-[36px] font-bold leading-snug italic text-center bg-gradient-to-r from-accent via-[#1fb9fb] to-primary bg-clip-text text-transparent drop-shadow-lg hover:scale-105 transition-transform duration-300">
-                "Small changes, big impact. Start today—your future self will thank you."
-              </p>
+              <div className="hb-quote-text flex flex-col gap-2 text-center hover:scale-105 transition-transform duration-300">
+                <p className="font-heading text-[32px] md:text-[40px] lg:text-[44px] font-bold leading-snug italic bg-gradient-to-r from-accent via-[#1fb9fb] to-primary bg-clip-text text-transparent drop-shadow-lg">
+                  "Small changes, big impact.
+                </p>
+                <p className="font-heading text-[24px] md:text-[28px] lg:text-[32px] font-bold leading-snug italic bg-gradient-to-r from-accent via-[#1fb9fb] to-primary bg-clip-text text-transparent drop-shadow-lg">
+                  Start today—your future self will
+                </p>
+                <p className="font-heading text-[18px] md:text-[22px] lg:text-[26px] font-bold leading-snug italic bg-gradient-to-r from-accent via-[#1fb9fb] to-primary bg-clip-text text-transparent drop-shadow-lg">
+                  thank you."
+                </p>
+              </div>
             </div>
           </div>
         </div>
