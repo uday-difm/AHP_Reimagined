@@ -547,3 +547,52 @@ body.hb-no-scroll {
   animation: slide-out-wipe 0.65s cubic-bezier(0.87, 0, 0.13, 1) forwards;
   will-change: transform;
 }
+
+/* ─── Lenis Scroll Smoother ─── */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* ─── Custom Brand Scrollbar ─── */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #0f7c85; /* brand teal */
+  border: 3px solid transparent;
+  background-clip: padding-box; /* keeps padding transparent around thumb */
+  border-radius: 9999px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3aadaf; /* lighter hover teal */
+}
+
+/* Firefox compatibility */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #0f7c85 transparent;
+}
