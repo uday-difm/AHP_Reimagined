@@ -106,17 +106,8 @@ export default function ContactPage() {
                   </div>
                 </div>
               </div>
-
-              {/* Notice Card */}
-              <div className="bg-[#e8f8f0] border border-[#27ae60]/10 rounded-[24px] p-6 flex gap-4 items-start">
-                <svg className="w-6 h-6 text-[#27ae60] shrink-0 mt-0.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0110.5 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.746 3.746 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0113.5 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
-                </svg>
-                <div className="text-[13.5px] leading-relaxed text-[#1a5f35]">
-                  <strong>Medical Disclaimer:</strong> Inquiries via this contact page do not constitute medical consultation or advice. For immediate health emergencies, please consult a physician.
-                </div>
-              </div>
             </div>
+
 
             {/* Right Column: Form Container */}
             <div className="reveal-fade">
@@ -191,6 +182,16 @@ export default function ContactPage() {
                     <button type="submit" className="w-full bg-[#0f7c85] hover:bg-[#0c6b73] text-white py-4 rounded-xl font-bold text-[14px] transition-colors shadow-md mt-2 cursor-pointer">
                       Submit Message
                     </button>
+
+                    {/* Medical Disclaimer */}
+                    <div className="bg-[#e8f8f0] border border-[#27ae60]/10 rounded-[20px] p-4 flex gap-3 items-start">
+                      <svg className="w-5 h-5 text-[#27ae60] shrink-0 mt-0.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0110.5 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.746 3.746 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0113.5 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
+                      </svg>
+                      <p className="text-[12.5px] leading-relaxed text-[#1a5f35]">
+                        <strong>Medical Disclaimer:</strong> Inquiries via this contact page do not constitute medical consultation or advice. For immediate health emergencies, please consult a physician.
+                      </p>
+                    </div>
                   </form>
                 )}
               </div>

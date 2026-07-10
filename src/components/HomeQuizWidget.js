@@ -1,0 +1,332 @@
+'use client';
+
+import { useState, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import Link from 'next/link';
+import { quizzes, FREE_QUESTION_LIMIT } from '@/data/quizzes';
+import QuizIcon from '@/components/quiz/QuizIcon';
+
+/**
+ * HomeQuizWidget
+ * Redesigned to look EXACTLY like the main quiz page (Image 2 style).
+ * Features:
+ *  - Centered split layout (no left sidebar/selector).
+ *  - Left side shows Question card (grey bg, white text container).
+ *  - Right side shows Options (radio circles, green Next button).
+ *  - Gating: After Q3 (FREE_QUESTION_LIMIT), shows the inline gate card.
+ *  - Locked Tracker Section: A blurred "Track Your Score" segment below the quiz with a "Login Required" card overlay.
+ */
+
+// We preview the featured General Wellness Quiz on the home page
+const FEATURED_QUIZ_INDEX = 0;
+
+export default function HomeQuizWidget() {
+  const router = useRouter();
+  const { status } = useSession();
+  const isAuthenticated = status === 'authenticated';
+  const [started, setStarted] = useState(true);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [selected, setSelected] = useState(null);
+  const [animating, setAnimating] = useState(false);
+  const [showGate, setShowGate] = useState(false);
+  const [answers, setAnswers] = useState([]);
+
+  const quiz = quizzes[FEATURED_QUIZ_INDEX];
+  const questions = quiz.questions;
+  const currentQ = questions[currentIndex];
+  const isLastQuestion = currentIndex === questions.length - 1;
+
+  const handleSelect = (optIdx) => {
+    if (animating || showGate) return;
+    setSelected(optIdx);
+  };
+
+  const handleNext = useCallback(() => {
+    if (selected === null || animating || showGate) return;
+    const option = currentQ.options[selected];
+    const newAnswers = [...answers, { questionId: currentQ.id, optionIndex: selected, score: option.score }];
+    setAnswers(newAnswers);
+
+    const nextIndex = currentIndex + 1;
+    const nextIsLocked = nextIndex >= FREE_QUESTION_LIMIT;
+
+    setAnimating(true);
+    setTimeout(() => {
+      if (nextIsLocked) {
+        // Save progress to restore after login
+        try {
+          sessionStorage.setItem(
+            `quiz-progress-${quiz.slug}`,
+            JSON.stringify({ savedIndex: nextIndex, savedAnswers: newAnswers })
+          );
+        } catch { /* ignore */ }
+        setShowGate(true);
+      } else {
+        setCurrentIndex(nextIndex);
+        setSelected(null);
+      }
+      setAnimating(false);
+    }, 300);
+  }, [selected, animating, showGate, currentQ, answers, currentIndex, quiz.slug]);
+
+  const handleBack = () => {
+    if (currentIndex === 0) { setStarted(false); return; }
+    setShowGate(false);
+    setAnimating(true);
+    setTimeout(() => {
+      setCurrentIndex(prev => prev - 1);
+      const prevAnswer = answers[currentIndex - 1];
+      setSelected(prevAnswer ? prevAnswer.optionIndex : null);
+      setAnswers(prev => prev.slice(0, -1));
+      setAnimating(false);
+    }, 250);
+  };
+
+  const handleLoginRedirect = () => {
+    const callbackUrl = encodeURIComponent(`/quizzes/${quiz.slug}`);
+    router.push(`/login?callbackUrl=${callbackUrl}`);
+  };
+
+  return (
+    <section className="pt-16 pb-4 px-4 bg-[#f8fafc] border-t border-slate-200/40">
+      <div className="container max-w-5xl mx-auto">
+        
+        {/* Header */}
+        <div className="text-center mb-10">
+          <span className="text-accent text-[11px] font-extrabold uppercase tracking-[3px] mb-2 block">
+            QUICK WELLNESS CHECK
+          </span>
+          <h2 className="font-heading font-extrabold text-2xl md:text-3xl tracking-tight mb-2 text-primary">
+            Try a quiz, right here.
+          </h2>
+          <p className="text-secondary text-[14px]">Test your knowledge and gain valuable insights</p>
+        </div>
+
+        {/* ── CENTRAL SPLIT QUIZ CARD (Image 2 style) ────────────────────── */}
+        <div className="max-w-4xl mx-auto">
+          
+          {/* NOT STARTED */}
+          {!started && !showGate && (
+            <div
+              className="bg-white rounded-[24px] overflow-hidden border border-slate-200/60 p-8 md:p-12 text-center shadow-sm max-w-2xl mx-auto"
+            >
+              <div className="w-16 h-16 rounded-full bg-[#0f7c85]/10 text-[#0f7c85] flex items-center justify-center mx-auto mb-6">
+                <QuizIcon name={quiz.icon} className="w-8 h-8" />
+              </div>
+              <h3 className="font-heading font-extrabold text-[22px] text-primary tracking-tight mb-3">
+                {quiz.title}
+              </h3>
+              <p className="text-secondary text-[14px] leading-relaxed max-w-md mx-auto mb-8">
+                {quiz.description}
+              </p>
+              <button
+                onClick={() => setStarted(true)}
+                className="bg-[#0f7c85] hover:bg-[#0c6b73] text-white px-8 py-3.5 rounded-full font-bold text-[14px] transition-all hover:shadow-lg hover:-translate-y-0.5 cursor-pointer"
+              >
+                Start Quiz
+              </button>
+            </div>
+          )}
+
+          {/* ACTIVE QUESTION */}
+          {started && !showGate && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+              
+              {/* Left Column: Question Card */}
+              <div
+                className="bg-[#f3f4f6] rounded-[24px] p-6 flex flex-col justify-between border border-slate-200/50 shadow-sm transition-all duration-300"
+                style={{
+                  opacity: animating ? 0 : 1,
+                  transform: animating ? 'translateX(-10px)' : 'translateX(0)',
+                }}
+              >
+                <div>
+                  <h4 className="text-[12px] font-extrabold text-slate-500 uppercase tracking-wider mb-8">
+                    Question:
+                  </h4>
+                  <div className="bg-white rounded-[16px] p-6 border border-slate-200/40 shadow-sm">
+                    <p className="font-heading font-bold text-[16px] md:text-[18px] text-primary leading-relaxed">
+                      {currentQ.text}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-8 flex items-center justify-between text-[11px] text-slate-400 font-semibold">
+                  <span>Question {currentIndex + 1} of {questions.length}</span>
+                </div>
+              </div>
+
+              {/* Right Column: Options & Next */}
+              <div
+                className="bg-white border border-slate-200/60 rounded-[24px] p-6 flex flex-col justify-between shadow-sm transition-all duration-300"
+                style={{
+                  opacity: animating ? 0 : 1,
+                  transform: animating ? 'translateX(10px)' : 'translateX(0)',
+                }}
+              >
+                {/* Options List */}
+                <div className="flex flex-col gap-3">
+                  {currentQ.options.map((opt, idx) => {
+                    const isSelected = selected === idx;
+                    return (
+                      <button
+                        key={idx}
+                        onClick={() => handleSelect(idx)}
+                        className="w-full text-left px-5 py-4 rounded-[16px] text-[13.5px] transition-all duration-150 border flex items-center gap-4.5 cursor-pointer bg-white"
+                        style={{
+                          borderColor: isSelected ? '#0f7c85' : '#e2e8f0',
+                          boxShadow: isSelected ? '0 4px 12px rgba(15, 124, 133, 0.05)' : 'none',
+                        }}
+                      >
+                        <div
+                          className="w-5 h-5 rounded-full border flex items-center justify-center shrink-0 transition-all duration-150"
+                          style={{
+                            borderColor: isSelected ? '#0f7c85' : '#cbd5e1',
+                            borderWidth: isSelected ? '5px' : '1px',
+                          }}
+                        />
+                        <span className="font-medium" style={{ color: isSelected ? '#1a1a2e' : '#4a4a5a' }}>
+                          {opt.label}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Submit actions */}
+                <div className="mt-8 flex items-center justify-between">
+                  <button
+                    onClick={handleBack}
+                    disabled={currentIndex === 0}
+                    className="text-[13px] font-bold text-slate-400 hover:text-slate-600 disabled:opacity-30 transition-colors cursor-pointer"
+                  >
+                    Back
+                  </button>
+                  <button
+                    onClick={handleNext}
+                    disabled={selected === null}
+                    className="bg-[#0f7c85] hover:bg-[#0c6b73] disabled:opacity-50 text-white font-bold text-[13.5px] px-8 py-2.5 rounded-full transition-all cursor-pointer shadow-sm"
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* GATED LOCK VIEW */}
+          {showGate && (
+            <div className="relative bg-white border border-slate-200/60 rounded-[24px] overflow-hidden p-8 md:p-12 text-center shadow-sm min-h-[380px] flex flex-col items-center justify-center max-w-2xl mx-auto">
+              <div className="w-14 h-14 rounded-full flex items-center justify-center mb-4 bg-[#0f7c85]/10 text-[#0f7c85]">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                  <path strokeLinecap="round" d="M7 11V7a5 5 0 0110 0v4" />
+                </svg>
+              </div>
+              <span className="text-[10px] font-extrabold uppercase tracking-[2px] text-[#0f7c85] mb-2">
+                Question {currentIndex + 1} is locked
+              </span>
+              <h3 className="font-heading font-extrabold text-[22px] text-primary mb-2">Sign in to continue</h3>
+              <p className="text-secondary text-[13.5px] max-w-sm mb-6">
+                Please log in to unlock all {quiz.questionCount} questions and save your score.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3 w-full max-w-xs justify-center">
+                <button
+                  onClick={handleLoginRedirect}
+                  className="bg-[#0f7c85] hover:bg-[#0c6b73] text-white px-8 py-3 rounded-full font-bold text-[14px] transition-colors cursor-pointer"
+                >
+                  Sign In
+                </button>
+                <button
+                  onClick={handleBack}
+                  className="border border-slate-200 hover:bg-slate-50 text-slate-600 px-6 py-3 rounded-full font-bold text-[13px] transition-colors cursor-pointer"
+                >
+                  Go Back
+                </button>
+              </div>
+            </div>
+          )}
+
+        </div>
+
+        {/* ── LOCKED / UNLOCKED SCOREBOARD AREA (Image 2 style) ─────────────────── */}
+        {!isAuthenticated ? (
+          <div className="relative border-t border-slate-200/80 pt-16 mt-14 max-w-4xl mx-auto">
+            {/* Blurry scoreboard */}
+            <div className="filter blur-md select-none pointer-events-none opacity-40">
+              <h2 className="text-center font-heading font-extrabold text-[24px] mb-8 text-primary">Track Your Score</h2>
+              <div className="grid grid-cols-3 gap-4 mb-8">
+                {[
+                  { l: 'Correct Answers', v: '0/0' },
+                  { l: 'Daily Streak', v: '0 Days' },
+                  { l: 'Completion Rate', v: '0%' },
+                ].map((stat, i) => (
+                  <div key={i} className="bg-white rounded-[20px] p-6 border border-slate-200/60 text-center">
+                    <span className="text-[24px] font-extrabold block text-slate-400 mb-1">{stat.v}</span>
+                    <span className="text-[11px] text-slate-400 uppercase tracking-wider">{stat.l}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="bg-white h-32 rounded-[24px] border border-slate-200/60" />
+            </div>
+
+            {/* Centered Lock Overlay */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-full max-w-sm">
+              <div className="bg-white border border-slate-200/60 rounded-[24px] p-8 text-center shadow-lg">
+                <div className="w-12 h-12 rounded-full border border-[#0f7c85] flex items-center justify-center mx-auto mb-4 text-[#0f7c85]">
+                  <svg className="w-5.5 h-5.5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                    <path strokeLinecap="round" d="M7 11V7a5 5 0 0110 0v4" />
+                  </svg>
+                </div>
+                <h3 className="font-heading font-bold text-[18px] text-primary mb-1">Login Required</h3>
+                <p className="text-secondary text-[13px] leading-relaxed mb-6">
+                  You need to log in to view this content and track your quiz score.
+                </p>
+                <button
+                  onClick={handleLoginRedirect}
+                  className="bg-[#0f7c85] hover:bg-[#0c6b73] text-white px-8 py-2.5 rounded-full font-bold text-[13.5px] transition-colors cursor-pointer w-full"
+                >
+                  Login
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          /* Unlocked Scoreboard Stats */
+          <div className="mt-14 max-w-4xl mx-auto">
+            <h2 className="text-center font-heading font-extrabold text-[24px] mb-8 text-primary">Track Your Score</h2>
+            <div className="grid grid-cols-3 gap-4 mb-8">
+              {[
+                { l: 'Correct Answers', v: answers.length > 0 ? `${answers.filter(a => a.score > 1).length}/${answers.length}` : '3/3' },
+                { l: 'Daily Streak', v: '3 Days' },
+                { l: 'Completion Rate', v: '100%' },
+              ].map((stat, i) => (
+                <div key={i} className="bg-white rounded-[20px] p-6 border border-slate-200/60 text-center shadow-sm">
+                  <span className="text-[24px] font-extrabold block text-[#0f7c85] mb-1">{stat.v}</span>
+                  <span className="text-[11px] text-slate-500 uppercase tracking-wider font-semibold">{stat.l}</span>
+                </div>
+              ))}
+            </div>
+            
+            {/* Dashboard shortcut card */}
+            <div className="bg-white rounded-[24px] border border-slate-200/60 p-6 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
+              <div className="flex items-center gap-3">
+                <span className="text-[24px]">📊</span>
+                <div className="text-left">
+                  <h4 className="font-heading font-bold text-[14px] text-primary">Wellness Dashboard active</h4>
+                  <p className="text-secondary text-[12px]">Your scores and personalized profiles are stored in your dashboard.</p>
+                </div>
+              </div>
+              <Link href="/quizzes/dashboard" className="bg-[#0f7c85] hover:bg-[#0c6b73] text-white px-5 py-2.5 rounded-full font-bold text-[13px] no-underline transition-all">
+                Go to Dashboard
+              </Link>
+            </div>
+          </div>
+        )}
+
+      </div>
+    </section>
+  );
+}

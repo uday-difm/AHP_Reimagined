@@ -124,8 +124,8 @@
 .swiper-timeline-pagination .swiper-pagination-bullet {
   width: 8px;
   height: 8px;
-  background: #cbd5e1;
-  opacity: 0.6;
+  background: #94a3b8;
+  opacity: 0.8;
   border-radius: 50%;
   transition: all 0.3s ease;
   cursor: pointer;
@@ -595,4 +595,16 @@ html.lenis, html.lenis body {
 * {
   scrollbar-width: thin;
   scrollbar-color: #0f7c85 transparent;
+}
+
+/* ─── Swiper Equal Height Cards ─── */
+.timeline-swiper .swiper-wrapper {
+  display: flex !important;
+  align-items: stretch !important;
+}
+
+.timeline-swiper .swiper-slide {
+  height: auto !important;
+  align-self: stretch !important;
+  display: flex !important;
 }

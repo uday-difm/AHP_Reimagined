@@ -82,7 +82,7 @@ export default function ContactFormSection({ siteId = "", content = {}, recaptch
 
   return (
     <section className="py-16 bg-white text-slate-800 border-t border-b animate-fade-in">
-      <div className="max-w-3xl mx-auto px-6">
+      <div className="w-full px-6">
         <div className="text-center mb-10">
           <h2 className="text-3xl font-extrabold tracking-tight text-slate-900">
             {content?.title || "Get In Touch"}

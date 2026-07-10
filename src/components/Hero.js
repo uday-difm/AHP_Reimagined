@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import AdSlot from '@/components/AdSlot';
+import Button from '@/components/Button';
 
 const trendingArticles = [
   {
@@ -70,61 +71,56 @@ export default function Hero() {
               </p>
 
               <div className="flex flex-wrap items-center gap-4">
-                <Link href="/blogs" className="bg-[#0f7c85] hover:bg-[#0c6b73] text-white px-8 py-3.5 rounded-full font-bold text-[15px] transition-colors shadow-md">
+                <Button href="/blogs" variant="primary">
                   Explore Blogs
-                </Link>
-                <Link href="/publication" className="bg-white/80 hover:bg-white text-[#0f7c85] border border-[#0f7c85]/20 backdrop-blur-sm px-8 py-3.5 rounded-full font-bold text-[15px] transition-all shadow-sm">
+                </Button>
+                <Button href="/publication" variant="glass">
                   Explore Magazines
-                </Link>
+                </Button>
               </div>
             </div>
-
-            {/* Trending and Ads */}
-            <div className="flex flex-col gap-6 items-start w-full max-w-2xl">
-
-              {/* Trending Sidebar */}
-              {/* <div className="w-full">
-                <div className="bg-white/60 border border-slate-200/50 rounded-[24px] p-4 md:p-5 shadow-sm backdrop-blur-xl">
-                  <div className="flex items-center gap-2 text-primary font-heading font-extrabold text-[15px] md:text-[16px] mb-4 tracking-tight">
-                    <svg className="w-5 h-5 text-accent-green" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
-                    </svg>
-                    Trending
-                  </div>
-
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {trendingArticles.slice(0, 4).map((art, i) => (
-                      <div key={i} className="flex flex-col gap-2 items-start group w-full">
-                        <Link href={`/blogs/${art.slug}`} className="relative w-full h-[80px] rounded-[10px] overflow-hidden shrink-0 shadow-sm border border-slate-100/50">
-                          <Image
-                            src={art.img}
-                            alt={art.title}
-                            fill
-                            className="object-cover transition-transform duration-500 group-hover:scale-105"
-                            sizes="(max-width: 768px) 50vw, 25vw"
-                          />
-                        </Link>
-                        <div className="flex flex-col gap-1 w-full">
-                          <span className="text-accent font-bold text-[9px] uppercase tracking-wider">{art.category}</span>
-                          <Link href={`/blogs/${art.slug}`} className="text-primary font-heading font-bold text-[12px] leading-[1.3] group-hover:text-accent transition-colors no-underline line-clamp-2">
-                            {art.title}
-                          </Link>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div> */}
-
-              {/* Ad Space
-              <div className="w-full max-w-[340px]">
-                <div className="bg-white/40 border border-slate-200/40 rounded-[24px] p-4 shadow-sm backdrop-blur-md">
-                  <AdSlot zone="hero-sidebar-bottom" />
-                </div>
-              </div> */}
-
-            </div>
           </div>
+
+          {/* Middle Column: Trending Sidebar */}
+          {/* <div className="flex flex-col w-full lg:max-w-sm -mt-2 md:-mt-6">
+            <div className="bg-white/60 border border-slate-200/50 rounded-[32px] p-6 md:p-8 shadow-sm backdrop-blur-xl">
+              <div className="flex items-center gap-2.5 text-primary font-heading font-extrabold text-[16px] md:text-[18px] mb-8 tracking-tight">
+                <svg className="w-5.5 h-5.5 text-accent-green" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
+                </svg>
+                Trending
+              </div>
+
+              <div className="flex flex-col gap-6">
+                {trendingArticles.map((art, i) => (
+                  <div key={i} className="flex gap-4.5 items-center group">
+                    <Link href={`/blogs/${art.slug}`} className="relative w-[100px] h-[75px] rounded-xl overflow-hidden shrink-0 shadow-sm border border-slate-100/50">
+                      <Image
+                        src={art.img}
+                        alt={art.title}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-104"
+                        sizes="100px"
+                      />
+                    </Link>
+                    <div className="flex flex-col gap-1">
+                      <span className="text-accent font-bold text-[10px] uppercase tracking-wider">{art.category}</span>
+                      <Link href={`/blogs/${art.slug}`} className="text-primary font-heading font-bold text-[13.5px] md:text-[14.5px] leading-snug group-hover:text-accent transition-colors no-underline">
+                        {art.title}
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div> */}
+
+          {/* Right Column: Ad Space */}
+          {/* <div className="flex flex-col w-full lg:max-w-xs ml-auto -mt-2 md:-mt-6">
+            <div className="bg-white/40 border border-slate-200/40 rounded-2xl p-4.5 shadow-sm backdrop-blur-md">
+              <AdSlot zone="hero-sidebar-bottom" />
+            </div>
+          </div> */}
 
           {/* Right Column: Empty */}
           <div></div>

@@ -18,7 +18,7 @@ export default async function UsersPage() {
   const sessionUser = await requireAuth();
 
   if (!sessionUser) {
-    redirect("/login");
+    redirect("/dashboard/login");
   }
 
   // Restrict access to SUPERADMIN and ADMIN

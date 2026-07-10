@@ -1,159 +1,141 @@
-"use client";
+'use client';
 
-import { signIn, useSession } from "next-auth/react";
-import { useState, useEffect, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
-import {
-  Eye,
-  EyeOff,
-  Loader2,
-  ShieldCheck,
-} from "lucide-react";
+import { signIn, useSession } from 'next-auth/react';
+import { useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import ScrollReveal from '@/components/ScrollReveal';
+import { Loader2 } from 'lucide-react';
 
-// Inner component that uses useSearchParams — must be inside <Suspense>
-function LoginAndProjectLanding() {
+function LoginClient() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const [activeTab, setActiveTab] = useState('login'); // 'login' | 'register'
+
+  // Input states
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [username, setUsername] = useState('');
+
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [twoFaRequired, setTwoFaRequired] = useState(false);
-  const [twoFaCode, setTwoFaCode] = useState("");
+  const [error, setError] = useState('');
+  const [successMsg, setSuccessMsg] = useState('');
 
-  const [recaptchaSiteKey, setRecaptchaSiteKey] = useState(null);
-
+  // Handle URL tabs (e.g. /login?tab=register)
   useEffect(() => {
-    const hostname = window.location.hostname;
-    const isIpAddress = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/.test(hostname);
-    const isNgrok = hostname.endsWith(".ngrok.io") ||
-      hostname.endsWith(".ngrok-free.dev");
-
-    // Use test key on localhost, IPs, and ngrok domains
-    const useTestKey = isIpAddress || isNgrok || hostname === "localhost" || hostname === "127.0.0.1";
-    const activeKey = useTestKey
-      ? "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
-      : process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
-
-    console.log("[reCAPTCHA Debug] Host:", hostname, "Using test key:", useTestKey, "Site Key:", activeKey);
-    setTimeout(() => {
-      setRecaptchaSiteKey(activeKey);
-    }, 0);
-  }, []);
-
-  // Load the reCAPTCHA v3 script dynamically.
-  useEffect(() => {
-    if (!recaptchaSiteKey) return;
-
-    const scriptId = "recaptcha-script";
-    let script = document.getElementById(scriptId);
-    if (!script) {
-      script = document.createElement("script");
-      script.id = scriptId;
-      script.src = `https://www.google.com/recaptcha/api.js?render=${recaptchaSiteKey}`;
-      script.async = true;
-      script.defer = true;
-      document.body.appendChild(script);
+    const tab = searchParams.get('tab');
+    if (tab === 'register') {
+      setActiveTab('register');
     } else {
-      const currentSrc = script.getAttribute("src");
-      if (currentSrc && !currentSrc.includes(recaptchaSiteKey)) {
-        script.src = `https://www.google.com/recaptcha/api.js?render=${recaptchaSiteKey}`;
-      }
+      setActiveTab('login');
     }
-  }, [recaptchaSiteKey]);
+  }, [searchParams]);
 
-  // If already authenticated, go straight to dashboard
+  // Redirect if already authenticated
   useEffect(() => {
-    if (status === "authenticated") {
-      const callbackUrl = searchParams.get("callbackUrl") || "/dashboard/dashboard";
+    if (status === 'authenticated') {
+      const callbackUrl = searchParams.get('callbackUrl') || '/quizzes/dashboard';
       router.replace(callbackUrl);
     }
   }, [status, router, searchParams]);
 
-  async function handleSubmit(e) {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    setError("");
-    if (!email.trim()) return setError("Email is required.");
-    if (!password) return setError("Password is required.");
+    setError('');
+    setSuccessMsg('');
+
+    if (!email.trim() || !password) {
+      return setError('Please enter both email and password.');
+    }
 
     setLoading(true);
 
     try {
-      // 1. Get reCAPTCHA v3 token
-      let token = "dev_bypass_recaptcha";
-      if (
-        typeof window !== "undefined" &&
-        window.grecaptcha &&
-        recaptchaSiteKey
-      ) {
-        token = await new Promise((resolve) => {
-          window.grecaptcha.ready(() => {
-            window.grecaptcha
-              .execute(recaptchaSiteKey, { action: "login" })
-              .then(resolve)
-              .catch((err) => {
-                console.error("reCAPTCHA execution error:", err);
-                resolve("recaptcha_error");
-              });
-          });
-        });
-      }
-
-      // 2. Call Pre-Login checking (2FA Check + reCAPTCHA validation)
-      const preRes = await fetch("/api/auth/pre-login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, token }),
-      });
-
-      const preData = await preRes.json();
-      if (!preRes.ok) {
-        setLoading(false);
-        return setError(preData.error || "Verification failed");
-      }
-
-      // If 2FA is required and not yet submitted, request code from user
-      if (preData.twoFaRequired && !twoFaRequired) {
-        setTwoFaRequired(true);
-        setLoading(false);
-        return;
-      }
-
-      // 3. Complete NextAuth sign-in
-      const res = await signIn("credentials", {
+      const res = await signIn('credentials', {
         email,
         password,
-        twoFaCode: twoFaCode || undefined,
         redirect: false,
       });
 
       if (res?.error) {
-        setError(res.error);
+        setError('Invalid email or password.');
         setLoading(false);
       } else {
-        // Successful login, route to callbackUrl
-        const callbackUrl = searchParams.get("callbackUrl") || "/dashboard/dashboard";
+        setSuccessMsg('Logged in successfully!');
+        const callbackUrl = searchParams.get('callbackUrl') || '/quizzes/dashboard';
         router.replace(callbackUrl);
       }
     } catch (err) {
-      console.error("Login submission error:", err);
-      setError("An unexpected error occurred. Please try again.");
+      console.error(err);
+      setError('An unexpected error occurred.');
       setLoading(false);
     }
-  }
+  };
 
-  if (status === "loading" || status === "authenticated") {
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    setError('');
+    setSuccessMsg('');
+
+    if (!email.trim() || !password || !name.trim() || !username.trim()) {
+      return setError('All fields are required.');
+    }
+
+    setLoading(true);
+
+    try {
+      const regRes = await fetch('/api/quizess/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'register',
+          name,
+          username,
+          email,
+          password,
+        }),
+      });
+
+      const regData = await regRes.json();
+
+      if (!regRes.ok) {
+        setLoading(false);
+        return setError(regData.error || 'Registration failed');
+      }
+
+      setSuccessMsg('Registration successful! Logging you in...');
+
+      // Auto login after registration
+      const logRes = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (logRes?.error) {
+        setError('Auto login failed. Please sign in manually.');
+        setLoading(false);
+      } else {
+        const callbackUrl = searchParams.get('callbackUrl') || '/quizzes/dashboard';
+        router.replace(callbackUrl);
+      }
+    } catch (err) {
+      console.error(err);
+      setError('An unexpected error occurred during registration.');
+      setLoading(false);
+    }
+  };
+
+  if (status === 'loading') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950">
+      <div className="min-h-screen flex items-center justify-center bg-[#f8fafc]">
         <div className="text-center">
-          <Loader2
-            className="animate-spin text-indigo-500 mx-auto mb-4"
-            size={40}
-          />
+          <Loader2 className="animate-spin text-[#0f7c85] mx-auto mb-4" size={40} />
           <p className="text-slate-400 text-sm">Verifying session...</p>
         </div>
       </div>
@@ -161,190 +143,191 @@ function LoginAndProjectLanding() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-6 font-sans selection:bg-indigo-500 selection:text-white relative overflow-hidden">
-      {/* Decorative ambient background glows */}
-      <div className="absolute top-1/4 left-1/4 w-[300px] h-[300px] bg-indigo-500/10 rounded-full blur-3xl -z-10 animate-pulse" />
-      <div className="absolute bottom-1/4 right-1/4 w-[300px] h-[300px] bg-violet-600/10 rounded-full blur-3xl -z-10" />
+    <div className="min-h-screen bg-[#f8fafc] flex flex-col justify-between">
+      <Header />
 
-      {/* Login Widget Container */}
-      <div
-        id="login-card-section"
-        className="w-full max-w-md rounded-2xl bg-slate-900/60 border border-slate-800 p-8 shadow-2xl backdrop-blur-xl hover:border-indigo-500/30 transition duration-300 relative z-10"
-      >
-        <div className="mb-6 text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-400 text-xs font-bold mb-3 border border-indigo-500/20">
-            <ShieldCheck size={12} />
-            Secure Login
+      <main className="flex-1 flex items-center justify-center px-4 pt-32 pb-20">
+        <div className="w-full max-w-[440px] bg-white rounded-[32px] border border-slate-200/60 p-8 md:p-10 shadow-xl"
+          style={{ boxShadow: '0 12px 36px rgba(0,0,0,0.03)' }}>
+          
+          {/* Header tabs */}
+          <div className="flex border-b border-slate-100 mb-8">
+            <button
+              onClick={() => { setActiveTab('login'); setError(''); setSuccessMsg(''); }}
+              className="flex-1 pb-4 text-[15px] font-heading font-extrabold transition-all border-b-2 cursor-pointer"
+              style={{
+                borderColor: activeTab === 'login' ? '#0f7c85' : 'transparent',
+                color: activeTab === 'login' ? '#1e2a35' : '#cbd5e1',
+              }}
+            >
+              Sign In
+            </button>
+            <button
+              onClick={() => { setActiveTab('register'); setError(''); setSuccessMsg(''); }}
+              className="flex-1 pb-4 text-[15px] font-heading font-extrabold transition-all border-b-2 cursor-pointer"
+              style={{
+                borderColor: activeTab === 'register' ? '#0f7c85' : 'transparent',
+                color: activeTab === 'register' ? '#1e2a35' : '#cbd5e1',
+              }}
+            >
+              Create Account
+            </button>
           </div>
-          <h2 className="text-xl font-bold text-white">
-            Dashboard Portal
-          </h2>
-          <p className="text-slate-400 text-xs mt-1">
-            Sign in with your CMS admin credentials
-          </p>
-        </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-          {twoFaRequired ? (
-            <div>
-              <label
-                htmlFor="twoFaCode"
-                className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5"
-              >
-                Two-Factor Authentication Code
-              </label>
-              <input
-                id="twoFaCode"
-                type="text"
-                required
-                maxLength={6}
-                value={twoFaCode}
-                onChange={(e) => {
-                  setTwoFaCode(e.target.value);
-                  setError("");
-                }}
-                placeholder="e.g. 123456"
-                className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-xs text-white outline-none hover:border-slate-700 focus:bg-slate-950 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all duration-200 text-center font-mono tracking-widest text-base"
-              />
-              <p className="text-[10px] text-slate-500 mt-1.5 text-center">
-                Open your authenticator app to retrieve your security code.
-              </p>
-            </div>
-          ) : (
-            <>
-              {/* Email */}
+          {/* Form */}
+          {activeTab === 'login' ? (
+            <form onSubmit={handleLogin} className="space-y-4">
               <div>
-                <label
-                  htmlFor="email"
-                  className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5"
-                >
+                <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">
                   Email Address
                 </label>
                 <input
-                  id="email"
                   type="email"
-                  required
-                  autoComplete="email"
                   value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                    setError("");
-                  }}
-                  placeholder="admin@example.com"
-                  className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-xs text-white outline-none hover:border-slate-700 focus:bg-slate-950 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all duration-200"
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="name@example.com"
+                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3.5 text-[13.5px] outline-none focus:border-[#0f7c85] focus:bg-white transition-all duration-200"
+                  required
                 />
               </div>
 
-              {/* Password */}
               <div>
-                <div className="flex justify-between items-center mb-1.5">
-                  <label
-                    htmlFor="password"
-                    className="block text-xs font-bold text-slate-400 uppercase tracking-wider"
-                  >
-                    Password
-                  </label>
-                  <Link
-                    href="/forgot-password"
-                    className="text-[10px] font-bold text-indigo-400 hover:text-indigo-300 transition"
-                  >
-                    Forgot Password?
-                  </Link>
-                </div>
-                <div className="relative">
-                  <input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    required
-                    autoComplete="current-password"
-                    value={password}
-                    onChange={(e) => {
-                      setPassword(e.target.value);
-                      setError("");
-                    }}
-                    placeholder="••••••••"
-                    className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 pr-11 text-xs text-white outline-none hover:border-slate-700 focus:bg-slate-950 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all duration-200"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword((v) => !v)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-350 transition"
-                    tabIndex={-1}
-                  >
-                    {showPassword ? (
-                      <EyeOff size={16} />
-                    ) : (
-                      <Eye size={16} />
-                    )}
-                  </button>
-                </div>
+                <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3.5 text-[13.5px] outline-none focus:border-[#0f7c85] focus:bg-white transition-all duration-200"
+                  required
+                />
               </div>
-            </>
+
+              {error && (
+                <div className="bg-red-50 text-red-500 rounded-xl p-3 text-[12px] font-semibold border border-red-100">
+                  ⚠️ {error}
+                </div>
+              )}
+
+              {successMsg && (
+                <div className="bg-green-50 text-[#00b050] rounded-xl p-3 text-[12px] font-semibold border border-green-100">
+                  ✓ {successMsg}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-4 rounded-full font-heading font-bold text-[14px] text-white bg-[#0f7c85] hover:bg-[#0c6b73] transition-colors disabled:opacity-50 cursor-pointer shadow-sm"
+              >
+                {loading ? 'Signing In...' : 'Sign In'}
+              </button>
+            </form>
+          ) : (
+            <form onSubmit={handleRegister} className="space-y-4">
+              <div>
+                <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">
+                  Full Name
+                </label>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="John Doe"
+                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3.5 text-[13.5px] outline-none focus:border-[#0f7c85] focus:bg-white transition-all duration-200"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">
+                  Username
+                </label>
+                <input
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="johndoe"
+                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3.5 text-[13.5px] outline-none focus:border-[#0f7c85] focus:bg-white transition-all duration-200"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="name@example.com"
+                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3.5 text-[13.5px] outline-none focus:border-[#0f7c85] focus:bg-white transition-all duration-200"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Min 6 characters"
+                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3.5 text-[13.5px] outline-none focus:border-[#0f7c85] focus:bg-white transition-all duration-200"
+                  required
+                />
+              </div>
+
+              {error && (
+                <div className="bg-red-50 text-red-500 rounded-xl p-3 text-[12px] font-semibold border border-red-100">
+                  ⚠️ {error}
+                </div>
+              )}
+
+              {successMsg && (
+                <div className="bg-green-50 text-[#00b050] rounded-xl p-3 text-[12px] font-semibold border border-green-100">
+                  ✓ {successMsg}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-4 rounded-full font-heading font-bold text-[14px] text-white bg-[#0f7c85] hover:bg-[#0c6b73] transition-colors disabled:opacity-50 cursor-pointer shadow-sm"
+              >
+                {loading ? 'Creating Account...' : 'Create Account'}
+              </button>
+            </form>
           )}
 
-          {/* Error Alert */}
-          {error && (
-            <div className="flex items-center gap-2 rounded-xl bg-red-500/10 border border-red-500/25 px-3 py-2.5 text-xs text-red-400">
-              <span className="w-1.5 h-1.5 rounded-full bg-red-500 shrink-0" />
-              {error}
-            </div>
-          )}
+          <p className="mt-6 text-center text-[12px] text-slate-400">
+            By signing in, you agree to our{' '}
+            <Link href="/legal/terms" className="text-accent underline font-semibold">Terms</Link> and{' '}
+            <Link href="/legal/privacy" className="text-accent underline font-semibold">Privacy Policy</Link>.
+          </p>
+        </div>
+      </main>
 
-          {/* Submit button */}
-          <button
-            id="login-submit"
-            type="submit"
-            disabled={loading}
-            className="w-full flex items-center justify-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-3 text-xs font-bold shadow-lg shadow-indigo-600/20 hover:shadow-indigo-500/30 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed hover:-translate-y-0.5"
-          >
-            {loading ? (
-              <>
-                <Loader2 size={14} className="animate-spin" />
-                {twoFaRequired
-                  ? "Verifying OTP…"
-                  : "Verifying Credentials…"}
-              </>
-            ) : twoFaRequired ? (
-              "Verify Code & Sign In"
-            ) : (
-              "Sign In to Dashboard"
-            )}
-          </button>
-
-          {twoFaRequired && (
-            <button
-              type="button"
-              onClick={() => {
-                setTwoFaRequired(false);
-                setTwoFaCode("");
-                setError("");
-              }}
-              className="w-full text-center text-xs text-slate-500 hover:text-slate-350 transition duration-150 mt-1 font-semibold"
-            >
-              Back to Sign In
-            </button>
-          )}
-        </form>
-
-        <p className="mt-5 text-center text-[10px] text-slate-500">
-          Protected by NextAuth credentials verification.
-        </p>
-      </div>
+      <Footer />
     </div>
   );
 }
 
-// Outer page component with Suspense
 export default function LoginPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen flex items-center justify-center bg-slate-950">
-          <Loader2 className="animate-spin text-indigo-500" size={32} />
+        <div className="min-h-screen flex items-center justify-center bg-[#f8fafc]">
+          <Loader2 className="animate-spin text-[#0f7c85]" size={32} />
         </div>
       }
     >
-      <LoginAndProjectLanding />
+      <LoginClient />
     </Suspense>
   );
 }

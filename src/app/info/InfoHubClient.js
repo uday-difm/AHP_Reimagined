@@ -95,8 +95,8 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  // Active tab state: 'board' | 'support' | 'legal'
-  const [activeTab, setActiveTab] = useState('board');
+  // Active tab state: 'support' | 'legal'
+  const [activeTab, setActiveTab] = useState('support');
   
   // Support form state
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -110,10 +110,10 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
     const tab = searchParams.get('tab');
     const doc = searchParams.get('doc');
 
-    if (tab && tab !== 'categories') {
+    if (tab && tab !== 'categories' && tab !== 'board') {
       setActiveTab(tab);
     } else {
-      setActiveTab('board');
+      setActiveTab('support');
     }
     if (doc) {
       setActiveLegalDoc(doc);
@@ -169,17 +169,6 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
           {/* Info Hub Navigation Tabs */}
           <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3 bg-white/80 p-2 rounded-2xl shadow-sm border border-slate-200/50 max-w-2xl mx-auto reveal-scale">
             <button
-              onClick={() => handleTabChange('board')}
-              className={`flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-[13px] transition-all cursor-pointer ${
-                activeTab === 'board'
-                  ? 'bg-primary text-white shadow-sm'
-                  : 'text-secondary hover:bg-slate-100 hover:text-primary'
-              }`}
-            >
-              <Users size={16} />
-              About Our Board
-            </button>
-            <button
               onClick={() => handleTabChange('support')}
               className={`flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-[13px] transition-all cursor-pointer ${
                 activeTab === 'support'
@@ -208,49 +197,10 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
         {/* Main Tab Content */}
         <main className="container py-16 max-w-6xl min-h-[500px]">
 
-        {/* Tab 2: Medical Review Board */}
-        {activeTab === 'board' && (
-          <div className="max-w-4xl mx-auto space-y-12 reveal-fade">
-            <div className="text-center max-w-2xl mx-auto mb-10">
-              <h2 className="text-primary font-heading font-extrabold text-2xl tracking-[-0.5px] mb-3">Our Vetting Guidelines</h2>
-              <p className="text-secondary text-[13.5px] leading-relaxed">
-                A Health Place utilizes a board of certified doctors, clinical experts, and holistic healers to vet every guide we publish. Our board cross-references references with standard medical literature (PubMed, NHI, WHO) to ensure accuracy.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {boardMembers.map((member, i) => (
-                <div key={i} className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm hover:shadow-md transition-shadow">
-                  <div className="w-12 h-12 bg-accent/10 rounded-2xl flex items-center justify-center font-heading font-extrabold text-accent text-lg mb-5">
-                    {member.avatar}
-                  </div>
-                  <h3 className="font-heading font-bold text-[16px] text-primary mb-1">{member.name}</h3>
-                  <p className="text-[11px] text-accent font-bold uppercase tracking-wider mb-1">{member.role}</p>
-                  <p className="text-[12px] text-slate-500 font-semibold mb-4">{member.specialty}</p>
-                  <p className="text-[13px] text-secondary leading-relaxed">{member.bio}</p>
-                </div>
-              ))}
-            </div>
-
-            <div className="bg-[#f0f6f3] border border-[#d8eae2] rounded-3xl p-8 flex flex-col sm:flex-row items-center gap-6 mt-12">
-              <div className="w-12 h-12 bg-accent-green/10 rounded-full flex items-center justify-center shrink-0">
-                <svg className="w-6 h-6 text-accent-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                </svg>
-              </div>
-              <div>
-                <h4 className="font-heading font-bold text-primary text-[15px] mb-1">Board Certification Status</h4>
-                <p className="text-secondary text-[12.5px] leading-relaxed">
-                  Every board reviewer holds active registrations in their respective state medical councils. Re-evaluations occur semi-annually to reflect new regulatory guidelines.
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Tab 3: Contact & Support */}
         {activeTab === 'support' && (
-          <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-[1fr_1.5fr] gap-10 reveal-fade">
+          <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-[1fr_1.5fr] gap-10">
             {/* Contact Details */}
             <div className="space-y-8">
               <div>
@@ -365,7 +315,7 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
 
         {/* Tab 4: Legal & Policies */}
         {activeTab === 'legal' && (
-          <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-[1fr_2.5fr] gap-10 reveal-fade">
+          <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-[1fr_2.5fr] gap-10">
             {/* Document Select Sidebar */}
             <div className="flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-visible pb-4 md:pb-0 border-b md:border-b-0 md:border-r border-slate-200 pr-0 md:pr-6 shrink-0">
               <button

@@ -5,11 +5,13 @@ import Footer from '@/components/Footer';
 import ScrollReveal from '@/components/ScrollReveal';
 import CustomCursor from '@/components/CustomCursor';
 import BackdropBlobs from '@/components/BackdropBlobs';
+import Button from '@/components/Button';
+import AdSlot from '@/components/AdSlot';
 
 export const metadata = {
   title: 'About Us — A Health Place',
   description:
-    'Learn about A Health Place — our mission to deliver empathetic, medically verified health guides, our advisory board, and our commitment to holistic wellness.',
+    'Learn about A Health Place — our mission to deliver empathetic, medically verified health guides, and our commitment to holistic wellness.',
 };
 
 const stats = [
@@ -103,32 +105,66 @@ export default function AboutPage() {
 
       <main className="w-full">
 
-        {/* Hero */}
         <section className="relative overflow-hidden bg-gradient-to-br from-[#f0fafa] via-[#f8fafc] to-[#eaf7f7] pt-[140px] pb-24 md:pb-32 rounded-b-[40px] border-b border-slate-200/20">
           <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-accent/10 rounded-full blur-[120px] pointer-events-none -translate-y-1/3 translate-x-1/4" />
           <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#27ae60]/8 rounded-full blur-[100px] pointer-events-none translate-y-1/3 -translate-x-1/4" />
           <div className="container relative z-10">
-            <div className="max-w-3xl mx-auto text-center">
-              <span className="inline-block text-[11px] font-bold tracking-[3px] uppercase text-accent mb-5 reveal-slide">Our Story</span>
-              <h1 className="font-heading font-extrabold text-[40px] md:text-[64px] lg:text-[72px] text-primary leading-[1.05] tracking-[-2px] mb-7 reveal-slide">
-                Health information<br />
-                <span className="text-accent">you can trust.</span>
-              </h1>
-              <p className="text-[16px] md:text-[18px] text-secondary leading-[1.8] max-w-xl mx-auto reveal-fade">
-                A Health Place was founded on a single belief — that every person deserves access to empathetic, accurate,
-                and actionable health guidance. No gatekeeping, no scare tactics, just science-backed clarity.
-              </p>
-              <div className="flex flex-wrap gap-4 justify-center mt-10 reveal-fade">
-                <Link href="/blogs" className="bg-accent hover:bg-[#3aadaf] text-white font-bold text-[13px] py-3.5 px-7 rounded-full transition-all duration-300 no-underline shadow-[0_8px_24px_rgba(79,192,195,0.35)] hover:shadow-[0_12px_32px_rgba(79,192,195,0.45)] hover:-translate-y-0.5">
-                  Explore Articles
-                </Link>
-                <Link href="/info?tab=board" className="bg-white hover:bg-slate-50 text-primary font-bold text-[13px] py-3.5 px-7 rounded-full border border-slate-200 transition-all duration-300 no-underline shadow-sm hover:-translate-y-0.5">
-                  Meet Our Board
-                </Link>
+            <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+
+              {/* Left — Text */}
+              <div className="flex-1 reveal-slide">
+                <span className="inline-block text-[11px] font-bold tracking-[3px] uppercase text-accent mb-5">Our Story</span>
+                <h1 className="font-heading font-extrabold text-[40px] md:text-[64px] lg:text-[72px] text-primary leading-[1.05] tracking-[-2px] mb-7">
+                  Health information<br />
+                  <span className="text-accent">you can trust.</span>
+                </h1>
+                <p className="text-[16px] md:text-[18px] text-secondary leading-[1.8] max-w-xl mb-10">
+                  A Health Place was founded on a single belief — that every person deserves access to empathetic, accurate,
+                  and actionable health guidance. No gatekeeping, no scare tactics, just science-backed clarity.
+                </p>
+                <div className="flex flex-wrap gap-4">
+                  <Button href="/blogs" variant="primary" className="!text-[13px] !py-3.5 !px-7 font-bold shadow-[0_8px_24px_rgba(79,192,195,0.35)] hover:shadow-[0_12px_32px_rgba(79,192,195,0.45)]">
+                    Explore Articles
+                  </Button>
+                  <Button href="/about#values" variant="outline" className="!text-[13px] !py-3.5 !px-7">
+                    Our Values
+                  </Button>
+                </div>
               </div>
+
+              {/* Right — Visual card */}
+              <div className="flex-shrink-0 w-full lg:w-[440px] reveal-scale">
+                <div className="relative h-[360px] md:h-[420px]">
+                  <div className="absolute top-6 right-6 w-full h-full bg-[#dceeed]/60 rounded-[32px] border border-slate-200/40 rotate-2" />
+                  <div className="relative z-10 w-full h-full bg-[#1c7b80] rounded-[32px] overflow-hidden flex flex-col justify-between p-8 md:p-10 shadow-[0_24px_60px_rgba(28,123,128,0.25)]">
+                    <div>
+                      <span className="text-white/70 font-bold text-[10px] uppercase tracking-[2.5px]">Medically Verified</span>
+                      <h3 className="font-heading font-extrabold text-[26px] md:text-[32px] text-white mt-3 leading-tight tracking-tight">
+                        Science-backed.<br />Human-first.
+                      </h3>
+                      <p className="text-white/80 text-[14px] leading-relaxed mt-4 max-w-sm">
+                        Our review board spans cardiology, psychiatry, Ayurveda, clinical dietetics, and insurance navigation.
+                      </p>
+                    </div>
+                    <div className="flex gap-3 flex-wrap">
+                      {['Physicians', 'Dietitians', 'Specialists', 'Advisors'].map((t, i) => (
+                        <span key={i} className="bg-white/15 text-white/90 text-[11px] font-bold px-3 py-1.5 rounded-full border border-white/20">{t}</span>
+                      ))}
+                    </div>
+                    <div className="absolute bottom-[-80px] right-[-60px] w-[240px] h-[240px] rounded-full bg-white/5 border border-white/10 pointer-events-none" />
+                    <div className="absolute bottom-[-40px] right-[-20px] w-[160px] h-[160px] rounded-full bg-white/5 border border-white/10 pointer-events-none" />
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
         </section>
+
+        {/* Ad Spot */}
+        <div className="container mx-auto my-10 px-6">
+          <AdSlot zone="about-hero-bottom" />
+        </div>
 
         {/* Stats Banner */}
         <section className="bg-primary py-16">
@@ -161,12 +197,6 @@ export default function AboutPage() {
                   Our editorial process is rigorous. Every piece of content is fact-checked against peer-reviewed literature
                   and signed off by at least one qualified medical professional. We never publish anything we would not share with our own families.
                 </p>
-                <Link href="/info?tab=board" className="inline-flex items-center gap-2 text-accent font-bold text-[14px] no-underline group">
-                  View Our Advisory Board
-                  <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                  </svg>
-                </Link>
               </div>
 
               {/* Visual card */}
@@ -194,6 +224,11 @@ export default function AboutPage() {
             </div>
           </div>
         </section>
+
+        {/* Ad Spot */}
+        <div className="container mx-auto my-10 px-6">
+          <AdSlot zone="about-mission-bottom" />
+        </div>
 
         {/* Values */}
         <section className="py-24 md:py-32 bg-[#f8fafc]">
@@ -231,12 +266,12 @@ export default function AboutPage() {
                   From everyday nutrition questions to navigating complex insurance codes — our library covers the full
                   arc of human health so you always find what you need.
                 </p>
-                <Link href="/blogs" className="inline-flex items-center gap-2 bg-primary hover:bg-[#16162a] text-white font-bold text-[13px] py-3.5 px-7 rounded-full transition-all duration-300 no-underline shadow-sm hover:-translate-y-0.5">
+                <Button href="/blogs" variant="primary" className="!bg-primary hover:!bg-[#16162a] !text-[13px] !py-3.5 !px-7 font-bold shadow-sm inline-flex items-center gap-2">
                   Browse All Articles
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                   </svg>
-                </Link>
+                </Button>
               </div>
               <div className="grid grid-cols-2 gap-4 reveal-scale">
                 {categories.map((cat, i) => (
@@ -265,12 +300,12 @@ export default function AboutPage() {
               Browse hundreds of clinically reviewed guides — free, forever. Your health journey starts with one article.
             </p>
             <div className="flex flex-wrap gap-4 justify-center reveal-fade">
-              <Link href="/blogs" className="bg-accent hover:bg-[#3aadaf] text-white font-bold text-[13px] py-3.5 px-8 rounded-full transition-all duration-300 no-underline shadow-[0_8px_24px_rgba(79,192,195,0.35)] hover:-translate-y-0.5">
+              <Button href="/blogs" variant="primary">
                 Read Our Guides
-              </Link>
-              <Link href="/services" className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-[13px] py-3.5 px-8 rounded-full transition-all duration-300 no-underline hover:-translate-y-0.5">
+              </Button>
+              <Button href="/services" variant="transparent">
                 Partner With Us
-              </Link>
+              </Button>
             </div>
           </div>
         </section>

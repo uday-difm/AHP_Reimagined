@@ -125,7 +125,7 @@ export default function BlogCategorySlider() {
             className="timeline-swiper !pb-10"
           >
             {categories.map((cat, i) => (
-              <SwiperSlide key={i} className="h-auto flex">
+              <SwiperSlide key={i} className="h-full flex">
                 <Link
                   href={cat.link}
                   className="group bg-white rounded-[24px] p-6 shadow-[0_10px_30px_rgba(0,0,0,0.02)] border border-slate-100/50 flex flex-col justify-between hover:shadow-[0_16px_40px_rgba(31,185,251,0.08)] hover:scale-[1.02] transition-all duration-300 h-full w-full no-underline"

@@ -1,8 +1,9 @@
 import Image from 'next/image';
+import Button from '@/components/Button';
 
 export default function CommunityEvents() {
   return (
-    <section id="events" className="community-section py-[100px] bg-bg-light rounded-t-[40px]">
+    <section id="events" className="community-section pt-16 pb-[100px] bg-bg-light rounded-t-[40px]">
       <div className="container">
         <div className="community-grid grid grid-cols-1 md:grid-cols-[0.9fr_1.1fr] gap-12 md:gap-20 items-center">
           <div className="community-info flex flex-col items-start gap-5 reveal-slide">
@@ -34,7 +35,7 @@ export default function CommunityEvents() {
                 <p className="featured-desc text-[14px] text-secondary leading-relaxed">Join lead eco-therapists and clinical wellness advisors for a morning sensory walk through regional reservation paths.</p>
                 <div className="featured-footer flex items-center justify-between mt-3 pt-5 border-t border-slate-200">
                   <span className="featured-meta text-[12px] font-semibold text-muted">9:00 AM — 11:30 AM</span>
-                  <a href="/info?tab=support" className="btn-primary btn-sm bg-primary text-white px-4 py-2 rounded-full font-semibold text-xs border border-primary hover:bg-transparent hover:text-primary transition-all duration-500">Reserve Spot</a>
+                  <Button href="/info?tab=support" variant="primary" className="!text-xs !py-2 !px-4 !font-semibold">Reserve Spot</Button>
                 </div>
               </div>
             </div>

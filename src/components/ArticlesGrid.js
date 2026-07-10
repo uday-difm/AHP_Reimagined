@@ -3,6 +3,7 @@
 import { useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import Button from '@/components/Button';
 
 const magazines = [
   {
@@ -70,7 +71,7 @@ export default function ArticlesGrid() {
 
   return (
     <section id="articles" className="projects-section py-[100px] bg-white rounded-t-[40px] shadow-[0_-20px_40px_rgba(0,0,0,0.01)] relative overflow-hidden">
-      <div className="container max-w-6xl mx-auto px-4">
+      <div className="container mx-auto px-4">
         
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
@@ -139,12 +140,13 @@ export default function ArticlesGrid() {
               </div>
             </Link>
 
-            <Link
+            <Button
               href="/publication"
-              className="bg-white hover:bg-slate-50 text-[#0f7c85] font-extrabold text-xs py-3.5 px-7 rounded-full border border-slate-200 shadow-sm transition-all duration-300 no-underline hover:-translate-y-0.5"
+              variant="white"
+              className="!text-xs !py-3.5 !px-7 font-extrabold"
             >
               Explore Archive →
-            </Link>
+            </Button>
           </div>
 
           {/* Right Column — Editorial Greeting & Spread Stack (7 cols) */}
@@ -160,12 +162,13 @@ export default function ArticlesGrid() {
                       Spring 2024 Issue
                     </h3>
                   </div>
-                  <Link 
+                  <Button 
                     href="/blogs/the-mindfulness-issue"
-                    className="bg-[#0f7c85] hover:bg-[#0c646b] text-white font-extrabold text-xs py-3 px-6 rounded-xl transition-all duration-300 no-underline shadow-sm hover:shadow-[0_6px_20px_rgba(15,124,133,0.2)] hover:-translate-y-0.5 transform inline-flex items-center gap-1.5"
+                    variant="primary"
+                    className="!text-xs !py-3 !px-6 !rounded-xl font-extrabold shadow-sm hover:shadow-[0_6px_20px_rgba(15,124,133,0.2)]"
                   >
                     View Latest
-                  </Link>
+                  </Button>
                 </div>
 
                 <div className="flex flex-col gap-3">

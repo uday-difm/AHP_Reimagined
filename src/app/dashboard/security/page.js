@@ -8,7 +8,7 @@ export default async function SecurityPage() {
   const sessionUser = await requireAuth();
 
   if (!sessionUser) {
-    redirect("/login");
+    redirect("/dashboard/login");
   }
 
   // Get active site configuration
