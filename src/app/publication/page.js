@@ -225,7 +225,7 @@ export default function PublicationPage() {
       {/* Hero — Current Issue */}
       <section className="bg-[#f0f6f3]/60 pt-[140px] pb-20 rounded-b-[40px] border-b border-slate-200/20 relative">
         <div className="container">
-          <div className="flex flex-col md:flex-row items-center gap-14">
+          <div className="flex flex-col md:flex-row items-center gap-10 xl:gap-14 justify-between">
 
             {/* Left — 3D Magazine Cover (3D Book effect) */}
             <Link href="/blogs/the-mindfulness-issue" className="flex-shrink-0 reveal-scale book-3d-container block no-underline">
@@ -253,37 +253,71 @@ export default function PublicationPage() {
               </div>
             </Link>
 
-            {/* Right — Info */}
-            <div className="flex-1 max-w-xl reveal-slide">
-              <div className="flex items-center gap-2 mb-5">
-                <span className="w-1.5 h-1.5 bg-accent-green rounded-full animate-pulse-slow" />
-                <span className="text-accent-green text-[11px] font-bold uppercase tracking-[2px]">Current Issue • Spring 2024</span>
+            {/* Middle — Info */}
+            <div className="flex-grow max-w-xl reveal-slide">
+              <div className="inline-flex items-center gap-2 bg-[#27ae60]/10 border border-[#27ae60]/20 rounded-full px-3.5 py-1.5 mb-6">
+                <span className="w-2 h-2 bg-accent-green rounded-full animate-pulse-slow" />
+                <span className="text-accent-green text-[10.5px] font-extrabold uppercase tracking-[2px]">LATEST ISSUE • Spring 2024</span>
               </div>
 
-              <h1 className="text-primary font-heading font-extrabold text-4xl md:text-5xl leading-tight mb-4 tracking-[-1.5px]">
+              <h1 className="text-primary font-heading font-extrabold text-4xl md:text-5xl leading-tight mb-5 tracking-[-1.5px]">
                 The Mindfulness<br />Issue
               </h1>
 
-              <p className="text-secondary text-[15px] md:text-base leading-relaxed mb-8 max-w-md">
+              <p className="text-secondary text-[15px] md:text-base leading-relaxed mb-10 max-w-md">
                 Explore the intersection of ancient wisdom and modern neuroscience. Our latest issue dives deep into meditative practices, cognitive health, and the art of intentional living.
               </p>
 
-              <div className="flex flex-wrap gap-4 mb-10">
-                <Link href="/blogs/the-mindfulness-issue" className="btn-primary hover-glow bg-primary text-white px-7 py-3.5 rounded-full font-bold text-[13.5px] border border-primary hover:bg-transparent hover:text-primary transition-all duration-500 hover:-translate-y-0.5 shadow-md cursor-pointer flex items-center justify-center no-underline">
+              <div className="flex flex-wrap gap-4 mb-12">
+                <Link href="/blogs/the-mindfulness-issue" className="btn-primary hover-glow bg-[#0f7c85] hover:bg-[#0c646b] text-white px-8 py-4 rounded-full font-bold text-[14px] border border-[#0f7c85] transition-all duration-500 hover:-translate-y-0.5 shadow-md hover:shadow-[0_8px_24px_rgba(15,124,133,0.25)] cursor-pointer flex items-center justify-center no-underline">
                   Read Digital Issue
                 </Link>
-                <a href="#recent-issues" className="border-2 border-primary/20 text-primary hover:border-primary font-bold text-[13.5px] px-7 py-3.5 rounded-full hover:bg-primary hover:text-white transition-all duration-500 hover:-translate-y-0.5 cursor-pointer flex items-center justify-center no-underline">
+                <a href="#recent-issues" className="border-2 border-[#0f7c85]/20 text-[#0f7c85] hover:border-[#0f7c85] hover:bg-[#0f7c85]/5 font-bold text-[14px] px-8 py-4 rounded-full transition-all duration-500 hover:-translate-y-0.5 cursor-pointer flex items-center justify-center no-underline">
                   Browse Archive
                 </a>
               </div>
 
-              <div className="flex flex-wrap gap-10 pt-8 border-t border-slate-200">
+              <div className="flex flex-wrap gap-10 pt-10 border-t border-slate-200">
                 {stats.map((s, i) => (
                   <div key={i} className="flex flex-col">
                     <span className="text-primary font-heading font-extrabold text-lg leading-tight">{s.value}</span>
                     <span className="text-muted text-[11px] font-semibold uppercase tracking-wider mt-1">{s.label}</span>
                   </div>
                 ))}
+              </div>
+            </div>
+
+            {/* Right Column — Partner Ad/Promo Card */}
+            <div className="hidden lg:block lg:w-[280px] flex-shrink-0 self-stretch reveal-scale">
+              <div className="bg-white/70 backdrop-blur-md rounded-[32px] p-5 border border-white/60 shadow-[0_12px_32px_rgba(0,0,0,0.03)] h-full flex flex-col justify-between">
+                <div>
+                  <span className="inline-block bg-[#27ae60]/10 border border-[#27ae60]/20 text-[#27ae60] font-bold text-[9px] uppercase tracking-[1.5px] px-2.5 py-1 rounded-full mb-3.5">
+                    Partner Highlight
+                  </span>
+                  
+                  <div className="relative w-full h-[120px] rounded-2xl overflow-hidden mb-4 border border-slate-100 shadow-sm bg-slate-50">
+                    <Image
+                      src="/images/service_partner_roundup_mockup.png"
+                      alt="Wellness Consultation Partner"
+                      fill
+                      className="object-cover animate-pulse-slow"
+                    />
+                  </div>
+
+                  <h3 className="font-heading font-extrabold text-[14px] text-primary leading-tight mb-2">
+                    Personalized Health Plans
+                  </h3>
+                  <p className="text-secondary text-[12px] leading-relaxed mb-4">
+                    Unlock tailored nutrition, circadian alignment, and somatic reset coaching from certified wellness experts.
+                  </p>
+                </div>
+
+                <a
+                  href="/services"
+                  className="w-full text-center bg-[#0f7c85] hover:bg-[#0c646b] text-white font-extrabold text-[12px] py-3 px-4 rounded-xl transition-all duration-300 no-underline block shadow-sm hover:shadow-[0_6px_20px_rgba(15,124,133,0.3)] hover:-translate-y-0.5 transform"
+                >
+                  Book Free Consultation
+                </a>
               </div>
             </div>
 

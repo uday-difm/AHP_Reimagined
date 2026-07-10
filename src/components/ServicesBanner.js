@@ -50,7 +50,7 @@ export default function ServicesBanner() {
             <div className="mt-4">
               <Link
                 href="/services"
-                className="bg-accent hover:bg-white text-primary hover:text-primary font-bold text-xs py-3.5 px-7 rounded-full inline-flex items-center gap-2 transition-all duration-300 no-underline shadow-[0_12px_32px_rgba(79,192,195,0.25)] hover:shadow-none hover:-translate-y-0.5 active:scale-[0.98]"
+                className="bg-accent hover:bg-white text-white hover:text-primary font-bold text-xs py-3.5 px-7 rounded-full inline-flex items-center gap-2 transition-all duration-300 no-underline shadow-[0_12px_32px_rgba(15,124,133,0.25)] hover:shadow-none hover:-translate-y-0.5 active:scale-[0.98]"
               >
                 Explore Media Packages <ArrowRight size={13} />
               </Link>

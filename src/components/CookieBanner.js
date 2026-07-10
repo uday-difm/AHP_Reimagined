@@ -117,7 +117,7 @@ export default function CookieBanner({ complianceSettings }) {
           </button>
           <button
             onClick={handleAccept}
-            className="px-5 py-2 text-xs font-semibold bg-accent text-primary rounded-full hover:shadow-[0_8px_20px_rgba(79,192,195,0.25)] transition-all duration-300 hover:scale-[1.02] cursor-pointer active:scale-[0.98] border border-accent"
+            className="px-5 py-2 text-xs font-semibold bg-accent text-white rounded-full hover:bg-[#0c646b] hover:border-[#0c646b] hover:shadow-[0_8px_20px_rgba(15,124,133,0.25)] transition-all duration-300 hover:scale-[1.02] cursor-pointer active:scale-[0.98] border border-accent"
           >
             {acceptText}
           </button>

@@ -10,7 +10,7 @@
 
   --color-primary: #1a1a2e;
   --color-secondary: #4a4a5a;
-  --color-accent: #4FC0C3;
+  --color-accent: #0f7c85;
   --color-accent-green: #27ae60;
   --color-bg-light: #f8fafc;
   --color-bg-white: #ffffff;
@@ -361,7 +361,7 @@ body.hb-no-scroll {
   inset: 0;
   width: 100%;
   height: 100%;
-  background: #143531; /* matching the cover primary color */
+  background: #0f7c85; /* same as the button brand teal */
   border-radius: 4px 12px 12px 4px;
   transform: translateZ(-10px);
   z-index: 1;
