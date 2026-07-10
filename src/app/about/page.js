@@ -95,16 +95,16 @@ const categories = [
 
 export default function AboutPage() {
   return (
-    <>
+    <div className="min-h-screen bg-bg-light relative">
       <CustomCursor />
       <ScrollReveal />
       <BackdropBlobs />
       <Header />
 
-      <main className="w-full pt-20">
+      <main className="w-full">
 
         {/* Hero */}
-        <section className="relative overflow-hidden bg-gradient-to-br from-[#f0fafa] via-[#f8fafc] to-[#eaf7f7] py-28 md:py-36">
+        <section className="relative overflow-hidden bg-gradient-to-br from-[#f0fafa] via-[#f8fafc] to-[#eaf7f7] pt-[140px] pb-24 md:pb-32 rounded-b-[40px] border-b border-slate-200/20">
           <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-accent/10 rounded-full blur-[120px] pointer-events-none -translate-y-1/3 translate-x-1/4" />
           <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#27ae60]/8 rounded-full blur-[100px] pointer-events-none translate-y-1/3 -translate-x-1/4" />
           <div className="container relative z-10">
@@ -119,7 +119,7 @@ export default function AboutPage() {
                 and actionable health guidance. No gatekeeping, no scare tactics, just science-backed clarity.
               </p>
               <div className="flex flex-wrap gap-4 justify-center mt-10 reveal-fade">
-                <Link href="/blogs" className="bg-accent hover:bg-[#0c646b] text-white font-bold text-[13px] py-3.5 px-7 rounded-full transition-all duration-300 no-underline shadow-[0_8px_24px_rgba(15,124,133,0.35)] hover:shadow-[0_12px_32px_rgba(15,124,133,0.45)] hover:-translate-y-0.5">
+                <Link href="/blogs" className="bg-accent hover:bg-[#3aadaf] text-white font-bold text-[13px] py-3.5 px-7 rounded-full transition-all duration-300 no-underline shadow-[0_8px_24px_rgba(79,192,195,0.35)] hover:shadow-[0_12px_32px_rgba(79,192,195,0.45)] hover:-translate-y-0.5">
                   Explore Articles
                 </Link>
                 <Link href="/info?tab=board" className="bg-white hover:bg-slate-50 text-primary font-bold text-[13px] py-3.5 px-7 rounded-full border border-slate-200 transition-all duration-300 no-underline shadow-sm hover:-translate-y-0.5">
@@ -265,7 +265,7 @@ export default function AboutPage() {
               Browse hundreds of clinically reviewed guides — free, forever. Your health journey starts with one article.
             </p>
             <div className="flex flex-wrap gap-4 justify-center reveal-fade">
-              <Link href="/blogs" className="bg-accent hover:bg-[#0c646b] text-white font-bold text-[13px] py-3.5 px-8 rounded-full transition-all duration-300 no-underline shadow-[0_8px_24px_rgba(15,124,133,0.35)] hover:-translate-y-0.5">
+              <Link href="/blogs" className="bg-accent hover:bg-[#3aadaf] text-white font-bold text-[13px] py-3.5 px-8 rounded-full transition-all duration-300 no-underline shadow-[0_8px_24px_rgba(79,192,195,0.35)] hover:-translate-y-0.5">
                 Read Our Guides
               </Link>
               <Link href="/services" className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-[13px] py-3.5 px-8 rounded-full transition-all duration-300 no-underline hover:-translate-y-0.5">
@@ -278,6 +278,6 @@ export default function AboutPage() {
       </main>
 
       <Footer />
-    </>
+    </div>
   );
 }

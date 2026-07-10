@@ -15,7 +15,7 @@ export default function Footer({ className = "" }) {
         <div className="footer-grid grid grid-cols-1 lg:grid-cols-[1.1fr_1.9fr] gap-16 lg:gap-24 pb-16">
 
           {/* Brand Presentation Card (Premium Glass & Shadow Gradient) */}
-          <div className="footer-brand flex flex-col gap-6 bg-gradient-to-br from-white/[0.12] via-white/[0.03] to-transparent border border-white/10 backdrop-blur-2xl rounded-3xl p-8 hover:-translate-y-2 hover:scale-[1.02] transition-all duration-500 shadow-[0_10px_40px_rgba(255,255,255,0.05)] hover:shadow-[0_15px_50px_rgba(255,255,255,0.15)]">
+          <div className="footer-brand flex flex-col gap-6 bg-gradient-to-br from-white/[0.12] via-white/[0.03] to-transparent border border-white/10 backdrop-blur-2xl rounded-3xl p-8 hover:-translate-y-2 hover:scale-[1.02] transition-all duration-500 shadow-[0_10px_40px_rgba(100,100,200,0.05)] hover:shadow-[0_15px_50px_rgba(100,100,200,0.15)]">
             <a href="#" className="logo-link-footer inline-block self-start transition-all duration-300">
               <Image
                 src="/images/Logo-web.png"

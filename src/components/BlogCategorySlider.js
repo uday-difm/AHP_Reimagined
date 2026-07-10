@@ -83,13 +83,21 @@ export default function BlogCategorySlider() {
       <div className="container relative px-6 md:px-8">
         {/* Section Title */}
         <div className="section-title-center text-center max-w-[600px] mx-auto mb-16 reveal-slide">
-          <span className="section-tag text-[11px] font-bold tracking-[2px] text-accent uppercase mb-3 block">EXPLORE CATEGORIES</span>
-          <h2 className="section-title font-heading font-extrabold text-[32px] md:text-[44px] text-primary tracking-[-1px]">Types of Blogs</h2>
+
+          <h2 className="section-title font-heading font-extrabold text-[32px] md:text-[44px] text-primary tracking-[-1px]">Latest Blogs</h2>
           <p className="text-secondary/80 mt-3 text-[14px]">Browse our articles by topic to find medically verified guides and insights.</p>
         </div>
 
-        {/* Swiper Slider Wrapper */}
-        <div className="reveal-scale relative px-2 md:px-0">
+        {/* Swiper Slider Wrapper with side paddings for arrows */}
+        <div className="reveal-scale relative px-12 md:px-14">
+
+          {/* Left Arrow */}
+          <button className="swiper-timeline-prev absolute left-0 md:left-2 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full border border-slate-200/60 bg-white/90 text-primary hover:border-accent hover:text-accent flex items-center justify-center transition-all duration-300 active:scale-95 shadow-sm cursor-pointer">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
+          </button>
+
           <Swiper
             modules={[Navigation, Pagination, Autoplay]}
             spaceBetween={30}
@@ -97,7 +105,7 @@ export default function BlogCategorySlider() {
             loop={true}
             speed={500}
             autoplay={{
-              delay: 3000,
+              delay: 2000,
               disableOnInteraction: false,
               pauseOnMouseEnter: true,
             }}
@@ -114,7 +122,7 @@ export default function BlogCategorySlider() {
                 slidesPerView: 4,
               },
             }}
-            className="timeline-swiper !pb-14"
+            className="timeline-swiper !pb-10"
           >
             {categories.map((cat, i) => (
               <SwiperSlide key={i} className="h-auto flex">
@@ -144,25 +152,18 @@ export default function BlogCategorySlider() {
             ))}
           </Swiper>
 
-          {/* Slider Controls (bullets + navigation arrow buttons) */}
-          <div className="flex justify-between items-center mt-6 px-4">
-            {/* Custom Pagination Bullets */}
-            <div className="swiper-timeline-pagination flex gap-2 !w-auto"></div>
+          {/* Right Arrow */}
+          <button className="swiper-timeline-next absolute right-0 md:right-2 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full border border-slate-200/60 bg-white/90 text-primary hover:border-accent hover:text-accent flex items-center justify-center transition-all duration-300 active:scale-95 shadow-sm cursor-pointer">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+            </svg>
+          </button>
 
-            {/* Custom Navigation Arrows */}
-            <div className="flex gap-3">
-              <button className="swiper-timeline-prev w-12 h-12 rounded-full border border-slate-200/60 bg-white/90 text-primary hover:border-accent hover:text-accent flex items-center justify-center transition-all duration-300 active:scale-95 shadow-sm cursor-pointer z-10">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-                </svg>
-              </button>
-              <button className="swiper-timeline-next w-12 h-12 rounded-full border border-slate-200/60 bg-white/90 text-primary hover:border-accent hover:text-accent flex items-center justify-center transition-all duration-300 active:scale-95 shadow-sm cursor-pointer z-10">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                </svg>
-              </button>
-            </div>
+          {/* Centered Pagination dots below */}
+          <div className="flex justify-center mt-6">
+            <div className="swiper-timeline-pagination flex gap-2 !w-auto"></div>
           </div>
+
         </div>
       </div>
     </section>
