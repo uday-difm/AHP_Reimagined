@@ -27,7 +27,7 @@ export default function Header() {
   return (
     <>
       {/* Header */}
-      <header className="fixed top-0 left-0 w-full flex items-center h-20 bg-white/30 backdrop-blur-3xl border-b border-white/50 shadow-[0_8px_32px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.6)] z-[9000]" style={{ WebkitBackdropFilter: 'blur(48px)' }}>
+      <header className="fixed top-0 left-0 w-full flex items-center h-20 bg-white/30 backdrop-blur-lg z-[9000]" style={{ WebkitBackdropFilter: 'blur(48px)' }}>
         <div className="header-container flex justify-between items-center w-full  mx-auto px-6 md:px-10">
           <a href="/" className="logo-link flex items-center">
             <Image
@@ -109,8 +109,7 @@ export default function Header() {
                   href={href}
                   onClick={() => setMenuOpen(false)}
                   style={{ transitionDelay: `${i * 0.05}s` }}
-                  className={`hb-nav-item font-heading font-extrabold text-[28px] sm:text-[40px] md:text-[56px] lg:text-[64px] text-primary no-underline leading-[1.1] tracking-[-1.5px] inline-block hover:text-accent hover:-translate-x-3 transition-all duration-500 ${menuOpen ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'
-                    }`}
+                  className={`hb-nav-item font-heading font-extrabold text-[28px] sm:text-[40px] md:text-[56px] lg:text-[64px] text-primary no-underline leading-[1.1] tracking-[-1.5px] inline-block hover:text-accent hover:translate-x-3 transition-all duration-500 ${menuOpen ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'}`}
                 >
                   {label}
                 </a>
