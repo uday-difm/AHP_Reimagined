@@ -498,7 +498,7 @@ export default function PublicationPage() {
 
       {/* Subscribe + Advertise — Side by Side */}
       <section className="container my-14 reveal-scale">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
 
           {/* Left — Terracotta Subscribe CTA */}
           <div
