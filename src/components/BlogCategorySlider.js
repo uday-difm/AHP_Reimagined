@@ -77,7 +77,7 @@ const categories = [
   },
 ];
 
-export default function TimelineMarquee() {
+export default function BlogCategorySlider() {
   return (
     <section id="timeline" className="timeline-section py-[100px] bg-bg-timeline rounded-t-[40px] relative overflow-hidden">
       <div className="container relative px-6 md:px-8">
@@ -106,7 +106,6 @@ export default function TimelineMarquee() {
               nextEl: '.swiper-timeline-next',
               prevEl: '.swiper-timeline-prev',
             }}
-            autoplay={{ delay: 5500, disableOnInteraction: false, pauseOnMouseEnter: true }}
             breakpoints={{
               640: {
                 slidesPerView: 2,

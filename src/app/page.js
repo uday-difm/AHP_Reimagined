@@ -3,9 +3,9 @@ import BackdropBlobs from '@/components/BackdropBlobs';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import Marquee from '@/components/Marquee';
-import About from '@/components/About';
+import WellnessShowcase from '@/components/WellnessShowcase';
 import ArticlesGrid from '@/components/ArticlesGrid';
-import TimelineMarquee from '@/components/TimelineMarquee';
+import BlogCategorySlider from '@/components/BlogCategorySlider';
 import CommunityEvents from '@/components/CommunityEvents';
 import ServicesBanner from '@/components/ServicesBanner';
 import Newsletter from '@/components/Newsletter';
@@ -31,8 +31,8 @@ export default function Home() {
         <AdSlot zone="homepage-hero-bottom" />
         <ArticlesGrid />
         <AdSlot zone="homepage-articles-bottom" />
-        <TimelineMarquee />
-        <About />
+        <BlogCategorySlider />
+        <WellnessShowcase />
         <AdSlot zone="homepage-about-bottom" />
         <CommunityEvents />
         <AdSlot zone="homepage-events-bottom" />

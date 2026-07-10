@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-export default function About() {
+export default function WellnessShowcase() {
   return (
     <section id="about" className="values-section py-[100px] bg-slate-50/50 rounded-b-[40px]">
       <div className="container">
