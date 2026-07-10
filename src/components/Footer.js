@@ -58,10 +58,10 @@ export default function Footer({ className = "" }) {
 
             {/* ISSN Barcode */}
             <div className="footer-col flex flex-col gap-4">
-              <h4 className="footer-title font-heading text-[12px] font-bold uppercase tracking-[2.5px] text-accent mb-4 relative after:absolute after:bottom-[-8px] after:left-0 after:w-8 after:h-[2px] after:bg-accent">
+              <h4 className="footer-title font-heading text-[12px] font-bold uppercase tracking-[2.5px] text-accent mb-6">
                 ISSN
               </h4>
-              <div className="bg-white p-3 rounded-xl inline-block self-start shadow-sm mt-2">
+              <div className="bg-white p-3 rounded-xl inline-block self-start shadow-sm">
                 <Image
                   src="/images/ISSN_BARCODE.png"
                   alt="ISSN Barcode"
@@ -74,7 +74,7 @@ export default function Footer({ className = "" }) {
 
             {/* Company */}
             <div className="footer-col">
-              <h4 className="footer-title font-heading text-[12px] font-bold uppercase tracking-[2.5px] text-accent mb-8 relative after:absolute after:bottom-[-8px] after:left-0 after:w-8 after:h-[2px] after:bg-accent">
+              <h4 className="footer-title font-heading text-[12px] font-bold uppercase tracking-[2.5px] text-accent mb-6">
                 Company
               </h4>
               <ul className="footer-links list-none flex flex-col gap-4">
@@ -106,7 +106,7 @@ export default function Footer({ className = "" }) {
 
             {/* Legal */}
             <div className="footer-col">
-              <h4 className="footer-title font-heading text-[12px] font-semibold uppercase tracking-[2px] text-accent mb-6">Legal</h4>
+              <h4 className="footer-title font-heading text-[12px] font-bold uppercase tracking-[2.5px] text-accent mb-6">Legal</h4>
               <ul className="footer-links list-none flex flex-col gap-3">
                 <li><Link href="/info?tab=legal&doc=privacy" className="footer-link text-[13.5px] text-white/60 no-underline transition-all hover:text-white hover:pl-1">Privacy Policy</Link></li>
                 <li><Link href="/info?tab=legal&doc=terms" className="footer-link text-[13.5px] text-white/60 no-underline transition-all hover:text-white hover:pl-1">Terms of Service</Link></li>
