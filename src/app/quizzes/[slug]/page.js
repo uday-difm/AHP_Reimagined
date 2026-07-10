@@ -9,8 +9,9 @@ export function generateStaticParams() {
   return quizzes.map((q) => ({ slug: q.slug }));
 }
 
-export function generateMetadata({ params }) {
-  const quiz = getQuizBySlug(params.slug);
+export async function generateMetadata({ params }) {
+  const resolvedParams = await params;
+  const quiz = getQuizBySlug(resolvedParams.slug);
   if (!quiz) return {};
   return {
     title: `${quiz.title} — A Health Place Quizzes`,
@@ -18,8 +19,9 @@ export function generateMetadata({ params }) {
   };
 }
 
-export default function QuizPage({ params }) {
-  const quiz = getQuizBySlug(params.slug);
+export default async function QuizPage({ params }) {
+  const resolvedParams = await params;
+  const quiz = getQuizBySlug(resolvedParams.slug);
   if (!quiz) notFound();
 
   return (
