@@ -28,11 +28,13 @@ export default async function Home() {
       <BackdropBlobs />
 
       {/* Persistent Navigation */}
+
+      <Marquee />
       <Header />
 
       {/* Modular Page Sections */}
+
       <main className="w-full">
-        <Marquee />
         <Hero />
         <AdSlot zone="homepage-hero-bottom" />
         <ArticlesGrid />

@@ -31,7 +31,7 @@ export default function Header() {
   return (
     <>
       {/* Header */}
-      <header className="fixed top-0 left-0 w-full flex items-center h-20 bg-white/30 backdrop-blur-lg z-[9000]" style={{ WebkitBackdropFilter: 'blur(48px)' }}>
+      <header className="fixed top-[40px] left-0 w-full flex items-center h-20 bg-white/30 backdrop-blur-lg z-[9000]" style={{ WebkitBackdropFilter: 'blur(48px)' }}>
         <div className="header-container flex justify-between items-center w-full  mx-auto px-6 md:px-10">
           <a href="/" className="logo-link flex items-center">
             <Image

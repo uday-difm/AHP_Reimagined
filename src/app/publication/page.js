@@ -498,34 +498,24 @@ export default function PublicationPage() {
 
       {/* Subscribe + Advertise — Side by Side */}
       <section className="container my-14 reveal-scale">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-[7fr_3fr] gap-6 items-stretch">
 
           {/* Left — Terracotta Subscribe CTA */}
           <div
             ref={subscribeCardRef}
             onMouseMove={handleSubscribeMouseMove}
             onMouseLeave={handleSubscribeMouseLeave}
-            className="bg-[#e28c6f]/92 rounded-[40px] py-12 px-8 shadow-[0_20px_48px_rgba(226,140,111,0.15)] relative overflow-hidden [perspective:1200px] flex flex-col justify-between"
+            className="bg-[#e28c6f]/92 rounded-[40px] shadow-[0_20px_48px_rgba(226,140,111,0.15)] relative [perspective:1200px] flex flex-row items-stretch min-h-[280px]"
           >
-            <div className="absolute inset-0 bg-gradient-to-tr from-[#df7f60]/20 to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-tr from-[#df7f60]/20 to-transparent pointer-events-none rounded-[40px]" />
 
-            {/* Phone mockup — absolute positioned, right side */}
-            <div
-              style={phoneTransform}
-              className="absolute bottom-0 right-6 w-[130px] md:w-[155px] hidden md:block select-none [transform-style:preserve-3d] opacity-90"
-            >
-              <div className="absolute -top-4 -right-4 w-28 h-36 bg-[#f4ded7]/60 rounded-[24px] rotate-6 opacity-60" />
-              <div className="relative z-10 rounded-[24px] overflow-hidden shadow-[0_24px_64px_rgba(0,0,0,0.12)] border-[4px] border-white/50">
-                <Image src="/images/mag_phone.png" alt="A Health Place magazine app" width={155} height={285} className="w-full object-cover" />
-              </div>
-            </div>
-
-            <div className="relative z-10 flex flex-col gap-6 h-full md:max-w-[58%]">
+            {/* Text content — left */}
+            <div className="relative z-10 flex flex-col justify-center gap-5 flex-1 py-10 pl-10 pr-6">
               <div>
                 <h2 className="text-primary font-heading font-extrabold text-2xl md:text-3xl leading-tight mb-3 tracking-[-1px]">
                   Never miss a moment<br />of wellness.
                 </h2>
-                <p className="text-[#3a2520]/80 text-[13.5px] leading-relaxed">
+                <p className="text-[#3a2520]/80 text-[13.5px] leading-relaxed max-w-md">
                   Subscribe to our digital edition for just $15/year. Get exclusive interviews, medically-vetted health guides, and a sanctuary of inspiration delivered to your inbox every quarter.
                 </p>
               </div>
@@ -536,16 +526,16 @@ export default function PublicationPage() {
                     ✅ You&apos;re subscribed! Welcome to the A Health Place community.
                   </div>
                 ) : (
-                  <form onSubmit={handleSubscribe} className="flex flex-col gap-3">
+                  <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3 max-w-md">
                     <input
                       type="email"
                       value={email}
                       onChange={e => setEmail(e.target.value)}
                       required
                       placeholder="Your email address"
-                      className="w-full rounded-full px-6 py-3.5 text-sm text-[#1a1a2e] outline-none focus:ring-2 focus:ring-white/50 bg-white/90 placeholder:text-[#9a8680]"
+                      className="flex-1 rounded-full px-6 py-3.5 text-sm text-[#1a1a2e] outline-none focus:ring-2 focus:ring-white/50 bg-white/90 placeholder:text-[#9a8680]"
                     />
-                    <Button type="submit" variant="primary" className="!bg-primary hover:!bg-primary/90 !text-sm !py-3.5 !px-7 shadow-md w-max">
+                    <Button type="submit" variant="primary" className="!bg-primary hover:!bg-primary/90 !text-sm !py-3.5 !px-7 shadow-md whitespace-nowrap">
                       Subscribe Now
                     </Button>
                   </form>
@@ -557,6 +547,20 @@ export default function PublicationPage() {
                 </p>
               </div>
             </div>
+
+            {/* Phone mockup — right column, bottom-aligned */}
+            <div
+              style={phoneTransform}
+              className="hidden md:flex shrink-0 w-[180px] items-end justify-center pr-4 pb-0 select-none [transform-style:preserve-3d]"
+            >
+              <div className="relative">
+                <div className="absolute -top-4 -right-3 w-24 h-36 bg-[#f4ded7]/50 rounded-[24px] rotate-6 opacity-60" />
+                <div className="relative z-10 rounded-[28px] overflow-hidden shadow-[0_24px_64px_rgba(0,0,0,0.15)] border-[4px] border-white/60">
+                  <Image src="/images/mag_phone.png" alt="A Health Place magazine app" width={160} height={300} className="w-full object-cover" />
+                </div>
+              </div>
+            </div>
+
           </div>
 
           {/* Right — Advertise With Us */}
