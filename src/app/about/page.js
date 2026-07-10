@@ -105,32 +105,64 @@ export default function AboutPage() {
 
       <main className="w-full">
 
-        {/* Hero */}
         <section className="relative overflow-hidden bg-gradient-to-br from-[#f0fafa] via-[#f8fafc] to-[#eaf7f7] pt-[140px] pb-24 md:pb-32 rounded-b-[40px] border-b border-slate-200/20">
           <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-accent/10 rounded-full blur-[120px] pointer-events-none -translate-y-1/3 translate-x-1/4" />
           <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#27ae60]/8 rounded-full blur-[100px] pointer-events-none translate-y-1/3 -translate-x-1/4" />
           <div className="container relative z-10">
-            <div className="max-w-3xl mx-auto text-center">
-              <span className="inline-block text-[11px] font-bold tracking-[3px] uppercase text-accent mb-5 reveal-slide">Our Story</span>
-              <h1 className="font-heading font-extrabold text-[40px] md:text-[64px] lg:text-[72px] text-primary leading-[1.05] tracking-[-2px] mb-7 reveal-slide">
-                Health information<br />
-                <span className="text-accent">you can trust.</span>
-              </h1>
-              <p className="text-[16px] md:text-[18px] text-secondary leading-[1.8] max-w-xl mx-auto reveal-fade">
-                A Health Place was founded on a single belief — that every person deserves access to empathetic, accurate,
-                and actionable health guidance. No gatekeeping, no scare tactics, just science-backed clarity.
-              </p>
-              <div className="flex flex-wrap gap-4 justify-center mt-10 reveal-fade">
-                <Button href="/blogs" variant="primary" className="!text-[13px] !py-3.5 !px-7 font-bold shadow-[0_8px_24px_rgba(79,192,195,0.35)] hover:shadow-[0_12px_32px_rgba(79,192,195,0.45)]">
-                  Explore Articles
-                </Button>
+            <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+
+              {/* Left — Text */}
+              <div className="flex-1 reveal-slide">
+                <span className="inline-block text-[11px] font-bold tracking-[3px] uppercase text-accent mb-5">Our Story</span>
+                <h1 className="font-heading font-extrabold text-[40px] md:text-[64px] lg:text-[72px] text-primary leading-[1.05] tracking-[-2px] mb-7">
+                  Health information<br />
+                  <span className="text-accent">you can trust.</span>
+                </h1>
+                <p className="text-[16px] md:text-[18px] text-secondary leading-[1.8] max-w-xl mb-10">
+                  A Health Place was founded on a single belief — that every person deserves access to empathetic, accurate,
+                  and actionable health guidance. No gatekeeping, no scare tactics, just science-backed clarity.
+                </p>
+                <div className="flex flex-wrap gap-4">
+                  <Button href="/blogs" variant="primary" className="!text-[13px] !py-3.5 !px-7 font-bold shadow-[0_8px_24px_rgba(79,192,195,0.35)] hover:shadow-[0_12px_32px_rgba(79,192,195,0.45)]">
+                    Explore Articles
+                  </Button>
+                  <Button href="/about#values" variant="outline" className="!text-[13px] !py-3.5 !px-7">
+                    Our Values
+                  </Button>
+                </div>
               </div>
+
+              {/* Right — Visual card */}
+              <div className="flex-shrink-0 w-full lg:w-[440px] reveal-scale">
+                <div className="relative h-[360px] md:h-[420px]">
+                  <div className="absolute top-6 right-6 w-full h-full bg-[#dceeed]/60 rounded-[32px] border border-slate-200/40 rotate-2" />
+                  <div className="relative z-10 w-full h-full bg-[#1c7b80] rounded-[32px] overflow-hidden flex flex-col justify-between p-8 md:p-10 shadow-[0_24px_60px_rgba(28,123,128,0.25)]">
+                    <div>
+                      <span className="text-white/70 font-bold text-[10px] uppercase tracking-[2.5px]">Medically Verified</span>
+                      <h3 className="font-heading font-extrabold text-[26px] md:text-[32px] text-white mt-3 leading-tight tracking-tight">
+                        Science-backed.<br />Human-first.
+                      </h3>
+                      <p className="text-white/80 text-[14px] leading-relaxed mt-4 max-w-sm">
+                        Our review board spans cardiology, psychiatry, Ayurveda, clinical dietetics, and insurance navigation.
+                      </p>
+                    </div>
+                    <div className="flex gap-3 flex-wrap">
+                      {['Physicians', 'Dietitians', 'Specialists', 'Advisors'].map((t, i) => (
+                        <span key={i} className="bg-white/15 text-white/90 text-[11px] font-bold px-3 py-1.5 rounded-full border border-white/20">{t}</span>
+                      ))}
+                    </div>
+                    <div className="absolute bottom-[-80px] right-[-60px] w-[240px] h-[240px] rounded-full bg-white/5 border border-white/10 pointer-events-none" />
+                    <div className="absolute bottom-[-40px] right-[-20px] w-[160px] h-[160px] rounded-full bg-white/5 border border-white/10 pointer-events-none" />
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
         </section>
 
         {/* Ad Spot */}
-        <div className="container max-w-4xl mx-auto my-10 px-6">
+        <div className="container mx-auto my-10 px-6">
           <AdSlot zone="about-hero-bottom" />
         </div>
 
@@ -194,7 +226,7 @@ export default function AboutPage() {
         </section>
 
         {/* Ad Spot */}
-        <div className="container max-w-5xl mx-auto my-10 px-6">
+        <div className="container mx-auto my-10 px-6">
           <AdSlot zone="about-mission-bottom" />
         </div>
 
