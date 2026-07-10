@@ -27,7 +27,7 @@ export default function Header() {
   return (
     <>
       {/* Header */}
-      <header className="fixed top-0 left-0 w-full flex items-center h-20 bg-white/30 backdrop-blur-3xl border-b border-white/50 shadow-[0_8px_32px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.6)] z-[9000]" style={{WebkitBackdropFilter:'blur(48px)'}}>
+      <header className="fixed top-0 left-0 w-full flex items-center h-20 bg-white/30 backdrop-blur-3xl border-b border-white/50 shadow-[0_8px_32px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.6)] z-[9000]" style={{ WebkitBackdropFilter: 'blur(48px)' }}>
         <div className="header-container flex justify-between items-center w-full  mx-auto px-6 md:px-10">
           <a href="/" className="logo-link flex items-center">
             <Image
@@ -43,6 +43,7 @@ export default function Header() {
           {/* Desktop Nav */}
           <nav className="nav-desktop hidden md:flex items-center gap-4 md:gap-8 flex-1 justify-center">
             <a href="/" className="nav-item text-xs md:text-sm font-medium text-secondary relative py-1.5 transition-colors hover:text-primary after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all after:duration-300 hover:after:w-full">Home</a>
+            <a href="/about" className="nav-item text-xs md:text-sm font-medium text-secondary relative py-1.5 transition-colors hover:text-primary after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all after:duration-300 hover:after:w-full">About</a>
             <a href="/publication" className="nav-item text-xs md:text-sm font-medium text-secondary relative py-1.5 transition-colors hover:text-primary after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all after:duration-300 hover:after:w-full">Publication</a>
             <a href="/blogs" className="nav-item text-xs md:text-sm font-medium text-secondary relative py-1.5 transition-colors hover:text-primary after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all after:duration-300 hover:after:w-full">Blogs</a>
           </nav>
@@ -73,8 +74,9 @@ export default function Header() {
         className={`fixed inset-0 w-full h-screen bg-white/95 dark:bg-slate-950/95 backdrop-blur-3xl z-[8999] flex items-center justify-center transition-all duration-500 ${menuOpen ? 'opacity-100 pointer-events-auto visible' : 'opacity-0 pointer-events-none invisible'
           }`}
       >
-        <div className={`hb-menu-container w-full max-h-screen overflow-y-auto py-24 px-6 sm:px-10 md:px-20 grid grid-cols-1 md:grid-cols-[0.8fr_1.2fr] gap-10 md:gap-20 items-center transition-transform duration-700 ${menuOpen ? 'translate-y-0' : 'translate-y-10'}`}>
-          <div className={`hb-meta-panel hidden md:flex flex-col gap-10 border-r border-primary/10 pr-12 transition-all duration-500 delay-300 ${menuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[30px]'}`}>
+        <div className={`hb-menu-container w-full max-h-screen overflow-y-auto py-24 px-6 sm:px-10 md:px-20 grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr] gap-10 md:gap-20 items-center transition-transform duration-700 ${menuOpen ? 'translate-y-0' : 'translate-y-10'}`}>
+
+          <div className={`hb-meta-panel hidden md:flex flex-col gap-10 border-r border-primary/10 pl-12 transition-all duration-500 delay-300 ${menuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[30px]'}`}>
             <div className="hb-quote-section flex items-start justify-start py-6 px-6 md:px-8 max-w-[650px]">
               <div className="hb-quote-container font-['Optima',_'Candara',_'Noto_Sans',_sans-serif] text-[#1a1a1a] dark:text-white py-6 leading-[1.1] uppercase">
                 <h1 className="hb-main-text text-[40px] md:text-[52px] lg:text-[64px] tracking-[2px] font-normal m-0 leading-[1.1]">
@@ -86,18 +88,21 @@ export default function Header() {
               </div>
             </div>
           </div>
-          <nav className="hb-nav-links flex flex-col gap-3 sm:gap-4 md:items-end">
-            {['Home', 'Blogs', 'Digital Magazine'].map((label, i) => {
+          <nav className="hb-nav-links flex flex-col gap-3 sm:gap-4">
+            {['Home', 'About', 'Blogs', 'Digital Magazine'].map((label, i) => {
               const isPublication = label === 'Digital Magazine';
               const isBlogs = label === 'Blogs';
               const isHome = label === 'Home';
+              const isAbout = label === 'About';
               const href = isHome
                 ? '/'
-                : isPublication
-                  ? '/publication'
-                  : isBlogs
-                    ? '/blogs'
-                    : `/#${label.toLowerCase().replace('journey', 'timeline').replace('newsletter', 'contact').replace('community', 'events')}`;
+                : isAbout
+                  ? '/about'
+                  : isPublication
+                    ? '/publication'
+                    : isBlogs
+                      ? '/blogs'
+                      : `/#${label.toLowerCase().replace('journey', 'timeline').replace('newsletter', 'contact').replace('community', 'events')}`;
               return (
                 <a
                   key={i}
@@ -112,6 +117,7 @@ export default function Header() {
               );
             })}
           </nav>
+
         </div>
       </div>
     </>
