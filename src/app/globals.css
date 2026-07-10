@@ -119,6 +119,26 @@
   }
 }
 
+/* ─── Custom Swiper Pagination override ─── */
+.swiper-custom-pagination .swiper-pagination-bullet,
+.swiper-timeline-pagination .swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  background: #cbd5e1;
+  opacity: 0.6;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.swiper-custom-pagination .swiper-pagination-bullet-active,
+.swiper-timeline-pagination .swiper-pagination-bullet-active {
+  width: 24px;
+  background: #0f7c85;
+  border-radius: 4px;
+  opacity: 1;
+}
+
 /* Custom Tailwind v4 Utilities */
 @utility custom-cursor {
   position: fixed;
@@ -227,8 +247,151 @@
 html.hb-no-scroll {
   overflow-y: scroll !important;
 }
+
 body.hb-no-scroll {
   overflow: hidden !important;
   height: 100vh !important;
   touch-action: none;
+}
+
+/* ─── 3D Book Effect ─── */
+.book-3d-container {
+  perspective: 1200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.book-3d {
+  width: 200px;
+  height: 270px;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateX(12deg) rotateY(-24deg) rotateZ(-3deg);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s ease;
+  animation: book-idle-rotate 6s infinite ease-in-out;
+  box-shadow: -15px 15px 30px rgba(0, 0, 0, 0.2), 
+              -2px 2px 5px rgba(0, 0, 0, 0.1),
+              0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes book-idle-rotate {
+  0% {
+    transform: rotateX(12deg) rotateY(-24deg) rotateZ(-3deg) translateY(0);
+  }
+  50% {
+    transform: rotateX(16deg) rotateY(-18deg) rotateZ(-2deg) translateY(-8px);
+  }
+  100% {
+    transform: rotateX(12deg) rotateY(-24deg) rotateZ(-3deg) translateY(0);
+  }
+}
+
+@media (min-width: 768px) {
+  .book-3d {
+    width: 240px;
+    height: 320px;
+  }
+}
+
+.book-3d-container:hover .book-3d {
+  animation: none;
+  transform: rotateX(8deg) rotateY(-12deg) rotateZ(-1deg) scale(1.03);
+  box-shadow: -25px 25px 50px rgba(0, 0, 0, 0.25), 
+              -5px 5px 15px rgba(0, 0, 0, 0.15),
+              0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+/* Front Cover */
+.book-3d-cover {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 4px 12px 12px 4px;
+  transform: translateZ(10px);
+  transform-style: preserve-3d;
+  z-index: 5;
+  box-shadow: inset 4px 0 10px rgba(0, 0, 0, 0.15);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  overflow: hidden;
+}
+
+/* Page Spines / Thickness (The right edges of the book pages) */
+.book-3d-pages {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  right: -9px;
+  width: 20px;
+  background: #fcfbf9;
+  transform: rotateY(90deg);
+  transform-style: preserve-3d;
+  box-shadow: inset 3px 0 10px rgba(0, 0, 0, 0.08);
+  border-radius: 0 3px 3px 0;
+  background-image: repeating-linear-gradient(
+    90deg,
+    #e8e7e3 0px,
+    #e8e7e3 1px,
+    #fcfbf9 1px,
+    #fcfbf9 3px
+  );
+  z-index: 3;
+}
+
+/* Spine (The left edge thickness of the book) */
+.book-3d-spine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -9px;
+  width: 20px;
+  background: #143531; /* matching the dark teal cover color */
+  transform: rotateY(-90deg);
+  transform-style: preserve-3d;
+  z-index: 4;
+  border-radius: 4px 0 0 4px;
+  box-shadow: inset -2px 0 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Back Cover */
+.book-3d-back {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: #143531; /* matching the cover primary color */
+  border-radius: 4px 12px 12px 4px;
+  transform: translateZ(-10px);
+  z-index: 1;
+  box-shadow: -5px 5px 15px rgba(0,0,0,0.3);
+}
+
+/* Front Cover Shine/Crease lines overlay */
+.book-3d-cover::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 10px;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: -1px 0 2px rgba(0,0,0,0.2), 1px 0 2px rgba(255,255,255,0.15);
+  z-index: 10;
+}
+
+.book-3d-cover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.08) 25%,
+    rgba(0, 0, 0, 0) 35%,
+    rgba(0, 0, 0, 0.15) 100%
+  );
+  z-index: 9;
+  pointer-events: none;
 }

@@ -250,6 +250,11 @@ const ARTICLES_DB = {
     date: 'Spring 2024 Edition',
     readTime: '9 min read',
     img: '/images/mag_mindfulness.png',
+    images: [
+      '/images/mag_mindfulness.png',
+      '/images/holistic.png',
+      '/images/ayurveda.png'
+    ],
     intro: 'Ancient meditative wisdom meets modern neuroscience. This featured edition explores cognitive health, gut pathways, and deliberate daily living.',
     body: [
       {
@@ -282,6 +287,97 @@ export default function ArticlePage({ params: paramsPromise }) {
           <Link href="/" className="btn-primary bg-primary text-white px-7 py-3 rounded-full font-bold text-sm border border-primary hover:bg-transparent hover:text-primary transition-all duration-300">
             Back to Home
           </Link>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Render digital magazine view for Digital Journals (Magazines)
+  if (article.category === 'Digital Journal') {
+    const letterBody = article.letterBody || `Welcome to the ${article.date || "latest edition"} of A Health Place! This featured journal focuses on practical ways to improve everyday health, mindfulness, and bodily wellbeing.
+
+In this edition, we explore the core principles of ${article.title.toLowerCase()} and key scientific insights to improve your daily recovery. We hope these insights inspire healthier choices and support your wellness journey.`;
+
+    return (
+      <div className="min-h-screen bg-bg-light relative">
+        <Header />
+
+        <main className="pt-[140px] pb-20">
+          <div className="container mx-auto max-w-5xl px-4">
+            {/* Breadcrumb */}
+            <div className="breadcrumb flex items-center gap-2 text-[12px] text-muted font-semibold uppercase tracking-[1px] mb-8">
+              <Link href="/" className="hover:text-accent transition-colors">Home</Link>
+              <span>•</span>
+              <Link href="/publication" className="hover:text-accent transition-colors">
+                {article.category}
+              </Link>
+              <span>•</span>
+              <span className="text-secondary truncate">{article.title}</span>
+            </div>
+
+            {/* Top Section: Sidebar + Letter */}
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-12 items-start">
+              {/* Left Sidebar (w-[180px]) */}
+              <div className="md:col-span-3 flex flex-col gap-4 max-w-[180px] mx-auto md:mx-0">
+                <div className="relative w-[180px] h-[240px] rounded-xl overflow-hidden shadow-md border border-slate-200 bg-white">
+                  <Image
+                    src={article.img}
+                    alt={article.title}
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+                <a
+                  href={article.magCloudLink || "https://www.magcloud.com/"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-[180px] bg-[#d92128] hover:bg-[#b81b21] text-white text-[11px] font-bold py-3 px-2 rounded-lg text-center tracking-wide shadow-sm transition-all duration-300 block leading-snug no-underline"
+                >
+                  FIND OUT MORE ON
+                  <span className="block text-[13px] font-extrabold uppercase mt-0.5">MagCloud</span>
+                </a>
+              </div>
+
+              {/* Right Letter */}
+              <div className="md:col-span-9 text-left font-serif text-[15px] md:text-[16px] leading-[1.8] text-slate-700 bg-white/40 p-6 md:p-8 rounded-3xl border border-white/60">
+                <h3 className="font-heading font-extrabold text-primary text-[16px] mb-4">
+                  {article.letterTitle || "Dear Readers,"}
+                </h3>
+                <div className="whitespace-pre-line space-y-4">
+                  {letterBody}
+                </div>
+                <div className="mt-6 border-t border-slate-200/50 pt-4">
+                  <p className="font-bold text-primary mb-0.5">Warm regards,</p>
+                  <p className="font-semibold text-accent">{article.letterSignature || "A Health Place Team"}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Large Digital Magazine Viewer (Iframe) */}
+            <div className="w-full bg-white rounded-3xl border border-slate-200/60 p-4 shadow-lg mb-12">
+              <div className="relative w-full aspect-[4/3] sm:aspect-[16/10] md:h-[650px] rounded-2xl overflow-hidden bg-slate-100">
+                <iframe
+                  src={article.iframeUrl || "https://heyzine.com/flip-book/42436f6d2e6b.html"}
+                  title={`${article.title} Digital Reader`}
+                  className="absolute inset-0 w-full h-full border-0"
+                  allowFullScreen
+                  allow="clipboard-write"
+                />
+              </div>
+            </div>
+
+            {/* Back button */}
+            <div className="text-center">
+              <Link 
+                href="/publication" 
+                className="inline-flex items-center gap-2 bg-primary hover:bg-accent text-white font-bold px-6 py-3 rounded-full text-sm shadow-md transition-all duration-300 no-underline"
+              >
+                ← Back to Publications
+              </Link>
+            </div>
+          </div>
         </main>
         <Footer />
       </div>
@@ -345,17 +441,37 @@ export default function ArticlePage({ params: paramsPromise }) {
             </div>
           </div>
 
-          {/* Featured Image */}
-          <div className="article-image-wrapper relative w-full h-[260px] sm:h-[450px] rounded-[32px] overflow-hidden shadow-[0_20px_48px_rgba(0,0,0,0.06)] border border-white/60 mb-12">
-            <Image
-              src={article.img}
-              alt={article.title}
-              fill
-              priority
-              className="object-cover"
-              sizes="100vw"
-            />
-          </div>
+          {/* Featured Image(s) */}
+          {article.images && article.images.length >= 3 ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+              {article.images.slice(0, 3).map((imgUrl, index) => (
+                <div 
+                  key={index} 
+                  className="article-image-wrapper relative w-full h-[240px] md:h-[380px] rounded-[24px] overflow-hidden shadow-[0_15px_35px_rgba(0,0,0,0.05)] border border-white/60 transition-transform duration-500 hover:scale-[1.02]"
+                >
+                  <Image
+                    src={imgUrl}
+                    alt={`${article.title} - Preview ${index + 1}`}
+                    fill
+                    priority={index === 0}
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                  />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="article-image-wrapper relative w-full h-[260px] sm:h-[450px] rounded-[32px] overflow-hidden shadow-[0_20px_48px_rgba(0,0,0,0.06)] border border-white/60 mb-12">
+              <Image
+                src={article.img}
+                alt={article.title}
+                fill
+                priority
+                className="object-cover"
+                sizes="100vw"
+              />
+            </div>
+          )}
 
           <AdSlot zone="article-body-top" />
 

@@ -81,13 +81,14 @@ export async function syncRoutes() {
       }));
 
     // Ensure site exists
+    const isAHP = SITE_ID === "AHP" || SITE_ID === "AHealthPlace";
     await prisma.site.upsert({
       where: { id: SITE_ID },
       update: {},
       create: {
         id: SITE_ID,
-        name: SITE_ID === "AHP" ? "A Health Place" : "Earth By Humans",
-        domain: SITE_ID === "AHP" ? "ahealthplace.com" : "earthbyhumans.com",
+        name: isAHP ? "A Health Place" : "Earth By Humans",
+        domain: isAHP ? "ahealthplace.com" : "earthbyhumans.com",
         isActive: true,
       },
     });

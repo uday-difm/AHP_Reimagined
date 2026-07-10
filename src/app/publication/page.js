@@ -227,57 +227,31 @@ export default function PublicationPage() {
         <div className="container">
           <div className="flex flex-col md:flex-row items-center gap-14">
 
-            {/* Left — 3D Magazine Cover (Flipping on Hover) */}
-            <div className="flex-shrink-0 reveal-scale [perspective:1000px] w-[220px] md:w-[260px] h-[290px] md:h-[340px] relative group cursor-pointer">
-
-              {/* Shadow and Background glows that shift slightly */}
-              <div className="absolute inset-0 translate-x-3.5 translate-y-3.5 bg-black/10 rounded-2xl blur-md transition-transform duration-500 group-hover:translate-x-5 group-hover:translate-y-5" />
-              <div className="absolute inset-0 translate-x-2 translate-y-1.5 bg-accent/15 rounded-2xl transition-transform duration-500 group-hover:scale-105" />
-
-              {/* The Flipping Card */}
-              <div className="w-full h-full relative transition-transform duration-[800ms] [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
-
-                {/* Front Face (Cover Image) */}
-                <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] rounded-2xl overflow-hidden shadow-2xl border border-white/60">
+            {/* Left — 3D Magazine Cover (3D Book effect) */}
+            <Link href="/blogs/the-mindfulness-issue" className="flex-shrink-0 reveal-scale book-3d-container block no-underline">
+              <div className="book-3d">
+                {/* Spine */}
+                <div className="book-3d-spine" />
+                
+                {/* Front Cover */}
+                <div className="book-3d-cover">
                   <Image
                     src="/images/mag_mindfulness.png"
                     alt="The Mindfulness Issue – Spring 2024"
                     fill
-                    sizes="(max-width: 768px) 220px, 260px"
+                    sizes="(max-width: 768px) 200px, 240px"
                     className="object-cover"
                     priority
                   />
                 </div>
-
-                {/* Back Face (Table of Contents / Editorial summary) */}
-                <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)] bg-[#1e4a45] rounded-2xl p-6 text-white flex flex-col justify-between shadow-2xl border border-white/20 select-none">
-                  <div className="flex flex-col gap-4 text-left">
-                    <div className="border-b border-white/25 pb-3">
-                      <span className="text-[10px] font-bold text-accent uppercase tracking-[2px] block mb-1">EDITORIAL BOARD</span>
-                      <h4 className="font-heading font-extrabold text-[15px] md:text-[17px] text-white tracking-[-0.5px]">Spring 2024 Issue</h4>
-                    </div>
-
-                    <div className="flex flex-col gap-2.5">
-                      <span className="text-[11px] text-white/50 font-bold uppercase tracking-[1px] block">Inside This Issue:</span>
-                      <ul className="text-[12.5px] leading-relaxed text-white/90 list-disc pl-4 space-y-1.5 font-medium">
-                        <li>Neuroscience of Focus</li>
-                        <li>Anxiety Somatic Resets</li>
-                        <li>Circadian Rhythms & Sleep</li>
-                        <li>Dosha-Balanced Nutrition</li>
-                      </ul>
-                    </div>
-                  </div>
-
-                  <Link
-                    href="/blogs/the-mindfulness-issue"
-                    className="w-full text-center bg-white text-primary font-bold text-[12px] py-2.5 rounded-full hover:bg-accent hover:text-white transition-all duration-300 shadow-md no-underline block"
-                  >
-                    Read Digital Issue →
-                  </Link>
-                </div>
-
+                
+                {/* Pages Thickness */}
+                <div className="book-3d-pages" />
+                
+                {/* Back Cover */}
+                <div className="book-3d-back" />
               </div>
-            </div>
+            </Link>
 
             {/* Right — Info */}
             <div className="flex-1 max-w-xl reveal-slide">

@@ -14,10 +14,10 @@ export default function ServicesBanner() {
   return (
     <section className="services-banner-section py-16 bg-bg-light relative overflow-hidden">
       <div className="container">
-        
+
         {/* Floating Card Container */}
         <div className="relative bg-gradient-to-br from-[#0f4c4e] to-[#176265] rounded-[36px] overflow-hidden shadow-[0_24px_50px_rgba(15,76,78,0.15)] border border-white/10 p-8 md:p-12 lg:p-16 flex flex-col lg:flex-row gap-12 items-center justify-between">
-          
+
           {/* Decorative Backdrop Blobs */}
           <div className="absolute w-[300px] h-[300px] rounded-full bg-accent/20 blur-3xl -top-12 -left-12 pointer-events-none" />
           <div className="absolute w-[200px] h-[200px] rounded-full bg-accent-green/20 blur-2xl -bottom-10 -right-10 pointer-events-none" />
@@ -27,11 +27,11 @@ export default function ServicesBanner() {
             <span className="inline-flex items-center gap-1.5 bg-accent/15 border border-accent/20 text-accent px-4 py-1.5 rounded-full text-[10px] font-extrabold uppercase tracking-[2px] w-max select-none">
               <Sparkles size={11} /> PR & Editorial Placements
             </span>
-            
+
             <h2 className="font-heading font-extrabold text-[28px] md:text-[40px] leading-tight text-white tracking-tight">
-              Feature Your Clinical Practice or Wellness Brand
+              Want to get featured in AHealthPlace?
             </h2>
-            
+
             <p className="text-white/80 text-[14px] md:text-[15px] leading-relaxed">
               Unlock authority status and reach our highly engaged, health-conscious readers. Align your expertise with a publication vetted by a medical review board.
             </p>
@@ -59,7 +59,7 @@ export default function ServicesBanner() {
 
           {/* Right: Gorgeous Overlapping Illustration Stack */}
           <div className="relative w-full max-w-[340px] aspect-[4/3] shrink-0 z-10 select-none hidden md:block">
-            
+
             {/* Background card (Back Cover) */}
             <div className="absolute w-[200px] h-[260px] rounded-2xl overflow-hidden shadow-md border border-white/10 top-0 left-4 -rotate-6 transition-transform duration-500 hover:-rotate-12 cursor-pointer">
               <Image
@@ -81,7 +81,7 @@ export default function ServicesBanner() {
                 sizes="210px"
               />
             </div>
-            
+
           </div>
 
         </div>
