@@ -1,27 +1,27 @@
 'use client';
 
 import { useState } from 'react';
+import { useSession } from 'next-auth/react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ScrollReveal from '@/components/ScrollReveal';
 import BackdropBlobs from '@/components/BackdropBlobs';
 import QuizCard from '@/components/quiz/QuizCard';
+import QuizIcon from '@/components/quiz/QuizIcon';
 import { quizzes } from '@/data/quizzes';
 import Link from 'next/link';
 
 export default function QuizzesPage() {
-  const [activeCategory, setActiveCategory] = useState('All');
+  const { status } = useSession();
+  const isAuthenticated = status === 'authenticated';
   const [searchQuery, setSearchQuery] = useState('');
 
-  const categories = ['All', 'Wellness', 'Sleep', 'Mental Health', 'Nutrition', 'Ayurveda'];
-
-  const filteredQuizzes = quizzes.filter((quiz) => {
-    const matchesCategory = activeCategory === 'All' || quiz.category === activeCategory;
-    const matchesSearch =
-      quiz.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      quiz.description.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
+  // Only keep the single General Wellness Quiz
+  const filteredQuizzes = quizzes.filter(
+    (quiz) => quiz.slug === 'general-wellness' &&
+    (quiz.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+     quiz.description.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
 
   return (
     <>
@@ -73,77 +73,67 @@ export default function QuizzesPage() {
         {/* ── QUIZ SECTION ───────────────────────────────────────────────── */}
         <section className="py-12 px-4">
           <div className="container max-w-6xl mx-auto">
-            {/* Category Filter Tabs */}
-            <div className="flex flex-wrap justify-center gap-2.5 mb-12">
-              {categories.map((cat) => {
-                const isActive = activeCategory === cat;
-                return (
-                  <button
-                    key={cat}
-                    onClick={() => setActiveCategory(cat)}
-                    className="px-6 py-2.5 rounded-full font-bold text-[13px] transition-all duration-300 cursor-pointer"
-                    style={{
-                      backgroundColor: isActive ? '#0f7c85' : '#ffffff',
-                      color: isActive ? '#ffffff' : '#4a4a5a',
-                      border: isActive ? '1px solid #0f7c85' : '1px solid #e2e8f0',
-                      boxShadow: isActive ? '0 8px 16px rgba(15,124,133,0.15)' : 'none',
-                    }}
-                  >
-                    {cat}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Quizzes Grid */}
-            {filteredQuizzes.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {filteredQuizzes.map((quiz) => (
-                  <QuizCard key={quiz.slug} quiz={quiz} />
-                ))}
+            {!isAuthenticated ? (
+              <div className="max-w-md mx-auto bg-white border border-slate-200/60 rounded-[28px] p-8 md:p-10 text-center shadow-lg my-12">
+                <div className="w-14 h-14 rounded-full bg-[#0f7c85]/10 text-[#0f7c85] flex items-center justify-center mx-auto mb-6">
+                  <QuizIcon name="general-wellness" className="w-7 h-7" />
+                </div>
+                <h2 className="font-heading font-extrabold text-[24px] text-primary mb-3">Login Required</h2>
+                <p className="text-secondary text-[13.5px] leading-relaxed mb-8 max-w-xs mx-auto">
+                  Please sign in to view available quizzes, evaluate your wellness profile, and track your scores.
+                </p>
+                <Link
+                  href="/login?callbackUrl=/quizzes"
+                  className="bg-[#0f7c85] hover:bg-[#0c6b73] text-white px-8 py-3 rounded-full font-bold text-[14px] no-underline transition-all block shadow-sm"
+                >
+                  Login to Continue
+                </Link>
               </div>
             ) : (
-              <div className="text-center py-16 bg-white rounded-[24px] border border-slate-200/50">
-                <div className="text-[48px] mb-4">🔍</div>
-                <h3 className="font-heading font-extrabold text-[18px] text-primary">No Quizzes Found</h3>
-                <p className="text-secondary text-[13px] mt-1">Try resetting your search query or filters.</p>
-              </div>
-            )}
+              <>
+                {/* Quizzes Grid (only showing 1 quiz card centered) */}
+                <div className="flex justify-center max-w-md mx-auto">
+                  {filteredQuizzes.length > 0 ? (
+                    <QuizCard quiz={filteredQuizzes[0]} />
+                  ) : (
+                    <div className="text-center py-16 bg-white rounded-[24px] border border-slate-200/50 w-full">
+                      <div className="text-[48px] mb-4">🔍</div>
+                      <h3 className="font-heading font-extrabold text-[18px] text-primary">No Quizzes Found</h3>
+                      <p className="text-secondary text-[13px] mt-1">Try resetting your search query.</p>
+                    </div>
+                  )}
+                </div>
 
-            {/* ── SAVE PROGRESS NOTICE ───────────────────────────────── */}
-            <div
-              className="mt-14 rounded-[24px] p-6 flex flex-col sm:flex-row items-center gap-5 text-center sm:text-left border border-slate-200/50 bg-white"
-              style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.03)' }}
-            >
-              <div
-                className="w-12 h-12 rounded-full flex items-center justify-center shrink-0 text-[20px]"
-                style={{ background: '#e8f4ff' }}
-              >
-                📊
-              </div>
-              <div className="flex-1">
-                <p className="font-heading font-bold text-[15px] text-primary mb-0.5">
-                  Save your wellness progress
-                </p>
-                <p className="text-[13px] text-secondary">
-                  Complete any quiz and keep track of your wellness profile by logging in. No hidden charges.
-                </p>
-              </div>
-              <div className="flex gap-2">
-                <Link
-                  href="/login"
-                  className="bg-[#0f7c85] hover:bg-[#0c6b73] text-white px-5 py-2.5 rounded-full font-bold text-[13px] no-underline transition-colors"
+                {/* ── SAVE PROGRESS NOTICE ───────────────────────────────── */}
+                <div
+                  className="mt-14 rounded-[24px] p-6 flex flex-col sm:flex-row items-center gap-5 text-center sm:text-left border border-slate-200/50 bg-white"
+                  style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.03)' }}
                 >
-                  Sign In Free
-                </Link>
-                <Link
-                  href="/quizzes/dashboard"
-                  className="bg-slate-50 hover:bg-slate-100 text-[#0f7c85] border border-slate-200 px-5 py-2.5 rounded-full font-bold text-[13px] no-underline transition-colors"
-                >
-                  My Dashboard
-                </Link>
-              </div>
-            </div>
+                  <div
+                    className="w-12 h-12 rounded-full flex items-center justify-center shrink-0"
+                    style={{ background: '#e8f4ff' }}
+                  >
+                    <QuizIcon name="dashboard" className="w-5 h-5 text-[#0f7c85]" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-heading font-bold text-[15px] text-primary mb-0.5">
+                      Save your wellness progress
+                    </p>
+                    <p className="text-[13px] text-secondary">
+                      Complete any quiz and keep track of your wellness profile by logging in. No hidden charges.
+                    </p>
+                  </div>
+                  <div className="flex gap-2">
+                    <Link
+                      href="/quizzes/dashboard"
+                      className="bg-slate-50 hover:bg-slate-100 text-[#0f7c85] border border-slate-200 px-5 py-2.5 rounded-full font-bold text-[13px] no-underline transition-colors"
+                    >
+                      My Dashboard
+                    </Link>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </section>
       </main>

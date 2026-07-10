@@ -34,14 +34,6 @@
 [2026-07-09T10:44:37.462Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
 [2026-07-09T10:44:37.469Z] [Auth] Authenticating against authService for: admin@example.com
 [2026-07-09T10:44:37.776Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrczol170001uhusthekq9b5
-<<<<<<< HEAD
-[2026-07-10T09:00:20.868Z] [Auth] Attempt started. Email: admin@example.com
-[2026-07-10T09:00:20.868Z] [Auth] Request Host: localhost:3000
-[2026-07-10T09:00:20.868Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
-[2026-07-10T09:00:20.869Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
-[2026-07-10T09:00:20.877Z] [Auth] Authenticating against authService for: admin@example.com
-[2026-07-10T09:00:21.185Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrczol170001uhusthekq9b5
-=======
 [2026-07-10T09:03:29.963Z] [Auth] Attempt started. Email: manish.yadav@difm.tech
 [2026-07-10T09:03:29.964Z] [Auth] Request Host: localhost:3000
 [2026-07-10T09:03:29.965Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
@@ -56,4 +48,17 @@
 [2026-07-10T09:40:12.086Z] [Auth] Authenticating against authService for: manish.yadav@difm.tech
 [2026-07-10T09:40:12.226Z] [Auth] Admin authentication failed, trying frontend auth table for: manish.yadav@difm.tech
 [2026-07-10T09:40:12.240Z] [Auth] Frontend user authenticated successfully: manish.yadav@difm.tech
->>>>>>> manish
+[2026-07-10T10:04:13.073Z] [Auth] Attempt started. Email: manish.yadav@difm.tech
+[2026-07-10T10:04:13.075Z] [Auth] Request Host: localhost:3000
+[2026-07-10T10:04:13.075Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
+[2026-07-10T10:04:13.076Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-10T10:04:13.098Z] [Auth] Authenticating against authService for: manish.yadav@difm.tech
+[2026-07-10T10:04:13.121Z] [Auth] Admin authentication failed, trying frontend auth table for: manish.yadav@difm.tech
+[2026-07-10T10:04:13.130Z] [Auth] Frontend user authenticated successfully: manish.yadav@difm.tech
+[2026-07-10T10:12:19.485Z] [Auth] Attempt started. Email: manish.yadav@difm.tech
+[2026-07-10T10:12:19.486Z] [Auth] Request Host: localhost:3000
+[2026-07-10T10:12:19.487Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
+[2026-07-10T10:12:19.487Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-10T10:12:19.517Z] [Auth] Authenticating against authService for: manish.yadav@difm.tech
+[2026-07-10T10:12:19.534Z] [Auth] Admin authentication failed, trying frontend auth table for: manish.yadav@difm.tech
+[2026-07-10T10:12:19.542Z] [Auth] Frontend user authenticated successfully: manish.yadav@difm.tech

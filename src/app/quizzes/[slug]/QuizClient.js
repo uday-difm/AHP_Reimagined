@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import ProgressBar from '@/components/quiz/ProgressBar';
+import QuizIcon from '@/components/quiz/QuizIcon';
 import { FREE_QUESTION_LIMIT } from '@/data/quizzes';
 
 /**
@@ -26,7 +27,7 @@ export default function QuizClient({ quiz }) {
   const [selected, setSelected] = useState(null);
   const [animating, setAnimating] = useState(false);
   const [completed, setCompleted] = useState(false);
-  const [showGate, setShowGate] = useState(false);
+  const [showGate, setShowGate] = useState(status === 'unauthenticated');
 
   const questions = quiz.questions;
   const currentQ = questions[currentIndex];
@@ -50,8 +51,12 @@ export default function QuizClient({ quiz }) {
   }, [isAuthenticated, quiz.slug]);
 
   useEffect(() => {
-    if (isAuthenticated && showGate) setShowGate(false);
-  }, [isAuthenticated, showGate]);
+    if (status === 'unauthenticated') {
+      setShowGate(true);
+    } else if (status === 'authenticated') {
+      setShowGate(false);
+    }
+  }, [status]);
 
   const handleSelect = (idx) => {
     if (animating || showGate) return;
