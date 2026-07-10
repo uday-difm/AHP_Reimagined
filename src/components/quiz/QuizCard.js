@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
+import QuizIcon from '@/components/quiz/QuizIcon';
 
 /**
  * QuizCard — Earth by Humans style.
@@ -65,8 +66,8 @@ export default function QuizCard({ quiz }) {
             </span>
           </div>
 
-          <div className="absolute bottom-4 left-4 z-10 text-white flex items-center gap-1.5 text-[11px] font-medium">
-            <span>{quiz.icon}</span>
+          <div className="absolute bottom-4 left-4 z-10 text-white flex items-center gap-1.5 text-[10.5px] font-bold bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 shadow-sm">
+            <QuizIcon name={quiz.icon} className="w-3.5 h-3.5 text-white" />
             <span className="opacity-95">{quiz.estimatedMinutes} Mins Read</span>
           </div>
         </div>

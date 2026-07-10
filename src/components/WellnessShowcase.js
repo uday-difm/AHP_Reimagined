@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
+import QuizIcon from '@/components/quiz/QuizIcon';
 
 // Quiz small cards — row 1 right column (light bg)
 const quizQuickCards = [
@@ -124,8 +125,10 @@ export default function WellnessShowcase() {
                   href={item.link}
                   className="bg-[#eaf1f0] hover:bg-[#e0e9e8] rounded-[24px] p-5 flex items-center justify-between gap-4 border border-slate-100 hover:shadow-md transition-all duration-300 group no-underline text-left flex-grow"
                 >
-                  <div className="flex items-center gap-3 flex-1">
-                    <span className="text-[22px] shrink-0">{item.icon}</span>
+                  <div className="flex items-center gap-3.5 flex-1">
+                    <div className="w-10 h-10 rounded-full bg-[#0f7c85]/10 text-[#0f7c85] flex items-center justify-center shrink-0">
+                      <QuizIcon name={item.icon} className="w-5 h-5" />
+                    </div>
                     <div className="flex flex-col gap-0.5">
                       <span className="text-[#0f7c85] font-extrabold text-[10px] uppercase tracking-wider">{item.tag}</span>
                       <p className="text-primary font-heading font-bold text-[13px] leading-snug">{item.desc}</p>
@@ -149,8 +152,10 @@ export default function WellnessShowcase() {
                 href={item.link}
                 className="bg-[#3f9a9e] hover:bg-[#368b8e] rounded-[24px] p-6 flex flex-col justify-between min-h-[150px] hover:shadow-md transition-all duration-300 group no-underline text-left"
               >
-                <div className="flex items-start gap-3">
-                  <span className="text-[26px] shrink-0 mt-0.5">{item.icon}</span>
+                <div className="flex items-start gap-3.5">
+                  <div className="w-11 h-11 rounded-full bg-white/15 text-white flex items-center justify-center shrink-0 mt-0.5">
+                    <QuizIcon name={item.icon} className="w-5.5 h-5.5 text-white" />
+                  </div>
                   <div className="flex flex-col">
                     <span className="text-white/80 font-extrabold text-[10px] uppercase tracking-wider">{item.tag}</span>
                     <p className="font-heading font-bold text-[14px] text-white leading-snug mt-1">{item.desc}</p>

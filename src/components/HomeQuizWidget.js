@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { quizzes, FREE_QUESTION_LIMIT } from '@/data/quizzes';
+import QuizIcon from '@/components/quiz/QuizIcon';
 
 /**
  * HomeQuizWidget
@@ -110,7 +111,9 @@ export default function HomeQuizWidget() {
             <div
               className="bg-white rounded-[24px] overflow-hidden border border-slate-200/60 p-8 md:p-12 text-center shadow-sm max-w-2xl mx-auto"
             >
-              <div className="text-[54px] mb-4 select-none">{quiz.icon}</div>
+              <div className="w-16 h-16 rounded-full bg-[#0f7c85]/10 text-[#0f7c85] flex items-center justify-center mx-auto mb-6">
+                <QuizIcon name={quiz.icon} className="w-8 h-8" />
+              </div>
               <h3 className="font-heading font-extrabold text-[22px] text-primary tracking-tight mb-3">
                 {quiz.title}
               </h3>
