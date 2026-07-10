@@ -88,7 +88,8 @@ export default function Header() {
               </div>
             </div>
           </div>
-          <nav className="hb-nav-links flex flex-col gap-3 sm:gap-4">
+          <nav className="hb-nav-links flex flex-col items-end pr-8 md:pr-16 lg:pr-32">
+            <div className="flex flex-col items-start text-left gap-3 sm:gap-4">
             {['Home', 'About', 'Blogs', 'Digital Magazine'].map((label, i) => {
               const isPublication = label === 'Digital Magazine';
               const isBlogs = label === 'Blogs';
@@ -115,6 +116,7 @@ export default function Header() {
                 </a>
               );
             })}
+            </div>
           </nav>
 
         </div>
