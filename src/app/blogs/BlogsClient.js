@@ -152,7 +152,7 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
 
       {/* Hero Title Section */}
       <section className="bg-[#f0f6f3]/60 pt-[140px] pb-8 rounded-b-[40px] border-b border-slate-200/20 text-center relative overflow-hidden">
-        <div className="container max-w-4xl">
+        <div className="container">
           <span className="text-accent text-[11px] font-bold uppercase tracking-[2px] mb-3 block reveal-slide">WELLNESS LIBRARY</span>
           <h1 className="text-primary font-heading font-extrabold text-4xl md:text-5xl tracking-[-1.5px] leading-tight mb-4 reveal-slide">
             Explore Wellness Guides
@@ -213,7 +213,7 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
       </section>
 
       {/* Articles Main View */}
-      <main className="container py-5 max-w-6xl min-h-[500px]">
+      <main className="container py-5 min-h-[500px]">
         <div className="space-y-10 reveal-fade">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-slate-200">
             <div className="flex flex-col gap-1 text-center md:text-left">
@@ -344,7 +344,7 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
 
       {/* Lower Page Banner — Advertise With Us */}
       <section className="bg-white py-16 border-t border-slate-200/50">
-        <div className="container max-w-4xl mx-auto px-4 reveal-slide">
+        <div className="container mx-auto px-4 reveal-slide">
           <div className="bg-gradient-to-br from-[#0f7c85]/5 via-white to-[#0f7c85]/10 rounded-[32px] p-8 md:p-12 border border-[#0f7c85]/10 shadow-[0_10px_30px_rgba(0,0,0,0.01)] flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="text-center md:text-left">
               <span className="inline-block bg-[#0f7c85]/10 text-[#0f7c85] font-extrabold text-[10px] uppercase tracking-[2px] px-3.5 py-1.5 rounded-full mb-3">
