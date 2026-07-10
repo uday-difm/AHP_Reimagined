@@ -20,6 +20,14 @@ export default function CustomCursor() {
   const cursorDotRef = useRef(null);
 
   useEffect(() => {
+    // Disable cursor if user prefers reduced motion or is on a touch device
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    
+    if (prefersReducedMotion || isTouchDevice) {
+      return;
+    }
+
     const handleMouseHover = (e) => {
       const target = e.target.closest('a, button, [role="button"], input, textarea, .tilt-card');
       if (cursorRef.current) {
@@ -38,11 +46,46 @@ export default function CustomCursor() {
   }, []);
 
   useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    
+    if (prefersReducedMotion || isTouchDevice) {
+      return;
+    }
+
     let mouseX = globalMousePosition.x;
     let mouseY = globalMousePosition.y;
     let cursorX = globalMousePosition.x;
     let cursorY = globalMousePosition.y;
+    let isLoopRunning = false;
+    let animId = null;
     const inertiaSpeed = 0.12;
+
+    const updateCursor = () => {
+      const dx = mouseX - cursorX;
+      const dy = mouseY - cursorY;
+
+      // Close enough to destination - pause loop to save CPU
+      if (Math.abs(dx) < 0.1 && Math.abs(dy) < 0.1) {
+        cursorX = mouseX;
+        cursorY = mouseY;
+        if (cursorRef.current) {
+          cursorRef.current.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%)`;
+        }
+        isLoopRunning = false;
+        animId = null;
+        return;
+      }
+
+      cursorX += dx * inertiaSpeed;
+      cursorY += dy * inertiaSpeed;
+
+      if (cursorRef.current) {
+        cursorRef.current.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%)`;
+      }
+
+      animId = requestAnimationFrame(updateCursor);
+    };
 
     const handleMouseMove = (e) => {
       mouseX = e.clientX;
@@ -57,31 +100,29 @@ export default function CustomCursor() {
       if (cursorDotRef.current) {
         cursorDotRef.current.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
       }
-    };
 
-    const updateCursor = () => {
-      const dx = mouseX - cursorX;
-      const dy = mouseY - cursorY;
-
-      cursorX += dx * inertiaSpeed;
-      cursorY += dy * inertiaSpeed;
-
-      if (cursorRef.current) {
-        cursorRef.current.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%)`;
+      // Start rendering loop only when mouse moves
+      if (!isLoopRunning) {
+        isLoopRunning = true;
+        animId = requestAnimationFrame(updateCursor);
       }
-
-      requestAnimationFrame(updateCursor);
     };
 
     document.addEventListener('mousemove', handleMouseMove);
-    const animId = requestAnimationFrame(updateCursor);
+
+    // Initial positioning
+    if (globalHasMoved && !isLoopRunning) {
+      isLoopRunning = true;
+      animId = requestAnimationFrame(updateCursor);
+    }
 
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
-      cancelAnimationFrame(animId);
+      if (animId) cancelAnimationFrame(animId);
     };
   }, []);
 
+  // Return markup but it stays hidden on touch/mobile devices via CSS/checks
   return (
     <>
       <div

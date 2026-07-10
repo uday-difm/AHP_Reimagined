@@ -95,16 +95,16 @@ const categories = [
 
 export default function AboutPage() {
   return (
-    <>
+    <div className="min-h-screen bg-bg-light relative">
       <CustomCursor />
       <ScrollReveal />
       <BackdropBlobs />
       <Header />
 
-      <main className="w-full pt-20">
+      <main className="w-full">
 
         {/* Hero */}
-        <section className="relative overflow-hidden bg-gradient-to-br from-[#f0fafa] via-[#f8fafc] to-[#eaf7f7] py-28 md:py-36">
+        <section className="relative overflow-hidden bg-gradient-to-br from-[#f0fafa] via-[#f8fafc] to-[#eaf7f7] pt-[140px] pb-24 md:pb-32 rounded-b-[40px] border-b border-slate-200/20">
           <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-accent/10 rounded-full blur-[120px] pointer-events-none -translate-y-1/3 translate-x-1/4" />
           <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#27ae60]/8 rounded-full blur-[100px] pointer-events-none translate-y-1/3 -translate-x-1/4" />
           <div className="container relative z-10">
@@ -278,6 +278,6 @@ export default function AboutPage() {
       </main>
 
       <Footer />
-    </>
+    </div>
   );
 }
