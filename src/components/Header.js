@@ -73,8 +73,20 @@ export default function Header() {
         className={`fixed inset-0 w-full h-screen bg-white/95 dark:bg-slate-950/95 backdrop-blur-3xl z-[8999] flex items-center justify-center transition-all duration-500 ${menuOpen ? 'opacity-100 pointer-events-auto visible' : 'opacity-0 pointer-events-none invisible'
           }`}
       >
-        <div className={`hb-menu-container w-full max-h-screen overflow-y-auto py-24 px-6 sm:px-10 md:px-20 grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr] gap-10 md:gap-20 items-center transition-transform duration-700 ${menuOpen ? 'translate-y-0' : 'translate-y-10'}`}>
-          <nav className="hb-nav-links flex flex-col gap-3 sm:gap-4">
+        <div className={`hb-menu-container w-full max-h-screen overflow-y-auto py-24 px-6 sm:px-10 md:px-20 grid grid-cols-1 md:grid-cols-[0.8fr_1.2fr] gap-10 md:gap-20 items-center transition-transform duration-700 ${menuOpen ? 'translate-y-0' : 'translate-y-10'}`}>
+          <div className={`hb-meta-panel hidden md:flex flex-col gap-10 border-r border-primary/10 pr-12 transition-all duration-500 delay-300 ${menuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[30px]'}`}>
+            <div className="hb-quote-section flex items-start justify-start py-6 px-6 md:px-8 max-w-[650px]">
+              <div className="hb-quote-container font-['Optima',_'Candara',_'Noto_Sans',_sans-serif] text-[#1a1a1a] dark:text-white py-6 leading-[1.1] uppercase">
+                <h1 className="hb-main-text text-[40px] md:text-[52px] lg:text-[64px] tracking-[2px] font-normal m-0 leading-[1.1]">
+                  "Small Changes Big Impact"
+                </h1>
+                <p className="hb-sub-text text-[24px] md:text-[28px] lg:text-[32px] tracking-[1px] mt-2 md:mt-3 font-normal pl-1 leading-[1.1] text-secondary">
+                  Start today—your future self will thank you.
+                </p>
+              </div>
+            </div>
+          </div>
+          <nav className="hb-nav-links flex flex-col gap-3 sm:gap-4 md:items-end">
             {['Home', 'Blogs', 'Digital Magazine'].map((label, i) => {
               const isPublication = label === 'Digital Magazine';
               const isBlogs = label === 'Blogs';
@@ -92,7 +104,7 @@ export default function Header() {
                   href={href}
                   onClick={() => setMenuOpen(false)}
                   style={{ transitionDelay: `${i * 0.05}s` }}
-                  className={`hb-nav-item font-heading font-extrabold text-[28px] sm:text-[40px] md:text-[56px] lg:text-[64px] text-primary no-underline leading-[1.1] tracking-[-1.5px] inline-block hover:text-accent hover:translate-x-3 transition-all duration-500 ${menuOpen ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'
+                  className={`hb-nav-item font-heading font-extrabold text-[28px] sm:text-[40px] md:text-[56px] lg:text-[64px] text-primary no-underline leading-[1.1] tracking-[-1.5px] inline-block hover:text-accent hover:-translate-x-3 transition-all duration-500 ${menuOpen ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'
                     }`}
                 >
                   {label}
@@ -100,18 +112,6 @@ export default function Header() {
               );
             })}
           </nav>
-          <div className={`hb-meta-panel hidden md:flex flex-col gap-10 border-l border-primary/10 pl-12 transition-all duration-500 delay-300 ${menuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[30px]'}`}>
-            <div className="hb-quote-section flex items-start justify-start py-6 px-6 md:px-8 max-w-[650px]">
-              <div className="hb-quote-container font-['Optima',_'Candara',_'Noto_Sans',_sans-serif] text-[#1a1a1a] dark:text-white py-6 leading-[1.1] uppercase">
-                <h1 className="hb-main-text text-[40px] md:text-[52px] lg:text-[64px] tracking-[2px] font-normal m-0 leading-[1.1]">
-                  "Small Changes Big Impact"
-                </h1>
-                <p className="hb-sub-text text-[24px] md:text-[28px] lg:text-[32px] tracking-[1px] mt-2 md:mt-3 font-normal pl-1 leading-[1.1] text-secondary">
-                  Start today—your future self will thank you.
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </>
