@@ -4,36 +4,36 @@ import { useState, useEffect, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import LoginWallModal from '@/components/quiz/LoginWallModal';
 import ProgressBar from '@/components/quiz/ProgressBar';
 import { FREE_QUESTION_LIMIT } from '@/data/quizzes';
 
 /**
- * QuizClient — the interactive quiz engine.
- * Gate logic:
- *  - Questions 1…FREE_QUESTION_LIMIT: always accessible
- *  - After answering the last free question and clicking Next → LoginWallModal appears if not signed in
- *  - Signed-in users play all questions uninterrupted
+ * QuizClient — redesigned to match the Earth By Humans quiz interface.
+ * Features:
+ *  - Split Layout: Left side shows Question card, Right side shows Options and Next button.
+ *  - Next Button: Styled green.
+ *  - Options: Custom rounded button lists with a radio check circle on the left.
+ *  - Locked Tracker Section: A blurred "Track Your Score" segment displayed below the quiz with a "Login Required" card overlay.
+ *  - Gating: If unauthenticated, after answering Q2 and clicking Next, the quiz transitions into the inline login gate card.
  */
 export default function QuizClient({ quiz }) {
   const { data: session, status } = useSession();
   const router = useRouter();
   const isAuthenticated = status === 'authenticated';
 
-  const [currentIndex, setCurrentIndex] = useState(0);       // 0-based
-  const [answers, setAnswers] = useState([]);                 // { questionId, optionIndex, score }
-  const [selected, setSelected] = useState(null);            // option index for current q
-  const [showWall, setShowWall] = useState(false);
-  const [animating, setAnimating] = useState(false);         // slide animation flag
-  const [slideDir, setSlideDir] = useState('right');         // 'right' | 'left'
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [answers, setAnswers] = useState([]);
+  const [selected, setSelected] = useState(null);
+  const [animating, setAnimating] = useState(false);
   const [completed, setCompleted] = useState(false);
+  const [showGate, setShowGate] = useState(false);
 
   const questions = quiz.questions;
   const currentQ = questions[currentIndex];
   const isLastQuestion = currentIndex === questions.length - 1;
-  const isOnLastFreeQuestion = currentIndex === FREE_QUESTION_LIMIT - 1; // 0-based index of Q2
+  const firstLockedIndex = FREE_QUESTION_LIMIT;
 
-  // On mount: restore progress from sessionStorage if user just returned from login
+  // Restore progress from sessionStorage after returning from login
   useEffect(() => {
     const saved = sessionStorage.getItem(`quiz-progress-${quiz.slug}`);
     if (saved && isAuthenticated) {
@@ -42,19 +42,24 @@ export default function QuizClient({ quiz }) {
         if (savedAnswers.length > 0) {
           setAnswers(savedAnswers);
           setCurrentIndex(savedIndex);
+          setShowGate(false);
           sessionStorage.removeItem(`quiz-progress-${quiz.slug}`);
         }
       } catch { /* ignore */ }
     }
   }, [isAuthenticated, quiz.slug]);
 
-  const handleSelect = (optionIndex) => {
-    if (animating) return;
-    setSelected(optionIndex);
+  useEffect(() => {
+    if (isAuthenticated && showGate) setShowGate(false);
+  }, [isAuthenticated, showGate]);
+
+  const handleSelect = (idx) => {
+    if (animating || showGate) return;
+    setSelected(idx);
   };
 
   const handleNext = useCallback(() => {
-    if (selected === null || animating) return;
+    if (selected === null || animating || showGate) return;
 
     const option = currentQ.options[selected];
     const newAnswers = [
@@ -62,66 +67,44 @@ export default function QuizClient({ quiz }) {
       { questionId: currentQ.id, optionIndex: selected, score: option.score },
     ];
 
-    // Check if gate should fire: user answered the last free question and is NOT authenticated
-    const justFinishedLastFreeQ = isOnLastFreeQuestion && !isAuthenticated;
+    const nextIndex = currentIndex + 1;
+    const nextIsLocked = nextIndex >= firstLockedIndex && !isAuthenticated;
 
-    if (justFinishedLastFreeQ) {
-      // Save progress to sessionStorage so we can restore after login
-      sessionStorage.setItem(
-        `quiz-progress-${quiz.slug}`,
-        JSON.stringify({ savedIndex: currentIndex + 1, savedAnswers: newAnswers })
-      );
-      setAnswers(newAnswers);
-      setShowWall(true);
-      return;
-    }
-
-    // Animate transition
-    setSlideDir('right');
     setAnimating(true);
     setAnswers(newAnswers);
 
     setTimeout(() => {
       if (isLastQuestion) {
-        // Save final results
         saveResults(newAnswers);
         setCompleted(true);
       } else {
-        setCurrentIndex((prev) => prev + 1);
+        setCurrentIndex(nextIndex);
         setSelected(null);
+        if (nextIsLocked) {
+          sessionStorage.setItem(
+            `quiz-progress-${quiz.slug}`,
+            JSON.stringify({ savedIndex: nextIndex, savedAnswers: newAnswers })
+          );
+          setShowGate(true);
+        }
       }
       setAnimating(false);
-    }, 350);
-  }, [selected, animating, currentQ, answers, isOnLastFreeQuestion, isAuthenticated,
-    isLastQuestion, currentIndex, quiz.slug]);
+    }, 300);
+  }, [selected, animating, showGate, currentQ, answers, currentIndex, firstLockedIndex, isAuthenticated, isLastQuestion, quiz.slug]);
 
   const handleBack = useCallback(() => {
     if (currentIndex === 0 || animating) return;
-    setSlideDir('left');
+    setShowGate(false);
     setAnimating(true);
     setTimeout(() => {
-      setCurrentIndex((prev) => prev - 1);
-      // Restore previously selected answer
-      const prevAnswer = answers[currentIndex - 1];
+      const prevIdx = currentIndex - 1;
+      setCurrentIndex(prevIdx);
+      const prevAnswer = answers[prevIdx];
       setSelected(prevAnswer ? prevAnswer.optionIndex : null);
-      setAnswers((prev) => prev.slice(0, -1));
+      setAnswers(prev => prev.slice(0, -1));
       setAnimating(false);
-    }, 350);
+    }, 250);
   }, [currentIndex, animating, answers]);
-
-  // Keyboard navigation
-  useEffect(() => {
-    const handler = (e) => {
-      if (e.key === 'ArrowRight' || e.key === 'Enter') handleNext();
-      if (e.key === 'ArrowLeft') handleBack();
-      if (['1', '2', '3', '4'].includes(e.key)) {
-        const idx = parseInt(e.key) - 1;
-        if (idx < currentQ.options.length) handleSelect(idx);
-      }
-    };
-    window.addEventListener('keydown', handler);
-    return () => window.removeEventListener('keydown', handler);
-  }, [handleNext, handleBack, currentQ]);
 
   function saveResults(finalAnswers) {
     const totalScore = computeScore(finalAnswers);
@@ -134,7 +117,7 @@ export default function QuizClient({ quiz }) {
     };
     try {
       const existing = JSON.parse(localStorage.getItem('quiz-results') || '[]');
-      const filtered = existing.filter((r) => r.slug !== quiz.slug);
+      const filtered = existing.filter(r => r.slug !== quiz.slug);
       localStorage.setItem('quiz-results', JSON.stringify([result, ...filtered]));
     } catch { /* ignore */ }
   }
@@ -146,85 +129,31 @@ export default function QuizClient({ quiz }) {
     }, 0);
   }
 
-  function getScoreLabel(score) {
-    if (!quiz.scoring) return null;
-    // Standard scoring
-    if (quiz.scoring[0]?.min !== undefined) {
-      return quiz.scoring.find((s) => score >= s.min && score <= s.max) || quiz.scoring[quiz.scoring.length - 1];
-    }
-    // Dosha quiz
-    return null;
-  }
+  const handleLoginRedirect = () => {
+    const callbackUrl = typeof window !== 'undefined' ? encodeURIComponent(window.location.href) : '';
+    router.push(`/login?callbackUrl=${callbackUrl}`);
+  };
 
-  // ─── Completed Screen ───────────────────────────────────────────────────────
+  // ─── COMPLETED SCREEN ────────────────────────────────────────────────────────
   if (completed) {
     const totalScore = computeScore(answers);
-    const scoreResult = getScoreLabel(totalScore);
     const maxPossible = questions.length * 3;
-
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center px-4 py-24"
-        style={{ background: 'linear-gradient(180deg, #f0fdfd 0%, #f8fafc 100%)' }}>
-        <div className="w-full max-w-xl bg-white rounded-[28px] shadow-xl overflow-hidden"
-          style={{ border: '1.5px solid rgba(15,124,133,0.12)' }}>
-          <div className="h-1.5" style={{ background: 'linear-gradient(90deg, #0f7c85, #1fb9fb, #27ae60)' }} />
+      <div className="min-h-screen bg-bg-light flex flex-col items-center justify-center px-4 py-24">
+        <div className="w-full max-w-lg bg-white rounded-[28px] overflow-hidden border border-slate-200/60 shadow-lg">
+          <div className="h-1.5 w-full bg-[#0f7c85]" />
           <div className="px-8 py-10 text-center">
-            {/* Trophy */}
-            <div className="text-[52px] mb-4 select-none">🎉</div>
-            <h2 className="font-heading font-extrabold text-[26px] text-primary tracking-tight mb-2">
-              Quiz Complete!
-            </h2>
+            <div className="text-[52px] mb-4">🎉</div>
+            <h2 className="font-heading font-extrabold text-[26px] text-primary tracking-tight mb-2">Quiz Complete!</h2>
             <p className="text-secondary text-[14px] mb-8">{quiz.title}</p>
-
-            {/* Score ring */}
-            <div className="relative w-28 h-28 mx-auto mb-6">
-              <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
-                <circle cx="50" cy="50" r="42" fill="none" stroke="#f1f5f9" strokeWidth="10" />
-                <circle
-                  cx="50" cy="50" r="42" fill="none"
-                  stroke={scoreResult?.color || '#0f7c85'}
-                  strokeWidth="10"
-                  strokeDasharray={`${2 * Math.PI * 42}`}
-                  strokeDashoffset={`${2 * Math.PI * 42 * (1 - totalScore / maxPossible)}`}
-                  strokeLinecap="round"
-                  style={{ transition: 'stroke-dashoffset 1s cubic-bezier(0.34,1.56,0.64,1) 0.3s' }}
-                />
-              </svg>
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="font-heading font-extrabold text-[22px]" style={{ color: scoreResult?.color || '#0f7c85' }}>
-                  {totalScore}
-                </span>
-                <span className="text-[10px] text-muted">/{maxPossible}</span>
-              </div>
+            <div className="text-[48px] font-extrabold text-[#0f7c85] mb-8">
+              {totalScore} <span className="text-[20px] text-slate-400">/{maxPossible}</span>
             </div>
-
-            {scoreResult && (
-              <>
-                <div
-                  className="inline-block text-[13px] font-bold px-4 py-1.5 rounded-full mb-4"
-                  style={{ background: scoreResult.color + '18', color: scoreResult.color }}
-                >
-                  {scoreResult.label}
-                </div>
-                <p className="text-[14px] text-secondary leading-relaxed mb-8 max-w-sm mx-auto">
-                  {scoreResult.insight}
-                </p>
-              </>
-            )}
-
             <div className="flex flex-col sm:flex-row gap-3">
-              <Link
-                href="/quizzes/dashboard"
-                className="flex-1 py-3 rounded-full font-bold text-[13.5px] text-white text-center no-underline transition-all duration-300 hover:opacity-90"
-                style={{ background: 'linear-gradient(135deg, #0f7c85, #0c646b)' }}
-              >
+              <Link href="/quizzes/dashboard" className="flex-1 py-3 rounded-full font-bold text-[13.5px] text-white text-center no-underline bg-[#0f7c85] hover:bg-[#0c6b73] transition-colors">
                 View Dashboard
               </Link>
-              <Link
-                href="/quizzes"
-                className="flex-1 py-3 rounded-full font-bold text-[13.5px] text-center no-underline border border-slate-200 transition-all duration-300 hover:bg-slate-50"
-                style={{ color: '#0f7c85' }}
-              >
+              <Link href="/quizzes" className="flex-1 py-3 rounded-full font-bold text-[13.5px] text-center no-underline border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors">
                 More Quizzes
               </Link>
             </div>
@@ -234,162 +163,243 @@ export default function QuizClient({ quiz }) {
     );
   }
 
-  // ─── Quiz Engine ─────────────────────────────────────────────────────────────
   return (
-    <>
-      {showWall && <LoginWallModal quizTitle={quiz.title} />}
-
-      <div
-        className="min-h-screen flex flex-col"
-        style={{ background: 'linear-gradient(180deg, #f0fdfd 0%, #f8fafc 100%)' }}
-      >
-        {/* Top bar */}
-        <div className="pt-24 pb-4 px-4">
-          <div className="max-w-xl mx-auto">
-            <div className="flex items-center justify-between mb-6">
-              <Link href="/quizzes" className="flex items-center gap-1.5 text-[12px] text-muted no-underline hover:text-primary transition-colors">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-                </svg>
-                All Quizzes
-              </Link>
-
-              <div className="flex items-center gap-2">
-                <span
-                  className="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-full"
-                  style={{ background: quiz.categoryBg, color: quiz.categoryColor }}
-                >
-                  {quiz.category}
-                </span>
-                {/* Free badge */}
-                {currentIndex < FREE_QUESTION_LIMIT && !isAuthenticated && (
-                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-full"
-                    style={{ background: '#fff8e8', color: '#f39c12' }}>
-                    Free Preview
-                  </span>
-                )}
-              </div>
-            </div>
-
-            <h1 className="font-heading font-extrabold text-[22px] text-primary tracking-tight mb-4">
-              {quiz.title}
-            </h1>
-
-            <ProgressBar
-              current={currentIndex + 1}
-              total={questions.length}
-              color={quiz.categoryColor}
-            />
-          </div>
+    <div className="min-h-screen bg-bg-light pt-24 pb-20 px-4">
+      <div className="container max-w-5xl mx-auto">
+        <div className="text-center mb-8">
+          <span className="text-accent text-[11px] font-extrabold uppercase tracking-[3px] mb-2 block">
+            {quiz.category} Quiz
+          </span>
+          <h1 className="text-primary font-heading font-extrabold text-2xl md:text-3xl tracking-tight mb-2">
+            {quiz.title}
+          </h1>
+          <p className="text-secondary text-[14px]">Test your knowledge and gain valuable insights</p>
         </div>
 
-        {/* Question card */}
-        <div className="flex-1 flex items-start justify-center px-4 py-8">
-          <div
-            className="w-full max-w-xl bg-white rounded-[28px] overflow-hidden shadow-xl"
-            style={{
-              border: '1.5px solid rgba(15,124,133,0.10)',
-              opacity: animating ? 0 : 1,
-              transform: animating
-                ? `translateX(${slideDir === 'right' ? '-24px' : '24px'})`
-                : 'translateX(0)',
-              transition: 'opacity 0.35s ease, transform 0.35s ease',
-            }}
-          >
-            <div className="h-1" style={{ background: `linear-gradient(90deg, ${quiz.categoryColor}, ${quiz.categoryColor}55)` }} />
-
-            <div className="px-7 pt-8 pb-6">
-              {/* Question number */}
-              <div className="text-[11px] font-extrabold uppercase tracking-[2px] mb-3" style={{ color: quiz.categoryColor }}>
-                Question {currentIndex + 1}
+        {/* ── INTERACTIVE SPLIT QUIZ CARD ────────────────────────────────── */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch mb-16">
+          {showGate ? (
+            /* Locked Gate Screen */
+            <div className="col-span-2 relative bg-white border border-slate-200/60 rounded-[24px] overflow-hidden p-8 md:p-12 text-center shadow-sm min-h-[380px] flex flex-col items-center justify-center">
+              <div className="w-14 h-14 rounded-full flex items-center justify-center mb-4 bg-[#0f7c85]/10 text-[#0f7c85]">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                  <path strokeLinecap="round" d="M7 11V7a5 5 0 0110 0v4" />
+                </svg>
               </div>
-
-              {/* Question text */}
-              <h2 className="font-heading font-bold text-[20px] md:text-[22px] text-primary leading-snug tracking-tight mb-7">
-                {currentQ.text}
-              </h2>
-
-              {/* Options */}
-              <div className="flex flex-col gap-3 mb-8">
-                {currentQ.options.map((opt, idx) => {
-                  const isSelected = selected === idx;
-                  return (
-                    <button
-                      key={idx}
-                      id={`quiz-option-${idx}`}
-                      onClick={() => handleSelect(idx)}
-                      className="w-full text-left px-5 py-4 rounded-[16px] font-medium text-[14px] transition-all duration-200 border cursor-pointer"
-                      style={{
-                        background: isSelected ? (quiz.categoryColor + '12') : '#f8fafc',
-                        borderColor: isSelected ? quiz.categoryColor : '#e2e8f0',
-                        color: isSelected ? '#1a1a2e' : '#4a4a5a',
-                        boxShadow: isSelected ? `0 0 0 2px ${quiz.categoryColor}40` : 'none',
-                        transform: isSelected ? 'scale(1.01)' : 'scale(1)',
-                      }}
-                    >
-                      <div className="flex items-center gap-3">
-                        {/* Option letter circle */}
-                        <span
-                          className="w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-extrabold shrink-0 transition-all duration-200"
-                          style={{
-                            background: isSelected ? quiz.categoryColor : '#e2e8f0',
-                            color: isSelected ? '#ffffff' : '#4a4a5a',
-                          }}
-                        >
-                          {['A', 'B', 'C', 'D'][idx]}
-                        </span>
-                        {opt.label}
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Navigation */}
-              <div className="flex items-center justify-between">
+              <span className="text-[10px] font-extrabold uppercase tracking-[2px] text-[#0f7c85] mb-2">
+                Question {currentIndex + 1} is locked
+              </span>
+              <h3 className="font-heading font-extrabold text-[22px] text-primary mb-2">Sign in to continue</h3>
+              <p className="text-secondary text-[13.5px] max-w-sm mb-6">
+                Please log in to unlock all {questions.length} questions and save your score.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3 w-full max-w-xs justify-center">
+                <button
+                  onClick={handleLoginRedirect}
+                  className="bg-[#0f7c85] hover:bg-[#0c6b73] text-white px-8 py-3 rounded-full font-bold text-[14px] transition-colors cursor-pointer"
+                >
+                  Sign In
+                </button>
                 <button
                   onClick={handleBack}
-                  disabled={currentIndex === 0}
-                  className="flex items-center gap-2 text-[13px] font-bold text-muted transition-all duration-200 hover:text-primary disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="border border-slate-200 hover:bg-slate-50 text-slate-600 px-6 py-3 rounded-full font-bold text-[13px] transition-colors cursor-pointer"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-                  </svg>
-                  Back
+                  Go Back
                 </button>
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* Left Column: Question Card */}
+              <div
+                className="bg-[#f3f4f6] rounded-[24px] p-6 flex flex-col justify-between border border-slate-200/50 shadow-sm transition-all duration-300"
+                style={{
+                  opacity: animating ? 0 : 1,
+                  transform: animating ? 'translateX(-10px)' : 'translateX(0)',
+                }}
+              >
+                <div>
+                  <h4 className="text-[12px] font-extrabold text-slate-500 uppercase tracking-wider mb-8">
+                    Question:
+                  </h4>
+                  <div className="bg-white rounded-[16px] p-6 border border-slate-200/40 shadow-sm">
+                    <p className="font-heading font-bold text-[16px] md:text-[18px] text-primary leading-relaxed">
+                      {currentQ.text}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-8 flex items-center justify-between text-[11px] text-slate-400 font-semibold">
+                  <span>Question {currentIndex + 1} of {questions.length}</span>
+                </div>
+              </div>
+
+              {/* Right Column: Options & Submit */}
+              <div
+                className="bg-white border border-slate-200/60 rounded-[24px] p-6 flex flex-col justify-between shadow-sm transition-all duration-300"
+                style={{
+                  opacity: animating ? 0 : 1,
+                  transform: animating ? 'translateX(10px)' : 'translateX(0)',
+                }}
+              >
+                {/* Options List */}
+                <div className="flex flex-col gap-3">
+                  {currentQ.options.map((opt, idx) => {
+                    const isSelected = selected === idx;
+                    return (
+                      <button
+                        key={idx}
+                        onClick={() => handleSelect(idx)}
+                        className="w-full text-left px-5 py-4 rounded-[16px] text-[13.5px] transition-all duration-150 border flex items-center gap-4.5 cursor-pointer bg-white"
+                        style={{
+                          borderColor: isSelected ? '#0f7c85' : '#e2e8f0',
+                          boxShadow: isSelected ? '0 4px 12px rgba(15, 124, 133, 0.05)' : 'none',
+                        }}
+                      >
+                        {/* Custom Radio check button */}
+                        <div
+                          className="w-5 h-5 rounded-full border flex items-center justify-center shrink-0 transition-all duration-150"
+                          style={{
+                            borderColor: isSelected ? '#0f7c85' : '#cbd5e1',
+                            borderWidth: isSelected ? '5px' : '1px',
+                          }}
+                        />
+                        <span
+                          className="font-medium"
+                          style={{ color: isSelected ? '#1a1a2e' : '#4a4a5a' }}
+                        >
+                          {opt.label}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Submit row */}
+                <div className="mt-8 flex items-center justify-between">
+                  <button
+                    onClick={handleBack}
+                    disabled={currentIndex === 0}
+                    className="text-[13px] font-bold text-slate-400 hover:text-slate-600 disabled:opacity-30 transition-colors cursor-pointer"
+                  >
+                    Back
+                  </button>
+
+                  <button
+                    onClick={handleNext}
+                    disabled={selected === null}
+                    className="bg-[#0f7c85] hover:bg-[#0c6b73] disabled:opacity-50 text-white font-bold text-[13.5px] px-8 py-2.5 rounded-full transition-all cursor-pointer shadow-sm"
+                  >
+                    {isLastQuestion ? 'Finish Quiz' : 'Next'}
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* ── LOCKED / UNLOCKED SCOREBOARD AREA ─────────────────────────────── */}
+        {!isAuthenticated ? (
+          <div className="relative border-t border-slate-200/80 pt-16 mt-8">
+            {/* Blurry dashboard background */}
+            <div className="filter blur-md select-none pointer-events-none opacity-40">
+              <h2 className="text-center font-heading font-extrabold text-[24px] mb-8 text-primary">Track Your Score</h2>
+              <div className="grid grid-cols-3 gap-4 mb-8">
+                {[
+                  { l: 'Correct Answers', v: '0/0', c: '#cbd5e1' },
+                  { l: 'Daily Streak', v: '0 Days', c: '#cbd5e1' },
+                  { l: 'Completion Rate', v: '0%', c: '#cbd5e1' },
+                ].map((stat, i) => (
+                  <div key={i} className="bg-white rounded-[20px] p-6 border border-slate-200/60 text-center">
+                    <span className="text-[24px] font-extrabold block text-slate-400 mb-1">{stat.v}</span>
+                    <span className="text-[11px] text-slate-400 uppercase tracking-wider">{stat.l}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="bg-white h-48 rounded-[24px] border border-slate-200/60 p-6 flex flex-col justify-end">
+                <div className="h-1 bg-slate-100 w-full rounded-full" />
+              </div>
+            </div>
+
+            {/* Scoreboard title centered on top */}
+            <div className="absolute top-8 left-0 right-0 text-center pointer-events-none z-10">
+              <h2 className="font-heading font-extrabold text-[26px] text-slate-400/80">Track Your Score</h2>
+            </div>
+
+            {/* Centered Login Required Modal */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-full max-w-sm">
+              <div className="bg-white border border-slate-200/60 rounded-[24px] p-8 text-center shadow-lg">
+                {/* Green lock circle icon */}
+                <div className="w-12 h-12 rounded-full border border-[#0f7c85] flex items-center justify-center mx-auto mb-4 text-[#0f7c85]">
+                  <svg className="w-5.5 h-5.5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                    <path strokeLinecap="round" d="M7 11V7a5 5 0 0110 0v4" />
+                  </svg>
+                </div>
+
+                <h3 className="font-heading font-bold text-[18px] text-primary mb-1">Login Required</h3>
+                <p className="text-secondary text-[13px] leading-relaxed mb-6">
+                  You need to log in to view this content and track your quiz score.
+                </p>
 
                 <button
-                  id="quiz-next-btn"
-                  onClick={handleNext}
-                  disabled={selected === null}
-                  className="flex items-center gap-2.5 px-6 py-3 rounded-full font-heading font-bold text-[13.5px] text-white transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed hover:opacity-90 hover:-translate-y-0.5 hover:shadow-lg"
-                  style={{ background: `linear-gradient(135deg, ${quiz.categoryColor}, ${quiz.categoryColor}cc)` }}
+                  onClick={handleLoginRedirect}
+                  className="bg-[#0f7c85] hover:bg-[#0c6b73] text-white px-8 py-2.5 rounded-full font-bold text-[13.5px] transition-colors cursor-pointer w-full"
                 >
-                  {isLastQuestion ? 'Finish Quiz' : 'Next Question'}
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                  </svg>
+                  Login
                 </button>
               </div>
             </div>
           </div>
-        </div>
+        ) : (
+          /* Unlocked Scoreboard / Dashboard link */
+          <div className="mt-14 max-w-4xl mx-auto">
+            <div className="bg-[#0f7c85] text-white rounded-[24px] p-8 md:p-10 shadow-md relative overflow-hidden">
+              <div className="absolute right-[-40px] bottom-[-40px] w-64 h-64 rounded-full bg-white/5 pointer-events-none" />
+              <div className="relative z-10 max-w-2xl mx-auto text-center flex flex-col items-center">
+                <span className="text-[10px] font-extrabold uppercase tracking-[2px] text-white/70 mb-2">YOUR WELLNESS JOURNEY</span>
+                <h2 className="font-heading font-extrabold text-[24px] md:text-[28px] mb-3 leading-tight">
+                  Track your health over time.
+                </h2>
+                <p className="text-white/85 text-[13.5px] leading-relaxed max-w-md mb-8">
+                  Welcome back! You are signed in. View your past quiz scores, track your wellness progress, and see detailed reports in your private dashboard.
+                </p>
+                
+                <div className="flex gap-10 mb-8 border-y border-white/10 py-4 w-full justify-center">
+                  <div className="text-center">
+                    <span className="text-[20px] font-extrabold block">5</span>
+                    <span className="text-[10px] uppercase text-white/60 tracking-wider">Quizzes</span>
+                  </div>
+                  <div className="text-center">
+                    <span className="text-[20px] font-extrabold block">3</span>
+                    <span className="text-[10px] uppercase text-white/60 tracking-wider">Free Qs</span>
+                  </div>
+                  <div className="text-center">
+                    <span className="text-[20px] font-extrabold block">∞</span>
+                    <span className="text-[10px] uppercase text-white/60 tracking-wider">Insights</span>
+                  </div>
+                </div>
 
-        {/* Free preview hint */}
-        {!isAuthenticated && currentIndex < FREE_QUESTION_LIMIT && (
-          <div className="pb-10 px-4 text-center">
-            <p className="text-[12px] text-muted">
-              🔓 {FREE_QUESTION_LIMIT - currentIndex - 1 > 0
-                ? `${FREE_QUESTION_LIMIT - currentIndex - 1} free question${FREE_QUESTION_LIMIT - currentIndex - 1 > 1 ? 's' : ''} remaining`
-                : 'This is your last free question'} —{' '}
-              <Link href="/login" className="font-bold no-underline" style={{ color: '#0f7c85' }}>
-                Sign in
-              </Link>{' '}
-              to unlock all {questions.length}
-            </p>
+                <div className="flex gap-4">
+                  <Link
+                    href="/quizzes/dashboard"
+                    className="bg-white text-[#0f7c85] hover:bg-slate-100 px-6 py-2.5 rounded-full font-bold text-[13.5px] no-underline transition-all shadow-sm"
+                  >
+                    My Dashboard
+                  </Link>
+                  <Link
+                    href="/quizzes"
+                    className="border border-white/20 hover:bg-white/10 text-white px-6 py-2.5 rounded-full font-bold text-[13.5px] no-underline transition-all"
+                  >
+                    All Quizzes
+                  </Link>
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }

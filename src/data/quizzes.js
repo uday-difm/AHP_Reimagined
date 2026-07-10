@@ -3,9 +3,111 @@
 // Each quiz has a slug, metadata, and an array of questions.
 // FREE_LIMIT controls how many questions are accessible without login.
 
-export const FREE_QUESTION_LIMIT = 2;
+export const FREE_QUESTION_LIMIT = 3;
 
 export const quizzes = [
+  {
+    slug: 'general-wellness',
+    title: 'General Wellness Quiz',
+    subtitle: 'Evaluate your overall health habits',
+    category: 'Wellness',
+    categoryColor: '#0f7c85',
+    categoryBg: '#f0fdfd',
+    icon: '✨',
+    img: '/images/holistic.png',
+    estimatedMinutes: 4,
+    questionCount: 8,
+    difficulty: 'Beginner',
+    description:
+      'A quick assessment to evaluate your daily physical activity, hydration, hydration consistency, and overall lifestyle balance.',
+    questions: [
+      {
+        id: 1,
+        text: 'How many glasses of water do you drink on average each day?',
+        options: [
+          { label: 'Less than 4 glasses', score: 0 },
+          { label: '4–6 glasses', score: 1 },
+          { label: '7–9 glasses', score: 3 },
+          { label: '10 or more glasses', score: 2 },
+        ],
+      },
+      {
+        id: 2,
+        text: 'How often do you engage in physical exercise or active movement?',
+        options: [
+          { label: 'Rarely or never', score: 0 },
+          { label: '1–2 times a week', score: 1 },
+          { label: '3–4 times a week', score: 3 },
+          { label: 'Every day', score: 2 },
+        ],
+      },
+      {
+        id: 3,
+        text: 'Do you make time for hobbies, relaxation, or self-care daily?',
+        options: [
+          { label: 'No, my days are too busy', score: 0 },
+          { label: 'Occasionally when I have time', score: 1 },
+          { label: 'Yes, at least 15-30 minutes', score: 3 },
+          { label: 'Yes, multiple hours a day', score: 2 },
+        ],
+      },
+      {
+        id: 4,
+        text: 'How often do you consume fresh fruits or green vegetables?',
+        options: [
+          { label: 'Rarely', score: 0 },
+          { label: 'A few times a week', score: 1 },
+          { label: 'Daily', score: 3 },
+          { label: 'With every meal', score: 2 },
+        ],
+      },
+      {
+        id: 5,
+        text: 'How would you rate your overall daily energy level?',
+        options: [
+          { label: 'Usually exhausted', score: 0 },
+          { label: 'Fluctuates throughout the day', score: 1 },
+          { label: 'Mostly stable and energetic', score: 3 },
+          { label: 'Consistently very high', score: 2 },
+        ],
+      },
+      {
+        id: 6,
+        text: 'How much screen time do you average daily outside of work?',
+        options: [
+          { label: 'More than 6 hours', score: 0 },
+          { label: '4–6 hours', score: 1 },
+          { label: '2–4 hours', score: 3 },
+          { label: 'Less than 2 hours', score: 2 },
+        ],
+      },
+      {
+        id: 7,
+        text: 'How often do you take short walks or stretch breaks during long tasks?',
+        options: [
+          { label: 'Never — I sit straight through', score: 0 },
+          { label: 'Rarely', score: 1 },
+          { label: 'Occasionally when stiff', score: 2 },
+          { label: 'Regularly every 1-2 hours', score: 3 },
+        ],
+      },
+      {
+        id: 8,
+        text: 'Which best describes your average sleep duration on weeknights?',
+        options: [
+          { label: 'Less than 5 hours', score: 0 },
+          { label: '5–6 hours', score: 1 },
+          { label: '7–8 hours', score: 3 },
+          { label: 'More than 8 hours', score: 2 },
+        ],
+      },
+    ],
+    scoring: [
+      { min: 0, max: 8, label: 'Needs Focus', color: '#e05248', insight: 'Try making small changes like drinking more water or taking brief walks to boost your energy.' },
+      { min: 9, max: 17, label: 'Balanced Lifestyle', color: '#f39c12', insight: 'You have good wellness habits! Focus on consistency to lock in your progress.' },
+      { min: 18, max: 24, label: 'Wellness Champion', color: '#27ae60', insight: 'Outstanding! You maintain highly balanced lifestyle habits. Keep it up.' },
+    ],
+  },
   {
     slug: 'sleep-quality',
     title: 'Sleep Quality Assessment',
@@ -14,6 +116,7 @@ export const quizzes = [
     categoryColor: '#1fb9fb',
     categoryBg: '#e8f4ff',
     icon: '🌙',
+    img: '/images/mag_sleep.png',
     estimatedMinutes: 5,
     questionCount: 10,
     difficulty: 'Beginner',
@@ -136,6 +239,7 @@ export const quizzes = [
     categoryColor: '#8e44ad',
     categoryBg: '#f3eeff',
     icon: '🧠',
+    img: '/images/mag_detox.png',
     estimatedMinutes: 6,
     questionCount: 10,
     difficulty: 'Intermediate',
@@ -258,6 +362,7 @@ export const quizzes = [
     categoryColor: '#f39c12',
     categoryBg: '#fff8e8',
     icon: '🥗',
+    img: '/images/mag_nutrition.png',
     estimatedMinutes: 5,
     questionCount: 10,
     difficulty: 'Beginner',
@@ -380,6 +485,7 @@ export const quizzes = [
     categoryColor: '#27ae60',
     categoryBg: '#e8f8f0',
     icon: '🌿',
+    img: '/images/ayurveda.png',
     estimatedMinutes: 7,
     questionCount: 10,
     difficulty: 'Intermediate',

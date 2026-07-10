@@ -10,7 +10,7 @@ export default async function Layout({ children }) {
   const user = await requireAuth();
 
   if (!user) {
-    redirect("/login");
+    redirect("/dashboard/login");
   }
 
   const siteId = process.env.NEXT_PUBLIC_SITE_ID || process.env.SITE_ID || "infinium";

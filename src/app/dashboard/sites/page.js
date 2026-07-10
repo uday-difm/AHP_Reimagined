@@ -15,7 +15,7 @@ export default async function SitesPage() {
   const sessionUser = await requireAuth();
 
   if (!sessionUser) {
-    redirect("/login");
+    redirect("/dashboard/login");
   }
 
   if (

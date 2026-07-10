@@ -2,10 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { useSession, signOut } from 'next-auth/react';
+import Link from 'next/link';
 import Search from '@/components/Search';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { status } = useSession();
+  const isAuthenticated = status === 'authenticated';
 
 
 
