@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export default function Footer({ className = "" }) {
   return (
-    <footer className="footer bg-bg-dark text-white relative overflow-hidden rounded-t-[48px] border-t border-white/5 pt-24 pb-12">
+    <footer className="footer bg-cyan-900 text-white relative overflow-hidden rounded-t-[48px] border-t border-white/5 pt-24 pb-12">
       {/* Top Accent Gradient Line */}
       <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-accent/30 to-transparent pointer-events-none" />
 
