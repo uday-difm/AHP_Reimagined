@@ -116,7 +116,7 @@ export default function PublicationPage() {
   // Refs for 3D card tilt
   const cardRefs = useRef([]);
 
-  const itemsPerPage = 8;
+  const itemsPerPage = 6;
   const totalPages = Math.ceil(recentIssues.length / itemsPerPage);
   const displayedIssues = recentIssues.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
@@ -249,7 +249,30 @@ export default function PublicationPage() {
                 <div className="book-3d-pages" />
                 
                 {/* Back Cover */}
-                <div className="book-3d-back" />
+                <div className="book-3d-back p-5 text-white flex flex-col justify-between select-none">
+                  <div className="flex flex-col gap-3.5 text-left">
+                    <div className="border-b border-white/20 pb-2.5">
+                      <span className="text-[9px] font-bold text-white/70 uppercase tracking-[2px] block mb-0.5">EDITORIAL BOARD</span>
+                      <h4 className="font-heading font-extrabold text-[14px] md:text-[15px] text-white tracking-[-0.5px]">Spring 2024 Issue</h4>
+                    </div>
+
+                    <div className="flex flex-col gap-2">
+                      <span className="text-[10px] text-white/50 font-bold uppercase tracking-[1px] block">Inside This Issue:</span>
+                      <ul className="text-[11.5px] leading-relaxed text-white/90 list-disc pl-3.5 space-y-1 font-medium">
+                        <li>Neuroscience of Focus</li>
+                        <li>Anxiety Somatic Resets</li>
+                        <li>Circadian Rhythms & Sleep</li>
+                        <li>Dosha-Balanced Nutrition</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <span
+                    className="w-full text-center bg-white text-[#0f7c85] font-bold text-[11px] py-2 rounded-full hover:bg-white/90 transition-all duration-300 shadow-md no-underline block"
+                  >
+                    Read Digital Issue →
+                  </span>
+                </div>
               </div>
             </Link>
 
@@ -341,18 +364,22 @@ export default function PublicationPage() {
       {/* Recent Issues Gallery */}
       <section id="recent-issues" className="py-20 bg-white rounded-t-[40px] shadow-[0_-20px_40px_rgba(0,0,0,0.01)] relative">
         <div className="container">
-          <div className="flex items-start justify-between mb-10 reveal-slide">
-            <div>
-              <span className="section-tag text-[11px] font-bold tracking-[2px] text-accent uppercase mb-2 block">BACK JOURNAL</span>
-              <h2 className="text-primary font-heading font-extrabold text-2xl md:text-3xl tracking-[-0.5px]">Recent Issues</h2>
-              <p className="text-muted text-[13.5px] mt-1.5">Journey through our curated collection of wellness wisdom.</p>
-            </div>
-            <button className="flex items-center gap-1 text-accent text-sm font-bold hover:underline mt-1 cursor-pointer">
+          <div className="flex flex-col items-center text-center max-w-xl mx-auto mb-14 reveal-slide">
+            <span className="section-tag text-[10px] font-extrabold tracking-[3px] text-accent uppercase mb-2 bg-[#0f7c85]/10 px-3.5 py-1.5 rounded-full">
+              BACK JOURNAL
+            </span>
+            <h2 className="text-primary font-heading font-extrabold text-3xl md:text-4xl tracking-[-0.5px] mt-2 mb-3">
+              Recent Issues
+            </h2>
+            <p className="text-muted text-[14px] leading-relaxed max-w-md">
+              Journey through our curated collection of wellness wisdom.
+            </p>
+            <button className="flex items-center gap-1 text-accent text-[12px] font-extrabold uppercase tracking-wider hover:underline mt-4 cursor-pointer">
               All Years <span className="arrow">→</span>
             </button>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-12 max-w-5xl mx-auto">
             {displayedIssues.map((issue, i) => {
               const slug = issue.slug || issue.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
               return (
@@ -362,39 +389,39 @@ export default function PublicationPage() {
                   onMouseMove={(e) => handleCardMouseMove(e, i)}
                   onMouseLeave={() => handleCardMouseLeave(i)}
                   style={{ transitionDelay: `${i * 0.1}s` }}
-                  className="project-card tilt-card bg-bg-light rounded-[20px] overflow-hidden border border-slate-200 transition-all duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer flex flex-col [transform-style:preserve-3d] [perspective:1000px] hover:border-accent/30 hover:shadow-[0_16px_40px_rgba(31,185,251,0.05)] reveal-slide p-4 min-h-[360px] md:min-h-[420px] group relative"
+                  className="project-card tilt-card bg-bg-light rounded-[24px] overflow-hidden border border-slate-200 transition-all duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer flex flex-col [transform-style:preserve-3d] [perspective:1000px] hover:border-[#0f7c85]/40 hover:shadow-[0_24px_48px_rgba(15,124,133,0.14)] hover:scale-[1.04] hover:-translate-y-2.5 active:scale-[0.98] reveal-slide p-5 min-h-[400px] md:min-h-[490px] group relative"
                 >
                   {/* The Flipping Card Wrapper */}
                   <div className="w-full h-full relative transition-transform duration-[800ms] [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] flex flex-col flex-grow">
 
                     {/* Front Face */}
                     <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] flex flex-col justify-between">
-                      <div className="relative rounded-xl overflow-hidden shadow-[0_10px_24px_rgba(0,0,0,0.03)] border border-slate-100 transition-all duration-500 mb-4 flex-grow h-[220px] md:h-[280px]">
+                      <div className="relative rounded-2xl overflow-hidden shadow-[0_12px_28px_rgba(0,0,0,0.04)] border border-slate-100 transition-all duration-500 mb-5 flex-grow h-[240px] md:h-[330px]">
                         <Image
                           src={issue.img}
                           alt={issue.title}
                           fill
-                          sizes="(max-width: 768px) 50vw, 25vw"
+                          sizes="(max-width: 768px) 50vw, 33vw"
                           className="object-cover"
                         />
                       </div>
-                      <div className="flex flex-col gap-1.5 mt-auto">
-                        <p className="text-accent text-[10px] font-bold uppercase tracking-wider">{issue.season}</p>
-                        <p className="text-primary font-heading font-semibold text-sm leading-snug">{issue.title}</p>
+                      <div className="flex flex-col gap-1 mt-auto">
+                        <p className="text-accent text-[11px] font-extrabold uppercase tracking-[1.5px] mb-1">{issue.season}</p>
+                        <p className="text-primary font-heading font-extrabold text-[15px] leading-snug tracking-[-0.3px] group-hover:text-accent transition-colors duration-300">{issue.title}</p>
                       </div>
                     </div>
 
                     {/* Back Face */}
-                    <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)] bg-[#1e4a45] rounded-xl p-5 text-white flex flex-col justify-between shadow-2xl border border-white/20 select-none">
-                      <div className="flex flex-col gap-3 text-left">
-                        <div className="border-b border-white/20 pb-2.5">
-                          <span className="text-[9px] font-bold text-accent uppercase tracking-[1.5px] block mb-0.5">{issue.season}</span>
-                          <h4 className="font-heading font-extrabold text-[13px] md:text-[14px] text-white leading-tight">{issue.title}</h4>
+                    <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)] bg-[#0f7c85] rounded-2xl p-6 text-white flex flex-col justify-between shadow-2xl border border-white/20 select-none">
+                      <div className="flex flex-col gap-4.5 text-left">
+                        <div className="border-b border-white/20 pb-3">
+                          <span className="text-[10px] font-extrabold text-[#4FC0C3] uppercase tracking-[1.5px] block mb-0.5">{issue.season}</span>
+                          <h4 className="font-heading font-extrabold text-[15px] md:text-[17px] text-white leading-tight tracking-tight">{issue.title}</h4>
                         </div>
 
-                        <div className="flex flex-col gap-2">
-                          <span className="text-[10px] text-white/50 font-bold uppercase tracking-[1px] block">Inside:</span>
-                          <ul className="text-[11px] md:text-[12px] leading-relaxed text-white/90 list-disc pl-3.5 space-y-1 font-medium">
+                        <div className="flex flex-col gap-2.5">
+                          <span className="text-[11px] text-white/50 font-bold uppercase tracking-[1px] block">Inside:</span>
+                          <ul className="text-[12px] md:text-[13.5px] leading-relaxed text-white/90 list-disc pl-4 space-y-1.5 font-medium">
                             {issue.contents.map((item, idx) => (
                               <li key={idx}>{item}</li>
                             ))}
@@ -404,7 +431,7 @@ export default function PublicationPage() {
 
                       <Link
                         href={`/blogs/${slug}`}
-                        className="w-full text-center bg-white text-primary font-bold text-[10.5px] py-2 rounded-full hover:bg-accent hover:text-white transition-all duration-300 shadow-md no-underline block"
+                        className="w-full text-center bg-white text-[#0f7c85] font-extrabold text-[12px] py-3 rounded-full hover:bg-primary hover:text-white transition-all duration-300 shadow-md no-underline block border border-transparent"
                       >
                         Read Issue →
                       </Link>
@@ -521,23 +548,52 @@ export default function PublicationPage() {
         </div>
       </section>
 
-      {/* Science-Backed Verification Block */}
+      {/* Verification & Advertising Info Section */}
       <section className="bg-white py-20 rounded-[40px] shadow-[0_20px_48px_rgba(0,0,0,0.01)] relative">
-        <div className="container max-w-[640px] text-center reveal-slide">
-          <div className="w-14 h-14 bg-[#e4eeea] rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
-            <svg className="w-6 h-6 text-accent-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-            </svg>
+        <div className="container max-w-5xl mx-auto px-4 reveal-slide">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+            
+            {/* Left Card — Science-Backed Verification */}
+            <div className="bg-bg-light rounded-[32px] p-8 border border-slate-200/60 shadow-[0_4px_20px_rgba(0,0,0,0.01)] flex flex-col justify-between text-center md:text-left h-full hover:border-[#27ae60]/20 transition-all duration-300">
+              <div>
+                <div className="w-12 h-12 bg-[#e4eeea] rounded-full flex items-center justify-center mb-6 shadow-sm mx-auto md:mx-0">
+                  <svg className="w-5 h-5 text-accent-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                </div>
+                <h2 className="text-primary font-heading font-extrabold text-2xl mb-4 tracking-[-0.5px]">
+                  Science-Backed. Reader-Loved.
+                </h2>
+                <p className="text-secondary text-[14px] leading-relaxed mb-8">
+                  Every article in &quot;A Health Place&quot; digital magazine undergoes a rigorous verification process by our board-certified Medical Review Committee to ensure you receive the most accurate, up-to-date health information.
+                </p>
+              </div>
+              <Link href="/info?tab=board" className="inline-flex items-center gap-1.5 text-accent-green text-sm font-bold hover:underline mx-auto md:mx-0 w-max">
+                Meet our Medical Review Board <span className="arrow">→</span>
+              </Link>
+            </div>
+
+            {/* Right Card — Advertise With Us */}
+            <div className="bg-bg-light rounded-[32px] p-8 border border-slate-200/60 shadow-[0_4px_20px_rgba(0,0,0,0.01)] flex flex-col justify-between text-center md:text-left h-full hover:border-[#0f7c85]/20 transition-all duration-300">
+              <div>
+                <div className="w-12 h-12 bg-[#e8f4ff] rounded-full flex items-center justify-center mb-6 shadow-sm mx-auto md:mx-0">
+                  <svg className="w-5 h-5 text-[#0f7c85]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+                  </svg>
+                </div>
+                <h2 className="text-primary font-heading font-extrabold text-2xl mb-4 tracking-[-0.5px]">
+                  Advertise With Us.
+                </h2>
+                <p className="text-secondary text-[14px] leading-relaxed mb-8">
+                  Reach our highly engaged audience of health and wellness enthusiasts. Partner with us for editorial integrations, custom newsletter sponsorships, or digital media packages.
+                </p>
+              </div>
+              <Link href="/info?tab=contact" className="inline-flex items-center justify-center bg-[#0f7c85] hover:bg-[#0c646b] text-white font-extrabold text-[12px] py-3 px-6 rounded-xl transition-all duration-300 no-underline w-max mx-auto md:mx-0 shadow-sm hover:shadow-[0_6px_20px_rgba(15,124,133,0.2)] hover:-translate-y-0.5 transform">
+                Contact Us
+              </Link>
+            </div>
+
           </div>
-          <h2 className="text-primary font-heading font-extrabold text-2xl md:text-3xl mb-4 tracking-[-0.5px]">
-            Science-Backed. Reader-Loved.
-          </h2>
-          <p className="text-secondary text-[14px] md:text-[15px] leading-relaxed mb-6">
-            Every article in &quot;A Health Place&quot; digital magazine undergoes a rigorous verification process by our board-certified Medical Review Committee to ensure you receive the most accurate, up-to-date health information.
-          </p>
-          <Link href="/info?tab=board" className="inline-flex items-center gap-1.5 text-accent-green text-sm font-bold hover:underline">
-            Meet our Medical Review Board <span className="arrow">→</span>
-          </Link>
         </div>
       </section>
 
