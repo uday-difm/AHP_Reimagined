@@ -71,14 +71,14 @@ export default function Header() {
 
       {/* Universal Hamburger Menu Overlay */}
       <div
-        className={`fixed inset-0 w-full h-screen bg-white/95 dark:bg-slate-950/95 backdrop-blur-3xl z-[8999] flex items-center justify-center transition-all duration-500 ${menuOpen ? 'opacity-100 pointer-events-auto visible' : 'opacity-0 pointer-events-none invisible'
+        className={`fixed inset-0 w-full h-screen bg-white/95 backdrop-blur-3xl z-[8999] flex items-center justify-center transition-all duration-500 ${menuOpen ? 'opacity-100 pointer-events-auto visible' : 'opacity-0 pointer-events-none invisible'
           }`}
       >
-        <div className={`hb-menu-container w-full max-h-screen overflow-y-auto py-24 px-6 sm:px-10 md:px-20 grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr] gap-10 md:gap-20 items-center transition-transform duration-700 ${menuOpen ? 'translate-y-0' : 'translate-y-10'}`}>
+        <div className={`hb-menu-container w-full max-h-screen overflow-y-auto py-24 px-6 sm:px-10 md:px-20 grid grid-cols-1 md:grid-cols-[0.95fr_1.05fr] gap-10 md:gap-20 items-center transition-transform duration-700 ${menuOpen ? 'translate-y-0' : 'translate-y-10'}`}>
 
-          <div className={`hb-meta-panel hidden md:flex flex-col gap-10 border-r border-primary/10 pl-12 transition-all duration-500 delay-300 ${menuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[30px]'}`}>
+          <div className={`hb-meta-panel hidden md:flex flex-col gap-10 border-r border-primary/10 pr-12 transition-all duration-500 delay-300 ${menuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[30px]'}`}>
             <div className="hb-quote-section flex items-start justify-start py-6 px-6 md:px-8 max-w-[650px]">
-              <div className="hb-quote-container font-['Optima',_'Candara',_'Noto_Sans',_sans-serif] text-[#1a1a1a] dark:text-white py-6 leading-[1.1] uppercase">
+              <div className="hb-quote-container font-['Optima',_'Candara',_'Noto_Sans',_sans-serif] text-[#1a1a1a] py-6 leading-[1.1] uppercase">
                 <h1 className="hb-main-text text-[40px] md:text-[52px] lg:text-[64px] tracking-[2px] font-normal m-0 leading-[1.1]">
                   "Small Changes Big Impact"
                 </h1>
