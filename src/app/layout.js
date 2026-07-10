@@ -2,7 +2,6 @@ import { headers } from "next/headers";
 import AuthProvider from "@/components/providers/SessionProvider";
 import ThemeProvider from "@/components/providers/ThemeProvider";
 import SessionTimeoutHandler from "@/components/utils/SessionTimeoutHandler";
-import PageTransitionProvider from "@/components/providers/PageTransitionProvider";
 import ScrollProvider from "@/components/providers/ScrollProvider";
 import { Toaster } from "sonner";
 import "@/core/listeners";
@@ -87,9 +86,7 @@ export default async function RootLayout({ children }) {
             <SessionTimeoutHandler timeoutMinutes={30} />
             <GlobalAnalytics settings={layout?.rawSettings} />
             <ScrollProvider>
-              <PageTransitionProvider>
-                {children}
-              </PageTransitionProvider>
+              {children}
             </ScrollProvider>
             <CookieBanner complianceSettings={complianceSettings} />
             <Toaster richColors position="top-right" closeButton />

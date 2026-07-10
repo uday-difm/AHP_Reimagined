@@ -5,6 +5,7 @@ import Footer from '@/components/Footer';
 import ScrollReveal from '@/components/ScrollReveal';
 import CustomCursor from '@/components/CustomCursor';
 import BackdropBlobs from '@/components/BackdropBlobs';
+import Button from '@/components/Button';
 
 export const metadata = {
   title: 'About Us — A Health Place',
@@ -265,12 +266,12 @@ export default function AboutPage() {
               Browse hundreds of clinically reviewed guides — free, forever. Your health journey starts with one article.
             </p>
             <div className="flex flex-wrap gap-4 justify-center reveal-fade">
-              <Link href="/blogs" className="bg-accent hover:bg-[#3aadaf] text-white font-bold text-[13px] py-3.5 px-8 rounded-full transition-all duration-300 no-underline shadow-[0_8px_24px_rgba(79,192,195,0.35)] hover:-translate-y-0.5">
+              <Button href="/blogs" variant="primary">
                 Read Our Guides
-              </Link>
-              <Link href="/services" className="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-[13px] py-3.5 px-8 rounded-full transition-all duration-300 no-underline hover:-translate-y-0.5">
+              </Button>
+              <Button href="/services" variant="transparent">
                 Partner With Us
-              </Link>
+              </Button>
             </div>
           </div>
         </section>

@@ -22,6 +22,15 @@ export default function AdsPage() {
   const [siteId, setSiteId] = useState("");
   const [saveError, setSaveError] = useState(null);
 
+  const handlePresetChange = (presetValue) => {
+    if (!presetValue) {
+      setNewZone(prev => ({ ...prev, width: "", height: "" }));
+      return;
+    }
+    const [width, height] = presetValue.split("x");
+    setNewZone(prev => ({ ...prev, width, height }));
+  };
+
   useEffect(() => {
     const id = localStorage.getItem("x-site-id") || process.env.NEXT_PUBLIC_SITE_ID || "";
     setSiteId(id);
@@ -414,6 +423,35 @@ export default function AdsPage() {
                   onChange={(e) => setNewZone({ ...newZone, name: e.target.value })}
                   className="w-full p-2 border rounded-lg text-xs dark:bg-slate-900 outline-none"
                 />
+              </div>
+
+              <div>
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1">Layout Preset</label>
+                <select
+                  onChange={(e) => handlePresetChange(e.target.value)}
+                  className="w-full p-2 border rounded-lg text-xs dark:bg-slate-900 outline-none"
+                  defaultValue=""
+                >
+                  <option value="">Custom / Responsive</option>
+                  <optgroup label="Mobile Layouts (High-End Devices)">
+                    <option value="300x200">300 x 200 px (Mobile Medium)</option>
+                    <option value="300x50">300 x 50 px (Mobile Leaderboard)</option>
+                    <option value="300x100">300 x 100 px (Mobile Large)</option>
+                    <option value="250x250">250 x 250 px (Square)</option>
+                    <option value="200x200">200 x 200 px (Small Square)</option>
+                  </optgroup>
+                  <optgroup label="Computer Layouts (Desktop)">
+                    <option value="300x250">300 x 250 px (Medium Rectangle)</option>
+                    <option value="336x280">336 x 280 px (Large Rectangle)</option>
+                    <option value="728x90">728 x 90 px (Leaderboard)</option>
+                    <option value="970x90">970 x 90 px (Large Leaderboard)</option>
+                    <option value="468x60">468 x 60 px (Banner)</option>
+                    <option value="300x600">300 x 600 px (Half-Page / Tower)</option>
+                    <option value="160x600">160 x 600 px (Wide Skyscraper)</option>
+                    <option value="250x250">250 x 250 px (Square)</option>
+                    <option value="200x200">200 x 200 px (Small Square)</option>
+                  </optgroup>
+                </select>
               </div>
 
               <div className="grid grid-cols-2 gap-2">

@@ -92,11 +92,12 @@ export default function Header() {
           </div>
           <nav className="hb-nav-links flex flex-col items-end pr-8 md:pr-16 lg:pr-32">
             <div className="flex flex-col items-start text-left gap-3 sm:gap-4">
-              {['Home', 'About', 'Blogs', 'Digital Magazine', 'Contact Us'].map((label, i) => {
-                const isPublication = label === 'Digital Magazine';
+              {['Home', 'About', 'Publication', 'Blogs', 'Quizzes', 'Contact Us'].map((label, i) => {
+                const isPublication = label === 'Publication';
                 const isBlogs = label === 'Blogs';
                 const isHome = label === 'Home';
                 const isAbout = label === 'About';
+                const isQuizzes = label === 'Quizzes';
                 const isContact = label === 'Contact Us';
                 const href = isHome
                   ? '/'
@@ -108,7 +109,9 @@ export default function Header() {
                         ? '/publication'
                         : isBlogs
                           ? '/blogs'
-                          : `/#${label.toLowerCase().replace('journey', 'timeline').replace('newsletter', 'contact').replace('community', 'events')}`;
+                          : isQuizzes
+                            ? '/quizzes'
+                            : `/#${label.toLowerCase().replace('journey', 'timeline').replace('newsletter', 'contact').replace('community', 'events')}`;
                 return (
                   <a
                     key={i}
