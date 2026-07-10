@@ -59,8 +59,27 @@ export default function Search() {
   // Focus input on open
   useEffect(() => {
     if (isOpen && inputRef.current) {
-      inputRef.current.focus();
+      // Focus after animation has started
+      const timer = setTimeout(() => {
+        inputRef.current.focus();
+      }, 100);
+      return () => clearTimeout(timer);
     }
+  }, [isOpen]);
+
+  // Body and HTML scroll locking when search is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add('hb-no-scroll');
+      document.documentElement.classList.add('hb-no-scroll');
+    } else {
+      document.body.classList.remove('hb-no-scroll');
+      document.documentElement.classList.remove('hb-no-scroll');
+    }
+    return () => {
+      document.body.classList.remove('hb-no-scroll');
+      document.documentElement.classList.remove('hb-no-scroll');
+    };
   }, [isOpen]);
 
   // Handle escape key
@@ -139,11 +158,16 @@ export default function Search() {
       </button>
 
       {/* Glassmorphic Search Overlay Modal */}
-      {isOpen && (
-        <div className="fixed inset-0 w-full h-screen bg-white/85 backdrop-blur-2xl z-[99999] flex flex-col justify-start items-center p-6 md:p-16">
-          
+      <div 
+        className={`fixed inset-0 w-full h-screen bg-white/85 backdrop-blur-2xl z-[99999] flex flex-col justify-start items-center p-6 md:p-16 transition-all duration-500 ${
+          isOpen ? 'opacity-100 pointer-events-auto visible' : 'opacity-0 pointer-events-none invisible'
+        }`}
+      >
+        <div className={`w-full max-w-[800px] flex flex-col items-center flex-1 transition-transform duration-700 ${
+          isOpen ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
+        }`}>
           {/* Top Row: Close button */}
-          <div className="w-full max-w-[800px] flex justify-end mb-6">
+          <div className="w-full flex justify-end mb-6">
             <button
               onClick={() => setIsOpen(false)}
               className="w-10 h-10 rounded-full flex items-center justify-center border border-slate-200 bg-white/80 hover:bg-slate-50 transition-colors shadow-sm cursor-pointer"
@@ -153,7 +177,7 @@ export default function Search() {
           </div>
 
           {/* Search Bar Container */}
-          <div className="w-full max-w-[800px] relative mb-12">
+          <div className="w-full relative mb-12">
             <div className="relative flex items-center border border-slate-200/80 rounded-2xl bg-white shadow-md px-5 py-4 focus-within:border-accent/40 focus-within:shadow-[0_8px_30px_rgba(31,185,251,0.06)] transition-all duration-300">
               <SearchIcon className="w-6 h-6 text-slate-400 mr-4" />
               <input
@@ -176,7 +200,7 @@ export default function Search() {
           </div>
 
           {/* Results Area */}
-          <div className="w-full max-w-[800px] flex-1 overflow-y-auto pr-2 custom-scrollbar">
+          <div className="w-full flex-1 overflow-y-auto pr-2 custom-scrollbar">
             {query.trim() === '' ? (
               <div className="text-center text-secondary py-12">
                 <span className="text-[11px] font-bold tracking-[2px] text-accent uppercase block mb-2">Guides Database</span>
@@ -231,9 +255,8 @@ export default function Search() {
               </div>
             )}
           </div>
-
         </div>
-      )}
+      </div>
     </>
   );
 }

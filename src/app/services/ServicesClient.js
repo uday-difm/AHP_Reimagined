@@ -6,6 +6,7 @@ import { useSearchParams } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AdSlot from '@/components/AdSlot';
+import Button from '@/components/Button';
 import { Search, ChevronRight, HelpCircle, Star, X, CheckCircle, Mail, ArrowLeft, ShieldAlert } from 'lucide-react';
 
 const STANDARD_PACKAGES = [
@@ -362,12 +363,13 @@ export default function ServicesClient({ showConfidential = false }) {
                           <span className="text-[8.5px] font-bold text-slate-400 uppercase tracking-wider">Package Price</span>
                           <span className="text-[14px] font-extrabold text-[#0f4c4e]">{service.price}</span>
                         </div>
-                        <button
+                        <Button
                           onClick={() => openDetailsModal(service)}
-                          className="bg-primary text-white hover:bg-accent hover:text-white font-bold text-xs py-2.5 px-5 rounded-full transition-all duration-300 no-underline shadow-sm flex items-center gap-1 active:scale-[0.98] cursor-pointer select-none"
+                          variant="primary"
+                          className="!bg-primary hover:!bg-accent hover:!text-white !text-xs !py-2.5 !px-5 inline-flex items-center gap-1 select-none shadow-sm"
                         >
                           Know More <ChevronRight size={12} />
-                        </button>
+                        </Button>
                       </div>
                     </div>
                   </div>
@@ -480,12 +482,13 @@ export default function ServicesClient({ showConfidential = false }) {
                 )}
 
                 {/* Next Step Action Button */}
-                <button
+                 <Button
                   onClick={() => setModalStep('form')}
-                  className="bg-[#0f4c4e] hover:bg-[#093031] text-white font-bold text-xs py-3.5 rounded-full transition-all duration-300 mt-2 shadow-md cursor-pointer select-none active:scale-[0.98]"
+                  variant="primary"
+                  className="!bg-[#0f4c4e] hover:!bg-[#093031] !text-xs !py-3.5 mt-2 shadow-md select-none w-full"
                 >
                   {selectedService.ctaButtonText}
-                </button>
+                </Button>
               </div>
             )}
 
@@ -650,13 +653,14 @@ export default function ServicesClient({ showConfidential = false }) {
                 </div>
 
                 {/* Submit button */}
-                <button
+                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="bg-[#0f4c4e] hover:bg-[#093031] disabled:bg-slate-400 text-white font-bold text-xs py-3.5 rounded-full transition-all duration-300 mt-2 shadow-md cursor-pointer select-none active:scale-[0.98]"
+                  variant="primary"
+                  className="!bg-[#0f4c4e] hover:!bg-[#093031] disabled:!bg-slate-400 !text-xs !py-3.5 mt-2 shadow-md select-none w-full"
                 >
                   {isSubmitting ? 'Securing Submission Details...' : 'Submit Media Package Inquiry'}
-                </button>
+                </Button>
               </form>
             )}
 
@@ -706,12 +710,13 @@ export default function ServicesClient({ showConfidential = false }) {
                 </div>
 
                 {/* Finish/Close button */}
-                <button
+                 <Button
                   onClick={() => setIsModalOpen(false)}
-                  className="bg-[#0f4c4e] hover:bg-[#093031] text-white font-bold text-xs py-3 px-8 rounded-full transition-all duration-300 mt-8 shadow-sm cursor-pointer select-none"
+                  variant="primary"
+                  className="!bg-[#0f4c4e] hover:!bg-[#093031] !text-xs !py-3 !px-8 mt-8 shadow-sm select-none"
                 >
                   Close Window
-                </button>
+                </Button>
               </div>
             )}
             

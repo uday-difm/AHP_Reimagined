@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import Button from '@/components/Button';
 
 export default function WellnessShowcase() {
   return (
@@ -35,9 +36,9 @@ export default function WellnessShowcase() {
                 <p className="text-[#4a4a5a] text-[13.5px] md:text-[14.5px] leading-relaxed mb-6">
                   Take charge of your digestion with guidance on natural remedies, biophilic diets, and gut longevity from our certified specialists.
                 </p>
-                <Link href="/blogs?filter=Holistic%20Ayurveda" className="bg-[#0f7c85] hover:bg-[#0c646b] text-white font-bold text-[12.5px] py-3 px-6 rounded-full transition-all duration-300 no-underline shadow-sm">
+                <Button href="/blogs?filter=Holistic%20Ayurveda" variant="primary" className="!text-[12.5px] !py-3 !px-6">
                   Visit Ayurveda Hub
-                </Link>
+                </Button>
               </div>
               
               {/* Circle plate image at the bottom */}
@@ -103,9 +104,9 @@ export default function WellnessShowcase() {
                   link: '/blogs?filter=Insurance%20Mappings',
                 },
                 {
-                  tag: 'Find Care Provider',
-                  desc: 'Connect with certified ayurvedic specialists on our review board.',
-                  link: '/info?tab=board',
+                  tag: 'Get Support & Contact',
+                  desc: 'Connect with our team and get help with your health questions.',
+                  link: '/info?tab=support',
                 },
               ].map((item, idx) => (
                 <Link key={idx} href={item.link} className="bg-[#3f9a9e] hover:bg-[#368b8e] rounded-[24px] p-5 flex items-center justify-between gap-4 hover:shadow-md transition-all duration-300 group no-underline text-left flex-grow">
@@ -132,9 +133,9 @@ export default function WellnessShowcase() {
                 <p className="text-white/90 text-[13.5px] md:text-[14.5px] leading-relaxed mb-6">
                   Learn everything you need to know about wellness treatments, clinical research, diagnostics, and certified natural remedies.
                 </p>
-                <Link href="/blogs" className="bg-white text-[#1c7b80] hover:bg-slate-100 font-bold text-[12.5px] py-3 px-6 rounded-full transition-all duration-300 no-underline shadow-sm">
+                <Button href="/blogs" variant="white" className="!text-[#1c7b80] !text-[12.5px] !py-3 !px-6 shadow-sm">
                   Search Directory
-                </Link>
+                </Button>
               </div>
               
               {/* Circle plate image at the bottom */}

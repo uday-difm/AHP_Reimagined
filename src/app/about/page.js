@@ -6,11 +6,12 @@ import ScrollReveal from '@/components/ScrollReveal';
 import CustomCursor from '@/components/CustomCursor';
 import BackdropBlobs from '@/components/BackdropBlobs';
 import Button from '@/components/Button';
+import AdSlot from '@/components/AdSlot';
 
 export const metadata = {
   title: 'About Us — A Health Place',
   description:
-    'Learn about A Health Place — our mission to deliver empathetic, medically verified health guides, our advisory board, and our commitment to holistic wellness.',
+    'Learn about A Health Place — our mission to deliver empathetic, medically verified health guides, and our commitment to holistic wellness.',
 };
 
 const stats = [
@@ -120,16 +121,18 @@ export default function AboutPage() {
                 and actionable health guidance. No gatekeeping, no scare tactics, just science-backed clarity.
               </p>
               <div className="flex flex-wrap gap-4 justify-center mt-10 reveal-fade">
-                <Link href="/blogs" className="bg-accent hover:bg-[#3aadaf] text-white font-bold text-[13px] py-3.5 px-7 rounded-full transition-all duration-300 no-underline shadow-[0_8px_24px_rgba(79,192,195,0.35)] hover:shadow-[0_12px_32px_rgba(79,192,195,0.45)] hover:-translate-y-0.5">
+                <Button href="/blogs" variant="primary" className="!text-[13px] !py-3.5 !px-7 font-bold shadow-[0_8px_24px_rgba(79,192,195,0.35)] hover:shadow-[0_12px_32px_rgba(79,192,195,0.45)]">
                   Explore Articles
-                </Link>
-                <Link href="/info?tab=board" className="bg-white hover:bg-slate-50 text-primary font-bold text-[13px] py-3.5 px-7 rounded-full border border-slate-200 transition-all duration-300 no-underline shadow-sm hover:-translate-y-0.5">
-                  Meet Our Board
-                </Link>
+                </Button>
               </div>
             </div>
           </div>
         </section>
+
+        {/* Ad Spot */}
+        <div className="container max-w-4xl mx-auto my-10 px-6">
+          <AdSlot zone="about-hero-bottom" />
+        </div>
 
         {/* Stats Banner */}
         <section className="bg-primary py-16">
@@ -162,12 +165,6 @@ export default function AboutPage() {
                   Our editorial process is rigorous. Every piece of content is fact-checked against peer-reviewed literature
                   and signed off by at least one qualified medical professional. We never publish anything we would not share with our own families.
                 </p>
-                <Link href="/info?tab=board" className="inline-flex items-center gap-2 text-accent font-bold text-[14px] no-underline group">
-                  View Our Advisory Board
-                  <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                  </svg>
-                </Link>
               </div>
 
               {/* Visual card */}
@@ -195,6 +192,11 @@ export default function AboutPage() {
             </div>
           </div>
         </section>
+
+        {/* Ad Spot */}
+        <div className="container max-w-5xl mx-auto my-10 px-6">
+          <AdSlot zone="about-mission-bottom" />
+        </div>
 
         {/* Values */}
         <section className="py-24 md:py-32 bg-[#f8fafc]">
@@ -232,12 +234,12 @@ export default function AboutPage() {
                   From everyday nutrition questions to navigating complex insurance codes — our library covers the full
                   arc of human health so you always find what you need.
                 </p>
-                <Link href="/blogs" className="inline-flex items-center gap-2 bg-primary hover:bg-[#16162a] text-white font-bold text-[13px] py-3.5 px-7 rounded-full transition-all duration-300 no-underline shadow-sm hover:-translate-y-0.5">
+                <Button href="/blogs" variant="primary" className="!bg-primary hover:!bg-[#16162a] !text-[13px] !py-3.5 !px-7 font-bold shadow-sm inline-flex items-center gap-2">
                   Browse All Articles
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                   </svg>
-                </Link>
+                </Button>
               </div>
               <div className="grid grid-cols-2 gap-4 reveal-scale">
                 {categories.map((cat, i) => (

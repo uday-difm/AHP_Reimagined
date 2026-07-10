@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Button from '@/components/Button';
 
 export default function Newsletter() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
@@ -46,9 +47,9 @@ export default function Newsletter() {
                 required
                 className="flex-grow bg-white border border-slate-200 rounded-full px-6 py-3.5 text-sm outline-none text-primary focus:border-accent focus:shadow-[0_0_0_4px_rgba(31,185,251,0.1)] transition-all"
               />
-              <button type="submit" className="bg-[#0f7c85] hover:bg-[#0c6b73] text-white px-8 py-3.5 rounded-full font-bold text-[14px] transition-colors shadow-sm cursor-pointer whitespace-nowrap">
+              <Button type="submit" variant="primary" className="whitespace-nowrap">
                 Subscribe
-              </button>
+              </Button>
             </form>
           </div>
 
@@ -95,9 +96,9 @@ export default function Newsletter() {
                   />
                 </div>
 
-                <button type="submit" className="w-full bg-[#0f7c85] hover:bg-[#0c6b73] text-white py-4 rounded-xl font-bold text-[14px] transition-colors shadow-md mt-2 cursor-pointer">
+                <Button type="submit" variant="primary" className="w-full !rounded-xl !py-4 mt-2">
                   Send Message
-                </button>
+                </Button>
               </form>
             </div>
           </div>

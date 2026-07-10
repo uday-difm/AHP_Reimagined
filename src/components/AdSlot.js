@@ -8,9 +8,66 @@ import { useState, useEffect } from 'react';
  * layout="strip"  → a compact single-line pill between sections (default)
  * layout="float"  → a small card that floats right, text wraps around it
  */
-export default function AdSlot({ zone, layout = 'strip' }) {
+const ZONE_DIMENSIONS = {
+  'homepage-hero-bottom': {
+    desktop: { width: 728, height: 90 },
+    mobile: { width: 300, height: 50 }
+  },
+  'homepage-articles-bottom': {
+    desktop: { width: 970, height: 90 },
+    mobile: { width: 300, height: 100 }
+  },
+  'homepage-about-bottom': {
+    desktop: { width: 728, height: 90 },
+    mobile: { width: 300, height: 50 }
+  },
+  'homepage-events-bottom': {
+    desktop: { width: 728, height: 90 },
+    mobile: { width: 300, height: 50 }
+  },
+  'hero-sidebar-bottom': {
+    desktop: { width: 300, height: 250 },
+    mobile: { width: 250, height: 250 }
+  },
+  'services-top': {
+    desktop: { width: 728, height: 90 },
+    mobile: { width: 300, height: 50 }
+  },
+  'article-body-top': {
+    desktop: { width: 728, height: 90 },
+    mobile: { width: 300, height: 50 }
+  },
+  'article-body-inline': {
+    desktop: { width: 300, height: 250 },
+    mobile: { width: 250, height: 250 }
+  },
+  'article-body-bottom': {
+    desktop: { width: 728, height: 90 },
+    mobile: { width: 300, height: 50 }
+  },
+  'about-hero-bottom': {
+    desktop: { width: 728, height: 90 },
+    mobile: { width: 300, height: 50 }
+  },
+  'about-mission-bottom': {
+    desktop: { width: 970, height: 90 },
+    mobile: { width: 300, height: 100 }
+  }
+};
+
+export default function AdSlot({ zone, layout = 'strip', width, height }) {
   const [ads, setAds] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     async function fetchAds() {
@@ -31,39 +88,130 @@ export default function AdSlot({ zone, layout = 'strip' }) {
 
   if (loading) return null;
 
+  const zoneConfig = ZONE_DIMENSIONS[zone];
+  const activeDimensions = isMobile ? (zoneConfig?.mobile || zoneConfig?.desktop) : zoneConfig?.desktop;
+
+  const w = width || activeDimensions?.width;
+  const h = height || activeDimensions?.height;
+
   // ── Active ads ──────────────────────────────────────────────
   if (ads.length > 0) {
     const wrapClass = layout === 'float'
-      ? 'float-right clear-right ml-6 mb-4 w-[200px]'
+      ? 'float-right clear-right ml-6 mb-4'
       : 'w-full flex flex-col items-center my-3';
+
+    const containerStyle = w && h ? {
+      width: `${w}px`,
+      maxWidth: '100%',
+      aspectRatio: `${w} / ${h}`,
+      height: 'auto',
+    } : {};
 
     return (
       <div className={wrapClass}>
-        <span className="block text-[9px] font-semibold text-muted uppercase tracking-[1.5px] mb-1.5 text-center">Ad</span>
-        {ads.map((ad) => {
-          if (ad.type === 'CODE') {
-            return (
-              <div key={ad.id} dangerouslySetInnerHTML={{ __html: ad.code }} />
-            );
-          }
-          if (ad.type === 'IMAGE' && ad.imageUrl) {
-            return (
-              <a key={ad.id} href={ad.targetUrl || '#'} target="_blank" rel="noopener noreferrer"
-                className="block hover:opacity-90 transition-opacity">
-                <img src={ad.imageUrl} alt={ad.name || 'Ad'}
-                  className="w-full h-auto rounded-lg shadow-[0_2px_12px_rgba(0,0,0,0.06)]" />
-              </a>
-            );
-          }
-          return null;
-        })}
+        <span className="block text-[9px] font-semibold text-muted uppercase tracking-[1.5px] mb-1.5 text-center font-body">Ad</span>
+        <div 
+          className="flex justify-center items-center overflow-hidden rounded-lg bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800/80 shadow-[0_2px_12px_rgba(0,0,0,0.03)]" 
+          style={containerStyle}
+        >
+          {ads.map((ad) => {
+            if (ad.type === 'CODE') {
+              return (
+                <div key={ad.id} className="w-full h-full flex justify-center items-center" dangerouslySetInnerHTML={{ __html: ad.code }} />
+              );
+            }
+            if (ad.type === 'IMAGE' && ad.imageUrl) {
+              return (
+                <a key={ad.id} href={ad.targetUrl || '#'} target="_blank" rel="noopener noreferrer"
+                  className="block w-full h-full hover:opacity-90 transition-opacity">
+                  <img src={ad.imageUrl} alt={ad.name || 'Ad'}
+                    className="w-full h-full object-cover" />
+                </a>
+              );
+            }
+            return null;
+          })}
+        </div>
       </div>
     );
   }
 
   // ── No active ads ────────────────────────────────────────────
 
-  // Float variant — small sidebar-style CTA that text flows around
+  // If size mapping exists, display the clean mockup layout (gray box with attractive CTAs)
+  if (w && h) {
+    const wrapClass = layout === 'float'
+      ? 'float-right clear-right ml-6 mb-4'
+      : 'w-full flex flex-col items-center my-4';
+
+    const containerStyle = {
+      width: `${w}px`,
+      maxWidth: '100%',
+      aspectRatio: `${w} / ${h}`,
+      height: 'auto',
+    };
+
+    // Determine content based on aspect ratio
+    const isWide = w >= 468 && h <= 120;
+    const isTall = w <= 200 && h >= 400;
+
+    let ctaContent;
+    if (isWide) {
+      ctaContent = (
+        <div className="flex items-center justify-between w-full px-6 md:px-10 h-full">
+          <div className="text-left">
+            <span className="text-[10px] font-bold text-teal-600 dark:text-teal-400 uppercase tracking-widest block">Partner Spot</span>
+            <p className="text-[13px] md:text-[14px] font-bold text-slate-800 dark:text-white leading-tight">Want to get featured here?</p>
+          </div>
+          <span className="bg-teal-600 hover:bg-teal-700 dark:bg-teal-505 text-white font-heading font-extrabold text-[10px] md:text-[11px] py-1.5 px-4 rounded-full shadow-sm tracking-wider uppercase transition-colors">
+            Advertise with us →
+          </span>
+        </div>
+      );
+    } else if (isTall) {
+      ctaContent = (
+        <div className="flex flex-col items-center justify-center text-center p-4 gap-4 h-full">
+          <span className="text-[9px] font-bold text-teal-600 dark:text-teal-400 uppercase tracking-widest">Partner Spot</span>
+          <div>
+            <p className="text-[13px] font-bold text-slate-800 dark:text-white leading-snug">Want to get featured?</p>
+            <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-1">Reach 100k+ readers</p>
+          </div>
+          <span className="bg-teal-600 hover:bg-teal-700 dark:bg-teal-500 text-white font-heading font-extrabold text-[9px] py-1.5 px-3 rounded-full shadow-sm tracking-wider uppercase transition-colors mt-auto mb-2">
+            Advertise →
+          </span>
+        </div>
+      );
+    } else {
+      // Box / Square / Default
+      ctaContent = (
+        <div className="flex flex-col items-center justify-center text-center p-4 gap-2.5 h-full">
+          <span className="text-[9px] font-bold text-teal-600 dark:text-teal-400 uppercase tracking-widest">Partner Spot</span>
+          <div>
+            <h5 className="text-[14px] font-bold text-slate-800 dark:text-white leading-tight">Want to get featured here?</h5>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 max-w-[200px]">Align your brand with medically verified health guides.</p>
+          </div>
+          <span className="bg-teal-600 hover:bg-teal-700 dark:bg-teal-500 text-white font-heading font-extrabold text-[10px] py-1.5 px-4 rounded-full shadow-sm tracking-wider uppercase transition-colors mt-1">
+            Advertise with us →
+          </span>
+        </div>
+      );
+    }
+
+    return (
+      <div className={wrapClass}>
+        <a 
+          href="/info?tab=support"
+          className="flex justify-center items-center overflow-hidden rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900/60 dark:to-slate-900/40 border border-slate-200/50 dark:border-slate-800/40 hover:border-teal-500/40 dark:hover:border-teal-500/30 hover:shadow-[0_8px_30px_rgba(15,124,133,0.06)] transition-all duration-500 group cursor-pointer no-underline select-none"
+          style={containerStyle}
+        >
+          {ctaContent}
+        </a>
+      </div>
+    );
+  }
+
+
+  // Float variant fallback if no dimensions specified
   if (layout === 'float') {
     return (
       <a href="/info?tab=support"
@@ -77,7 +225,7 @@ export default function AdSlot({ zone, layout = 'strip' }) {
     );
   }
 
-  // Strip variant — a compact single-line row between page sections
+  // Strip variant fallback if no dimensions specified
   return (
     <div className="w-full flex items-center justify-between px-1 py-2 my-1">
       <span className="text-[9px] font-semibold text-slate-300 uppercase tracking-[2px]">Ad space</span>
@@ -88,3 +236,4 @@ export default function AdSlot({ zone, layout = 'strip' }) {
     </div>
   );
 }
+

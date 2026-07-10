@@ -8,6 +8,7 @@ import Footer from '@/components/Footer';
 import CustomCursor from '@/components/CustomCursor';
 import ScrollReveal from '@/components/ScrollReveal';
 import BackdropBlobs from '@/components/BackdropBlobs';
+import Button from '@/components/Button';
 
 const stats = [
   { value: '145k+', label: 'Active Readers' },
@@ -383,7 +384,7 @@ export default function PublicationPage() {
             </button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-12 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-12 mx-auto">
             {displayedIssues.map((issue, i) => {
               const slug = issue.slug || issue.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
               return (
@@ -494,110 +495,93 @@ export default function PublicationPage() {
         </div>
       </section>
 
-      {/* Terracotta Subscribe CTA */}
+
+      {/* Subscribe + Advertise — Side by Side */}
       <section className="container my-14 reveal-scale">
-        <div
-          ref={subscribeCardRef}
-          onMouseMove={handleSubscribeMouseMove}
-          onMouseLeave={handleSubscribeMouseLeave}
-          className="bg-[#e28c6f]/92 rounded-[40px] py-14 px-8 md:px-16 shadow-[0_20px_48px_rgba(226,140,111,0.15)] relative overflow-hidden [perspective:1200px]"
-        >
-          <div className="absolute inset-0 bg-gradient-to-tr from-[#df7f60]/20 to-transparent pointer-events-none" />
-          <div className="flex flex-col md:flex-row items-center gap-14 relative z-10">
-            <div className="flex-1 max-w-lg text-left">
-              <h2 className="text-primary font-heading font-extrabold text-3xl md:text-4xl leading-tight mb-4 tracking-[-1px]">
-                Never miss a moment<br />of wellness.
-              </h2>
-              <p className="text-[#3a2520]/80 text-[14.5px] leading-relaxed mb-8 max-w-[480px]">
-                Subscribe to our digital edition for just $15/year. Get exclusive interviews, medically-vetted health guides, and a sanctuary of inspiration delivered to your inbox every quarter.
-              </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto items-stretch">
 
-              {subscribed ? (
-                <div className="bg-white/90 backdrop-blur-sm rounded-2xl px-6 py-4 text-[#1a1a2e] font-bold text-sm shadow-[0_4px_16px_rgba(0,0,0,0.05)]">
-                  ✅ You&apos;re subscribed! Welcome to the A Health Place community.
-                </div>
-              ) : (
-                <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3 max-w-[500px]">
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                    required
-                    placeholder="Your email address"
-                    className="flex-grow rounded-full px-6 py-3.5 text-sm text-[#1a1a2e] outline-none focus:ring-2 focus:ring-white/50 bg-white/90 placeholder:text-[#9a8680]"
-                  />
-                  <button type="submit" className="bg-primary text-white font-bold text-sm px-7 py-3.5 rounded-full hover:bg-primary/90 transition-colors shadow-md cursor-pointer whitespace-nowrap">
-                    Subscribe Now
-                  </button>
-                </form>
-              )}
-              <p className="text-[#3a2520]/60 text-[11px] mt-4">
-                By subscribing, you agree to our{' '}
-                <Link href="/info?tab=legal&doc=privacy" className="underline hover:text-primary">Privacy Policy</Link>.
-                You can unsubscribe at any time.
-              </p>
-            </div>
+          {/* Left — Terracotta Subscribe CTA */}
+          <div
+            ref={subscribeCardRef}
+            onMouseMove={handleSubscribeMouseMove}
+            onMouseLeave={handleSubscribeMouseLeave}
+            className="bg-[#e28c6f]/92 rounded-[40px] py-12 px-8 shadow-[0_20px_48px_rgba(226,140,111,0.15)] relative overflow-hidden [perspective:1200px] flex flex-col justify-between"
+          >
+            <div className="absolute inset-0 bg-gradient-to-tr from-[#df7f60]/20 to-transparent pointer-events-none" />
 
-            {/* Mobile/Tablet Mockup (Interactive cursor tracking shifts applied here) */}
+            {/* Phone mockup — absolute positioned, right side */}
             <div
               style={phoneTransform}
-              className="flex-shrink-0 relative w-[220px] md:w-[260px] hidden md:block select-none [transform-style:preserve-3d]"
+              className="absolute bottom-0 right-6 w-[130px] md:w-[155px] hidden md:block select-none [transform-style:preserve-3d] opacity-90"
             >
-              <div className="absolute -top-4 -right-4 w-40 h-52 bg-[#f4ded7]/60 rounded-[32px] rotate-6 opacity-60" />
-              <div className="relative z-10 rounded-[32px] overflow-hidden shadow-[0_24px_64px_rgba(0,0,0,0.12)] border-[5px] border-white/50">
-                <Image src="/images/mag_phone.png" alt="A Health Place magazine app" width={260} height={480} className="w-full object-cover" />
+              <div className="absolute -top-4 -right-4 w-28 h-36 bg-[#f4ded7]/60 rounded-[24px] rotate-6 opacity-60" />
+              <div className="relative z-10 rounded-[24px] overflow-hidden shadow-[0_24px_64px_rgba(0,0,0,0.12)] border-[4px] border-white/50">
+                <Image src="/images/mag_phone.png" alt="A Health Place magazine app" width={155} height={285} className="w-full object-cover" />
+              </div>
+            </div>
+
+            <div className="relative z-10 flex flex-col gap-6 h-full md:max-w-[58%]">
+              <div>
+                <h2 className="text-primary font-heading font-extrabold text-2xl md:text-3xl leading-tight mb-3 tracking-[-1px]">
+                  Never miss a moment<br />of wellness.
+                </h2>
+                <p className="text-[#3a2520]/80 text-[13.5px] leading-relaxed">
+                  Subscribe to our digital edition for just $15/year. Get exclusive interviews, medically-vetted health guides, and a sanctuary of inspiration delivered to your inbox every quarter.
+                </p>
+              </div>
+
+              <div>
+                {subscribed ? (
+                  <div className="bg-white/90 backdrop-blur-sm rounded-2xl px-6 py-4 text-[#1a1a2e] font-bold text-sm shadow-[0_4px_16px_rgba(0,0,0,0.05)]">
+                    ✅ You&apos;re subscribed! Welcome to the A Health Place community.
+                  </div>
+                ) : (
+                  <form onSubmit={handleSubscribe} className="flex flex-col gap-3">
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={e => setEmail(e.target.value)}
+                      required
+                      placeholder="Your email address"
+                      className="w-full rounded-full px-6 py-3.5 text-sm text-[#1a1a2e] outline-none focus:ring-2 focus:ring-white/50 bg-white/90 placeholder:text-[#9a8680]"
+                    />
+                    <Button type="submit" variant="primary" className="!bg-primary hover:!bg-primary/90 !text-sm !py-3.5 !px-7 shadow-md w-max">
+                      Subscribe Now
+                    </Button>
+                  </form>
+                )}
+                <p className="text-[#3a2520]/60 text-[11px] mt-3">
+                  By subscribing, you agree to our{' '}
+                  <Link href="/info?tab=legal&doc=privacy" className="underline hover:text-primary">Privacy Policy</Link>.
+                  You can unsubscribe at any time.
+                </p>
               </div>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* Verification & Advertising Info Section */}
-      <section className="bg-white py-20 rounded-[40px] shadow-[0_20px_48px_rgba(0,0,0,0.01)] relative">
-        <div className="container max-w-5xl mx-auto px-4 reveal-slide">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
-            
-            {/* Left Card — Science-Backed Verification */}
-            <div className="bg-bg-light rounded-[32px] p-8 border border-slate-200/60 shadow-[0_4px_20px_rgba(0,0,0,0.01)] flex flex-col justify-between text-center md:text-left h-full hover:border-[#27ae60]/20 transition-all duration-300">
-              <div>
-                <div className="w-12 h-12 bg-[#e4eeea] rounded-full flex items-center justify-center mb-6 shadow-sm mx-auto md:mx-0">
-                  <svg className="w-5 h-5 text-accent-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                  </svg>
-                </div>
-                <h2 className="text-primary font-heading font-extrabold text-2xl mb-4 tracking-[-0.5px]">
-                  Science-Backed. Reader-Loved.
-                </h2>
-                <p className="text-secondary text-[14px] leading-relaxed mb-8">
-                  Every article in &quot;A Health Place&quot; digital magazine undergoes a rigorous verification process by our board-certified Medical Review Committee to ensure you receive the most accurate, up-to-date health information.
-                </p>
+          {/* Right — Advertise With Us */}
+          <div className="bg-bg-light rounded-[40px] p-8 border border-slate-200/60 shadow-[0_4px_20px_rgba(0,0,0,0.01)] flex flex-col justify-between hover:border-[#0f7c85]/20 transition-all duration-300">
+            <div>
+              <div className="w-12 h-12 bg-[#e8f4ff] rounded-full flex items-center justify-center mb-6 shadow-sm">
+                <svg className="w-5 h-5 text-[#0f7c85]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+                </svg>
               </div>
-              <Link href="/info?tab=board" className="inline-flex items-center gap-1.5 text-accent-green text-sm font-bold hover:underline mx-auto md:mx-0 w-max">
-                Meet our Medical Review Board <span className="arrow">→</span>
-              </Link>
+              <h2 className="text-primary font-heading font-extrabold text-2xl md:text-3xl mb-4 tracking-[-0.5px]">
+                Advertise With Us.
+              </h2>
+              <p className="text-secondary text-[14px] leading-relaxed mb-8">
+                Reach our highly engaged audience of health and wellness enthusiasts. Partner with us for editorial integrations, custom newsletter sponsorships, or digital media packages.
+              </p>
             </div>
-
-            {/* Right Card — Advertise With Us */}
-            <div className="bg-bg-light rounded-[32px] p-8 border border-slate-200/60 shadow-[0_4px_20px_rgba(0,0,0,0.01)] flex flex-col justify-between text-center md:text-left h-full hover:border-[#0f7c85]/20 transition-all duration-300">
-              <div>
-                <div className="w-12 h-12 bg-[#e8f4ff] rounded-full flex items-center justify-center mb-6 shadow-sm mx-auto md:mx-0">
-                  <svg className="w-5 h-5 text-[#0f7c85]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
-                  </svg>
-                </div>
-                <h2 className="text-primary font-heading font-extrabold text-2xl mb-4 tracking-[-0.5px]">
-                  Advertise With Us.
-                </h2>
-                <p className="text-secondary text-[14px] leading-relaxed mb-8">
-                  Reach our highly engaged audience of health and wellness enthusiasts. Partner with us for editorial integrations, custom newsletter sponsorships, or digital media packages.
-                </p>
-              </div>
-              <Link href="/info?tab=contact" className="inline-flex items-center justify-center bg-[#0f7c85] hover:bg-[#0c646b] text-white font-extrabold text-[12px] py-3 px-6 rounded-xl transition-all duration-300 no-underline w-max mx-auto md:mx-0 shadow-sm hover:shadow-[0_6px_20px_rgba(15,124,133,0.2)] hover:-translate-y-0.5 transform">
-                Contact Us
-              </Link>
-            </div>
-
+            <Link
+              href="/info?tab=contact"
+              className="inline-flex items-center justify-center bg-[#0f7c85] hover:bg-[#0c646b] text-white font-extrabold text-[12px] py-3 px-6 rounded-xl transition-all duration-300 no-underline w-max shadow-sm hover:shadow-[0_6px_20px_rgba(15,124,133,0.2)] hover:-translate-y-0.5 transform"
+            >
+              Contact Us
+            </Link>
           </div>
+
         </div>
       </section>
 

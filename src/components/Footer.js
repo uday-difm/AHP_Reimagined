@@ -88,7 +88,6 @@ export default function Footer({ className = "" }) {
                   </a>
                 </li>
                 {[
-                  { label: 'About Our Board', link: '#' },
                   { label: 'Contact Support', link: '#' }
                 ].map((item, idx) => (
                   <li key={idx}>
