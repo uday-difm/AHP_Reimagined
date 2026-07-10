@@ -6,36 +6,8 @@ import Search from '@/components/Search';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const [hideHeader, setHideHeader] = useState(false);
 
-  // Header Hide/Show on Scroll
-  useEffect(() => {
-    let lastScrollY = window.scrollY;
 
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-
-      if (currentScrollY > 50) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
-
-      if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        setHideHeader(true);
-      } else {
-        setHideHeader(false);
-      }
-
-      lastScrollY = currentScrollY;
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
 
   // Body and HTML scroll locking when menu is open
   useEffect(() => {
@@ -54,15 +26,8 @@ export default function Header() {
 
   return (
     <>
-      {/* Sticky Header */}
-      <header
-        className={`fixed top-0 left-0 w-full flex items-center z-[9000] transition-all duration-300 ${menuOpen
-          ? 'bg-transparent border-b border-transparent h-20'
-          : scrolled
-            ? 'bg-transparent h-[70px] shadow-[0_4px_30px_rgba(0,0,0,0.02)] border-b border-[var(--color-border)]/40 backdrop-blur-md'
-            : 'bg-transparent h-20 border-b border-[var(--color-border)]/40 backdrop-blur-md'
-          } ${hideHeader && !menuOpen ? '-translate-y-full' : 'translate-y-0'}`}
-      >
+      {/* Header */}
+      <header className="fixed top-0 left-0 w-full flex items-center h-20 bg-white/30 backdrop-blur-3xl border-b border-white/50 shadow-[0_8px_32px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.6)] z-[9000]" style={{WebkitBackdropFilter:'blur(48px)'}}>
         <div className="header-container flex justify-between items-center w-full  mx-auto px-6 md:px-10">
           <a href="/" className="logo-link flex items-center">
             <Image
