@@ -489,3 +489,61 @@ body.hb-no-scroll {
   transform: translate3d(0, -15px, 0) rotate(0deg) scale(1.08);
   box-shadow: 0 20px 45px rgba(0, 0, 0, 0.22);
 }
+
+/* ─── Cinematic Page Wipe Transition ─── */
+@keyframes slide-in-wipe {
+  from {
+    transform: translate3d(100%, 0, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes slide-out-wipe {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(100%, 0, 0);
+  }
+}
+
+@utility wipe-enter {
+  animation: slide-in-wipe 0.65s cubic-bezier(0.87, 0, 0.13, 1) forwards;
+  will-change: transform;
+}
+
+@utility wipe-exit {
+  animation: slide-out-wipe 0.65s cubic-bezier(0.87, 0, 0.13, 1) forwards;
+  will-change: transform;
+}
+
+/* ─── Cinematic Page Wipe Transition ─── */
+@keyframes slide-in-wipe {
+  from {
+    transform: translate3d(100%, 0, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes slide-out-wipe {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(100%, 0, 0);
+  }
+}
+
+@utility wipe-enter {
+  animation: slide-in-wipe 0.65s cubic-bezier(0.87, 0, 0.13, 1) forwards;
+  will-change: transform;
+}
+
+@utility wipe-exit {
+  animation: slide-out-wipe 0.65s cubic-bezier(0.87, 0, 0.13, 1) forwards;
+  will-change: transform;
+}
