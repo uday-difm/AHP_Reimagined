@@ -89,36 +89,40 @@ export default function Header() {
               </div>
             </div>
           </div>
-          <nav className="hb-nav-links flex flex-col gap-3 sm:gap-4">
-            {['Home', 'About', 'Blogs', 'Digital Magazine', 'Contact Us'].map((label, i) => {
-              const isPublication = label === 'Digital Magazine';
-              const isBlogs = label === 'Blogs';
-              const isHome = label === 'Home';
-              const isAbout = label === 'About';
-              const isContact = label === 'Contact Us';
-              const href = isHome
-                ? '/'
-                : isAbout
-                  ? '/about'
-                  : isContact
-                    ? '/contact'
-                    : isPublication
-                      ? '/publication'
-                      : isBlogs
-                        ? '/blogs'
-                        : `/#${label.toLowerCase().replace('journey', 'timeline').replace('newsletter', 'contact').replace('community', 'events')}`;
-              return (
-                <a
-                  key={i}
-                  href={href}
-                  onClick={() => setMenuOpen(false)}
-                  style={{ transitionDelay: `${i * 0.05}s` }}
-                  className={`hb-nav-item font-heading font-extrabold text-[28px] sm:text-[40px] md:text-[56px] lg:text-[64px] text-primary no-underline leading-[1.1] tracking-[-1.5px] inline-block hover:text-accent hover:translate-x-3 transition-all duration-500 ${menuOpen ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'}`}
-                >
-                  {label}
-                </a>
-              );
-            })}
+          <nav className="hb-nav-links flex flex-col items-end pr-8 md:pr-16 lg:pr-32">
+            <div className="flex flex-col items-start text-left gap-3 sm:gap-4">
+              {['Home', 'About', 'Blogs', 'Digital Magazine'].map((label, i) => {
+                <nav className="hb-nav-links flex flex-col gap-3 sm:gap-4">
+                  {['Home', 'About', 'Blogs', 'Digital Magazine', 'Contact Us'].map((label, i) => {
+                    const isPublication = label === 'Digital Magazine';
+                    const isBlogs = label === 'Blogs';
+                    const isHome = label === 'Home';
+                    const isAbout = label === 'About';
+                    const isContact = label === 'Contact Us';
+                    const href = isHome
+                      ? '/'
+                      : isAbout
+                        ? '/about'
+                        : isContact
+                          ? '/contact'
+                          : isPublication
+                            ? '/publication'
+                            : isBlogs
+                              ? '/blogs'
+                              : `/#${label.toLowerCase().replace('journey', 'timeline').replace('newsletter', 'contact').replace('community', 'events')}`;
+                    return (
+                      <a
+                        key={i}
+                        href={href}
+                        onClick={() => setMenuOpen(false)}
+                        style={{ transitionDelay: `${i * 0.05}s` }}
+                        className={`hb-nav-item font-heading font-extrabold text-[28px] sm:text-[40px] md:text-[56px] lg:text-[64px] text-primary no-underline leading-[1.1] tracking-[-1.5px] inline-block hover:text-accent hover:translate-x-3 transition-all duration-500 ${menuOpen ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'}`}
+                      >
+                        {label}
+                      </a>
+                    );
+                  })}
+                </div>
           </nav>
 
         </div>
