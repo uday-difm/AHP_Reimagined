@@ -46,6 +46,7 @@ export default function Header() {
             <a href="/about" className="nav-item text-sm md:text-[15px] font-medium text-secondary relative py-1.5 transition-colors hover:text-primary after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all after:duration-300 hover:after:w-full">About</a>
             <a href="/publication" className="nav-item text-sm md:text-[15px] font-medium text-secondary relative py-1.5 transition-colors hover:text-primary after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all after:duration-300 hover:after:w-full">Publication</a>
             <a href="/blogs" className="nav-item text-sm md:text-[15px] font-medium text-secondary relative py-1.5 transition-colors hover:text-primary after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all after:duration-300 hover:after:w-full">Blogs</a>
+            <a href="/quizzes" className="nav-item text-sm md:text-[15px] font-medium text-secondary relative py-1.5 transition-colors hover:text-primary after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all after:duration-300 hover:after:w-full">Quizzes</a>
           </nav>
 
           {/* Actions wrapper */}
@@ -89,11 +90,12 @@ export default function Header() {
             </div>
           </div>
           <nav className="hb-nav-links flex flex-col gap-3 sm:gap-4">
-            {['Home', 'About', 'Blogs', 'Digital Magazine'].map((label, i) => {
+            {['Home', 'About', 'Blogs', 'Quizzes', 'Digital Magazine'].map((label, i) => {
               const isPublication = label === 'Digital Magazine';
               const isBlogs = label === 'Blogs';
               const isHome = label === 'Home';
               const isAbout = label === 'About';
+              const isQuizzes = label === 'Quizzes';
               const href = isHome
                 ? '/'
                 : isAbout
@@ -102,7 +104,9 @@ export default function Header() {
                     ? '/publication'
                     : isBlogs
                       ? '/blogs'
-                      : `/#${label.toLowerCase().replace('journey', 'timeline').replace('newsletter', 'contact').replace('community', 'events')}`;
+                      : isQuizzes
+                        ? '/quizzes'
+                        : `/#${label.toLowerCase().replace('journey', 'timeline').replace('newsletter', 'contact').replace('community', 'events')}`;
               return (
                 <a
                   key={i}
