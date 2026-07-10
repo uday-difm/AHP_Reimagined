@@ -37,7 +37,7 @@ export default function QuizzesPage() {
             background: 'linear-gradient(180deg, rgba(240, 246, 243, 0.8) 0%, rgba(248, 250, 252, 1) 100%)',
           }}
         >
-          <div className="container max-w-4xl mx-auto px-4 relative z-10">
+          <div className="container px-4 relative z-10">
             <span className="text-[#0f7c85] text-[11px] font-extrabold uppercase tracking-[3px] mb-3 block">
               ✦ Interactive Fun Zone ✦
             </span>
@@ -72,7 +72,7 @@ export default function QuizzesPage() {
 
         {/* ── QUIZ SECTION ───────────────────────────────────────────────── */}
         <section className="py-12 px-4">
-          <div className="container max-w-6xl mx-auto">
+          <div className="container">
             {!isAuthenticated ? (
               <div className="max-w-md mx-auto bg-white border border-slate-200/60 rounded-[28px] p-8 md:p-10 text-center shadow-lg my-12">
                 <div className="w-14 h-14 rounded-full bg-[#0f7c85]/10 text-[#0f7c85] flex items-center justify-center mx-auto mb-6">
