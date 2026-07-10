@@ -233,6 +233,10 @@ export default function PublicationPage() {
                 {/* Spine */}
                 <div className="book-3d-spine" />
                 
+                {/* Top & Bottom page stack edges */}
+                <div className="book-3d-pages-top" />
+                <div className="book-3d-pages-bottom" />
+                
                 {/* Front Cover */}
                 <div className="book-3d-cover">
                   <Image
