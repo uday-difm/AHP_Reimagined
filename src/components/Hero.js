@@ -50,8 +50,16 @@ export default function Hero() {
           {/* Left Column: Hero Text */}
           <div className="flex flex-col -mt-2 md:-mt-6">
             <div className="w-full text-left max-w-2xl md:-ml-2">
-              <h1 className="text-primary font-heading font-extrabold text-[32px] md:text-[44px] lg:text-[56px] leading-tight tracking-[-1px] mb-6 uppercase">
-                <strong>YOUR DAILY GUIDE TO HEALTH &amp; WELLNESS</strong>
+              <div className="flex items-center gap-2 text-[#5a8b43] font-medium text-[14px] md:text-[16px] mb-4">
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2C6.48 2 2 6.48 2 12c0 1.25.24 2.45.67 3.56l-1.38 1.38 1.41 1.41 1.38-1.38C5.19 20.8 7.42 22 10 22c5.52 0 10-4.48 10-10S15.52 2 10 2zm0 18c-2.03 0-3.92-.78-5.34-2.06l6.4-6.4 1.41 1.41-6.4 6.4C9.55 19.8 10.74 20 12 20c4.41 0 8-3.59 8-8s-3.59-8-8-8-8 3.59-8 8c0 1.37.34 2.65.94 3.76l6.3-6.3 1.41 1.41-6.3 6.3c1.78 2.06 4.46 3.19 7.31 3.19z"/>
+                  <path d="M17.2 3.8a10.9 10.9 0 0 0-7.3-1.6A11.1 11.1 0 0 0 4 8.7a11.1 11.1 0 0 0-1.8 7.1l-1.5 1.5 1.4 1.4 1.5-1.5a11 11 0 0 0 7.2-1.7 11.1 11.1 0 0 0 6.5-6.5 11 11 0 0 0 0-7V3.8zM15 9c-.8 2.3-2.3 4.2-4.2 5.5l-4-4c1.3-1.8 3.2-3.3 5.5-4.1 2.3-.8 4.7-.6 6.5.6-1.1 1.7-2.6 2.8-3.8 2z"/>
+                </svg>
+                Your Health, Our Priority
+              </div>
+              <h1 className="font-heading font-extrabold text-[36px] md:text-[48px] lg:text-[60px] leading-[1.1] tracking-[-1.5px] mb-6 capitalize">
+                <span className="text-[#1e2a35] block">Your Daily Guide To</span>
+                <span className="text-[#0f7c85] block">Health &amp; Wellness</span>
               </h1>
               <p className="text-secondary text-[16px] md:text-[20px] leading-relaxed max-w-xl mb-8">
                 Discover trusted health blogs, expert magazines, disease awareness,
