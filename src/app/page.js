@@ -1,9 +1,12 @@
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '@/lib/auth';
 import CustomCursor from '@/components/CustomCursor';
 import BackdropBlobs from '@/components/BackdropBlobs';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import Marquee from '@/components/Marquee';
 import WellnessShowcase from '@/components/WellnessShowcase';
+import HomeQuizWidget from '@/components/HomeQuizWidget';
 import ArticlesGrid from '@/components/ArticlesGrid';
 import BlogCategorySlider from '@/components/BlogCategorySlider';
 import CommunityEvents from '@/components/CommunityEvents';
@@ -13,7 +16,10 @@ import Footer from '@/components/Footer';
 import ScrollReveal from '@/components/ScrollReveal';
 import AdSlot from '@/components/AdSlot';
 
-export default function Home() {
+export default async function Home() {
+  const session = await getServerSession(authOptions);
+  const isAuthenticated = !!session;
+
   return (
     <>
       {/* Global Animation Utilities */}
@@ -32,8 +38,13 @@ export default function Home() {
         <ArticlesGrid />
         <AdSlot zone="homepage-articles-bottom" />
         <BlogCategorySlider />
-        <WellnessShowcase />
-        <AdSlot zone="homepage-about-bottom" />
+        <HomeQuizWidget />
+        {isAuthenticated && (
+          <>
+            <WellnessShowcase />
+            <AdSlot zone="homepage-about-bottom" />
+          </>
+        )}
         <CommunityEvents />
         <AdSlot zone="homepage-events-bottom" />
         <ServicesBanner />

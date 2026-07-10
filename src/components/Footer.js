@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export default function Footer({ className = "" }) {
   return (
-    <footer className="footer bg-cyan-900 text-white relative overflow-hidden rounded-t-[48px] border-t border-white/5 pt-24 pb-12">
+    <footer className="footer bg-cyan-900 text-white relative overflow-hidden rounded-t-[48px] border-t border-white/5 pt-24 pb-12 mt-[-48px] z-10">
       {/* Top Accent Gradient Line */}
       <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-accent/30 to-transparent pointer-events-none" />
 
@@ -58,32 +58,32 @@ export default function Footer({ className = "" }) {
 
             {/* ISSN Barcode */}
             <div className="footer-col flex flex-col gap-4">
-              <h4 className="footer-title font-heading text-[12px] font-bold uppercase tracking-[2.5px] text-accent mb-6">
+              <h4 className="footer-title font-heading text-[12px] font-extrabold uppercase tracking-[2.5px] text-teal-300 mb-6">
                 ISSN
               </h4>
-              <div className="bg-white p-3 rounded-xl inline-block self-start shadow-sm">
+              <div className="bg-white p-3 rounded-xl inline-block self-start shadow-sm border border-white/20">
                 <Image
                   src="/images/ISSN_BARCODE.png"
                   alt="ISSN Barcode"
                   width={180}
                   height={70}
-                  className="object-contain"
+                  className="object-contain animate-[pulse_3s_infinite_ease-in-out]"
                 />
               </div>
             </div>
 
             {/* Company */}
             <div className="footer-col">
-              <h4 className="footer-title font-heading text-[12px] font-bold uppercase tracking-[2.5px] text-accent mb-6">
+              <h4 className="footer-title font-heading text-[12px] font-extrabold uppercase tracking-[2.5px] text-teal-300 mb-6">
                 Company
               </h4>
               <ul className="footer-links list-none flex flex-col gap-4">
                 <li>
                   <a
                     href="mailto:support@ahealthplace.com"
-                    className="footer-link text-[14px] text-white/50 no-underline transition-all duration-300 hover:text-white hover:pl-2 flex items-center group font-body"
+                    className="footer-link text-[14px] text-white/90 font-semibold no-underline transition-all duration-300 hover:text-teal-300 hover:pl-2 flex items-center group font-body"
                   >
-                    <span className="w-1.5 h-1.5 rounded-full bg-accent/60 mr-2 opacity-0 group-hover:opacity-100 transition-all duration-300"></span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-teal-300 mr-2 opacity-0 group-hover:opacity-100 transition-all duration-300"></span>
                     support@ahealthplace.com
                   </a>
                 </li>
@@ -94,9 +94,9 @@ export default function Footer({ className = "" }) {
                   <li key={idx}>
                     <a
                       href={item.link}
-                      className="footer-link text-[14px] text-white/50 no-underline transition-all duration-300 hover:text-white hover:pl-2 flex items-center group font-body"
+                      className="footer-link text-[14px] text-white/80 no-underline transition-all duration-300 hover:text-teal-300 hover:pl-2 flex items-center group font-body"
                     >
-                      <span className="w-1.5 h-1.5 rounded-full bg-accent/60 mr-2 opacity-0 group-hover:opacity-100 transition-all duration-300"></span>
+                      <span className="w-1.5 h-1.5 rounded-full bg-teal-300 mr-2 opacity-0 group-hover:opacity-100 transition-all duration-300"></span>
                       {item.label}
                     </a>
                   </li>
@@ -106,13 +106,14 @@ export default function Footer({ className = "" }) {
 
             {/* Legal */}
             <div className="footer-col">
-              <h4 className="footer-title font-heading text-[12px] font-bold uppercase tracking-[2.5px] text-accent mb-6">Legal</h4>
+              <h4 className="footer-title font-heading text-[12px] font-extrabold uppercase tracking-[2.5px] text-teal-300 mb-6">Legal</h4>
               <ul className="footer-links list-none flex flex-col gap-3">
-                <li><Link href="/info?tab=legal&doc=privacy" className="footer-link text-[13.5px] text-white/60 no-underline transition-all hover:text-white hover:pl-1">Privacy Policy</Link></li>
-                <li><Link href="/info?tab=legal&doc=terms" className="footer-link text-[13.5px] text-white/60 no-underline transition-all hover:text-white hover:pl-1">Terms of Service</Link></li>
-                <li><Link href="/info?tab=legal&doc=disclaimer" className="footer-link text-[13.5px] text-white/60 no-underline transition-all hover:text-white hover:pl-1">Medical Disclaimer</Link></li>
+                <li><Link href="/info?tab=legal&doc=privacy" className="footer-link text-[13.5px] text-white/80 no-underline transition-all hover:text-teal-300 hover:pl-1">Privacy Policy</Link></li>
+                <li><Link href="/info?tab=legal&doc=terms" className="footer-link text-[13.5px] text-white/80 no-underline transition-all hover:text-teal-300 hover:pl-1">Terms of Service</Link></li>
+                <li><Link href="/info?tab=legal&doc=disclaimer" className="footer-link text-[13.5px] text-white/80 no-underline transition-all hover:text-teal-300 hover:pl-1">Medical Disclaimer</Link></li>
               </ul>
             </div>
+
           </div>
         </div>
 

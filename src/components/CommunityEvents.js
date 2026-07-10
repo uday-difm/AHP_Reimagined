@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 export default function CommunityEvents() {
   return (
-    <section id="events" className="community-section py-[100px] bg-bg-light rounded-t-[40px]">
+    <section id="events" className="community-section pt-16 pb-[100px] bg-bg-light rounded-t-[40px]">
       <div className="container">
         <div className="community-grid grid grid-cols-1 md:grid-cols-[0.9fr_1.1fr] gap-12 md:gap-20 items-center">
           <div className="community-info flex flex-col items-start gap-5 reveal-slide">

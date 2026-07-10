@@ -70,7 +70,7 @@ export default function ArticlesGrid() {
 
   return (
     <section id="articles" className="projects-section py-[100px] bg-white rounded-t-[40px] shadow-[0_-20px_40px_rgba(0,0,0,0.01)] relative overflow-hidden">
-      <div className="container max-w-6xl mx-auto px-4">
+      <div className="container mx-auto px-4">
         
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           

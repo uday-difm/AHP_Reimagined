@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import AdSlot from '@/components/AdSlot';
+import Button from '@/components/Button';
 
 const trendingArticles = [
   {
@@ -52,8 +53,8 @@ export default function Hero() {
             <div className="w-full text-left max-w-2xl md:-ml-2">
               <div className="flex items-center gap-2 text-[#5a8b43] font-medium text-[14px] md:text-[16px] mb-4">
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2C6.48 2 2 6.48 2 12c0 1.25.24 2.45.67 3.56l-1.38 1.38 1.41 1.41 1.38-1.38C5.19 20.8 7.42 22 10 22c5.52 0 10-4.48 10-10S15.52 2 10 2zm0 18c-2.03 0-3.92-.78-5.34-2.06l6.4-6.4 1.41 1.41-6.4 6.4C9.55 19.8 10.74 20 12 20c4.41 0 8-3.59 8-8s-3.59-8-8-8-8 3.59-8 8c0 1.37.34 2.65.94 3.76l6.3-6.3 1.41 1.41-6.3 6.3c1.78 2.06 4.46 3.19 7.31 3.19z"/>
-                  <path d="M17.2 3.8a10.9 10.9 0 0 0-7.3-1.6A11.1 11.1 0 0 0 4 8.7a11.1 11.1 0 0 0-1.8 7.1l-1.5 1.5 1.4 1.4 1.5-1.5a11 11 0 0 0 7.2-1.7 11.1 11.1 0 0 0 6.5-6.5 11 11 0 0 0 0-7V3.8zM15 9c-.8 2.3-2.3 4.2-4.2 5.5l-4-4c1.3-1.8 3.2-3.3 5.5-4.1 2.3-.8 4.7-.6 6.5.6-1.1 1.7-2.6 2.8-3.8 2z"/>
+                  <path d="M12 2C6.48 2 2 6.48 2 12c0 1.25.24 2.45.67 3.56l-1.38 1.38 1.41 1.41 1.38-1.38C5.19 20.8 7.42 22 10 22c5.52 0 10-4.48 10-10S15.52 2 10 2zm0 18c-2.03 0-3.92-.78-5.34-2.06l6.4-6.4 1.41 1.41-6.4 6.4C9.55 19.8 10.74 20 12 20c4.41 0 8-3.59 8-8s-3.59-8-8-8-8 3.59-8 8c0 1.37.34 2.65.94 3.76l6.3-6.3 1.41 1.41-6.3 6.3c1.78 2.06 4.46 3.19 7.31 3.19z" />
+                  <path d="M17.2 3.8a10.9 10.9 0 0 0-7.3-1.6A11.1 11.1 0 0 0 4 8.7a11.1 11.1 0 0 0-1.8 7.1l-1.5 1.5 1.4 1.4 1.5-1.5a11 11 0 0 0 7.2-1.7 11.1 11.1 0 0 0 6.5-6.5 11 11 0 0 0 0-7V3.8zM15 9c-.8 2.3-2.3 4.2-4.2 5.5l-4-4c1.3-1.8 3.2-3.3 5.5-4.1 2.3-.8 4.7-.6 6.5.6-1.1 1.7-2.6 2.8-3.8 2z" />
                 </svg>
                 Your Health, Our Priority
               </div>
@@ -68,18 +69,18 @@ export default function Hero() {
               </p>
 
               <div className="flex flex-wrap items-center gap-4">
-                <Link href="/blogs" className="bg-[#0f7c85] hover:bg-[#0c6b73] text-white px-8 py-3.5 rounded-full font-bold text-[15px] transition-colors shadow-md">
+                <Button href="/blogs" variant="primary">
                   Explore Blogs
-                </Link>
-                <Link href="/publication" className="bg-white/80 hover:bg-white text-[#0f7c85] border border-[#0f7c85]/20 backdrop-blur-sm px-8 py-3.5 rounded-full font-bold text-[15px] transition-all shadow-sm">
+                </Button>
+                <Button href="/publication" variant="glass">
                   Explore Magazines
-                </Link>
+                </Button>
               </div>
             </div>
           </div>
 
           {/* Middle Column: Trending Sidebar */}
-          <div className="flex flex-col w-full lg:max-w-sm -mt-2 md:-mt-6">
+          {/* <div className="flex flex-col w-full lg:max-w-sm -mt-2 md:-mt-6">
             <div className="bg-white/60 border border-slate-200/50 rounded-[32px] p-6 md:p-8 shadow-sm backdrop-blur-xl">
               <div className="flex items-center gap-2.5 text-primary font-heading font-extrabold text-[16px] md:text-[18px] mb-8 tracking-tight">
                 <svg className="w-5.5 h-5.5 text-accent-green" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
@@ -110,14 +111,14 @@ export default function Hero() {
                 ))}
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* Right Column: Ad Space */}
-          <div className="flex flex-col w-full lg:max-w-xs ml-auto -mt-2 md:-mt-6">
+          {/* <div className="flex flex-col w-full lg:max-w-xs ml-auto -mt-2 md:-mt-6">
             <div className="bg-white/40 border border-slate-200/40 rounded-2xl p-4.5 shadow-sm backdrop-blur-md">
               <AdSlot zone="hero-sidebar-bottom" />
             </div>
-          </div>
+          </div> */}
 
         </div>
       </div>

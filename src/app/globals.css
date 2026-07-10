@@ -596,3 +596,15 @@ html.lenis, html.lenis body {
   scrollbar-width: thin;
   scrollbar-color: #0f7c85 transparent;
 }
+
+/* ─── Swiper Equal Height Cards ─── */
+.timeline-swiper .swiper-wrapper {
+  display: flex !important;
+  align-items: stretch !important;
+}
+
+.timeline-swiper .swiper-slide {
+  height: auto !important;
+  align-self: stretch !important;
+  display: flex !important;
+}

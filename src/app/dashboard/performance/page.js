@@ -8,7 +8,7 @@ export default async function PerformancePage() {
   const sessionUser = await requireAuth();
 
   if (!sessionUser) {
-    redirect("/login");
+    redirect("/dashboard/login");
   }
 
   const isAdmin = sessionUser.globalRole === "SUPERADMIN" || sessionUser.globalRole === "ADMIN";
