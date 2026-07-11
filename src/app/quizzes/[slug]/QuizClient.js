@@ -371,7 +371,7 @@ export default function QuizClient({ quiz }) {
                   <p className="text-white/85 text-[13.5px] leading-relaxed max-w-md mb-8">
                     Welcome back! You are signed in. View your past quiz scores, track your wellness progress, and see detailed reports in your private dashboard.
                   </p>
-                  
+
                   <div className="flex gap-10 mb-8 border-y border-white/10 py-4 w-full justify-center">
                     <div className="text-center">
                       <span className="text-[20px] font-extrabold block">5</span>
@@ -405,7 +405,7 @@ export default function QuizClient({ quiz }) {
               </div>
             </div>
           )
-        )}}
+        )}
       </div>
     </div>
   );
