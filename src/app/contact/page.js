@@ -179,10 +179,6 @@ export default function ContactPage() {
                       />
                     </div>
 
-                    <button type="submit" className="w-full bg-[#0f7c85] hover:bg-[#0c6b73] text-white py-4 rounded-xl font-bold text-[14px] transition-colors shadow-md mt-2 cursor-pointer">
-                      Submit Message
-                    </button>
-
                     {/* Medical Disclaimer */}
                     <div className="bg-[#e8f8f0] border border-[#27ae60]/10 rounded-[20px] p-4 flex gap-3 items-start">
                       <svg className="w-5 h-5 text-[#27ae60] shrink-0 mt-0.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
@@ -192,6 +188,10 @@ export default function ContactPage() {
                         <strong>Medical Disclaimer:</strong> Inquiries via this contact page do not constitute medical consultation or advice. For immediate health emergencies, please consult a physician.
                       </p>
                     </div>
+
+                    <button type="submit" className="w-full bg-[#0f7c85] hover:bg-[#0c6b73] text-white py-4 rounded-xl font-bold text-[14px] transition-colors shadow-md mt-2 cursor-pointer">
+                      Submit Message
+                    </button>
                   </form>
                 )}
               </div>

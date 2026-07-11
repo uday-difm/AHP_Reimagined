@@ -304,7 +304,7 @@ In this edition, we explore the core principles of ${article.title.toLowerCase()
         <Header />
 
         <main className="pt-[140px] pb-20">
-          <div className="container mx-auto max-w-5xl px-4">
+          <div className="container mx-auto  px-4">
             {/* Breadcrumb */}
             <div className="breadcrumb flex items-center gap-2 text-[12px] text-muted font-semibold uppercase tracking-[1px] mb-8">
               <Link href="/" className="hover:text-accent transition-colors">Home</Link>
@@ -370,8 +370,8 @@ In this edition, we explore the core principles of ${article.title.toLowerCase()
 
             {/* Back button */}
             <div className="text-center">
-              <Link 
-                href="/publication" 
+              <Link
+                href="/publication"
                 className="inline-flex items-center gap-2 bg-primary hover:bg-accent text-white font-bold px-6 py-3 rounded-full text-sm shadow-md transition-all duration-300 no-underline"
               >
                 ← Back to Publications
@@ -445,8 +445,8 @@ In this edition, we explore the core principles of ${article.title.toLowerCase()
           {article.images && article.images.length >= 3 ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
               {article.images.slice(0, 3).map((imgUrl, index) => (
-                <div 
-                  key={index} 
+                <div
+                  key={index}
                   className="article-image-wrapper relative w-full h-[240px] md:h-[380px] rounded-[24px] overflow-hidden shadow-[0_15px_35px_rgba(0,0,0,0.05)] border border-white/60 transition-transform duration-500 hover:scale-[1.02]"
                 >
                   <Image
@@ -476,7 +476,7 @@ In this edition, we explore the core principles of ${article.title.toLowerCase()
           <AdSlot zone="article-body-top" />
 
           {/* Article Body */}
-          <article className="article-body-content max-w-[740px] mx-auto">
+          <article className="article-body-content  mx-auto">
             {/* Intro */}
             <p className="text-[17px] md:text-[19px] leading-relaxed text-primary font-medium mb-10 border-l-3 border-accent pl-5">
               {article.intro}

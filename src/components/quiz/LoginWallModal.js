@@ -18,7 +18,7 @@ export default function LoginWallModal({ quizTitle, onAfterLogin }) {
   const handleSignIn = () => {
     // callbackUrl brings the user back to the quiz after login
     const callbackUrl = typeof window !== 'undefined' ? window.location.href : '/quizzes';
-    signIn(undefined, { callbackUrl });
+    window.location.href = `/login?callbackUrl=${encodeURIComponent(callbackUrl)}`;
   };
 
   return (

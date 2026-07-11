@@ -94,13 +94,13 @@ export async function proxy(request) {
 
   // --------------- Admin/CRM Auth Guard ---------------
   const ADMIN_PATHS = ["/dashboard", "/crm", "/preview"];
-  const isDashboardPath = ADMIN_PATHS.some((p) => pathname.startsWith(p));
+  const isDashboardPath = ADMIN_PATHS.some((p) => pathname.startsWith(p)) && !pathname.startsWith("/dashboard/login");
   if (isDashboardPath) {
     const hasSession =
       request.cookies.has("next-auth.session-token") ||
       request.cookies.has("__Secure-next-auth.session-token");
     if (!hasSession) {
-      const loginUrl = new URL("/login", url);
+      const loginUrl = new URL("/dashboard/login", url);
       loginUrl.searchParams.set("callbackUrl", pathname);
       return NextResponse.redirect(loginUrl);
     }
