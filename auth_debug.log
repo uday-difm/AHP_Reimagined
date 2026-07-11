@@ -62,3 +62,23 @@
 [2026-07-10T10:12:19.517Z] [Auth] Authenticating against authService for: manish.yadav@difm.tech
 [2026-07-10T10:12:19.534Z] [Auth] Admin authentication failed, trying frontend auth table for: manish.yadav@difm.tech
 [2026-07-10T10:12:19.542Z] [Auth] Frontend user authenticated successfully: manish.yadav@difm.tech
+[2026-07-11T06:57:00.547Z] [Auth] Attempt started. Email: abc@c.com
+[2026-07-11T06:57:00.551Z] [Auth] Request Host: localhost:3000
+[2026-07-11T06:57:00.552Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
+[2026-07-11T06:57:00.553Z] [Auth] Token received (length: undefined): empty...
+[2026-07-11T06:57:00.553Z] [Auth] Failed: reCAPTCHA token missing
+[2026-07-11T06:57:07.305Z] [Auth] Attempt started. Email: abc@c.com
+[2026-07-11T06:57:07.306Z] [Auth] Request Host: localhost:3000
+[2026-07-11T06:57:07.306Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
+[2026-07-11T06:57:07.306Z] [Auth] Token received (length: undefined): empty...
+[2026-07-11T06:57:07.307Z] [Auth] Failed: reCAPTCHA token missing
+[2026-07-11T06:57:12.097Z] [Auth] Attempt started. Email: abc@c.com
+[2026-07-11T06:57:12.097Z] [Auth] Request Host: localhost:3000
+[2026-07-11T06:57:12.098Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
+[2026-07-11T06:57:12.100Z] [Auth] Token received (length: undefined): empty...
+[2026-07-11T06:57:12.101Z] [Auth] Failed: reCAPTCHA token missing
+[2026-07-11T06:57:16.178Z] [Auth] Attempt started. Email: abc@c.com
+[2026-07-11T06:57:16.178Z] [Auth] Request Host: localhost:3000
+[2026-07-11T06:57:16.178Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
+[2026-07-11T06:57:16.179Z] [Auth] Token received (length: undefined): empty...
+[2026-07-11T06:57:16.179Z] [Auth] Failed: reCAPTCHA token missing

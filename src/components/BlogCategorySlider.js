@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import AdSlot from '@/components/AdSlot';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -60,6 +61,10 @@ const categories = [
     badgeClass: 'bg-[var(--color-badge-red-bg)] text-[var(--color-badge-red-text)]',
   },
   {
+    isAd: true,
+    zone: 'homepage-articles-bottom',
+  },
+  {
     title: 'Alternative Care',
     tag: 'NATURAL REMEDIES',
     desc: 'Explore alternative therapies, biophilic setups, and herbal supplement vetting protocols.',
@@ -109,7 +114,7 @@ export default function BlogCategorySlider() {
               disableOnInteraction: false,
               pauseOnMouseEnter: true,
             }}
-            pagination={{ clickable: true, el: '.swiper-timeline-pagination' }}
+            pagination={{ clickable: true, dynamicBullets: true }}
             navigation={{
               nextEl: '.swiper-timeline-next',
               prevEl: '.swiper-timeline-prev',
@@ -122,32 +127,36 @@ export default function BlogCategorySlider() {
                 slidesPerView: 4,
               },
             }}
-            className="timeline-swiper !pb-10"
+            className="timeline-swiper !pb-14"
           >
             {categories.map((cat, i) => (
               <SwiperSlide key={i} className="h-full flex">
-                <Link
-                  href={cat.link}
-                  className="group bg-white rounded-[24px] p-6 shadow-[0_10px_30px_rgba(0,0,0,0.02)] border border-slate-100/50 flex flex-col justify-between hover:shadow-[0_16px_40px_rgba(31,185,251,0.08)] hover:scale-[1.02] transition-all duration-300 h-full w-full no-underline"
-                >
-                  <div className="flex flex-col gap-3">
-                    <div className="flex justify-between items-center border-b border-slate-100 pb-3">
-                      <span className={`text-[9.5px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider ${cat.badgeClass}`}>{cat.tag}</span>
+                {cat.isAd ? (
+                  <AdSlot zone={cat.zone} layout="blogCard" className="h-full w-full" />
+                ) : (
+                  <Link
+                    href={cat.link}
+                    className="group bg-white rounded-[24px] p-6 shadow-[0_10px_30px_rgba(0,0,0,0.02)] border border-slate-100/50 flex flex-col justify-between hover:shadow-[0_16px_40px_rgba(31,185,251,0.08)] hover:scale-[1.02] transition-all duration-300 h-full w-full no-underline"
+                  >
+                    <div className="flex flex-col gap-3">
+                      <div className="flex justify-between items-center border-b border-slate-100 pb-3">
+                        <span className={`text-[9.5px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider ${cat.badgeClass}`}>{cat.tag}</span>
+                      </div>
+                      <h4 className="font-heading font-bold text-[17px] text-primary group-hover:text-accent transition-colors mt-2">{cat.title}</h4>
+                      <p className="text-[12.5px] text-secondary leading-relaxed mt-1">{cat.desc}</p>
                     </div>
-                    <h4 className="font-heading font-bold text-[17px] text-primary group-hover:text-accent transition-colors mt-2">{cat.title}</h4>
-                    <p className="text-[12.5px] text-secondary leading-relaxed mt-1">{cat.desc}</p>
-                  </div>
 
-                  <div className="relative mt-6 h-[120px] w-full rounded-xl overflow-hidden shadow-sm">
-                    <Image
-                      src={cat.img}
-                      alt={cat.title}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      sizes="(max-width: 768px) 100vw, 25vw"
-                    />
-                  </div>
-                </Link>
+                    <div className="relative mt-6 h-[120px] w-full rounded-xl overflow-hidden shadow-sm">
+                      <Image
+                        src={cat.img}
+                        alt={cat.title}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        sizes="(max-width: 768px) 100vw, 25vw"
+                      />
+                    </div>
+                  </Link>
+                )}
               </SwiperSlide>
             ))}
           </Swiper>
@@ -159,10 +168,6 @@ export default function BlogCategorySlider() {
             </svg>
           </button>
 
-          {/* Centered Pagination dots below */}
-          <div className="flex justify-center mt-6">
-            <div className="swiper-timeline-pagination flex gap-2 !w-auto"></div>
-          </div>
 
         </div>
       </div>

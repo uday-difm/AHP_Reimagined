@@ -121,7 +121,8 @@
 
 /* ─── Custom Swiper Pagination override ─── */
 .swiper-custom-pagination .swiper-pagination-bullet,
-.swiper-timeline-pagination .swiper-pagination-bullet {
+.swiper-timeline-pagination .swiper-pagination-bullet,
+.timeline-swiper .swiper-pagination-bullet {
   width: 8px;
   height: 8px;
   background: #94a3b8;
@@ -132,7 +133,8 @@
 }
 
 .swiper-custom-pagination .swiper-pagination-bullet-active,
-.swiper-timeline-pagination .swiper-pagination-bullet-active {
+.swiper-timeline-pagination .swiper-pagination-bullet-active,
+.timeline-swiper .swiper-pagination-bullet-active {
   width: 24px;
   background: #0f7c85;
   border-radius: 4px;
