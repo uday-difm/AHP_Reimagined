@@ -92,7 +92,7 @@ export default function QuizzesPage() {
             ) : (
               <>
                 {/* Quizzes Grid (only showing 1 quiz card centered) */}
-                <div className="flex justify-center max-w-md mx-auto">
+                <div className="flex justify-center mx-auto">
                   {filteredQuizzes.length > 0 ? (
                     <QuizCard quiz={filteredQuizzes[0]} />
                   ) : (

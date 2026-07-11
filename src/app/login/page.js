@@ -147,7 +147,7 @@ function LoginClient() {
       <Header />
 
       <main className="flex-1 flex items-center justify-center px-4 pt-32 pb-20">
-        <div className="w-full max-w-[440px] bg-white rounded-[32px] border border-slate-200/60 p-8 md:p-10 shadow-xl"
+        <div className="w-full max-w-[440px] min-h-[530px] flex flex-col bg-white rounded-[32px] border border-slate-200/60 p-8 md:p-10 shadow-xl"
           style={{ boxShadow: '0 12px 36px rgba(0,0,0,0.03)' }}>
           
           {/* Header tabs */}
@@ -305,7 +305,7 @@ function LoginClient() {
             </form>
           )}
 
-          <p className="mt-6 text-center text-[12px] text-slate-400">
+          <p className="mt-auto pt-6 text-center text-[12px] text-slate-400">
             By signing in, you agree to our{' '}
             <Link href="/legal/terms" className="text-accent underline font-semibold">Terms</Link> and{' '}
             <Link href="/legal/privacy" className="text-accent underline font-semibold">Privacy Policy</Link>.

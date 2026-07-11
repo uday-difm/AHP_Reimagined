@@ -498,7 +498,7 @@ export default function PublicationPage() {
 
       {/* Subscribe + Advertise — Side by Side */}
       <section className="container my-14 reveal-scale">
-        <div className="grid grid-cols-1 md:grid-cols-[7fr_3fr] gap-6 items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-[7fr_3fr] gap-6 md:items-center items-stretch">
 
           {/* Left — Terracotta Subscribe CTA */}
           <div
@@ -548,10 +548,10 @@ export default function PublicationPage() {
               </div>
             </div>
 
-            {/* Phone mockup — right column, bottom-aligned */}
+            {/* Phone mockup — right column, centered */}
             <div
               style={phoneTransform}
-              className="hidden md:flex shrink-0 w-[180px] items-end justify-center pr-4 pb-0 select-none [transform-style:preserve-3d]"
+              className="hidden md:flex shrink-0 w-[180px] items-center justify-center pr-10 pb-0 select-none [transform-style:preserve-3d]"
             >
               <div className="relative">
                 <div className="absolute -top-4 -right-3 w-24 h-36 bg-[#f4ded7]/50 rounded-[24px] rotate-6 opacity-60" />

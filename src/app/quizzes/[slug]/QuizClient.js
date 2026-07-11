@@ -305,105 +305,107 @@ export default function QuizClient({ quiz }) {
         </div>
 
         {/* ── LOCKED / UNLOCKED SCOREBOARD AREA ─────────────────────────────── */}
-        {!isAuthenticated ? (
-          <div className="relative border-t border-slate-200/80 pt-16 mt-8">
-            {/* Blurry dashboard background */}
-            <div className="filter blur-md select-none pointer-events-none opacity-40">
-              <h2 className="text-center font-heading font-extrabold text-[24px] mb-8 text-primary">Track Your Score</h2>
-              <div className="grid grid-cols-3 gap-4 mb-8">
-                {[
-                  { l: 'Correct Answers', v: '0/0', c: '#cbd5e1' },
-                  { l: 'Daily Streak', v: '0 Days', c: '#cbd5e1' },
-                  { l: 'Completion Rate', v: '0%', c: '#cbd5e1' },
-                ].map((stat, i) => (
-                  <div key={i} className="bg-white rounded-[20px] p-6 border border-slate-200/60 text-center">
-                    <span className="text-[24px] font-extrabold block text-slate-400 mb-1">{stat.v}</span>
-                    <span className="text-[11px] text-slate-400 uppercase tracking-wider">{stat.l}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="bg-white h-48 rounded-[24px] border border-slate-200/60 p-6 flex flex-col justify-end">
-                <div className="h-1 bg-slate-100 w-full rounded-full" />
-              </div>
-            </div>
-
-            {/* Scoreboard title centered on top */}
-            <div className="absolute top-8 left-0 right-0 text-center pointer-events-none z-10">
-              <h2 className="font-heading font-extrabold text-[26px] text-slate-400/80">Track Your Score</h2>
-            </div>
-
-            {/* Centered Login Required Modal */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-full max-w-sm">
-              <div className="bg-white border border-slate-200/60 rounded-[24px] p-8 text-center shadow-lg">
-                {/* Green lock circle icon */}
-                <div className="w-12 h-12 rounded-full border border-[#0f7c85] flex items-center justify-center mx-auto mb-4 text-[#0f7c85]">
-                  <svg className="w-5.5 h-5.5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
-                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                    <path strokeLinecap="round" d="M7 11V7a5 5 0 0110 0v4" />
-                  </svg>
+        {!showGate && (
+          !isAuthenticated ? (
+            <div className="relative border-t border-slate-200/80 pt-16 mt-8">
+              {/* Blurry dashboard background */}
+              <div className="filter blur-md select-none pointer-events-none opacity-40">
+                <h2 className="text-center font-heading font-extrabold text-[24px] mb-8 text-primary">Track Your Score</h2>
+                <div className="grid grid-cols-3 gap-4 mb-8">
+                  {[
+                    { l: 'Correct Answers', v: '0/0', c: '#cbd5e1' },
+                    { l: 'Daily Streak', v: '0 Days', c: '#cbd5e1' },
+                    { l: 'Completion Rate', v: '0%', c: '#cbd5e1' },
+                  ].map((stat, i) => (
+                    <div key={i} className="bg-white rounded-[20px] p-6 border border-slate-200/60 text-center">
+                      <span className="text-[24px] font-extrabold block text-slate-400 mb-1">{stat.v}</span>
+                      <span className="text-[11px] text-slate-400 uppercase tracking-wider">{stat.l}</span>
+                    </div>
+                  ))}
                 </div>
-
-                <h3 className="font-heading font-bold text-[18px] text-primary mb-1">Login Required</h3>
-                <p className="text-secondary text-[13px] leading-relaxed mb-6">
-                  You need to log in to view this content and track your quiz score.
-                </p>
-
-                <button
-                  onClick={handleLoginRedirect}
-                  className="bg-[#0f7c85] hover:bg-[#0c6b73] text-white px-8 py-2.5 rounded-full font-bold text-[13.5px] transition-colors cursor-pointer w-full"
-                >
-                  Login
-                </button>
-              </div>
-            </div>
-          </div>
-        ) : (
-          /* Unlocked Scoreboard / Dashboard link */
-          <div className="mt-14 max-w-4xl mx-auto">
-            <div className="bg-[#0f7c85] text-white rounded-[24px] p-8 md:p-10 shadow-md relative overflow-hidden">
-              <div className="absolute right-[-40px] bottom-[-40px] w-64 h-64 rounded-full bg-white/5 pointer-events-none" />
-              <div className="relative z-10 max-w-2xl mx-auto text-center flex flex-col items-center">
-                <span className="text-[10px] font-extrabold uppercase tracking-[2px] text-white/70 mb-2">YOUR WELLNESS JOURNEY</span>
-                <h2 className="font-heading font-extrabold text-[24px] md:text-[28px] mb-3 leading-tight">
-                  Track your health over time.
-                </h2>
-                <p className="text-white/85 text-[13.5px] leading-relaxed max-w-md mb-8">
-                  Welcome back! You are signed in. View your past quiz scores, track your wellness progress, and see detailed reports in your private dashboard.
-                </p>
-                
-                <div className="flex gap-10 mb-8 border-y border-white/10 py-4 w-full justify-center">
-                  <div className="text-center">
-                    <span className="text-[20px] font-extrabold block">5</span>
-                    <span className="text-[10px] uppercase text-white/60 tracking-wider">Quizzes</span>
-                  </div>
-                  <div className="text-center">
-                    <span className="text-[20px] font-extrabold block">3</span>
-                    <span className="text-[10px] uppercase text-white/60 tracking-wider">Free Qs</span>
-                  </div>
-                  <div className="text-center">
-                    <span className="text-[20px] font-extrabold block">∞</span>
-                    <span className="text-[10px] uppercase text-white/60 tracking-wider">Insights</span>
-                  </div>
+                <div className="bg-white h-48 rounded-[24px] border border-slate-200/60 p-6 flex flex-col justify-end">
+                  <div className="h-1 bg-slate-100 w-full rounded-full" />
                 </div>
+              </div>
 
-                <div className="flex gap-4">
-                  <Link
-                    href="/quizzes/dashboard"
-                    className="bg-white text-[#0f7c85] hover:bg-slate-100 px-6 py-2.5 rounded-full font-bold text-[13.5px] no-underline transition-all shadow-sm"
+              {/* Scoreboard title centered on top */}
+              <div className="absolute top-8 left-0 right-0 text-center pointer-events-none z-10">
+                <h2 className="font-heading font-extrabold text-[26px] text-slate-400/80">Track Your Score</h2>
+              </div>
+
+              {/* Centered Login Required Modal */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-full max-w-sm">
+                <div className="bg-white border border-slate-200/60 rounded-[24px] p-8 text-center shadow-lg">
+                  {/* Green lock circle icon */}
+                  <div className="w-12 h-12 rounded-full border border-[#0f7c85] flex items-center justify-center mx-auto mb-4 text-[#0f7c85]">
+                    <svg className="w-5.5 h-5.5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
+                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                      <path strokeLinecap="round" d="M7 11V7a5 5 0 0110 0v4" />
+                    </svg>
+                  </div>
+
+                  <h3 className="font-heading font-bold text-[18px] text-primary mb-1">Login Required</h3>
+                  <p className="text-secondary text-[13px] leading-relaxed mb-6">
+                    You need to log in to view this content and track your quiz score.
+                  </p>
+
+                  <button
+                    onClick={handleLoginRedirect}
+                    className="bg-[#0f7c85] hover:bg-[#0c6b73] text-white px-8 py-2.5 rounded-full font-bold text-[13.5px] transition-colors cursor-pointer w-full"
                   >
-                    My Dashboard
-                  </Link>
-                  <Link
-                    href="/quizzes"
-                    className="border border-white/20 hover:bg-white/10 text-white px-6 py-2.5 rounded-full font-bold text-[13.5px] no-underline transition-all"
-                  >
-                    All Quizzes
-                  </Link>
+                    Login
+                  </button>
                 </div>
               </div>
             </div>
-          </div>
-        )}
+          ) : (
+            /* Unlocked Scoreboard / Dashboard link */
+            <div className="mt-14 max-w-4xl mx-auto">
+              <div className="bg-[#0f7c85] text-white rounded-[24px] p-8 md:p-10 shadow-md relative overflow-hidden">
+                <div className="absolute right-[-40px] bottom-[-40px] w-64 h-64 rounded-full bg-white/5 pointer-events-none" />
+                <div className="relative z-10 max-w-2xl mx-auto text-center flex flex-col items-center">
+                  <span className="text-[10px] font-extrabold uppercase tracking-[2px] text-white/70 mb-2">YOUR WELLNESS JOURNEY</span>
+                  <h2 className="font-heading font-extrabold text-[24px] md:text-[28px] mb-3 leading-tight">
+                    Track your health over time.
+                  </h2>
+                  <p className="text-white/85 text-[13.5px] leading-relaxed max-w-md mb-8">
+                    Welcome back! You are signed in. View your past quiz scores, track your wellness progress, and see detailed reports in your private dashboard.
+                  </p>
+                  
+                  <div className="flex gap-10 mb-8 border-y border-white/10 py-4 w-full justify-center">
+                    <div className="text-center">
+                      <span className="text-[20px] font-extrabold block">5</span>
+                      <span className="text-[10px] uppercase text-white/60 tracking-wider">Quizzes</span>
+                    </div>
+                    <div className="text-center">
+                      <span className="text-[20px] font-extrabold block">3</span>
+                      <span className="text-[10px] uppercase text-white/60 tracking-wider">Free Qs</span>
+                    </div>
+                    <div className="text-center">
+                      <span className="text-[20px] font-extrabold block">∞</span>
+                      <span className="text-[10px] uppercase text-white/60 tracking-wider">Insights</span>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-4">
+                    <Link
+                      href="/quizzes/dashboard"
+                      className="bg-white text-[#0f7c85] hover:bg-slate-100 px-6 py-2.5 rounded-full font-bold text-[13.5px] no-underline transition-all shadow-sm"
+                    >
+                      My Dashboard
+                    </Link>
+                    <Link
+                      href="/quizzes"
+                      className="border border-white/20 hover:bg-white/10 text-white px-6 py-2.5 rounded-full font-bold text-[13.5px] no-underline transition-all"
+                    >
+                      All Quizzes
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )
+        )}}
       </div>
     </div>
   );
