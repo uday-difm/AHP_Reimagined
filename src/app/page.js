@@ -34,9 +34,7 @@ export default async function Home() {
 
       <main className="w-full">
         <Hero />
-        <AdSlot zone="homepage-hero-bottom" />
         <ArticlesGrid />
-        <AdSlot zone="homepage-articles-bottom" />
         <BlogCategorySlider />
         <HomeQuizWidget />
         {isAuthenticated && (
@@ -46,7 +44,6 @@ export default async function Home() {
           </>
         )}
         <CommunityEvents />
-        <AdSlot zone="homepage-events-bottom" />
         <ServicesBanner />
         <Newsletter />
       </main>

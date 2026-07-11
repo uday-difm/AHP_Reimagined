@@ -6,6 +6,7 @@ import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { quizzes, FREE_QUESTION_LIMIT } from '@/data/quizzes';
 import QuizIcon from '@/components/quiz/QuizIcon';
+import AdSlot from '@/components/AdSlot';
 
 /**
  * HomeQuizWidget
@@ -89,23 +90,23 @@ export default function HomeQuizWidget() {
   };
 
   return (
-    <section className="pt-16 pb-4 px-4 bg-[#f8fafc] border-t border-slate-200/40">
-      <div className="container max-w-5xl mx-auto">
-        
+    <section className="pt-20 pb-10 px-4 bg-[#f8fafc] border-t border-slate-200/40">
+      <div className="container max-w-7xl mx-auto">
+
         {/* Header */}
-        <div className="text-center mb-10">
+        <div className="text-center mb-12">
           <span className="text-accent text-[11px] font-extrabold uppercase tracking-[3px] mb-2 block">
             QUICK WELLNESS CHECK
           </span>
-          <h2 className="font-heading font-extrabold text-2xl md:text-3xl tracking-tight mb-2 text-primary">
+          <h2 className="font-heading font-extrabold text-3xl md:text-4xl tracking-tight mb-3 text-primary">
             Try a quiz, right here.
           </h2>
-          <p className="text-secondary text-[14px]">Test your knowledge and gain valuable insights</p>
+          <p className="text-secondary text-[15px]">Test your knowledge and gain valuable insights</p>
         </div>
 
         {/* ── CENTRAL SPLIT QUIZ CARD (Image 2 style) ────────────────────── */}
-        <div className="max-w-4xl mx-auto">
-          
+        <div className="max-w-6xl mx-auto">
+
           {/* NOT STARTED */}
           {!started && !showGate && (
             <div
@@ -131,8 +132,8 @@ export default function HomeQuizWidget() {
 
           {/* ACTIVE QUESTION */}
           {started && !showGate && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
-              
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+
               {/* Left Column: Question Card */}
               <div
                 className="bg-[#f3f4f6] rounded-[24px] p-6 flex flex-col justify-between border border-slate-200/50 shadow-sm transition-all duration-300"
@@ -157,7 +158,7 @@ export default function HomeQuizWidget() {
                 </div>
               </div>
 
-              {/* Right Column: Options & Next */}
+              {/* Middle Column: Options & Next */}
               <div
                 className="bg-white border border-slate-200/60 rounded-[24px] p-6 flex flex-col justify-between shadow-sm transition-all duration-300"
                 style={{
@@ -212,6 +213,12 @@ export default function HomeQuizWidget() {
                   </button>
                 </div>
               </div>
+
+              {/* Right Column: Ad Card */}
+              <div className="hidden md:flex">
+                <AdSlot zone="homepage-events-bottom" layout="blogCard" className="h-full w-full" />
+              </div>
+
             </div>
           )}
 
@@ -310,7 +317,7 @@ export default function HomeQuizWidget() {
                   </div>
                 ))}
               </div>
-              
+
               {/* Dashboard shortcut card */}
               <div className="bg-white rounded-[24px] border border-slate-200/60 p-6 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
                 <div className="flex items-center gap-3">

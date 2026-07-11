@@ -55,7 +55,7 @@ const ZONE_DIMENSIONS = {
   }
 };
 
-export default function AdSlot({ zone, layout = 'strip', width, height }) {
+export default function AdSlot({ zone, layout = 'strip', width, height, className }) {
   const [ads, setAds] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
@@ -96,6 +96,75 @@ export default function AdSlot({ zone, layout = 'strip', width, height }) {
 
   // ── Active ads ──────────────────────────────────────────────
   if (ads.length > 0) {
+    if (layout === 'blogCard') {
+      return (
+        <div className={`w-full h-full flex ${className || ''}`}>
+          <div className="bg-white rounded-[24px] p-6 shadow-[0_10px_30px_rgba(0,0,0,0.02)] border border-slate-100/50 flex flex-col justify-between hover:shadow-[0_16px_40px_rgba(31,185,251,0.08)] transition-all duration-300 h-full w-full">
+            <div className="flex flex-col gap-3 h-full justify-between">
+              <div className="flex justify-between items-center border-b border-slate-100 pb-3">
+                <span className="text-[9.5px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider bg-teal-50 text-teal-700">
+                  Sponsored
+                </span>
+              </div>
+              <div className="flex-1 flex items-center justify-center overflow-hidden rounded-xl border border-slate-100 bg-slate-50 min-h-[120px] my-3">
+                {ads.map((ad) => {
+                  if (ad.type === 'CODE') {
+                    return (
+                      <div key={ad.id} className="w-full h-full flex justify-center items-center" dangerouslySetInnerHTML={{ __html: ad.code }} />
+                    );
+                  }
+                  if (ad.type === 'IMAGE' && ad.imageUrl) {
+                    return (
+                      <a key={ad.id} href={ad.targetUrl || '#'} target="_blank" rel="noopener noreferrer"
+                        className="block w-full h-full hover:opacity-90 transition-opacity">
+                        <img src={ad.imageUrl} alt={ad.name || 'Ad'}
+                          className="w-full h-full object-cover" />
+                      </a>
+                    );
+                  }
+                  return null;
+                })}
+              </div>
+              <div>
+                <a href="/info?tab=support" className="text-[10px] text-muted hover:text-accent font-semibold uppercase tracking-[1.5px] block text-center mt-2 transition-colors">
+                  Advertise with us
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    if (layout === 'card') {
+      return (
+        <div className={`w-full h-full flex flex-col items-center justify-center ${className || ''}`}>
+          <span className="block text-[9px] font-semibold text-muted uppercase tracking-[1.5px] mb-1.5 text-center font-body">Ad</span>
+          <div 
+            className="flex justify-center items-center overflow-hidden rounded-[32px] bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800/80 shadow-[0_2px_12px_rgba(0,0,0,0.03)] w-full h-full min-h-[300px]"
+          >
+            {ads.map((ad) => {
+              if (ad.type === 'CODE') {
+                return (
+                  <div key={ad.id} className="w-full h-full flex justify-center items-center" dangerouslySetInnerHTML={{ __html: ad.code }} />
+                );
+              }
+              if (ad.type === 'IMAGE' && ad.imageUrl) {
+                return (
+                  <a key={ad.id} href={ad.targetUrl || '#'} target="_blank" rel="noopener noreferrer"
+                    className="block w-full h-full hover:opacity-90 transition-opacity">
+                    <img src={ad.imageUrl} alt={ad.name || 'Ad'}
+                      className="w-full h-full object-cover" />
+                  </a>
+                );
+              }
+              return null;
+            })}
+          </div>
+        </div>
+      );
+    }
+
     const wrapClass = layout === 'float'
       ? 'float-right clear-right ml-6 mb-4'
       : 'w-full flex flex-col items-center my-3';
@@ -137,6 +206,65 @@ export default function AdSlot({ zone, layout = 'strip', width, height }) {
   }
 
   // ── No active ads ────────────────────────────────────────────
+
+  if (layout === 'blogCard') {
+    return (
+      <div className={`w-full h-full flex ${className || ''}`}>
+        <a 
+          href="/info?tab=support"
+          className="group bg-white rounded-[24px] p-6 shadow-[0_10px_30px_rgba(0,0,0,0.02)] border border-slate-200/60 flex flex-col justify-between hover:shadow-[0_16px_40px_rgba(31,185,251,0.08)] hover:border-teal-500/40 hover:scale-[1.02] transition-all duration-300 h-full w-full no-underline cursor-pointer select-none"
+        >
+          <div className="flex flex-col gap-3">
+            <div className="flex justify-between items-center border-b border-slate-100 pb-3">
+              <span className="text-[9.5px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider bg-teal-50 text-teal-700 dark:bg-teal-950/40 dark:text-teal-400">
+                Partner Spot
+              </span>
+            </div>
+            <h4 className="font-heading font-bold text-[17px] text-primary group-hover:text-teal-600 transition-colors mt-2">
+              Want to get featured?
+            </h4>
+            <p className="text-[12.5px] text-secondary leading-relaxed mt-1">
+              Place your brand inside our interactive guide slider. Reach health-conscious readers.
+            </p>
+          </div>
+
+          <div className="mt-6">
+            <span className="w-full text-center bg-teal-600 hover:bg-teal-700 text-white font-extrabold text-[11px] py-2.5 rounded-full shadow-sm tracking-wider uppercase transition-colors block">
+              Advertise with us →
+            </span>
+          </div>
+        </a>
+      </div>
+    );
+  }
+
+  if (layout === 'card') {
+    const cardContent = (
+      <div className="flex flex-col items-center justify-center text-center p-6 gap-4 h-full w-full">
+        <span className="text-[10px] font-bold text-teal-600 dark:text-teal-400 uppercase tracking-widest">Partner Spot</span>
+        <div className="flex flex-col gap-2">
+          <h5 className="text-[15px] font-extrabold text-slate-800 dark:text-white leading-snug">Want to get featured here?</h5>
+          <p className="text-[12px] text-slate-500 dark:text-slate-400 leading-relaxed max-w-[200px] mx-auto">
+            Align your brand with medically verified health guides.
+          </p>
+        </div>
+        <span className="bg-teal-600 hover:bg-teal-700 dark:bg-teal-500 text-white font-heading font-extrabold text-[10px] py-2 px-5 rounded-full shadow-sm tracking-wider uppercase transition-all duration-300 hover:scale-105 mt-2">
+          Advertise with us →
+        </span>
+      </div>
+    );
+
+    return (
+      <div className={`w-full h-full flex ${className || ''}`}>
+        <a 
+          href="/info?tab=support"
+          className="flex flex-col justify-center items-center overflow-hidden rounded-[32px] bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900/60 dark:to-slate-900/40 border border-slate-200/60 dark:border-slate-800/40 hover:border-teal-500/40 dark:hover:border-teal-500/30 hover:shadow-[0_8px_30px_rgba(15,124,133,0.06)] transition-all duration-500 group cursor-pointer no-underline select-none w-full h-full min-h-[300px]"
+        >
+          {cardContent}
+        </a>
+      </div>
+    );
+  }
 
   // If size mapping exists, display the clean mockup layout (gray box with attractive CTAs)
   if (w && h) {
