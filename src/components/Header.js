@@ -74,7 +74,7 @@ export default function Header() {
             {/* Hamburger Menu Button */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className={`relative w-12 h-12 rounded-full flex justify-center items-center cursor-pointer z-[10000] shadow-[0_4px_20px_rgba(0,0,0,0.05)] transition-all duration-500 border ${menuOpen ? 'bg-accent border-accent shadow-[0_6px_24px_rgba(15,124,133,0.15)]' : 'bg-white/90 border-[var(--color-border)]/80 hover:scale-105 hover:border-accent hover:shadow-[0_6px_24px_rgba(31,185,251,0.12)]'
+              className={`md:hidden relative w-12 h-12 rounded-full flex justify-center items-center cursor-pointer z-[10000] shadow-[0_4px_20px_rgba(0,0,0,0.05)] transition-all duration-500 border ${menuOpen ? 'bg-accent border-accent shadow-[0_6px_24px_rgba(15,124,133,0.15)]' : 'bg-white/90 border-[var(--color-border)]/80 hover:scale-105 hover:border-accent hover:shadow-[0_6px_24px_rgba(31,185,251,0.12)]'
                 }`}
               aria-label="Toggle Menu"
             >
@@ -90,11 +90,12 @@ export default function Header() {
 
       {/* Universal Hamburger Menu Overlay */}
       <div
-        className={`fixed inset-0 w-full h-screen bg-white/95 backdrop-blur-3xl z-[8999] flex items-center justify-center transition-all duration-500 ${menuOpen ? 'opacity-100 pointer-events-auto visible' : 'opacity-0 pointer-events-none invisible'
+        className={`fixed inset-0 w-full h-[100dvh] bg-white/98 backdrop-blur-3xl z-[8999] flex flex-col justify-center transition-all duration-500 ${menuOpen ? 'opacity-100 pointer-events-auto visible' : 'opacity-0 pointer-events-none invisible'
           }`}
       >
-        <div className={`hb-menu-container w-full max-h-screen overflow-y-auto py-24 px-6 sm:px-10 md:px-20 grid grid-cols-1 md:grid-cols-[0.95fr_1.05fr] gap-10 md:gap-20 items-center transition-transform duration-700 ${menuOpen ? 'translate-y-0' : 'translate-y-10'}`}>
+        <div className={`hb-menu-container w-full h-full max-h-[100dvh] overflow-y-auto py-24 px-6 sm:px-10 md:px-20 flex flex-col justify-center transition-transform duration-700 ${menuOpen ? 'translate-y-0' : 'translate-y-10'}`}>
 
+          {/* 
           <div className={`hb-meta-panel hidden md:flex flex-col gap-10 border-r border-primary/10 pr-12 transition-all duration-500 delay-300 ${menuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[30px]'}`}>
             <div className="hb-quote-section flex items-start justify-start py-6 px-6 md:px-8 max-w-[650px]">
               <div className="hb-quote-container font-['Optima',_'Candara',_'Noto_Sans',_sans-serif] text-[#1a1a1a] py-6 leading-[1.1] uppercase">
@@ -106,9 +107,10 @@ export default function Header() {
                 </p>
               </div>
             </div>
-          </div>
-          <nav className="hb-nav-links flex flex-col items-end pr-8 md:pr-16 lg:pr-32">
-            <div className="flex flex-col items-start text-left gap-3 sm:gap-4">
+          </div> 
+          */}
+          <nav className="hb-nav-links flex flex-col items-end pr-0 md:pr-16 lg:pr-32 w-full my-auto">
+            <div className="flex flex-col items-end text-right gap-2 sm:gap-4 w-full">
               {['Home', 'About', 'Publication', 'Blogs', 'Quizzes', 'Contact Us', ...(isAuthenticated ? ['Dashboard', 'Logout'] : ['Login'])].map((label, i) => {
                 const isPublication = label === 'Publication';
                 const isBlogs = label === 'Blogs';
@@ -144,7 +146,7 @@ export default function Header() {
                       key={i}
                       onClick={() => { setMenuOpen(false); signOut({ callbackUrl: '/' }); }}
                       style={{ transitionDelay: `${i * 0.05}s` }}
-                      className={`hb-nav-item font-heading font-extrabold text-[28px] sm:text-[40px] md:text-[56px] lg:text-[64px] text-red-500 hover:text-red-600 no-underline leading-[1.1] tracking-[-1.5px] inline-block hover:translate-x-3 transition-all duration-500 text-left border-none bg-transparent cursor-pointer ${menuOpen ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'}`}
+                      className={`hb-nav-item font-heading font-extrabold text-[28px] sm:text-[40px] md:text-[56px] lg:text-[64px] text-red-500 hover:text-red-600 no-underline leading-[1.1] tracking-[-1.5px] block w-full text-right hover:-translate-x-3 hover:scale-[1.02] hover:bg-red-500/10 px-6 py-3 rounded-2xl transition-all duration-500 border-none bg-transparent cursor-pointer ${menuOpen ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'}`}
                     >
                       Logout
                     </button>
@@ -157,7 +159,7 @@ export default function Header() {
                     href={href}
                     onClick={() => setMenuOpen(false)}
                     style={{ transitionDelay: `${i * 0.05}s` }}
-                    className={`hb-nav-item font-heading font-extrabold text-[28px] sm:text-[40px] md:text-[56px] lg:text-[64px] text-primary no-underline leading-[1.1] tracking-[-1.5px] inline-block hover:text-accent hover:translate-x-3 transition-all duration-500 ${menuOpen ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'}`}
+                    className={`hb-nav-item font-heading font-extrabold text-[28px] sm:text-[40px] md:text-[56px] lg:text-[64px] text-primary no-underline leading-[1.1] tracking-[-1.5px] block w-full text-right hover:text-accent hover:-translate-x-3 hover:scale-[1.02] hover:bg-accent/10 px-6 py-3 rounded-2xl transition-all duration-500 ${menuOpen ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'}`}
                   >
                     {label}
                   </a>
