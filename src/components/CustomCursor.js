@@ -5,6 +5,7 @@ import { useEffect, useRef } from 'react';
 // Persist mouse position globally so that the cursor doesn't jump to (0,0) on page/tab navigation remounts
 let globalMousePosition = { x: 0, y: 0 };
 let globalHasMoved = false;
+let globalHoveredNavTarget = null;
 
 if (typeof window !== 'undefined') {
   const trackMouseGlobal = (e) => {
@@ -24,25 +25,7 @@ export default function CustomCursor() {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
     
-    if (prefersReducedMotion || isTouchDevice) {
-      return;
-    }
-
-    const handleMouseHover = (e) => {
-      const target = e.target.closest('a, button, [role="button"], input, textarea, .tilt-card');
-      if (cursorRef.current) {
-        if (target) {
-          cursorRef.current.classList.add('custom-cursor-hover');
-        } else {
-          cursorRef.current.classList.remove('custom-cursor-hover');
-        }
-      }
-    };
-
-    document.addEventListener('mouseover', handleMouseHover);
-    return () => {
-      document.removeEventListener('mouseover', handleMouseHover);
-    };
+    // Mouse tracking now completely handled in the second useEffect
   }, []);
 
   useEffect(() => {
@@ -61,27 +44,49 @@ export default function CustomCursor() {
     let animId = null;
     const inertiaSpeed = 0.12;
 
-    const updateCursor = () => {
-      const dx = mouseX - cursorX;
-      const dy = mouseY - cursorY;
+    let currentNavTarget = null;
+    let currentHoverTarget = null;
 
-      // Close enough to destination - pause loop to save CPU
-      if (Math.abs(dx) < 0.1 && Math.abs(dy) < 0.1) {
-        cursorX = mouseX;
-        cursorY = mouseY;
+    const updateCursor = () => {
+      if (currentNavTarget && cursorRef.current) {
+        // Snap directly to the nav item (magnetic effect)
+        const rect = currentNavTarget.getBoundingClientRect();
+        const targetX = rect.left + rect.width / 2;
+        const targetY = rect.top + rect.height / 2;
+        
+        // Fast snap
+        cursorX += (targetX - cursorX) * 0.4;
+        cursorY += (targetY - cursorY) * 0.4;
+        
+        cursorRef.current.style.width = `${rect.width}px`;
+        cursorRef.current.style.height = `${rect.height}px`;
+        cursorRef.current.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%)`;
+      } else {
+        const dx = mouseX - cursorX;
+        const dy = mouseY - cursorY;
+
+        // Close enough to destination - pause loop to save CPU
+        if (Math.abs(dx) < 0.1 && Math.abs(dy) < 0.1) {
+          cursorX = mouseX;
+          cursorY = mouseY;
+          if (cursorRef.current) {
+            cursorRef.current.style.width = '';
+            cursorRef.current.style.height = '';
+            cursorRef.current.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%)`;
+          }
+          isLoopRunning = false;
+          animId = null;
+          return;
+        }
+
+        cursorX += dx * inertiaSpeed;
+        cursorY += dy * inertiaSpeed;
+
         if (cursorRef.current) {
+          cursorRef.current.style.width = '';
+          cursorRef.current.style.height = '';
           cursorRef.current.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%)`;
         }
-        isLoopRunning = false;
-        animId = null;
-        return;
-      }
-
-      cursorX += dx * inertiaSpeed;
-      cursorY += dy * inertiaSpeed;
-
-      if (cursorRef.current) {
-        cursorRef.current.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%)`;
       }
 
       animId = requestAnimationFrame(updateCursor);
@@ -94,10 +99,31 @@ export default function CustomCursor() {
       globalMousePosition.y = mouseY;
       globalHasMoved = true;
 
-      if (cursorRef.current) cursorRef.current.style.opacity = '1';
+      // Update hover state precisely on mouse move
+      currentNavTarget = e.target.closest('.nav-item, nav a, nav button, button, .btn, [role="button"]');
+      currentHoverTarget = e.target.closest('a, input, textarea, .tilt-card');
+
+      if (cursorRef.current) {
+        cursorRef.current.style.opacity = '1';
+        
+        if (currentNavTarget) {
+          cursorRef.current.classList.add('custom-cursor-nav-hover');
+          cursorRef.current.classList.remove('custom-cursor-hover');
+          if (cursorDotRef.current) cursorDotRef.current.style.display = 'none';
+        } else if (currentHoverTarget) {
+          cursorRef.current.classList.add('custom-cursor-hover');
+          cursorRef.current.classList.remove('custom-cursor-nav-hover');
+          if (cursorDotRef.current) cursorDotRef.current.style.display = 'block';
+        } else {
+          cursorRef.current.classList.remove('custom-cursor-hover');
+          cursorRef.current.classList.remove('custom-cursor-nav-hover');
+          if (cursorDotRef.current) cursorDotRef.current.style.display = 'block';
+        }
+      }
+
       if (cursorDotRef.current) cursorDotRef.current.style.opacity = '1';
 
-      if (cursorDotRef.current) {
+      if (cursorDotRef.current && !currentNavTarget) {
         cursorDotRef.current.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
       }
 

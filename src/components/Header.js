@@ -48,24 +48,49 @@ export default function Header() {
 
           {/* Desktop Nav */}
           <nav className="nav-desktop hidden md:flex items-center gap-4 md:gap-8 flex-1 justify-center">
-            <a href="/" className="nav-item text-sm md:text-[15px] font-medium text-secondary relative py-1.5 transition-colors hover:text-primary after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all after:duration-300 hover:after:w-full">Home</a>
-            <a href="/about" className="nav-item text-sm md:text-[15px] font-medium text-secondary relative py-1.5 transition-colors hover:text-primary after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all after:duration-300 hover:after:w-full">About</a>
-            <a href="/publication" className="nav-item text-sm md:text-[15px] font-medium text-secondary relative py-1.5 transition-colors hover:text-primary after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all after:duration-300 hover:after:w-full">Publication</a>
-            <a href="/blogs" className="nav-item text-sm md:text-[15px] font-medium text-secondary relative py-1.5 transition-colors hover:text-primary after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all after:duration-300 hover:after:w-full">Blogs</a>
-            <a href="/quizzes" className="nav-item text-sm md:text-[15px] font-medium text-secondary relative py-1.5 transition-colors hover:text-primary after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all after:duration-300 hover:after:w-full">Quizzes</a>
-            <a href="/contact" className="nav-item text-sm md:text-[15px] font-medium text-secondary relative py-1.5 transition-colors hover:text-primary after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all after:duration-300 hover:after:w-full">Contact Us</a>
+            <Link href="/" className="nav-item group text-sm md:text-[15px] font-medium text-secondary relative py-2 px-4 rounded-full transition-all duration-300 ease-out hover:text-primary overflow-hidden">
+              <span className="relative z-10">Home</span>
+              <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-accent transition-all duration-300 ease-out group-hover:w-[60%] rounded-full"></span>
+            </Link>
+            <Link href="/about" className="nav-item group text-sm md:text-[15px] font-medium text-secondary relative py-2 px-4 rounded-full transition-all duration-300 ease-out hover:text-[#0f7c85] overflow-hidden">
+              <span className="relative z-10">About</span>
+              <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-accent transition-all duration-300 ease-out group-hover:w-[60%] rounded-full"></span>
+            </Link>
+            <Link href="/publication" className="nav-item group text-sm md:text-[15px] font-medium text-secondary relative py-2 px-4 rounded-full transition-all duration-300 ease-out hover:text-[#0f7c85] overflow-hidden">
+              <span className="relative z-10">Publication</span>
+              <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-accent transition-all duration-300 ease-out group-hover:w-[60%] rounded-full"></span>
+            </Link>
+            <Link href="/blogs" className="nav-item group text-sm md:text-[15px] font-medium text-secondary relative py-2 px-4 rounded-full transition-all duration-300 ease-out hover:text-[#0f7c85] overflow-hidden">
+              <span className="relative z-10">Blogs</span>
+              <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-accent transition-all duration-300 ease-out group-hover:w-[60%] rounded-full"></span>
+            </Link>
+            <Link href="/quizzes" className="nav-item group text-sm md:text-[15px] font-medium text-secondary relative py-2 px-4 rounded-full transition-all duration-300 ease-out hover:text-[#0f7c85] overflow-hidden">
+              <span className="relative z-10">Quizzes</span>
+              <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-accent transition-all duration-300 ease-out group-hover:w-[60%] rounded-full"></span>
+            </Link>
+            <Link href="/contact" className="nav-item group text-sm md:text-[15px] font-medium text-secondary relative py-2 px-4 rounded-full transition-all duration-300 ease-out hover:text-[#0f7c85] overflow-hidden">
+              <span className="relative z-10">Contact Us</span>
+              <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-accent transition-all duration-300 ease-out group-hover:w-[60%] rounded-full"></span>
+            </Link>
             {isAuthenticated ? (
               <>
-                <a href="/quizzes/dashboard" className="nav-item text-sm md:text-[15px] font-medium text-secondary relative py-1.5 transition-colors hover:text-primary after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all after:duration-300 hover:after:w-full">Dashboard</a>
+                <Link href="/quizzes/dashboard" className="nav-item group text-sm md:text-[15px] font-medium text-secondary relative py-2 px-4 rounded-full transition-all duration-300 ease-out hover:text-[#0f7c85] overflow-hidden">
+                  <span className="relative z-10">Dashboard</span>
+                  <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-accent transition-all duration-300 ease-out group-hover:w-[60%] rounded-full"></span>
+                </Link>
                 <button
                   onClick={() => signOut({ callbackUrl: '/' })}
-                  className="nav-item text-sm md:text-[15px] font-medium text-secondary relative py-1.5 transition-colors hover:text-red-500 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-red-500 after:transition-all after:duration-300 hover:after:w-full border-none bg-transparent cursor-pointer"
+                  className="nav-item group text-sm md:text-[15px] font-medium text-secondary relative py-2 px-4 rounded-full transition-all duration-300 ease-out hover:text-red-500 border-none bg-transparent cursor-pointer overflow-hidden"
                 >
-                  Logout
+                  <span className="relative z-10">Logout</span>
+                  <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-red-500 transition-all duration-300 ease-out group-hover:w-[60%] rounded-full"></span>
                 </button>
               </>
             ) : (
-              <a href="/login" className="nav-item text-sm md:text-[15px] font-medium text-secondary relative py-1.5 transition-colors hover:text-primary after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-accent after:transition-all after:duration-300 hover:after:w-full">Login</a>
+              <a href="/login" className="nav-item group text-sm md:text-[15px] font-medium text-secondary relative py-2 px-4 rounded-full transition-all duration-300 ease-out hover:text-[#0f7c85] hover:bg-[#0f7c85]/10 overflow-hidden">
+                <span className="relative z-10">Login</span>
+                <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-accent transition-all duration-300 ease-out group-hover:w-[60%] rounded-full"></span>
+              </a>
             )}
           </nav>
 

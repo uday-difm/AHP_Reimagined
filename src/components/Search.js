@@ -158,14 +158,12 @@ export default function Search() {
       </button>
 
       {/* Glassmorphic Search Overlay Modal */}
-      <div 
-        className={`fixed inset-0 w-full h-screen bg-white/85 backdrop-blur-2xl z-[99999] flex flex-col justify-start items-center p-6 md:p-16 transition-all duration-500 ${
-          isOpen ? 'opacity-100 pointer-events-auto visible' : 'opacity-0 pointer-events-none invisible'
-        }`}
+      <div
+        className={`fixed inset-0 w-full h-screen bg-white/85 backdrop-blur-2xl z-[99999] flex flex-col justify-start items-center p-6 md:p-16 transition-all duration-500 ${isOpen ? 'opacity-100 pointer-events-auto visible' : 'opacity-0 pointer-events-none invisible'
+          }`}
       >
-        <div className={`w-full max-w-[800px] flex flex-col items-center flex-1 transition-transform duration-700 ${
-          isOpen ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
-        }`}>
+        <div className={`w-full max-w-[800px] flex flex-col items-center flex-1 transition-transform duration-700 ${isOpen ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
+          }`}>
           {/* Top Row: Close button */}
           <div className="w-full flex justify-end mb-6">
             <button
@@ -211,7 +209,7 @@ export default function Search() {
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">
                   Found {allResults.length} matching guides
                 </span>
-                
+
                 {allResults.map((art) => (
                   <Link
                     key={art.slug}

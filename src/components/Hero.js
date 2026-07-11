@@ -44,7 +44,7 @@ export default function Hero() {
       {/* Decorative gradient circle flare blur */}
       <div className="absolute w-[450px] h-[450px] md:w-[800px] md:h-[800px] rounded-full bg-gradient-to-tr from-accent/20 to-purple-500/15 top-[-60px] md:top-[-120px] right-[-120px] md:right-[-250px] pointer-events-none z-0 blur-xl" />
 
-      <div className="container hero-container relative z-10 flex flex-col pt-4 md:pt-8 -mt-12 md:-mt-20">
+      <div className="container hero-container relative z-10 flex flex-col pt-32 md:pt-40">
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 items-start">
 
@@ -114,18 +114,8 @@ export default function Hero() {
               </div>
             </div>
           </div> */}
-
-          {/* Right Column: Ad Space */}
-          {/* <div className="flex flex-col w-full lg:max-w-xs ml-auto -mt-2 md:-mt-6">
-            <div className="bg-white/40 border border-slate-200/40 rounded-2xl p-4.5 shadow-sm backdrop-blur-md">
-              <AdSlot zone="hero-sidebar-bottom" />
-            </div>
-          </div> */}
-
-          {/* Right Column: Empty */}
-          <div></div>
-
         </div>
+
       </div>
     </section>
   );
