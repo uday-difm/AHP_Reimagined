@@ -68,11 +68,11 @@ function LoginAndProjectLanding() {
 
   // If already authenticated, check if role is admin and route to dashboard
   useEffect(() => {
-    if (status === "authenticated") {
+    if (status === "authenticated" && session?.user?.globalRole !== "USER") {
       const callbackUrl = searchParams.get("callbackUrl") || "/dashboard/dashboard";
       router.replace(callbackUrl);
     }
-  }, [status, router, searchParams]);
+  }, [status, session, router, searchParams]);
 
   async function handleSubmit(e) {
     e.preventDefault();

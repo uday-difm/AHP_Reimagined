@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import prisma from "@/lib/prisma";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { requireAuth } from "@/lib/requireAuth";
@@ -7,6 +8,13 @@ import { getSiteForUser } from "@/lib/getSiteForUser";
 export const dynamic = "force-dynamic";
 
 export default async function Layout({ children }) {
+  const headersList = await headers();
+  const pathname = headersList.get("x-pathname") || "";
+
+  if (pathname.includes("/dashboard/login")) {
+    return <>{children}</>;
+  }
+
   const user = await requireAuth();
 
   if (!user) {

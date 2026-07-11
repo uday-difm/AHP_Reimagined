@@ -215,8 +215,8 @@ export const authOptions = {
   },
 
   pages: {
-    signIn: "/login",
-    error: "/login",
+    signIn: "/dashboard/login",
+    error: "/dashboard/login",
   },
 
   useSecureCookies: false,

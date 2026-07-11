@@ -4,7 +4,6 @@ import CustomCursor from '@/components/CustomCursor';
 import BackdropBlobs from '@/components/BackdropBlobs';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
-import Marquee from '@/components/Marquee';
 import WellnessShowcase from '@/components/WellnessShowcase';
 import HomeQuizWidget from '@/components/HomeQuizWidget';
 import ArticlesGrid from '@/components/ArticlesGrid';
@@ -29,7 +28,6 @@ export default async function Home() {
 
       {/* Persistent Navigation */}
 
-      <Marquee />
       <Header />
 
       {/* Modular Page Sections */}

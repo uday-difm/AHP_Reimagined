@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useSession, signOut } from 'next-auth/react';
 import Link from 'next/link';
 import Search from '@/components/Search';
+import Marquee from '@/components/Marquee';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -30,6 +31,7 @@ export default function Header() {
 
   return (
     <>
+      <Marquee />
       {/* Header */}
       <header className="fixed top-[40px] left-0 w-full flex items-center h-20 bg-white/30 backdrop-blur-lg z-[9000]" style={{ WebkitBackdropFilter: 'blur(48px)' }}>
         <div className="header-container flex justify-between items-center w-full  mx-auto px-6 md:px-10">
