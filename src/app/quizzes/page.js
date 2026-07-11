@@ -51,22 +51,24 @@ export default function QuizzesPage() {
               Pick a category below and discover actionable insights about sleep quality, stress indices, nutrition gut health, and Ayurvedic dosha mind-body constitution.
             </p>
 
-            {/* Modern Search Input */}
-            <div className="max-w-md mx-auto relative mb-6">
-              <input
-                type="text"
-                placeholder="Search wellness quizzes..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-6 py-4 rounded-full border border-slate-200 bg-white text-[14px] text-primary focus:outline-none focus:ring-2 focus:ring-[#0f7c85]/20 focus:border-[#0f7c85] transition-all"
-                style={{ boxShadow: '0 4px 16px rgba(0,0,0,0.02)' }}
-              />
-              <span className="absolute left-4.5 top-1/2 -translate-y-1/2 text-slate-400">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-              </span>
-            </div>
+            {/* Modern Search Input — only for authenticated users */}
+            {isAuthenticated && (
+              <div className="max-w-2xl mx-auto relative mb-6">
+                <input
+                  type="text"
+                  placeholder="Search wellness quizzes..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-12 pr-6 py-4 rounded-full border border-slate-200 bg-white text-[14px] text-primary focus:outline-none focus:ring-2 focus:ring-[#0f7c85]/20 focus:border-[#0f7c85] transition-all"
+                  style={{ boxShadow: '0 4px 16px rgba(0,0,0,0.02)' }}
+                />
+                <span className="absolute left-4.5 top-1/2 -translate-y-1/2 text-slate-400">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </span>
+              </div>
+            )}
           </div>
         </section>
 
@@ -74,25 +76,64 @@ export default function QuizzesPage() {
         <section className="py-12 px-4">
           <div className="container mx-auto px-4">
             {!isAuthenticated ? (
-              <div className="max-w-md mx-auto bg-white border border-slate-200/60 rounded-[28px] p-8 md:p-10 text-center shadow-lg my-12">
-                <div className="w-14 h-14 rounded-full bg-[#0f7c85]/10 text-[#0f7c85] flex items-center justify-center mx-auto mb-6">
-                  <QuizIcon name="general-wellness" className="w-7 h-7" />
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center my-12">
+                {/* Left: Info Section */}
+                <div className="text-left space-y-6">
+                  <span className="text-[#0f7c85] text-[11px] font-extrabold uppercase tracking-[3px] bg-[#0f7c85]/10 px-3.5 py-1.5 rounded-full w-max inline-block">
+                    Exclusive Member Benefits
+                  </span>
+                  <h2 className="font-heading font-extrabold text-3xl md:text-4xl text-[#1e2a35] leading-tight">
+                    Unlock Your Personalized <br />
+                    <span className="text-[#0f7c85]">Wellness Dashboard</span>
+                  </h2>
+                  <p className="text-secondary text-[15px] leading-relaxed">
+                    Take control of your health. Create a free account to access our interactive wellness checks, save your scores, and receive advisor-vetted insights.
+                  </p>
+                  
+                  <div className="space-y-4 pt-2">
+                    {[
+                      { t: 'Interactive Health Checks', d: 'Evaluate sleep patterns, stress resilience, and biophilic dosha maps.' },
+                      { t: 'Secure Progress Logs', d: 'Track score metrics over time and save trends to your dashboard.' },
+                      { t: 'Empathetic Advising Matches', d: 'Receive tailored advice based on your unique wellness profiles.' },
+                    ].map((item, idx) => (
+                      <div key={idx} className="flex gap-4 items-start">
+                        <div className="w-6 h-6 rounded-full bg-[#e8f8f0] text-[#27ae60] flex items-center justify-center shrink-0 mt-0.5">
+                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                          </svg>
+                        </div>
+                        <div>
+                          <h4 className="font-heading font-bold text-[15px] text-[#1e2a35]">{item.t}</h4>
+                          <p className="text-[13px] text-secondary mt-0.5">{item.d}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <h2 className="font-heading font-extrabold text-[24px] text-primary mb-3">Login Required</h2>
-                <p className="text-secondary text-[13.5px] leading-relaxed mb-8 max-w-xs mx-auto">
-                  Please sign in to view available quizzes, evaluate your wellness profile, and track your scores.
-                </p>
-                <Link
-                  href="/login?callbackUrl=/quizzes"
-                  className="bg-[#0f7c85] hover:bg-[#0c6b73] text-white px-8 py-3 rounded-full font-bold text-[14px] no-underline transition-all block shadow-sm"
-                >
-                  Login to Continue
-                </Link>
+
+                {/* Right: Square Login Required Card */}
+                <div className="flex justify-center lg:justify-end">
+                  <div className="w-full max-w-[440px] aspect-square flex flex-col justify-center items-center bg-white border border-slate-200/60 rounded-[32px] p-8 md:p-10 text-center shadow-lg">
+                    <div className="w-14 h-14 rounded-full bg-[#0f7c85]/10 text-[#0f7c85] flex items-center justify-center mb-6">
+                      <QuizIcon name="general-wellness" className="w-7 h-7" />
+                    </div>
+                    <h3 className="font-heading font-bold text-[20px] text-primary mb-3">Login Required</h3>
+                    <p className="text-secondary text-[13.5px] leading-relaxed mb-8 max-w-xs mx-auto">
+                      Please sign in to view available quizzes, evaluate your wellness profile, and track your scores.
+                    </p>
+                    <Link
+                      href="/login?callbackUrl=/quizzes"
+                      className="bg-[#0f7c85] hover:bg-[#0c6b73] text-white px-8 py-3.5 rounded-full font-bold text-[14px] no-underline transition-all block shadow-sm w-full"
+                    >
+                      Login to Continue
+                    </Link>
+                  </div>
+                </div>
               </div>
             ) : (
               <>
                 {/* Quizzes Grid (only showing 1 quiz card centered) */}
-                <div className="flex justify-center mx-auto">
+                <div className="w-full max-w-4xl mx-auto">
                   {filteredQuizzes.length > 0 ? (
                     <QuizCard quiz={filteredQuizzes[0]} />
                   ) : (

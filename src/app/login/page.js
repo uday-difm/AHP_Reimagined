@@ -6,7 +6,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import ScrollReveal from '@/components/ScrollReveal';
 import { Loader2 } from 'lucide-react';
 
 function LoginClient() {
@@ -146,10 +145,14 @@ function LoginClient() {
     <div className="min-h-screen bg-[#f8fafc] flex flex-col justify-between">
       <Header />
 
-      <main className="flex-1 flex items-center justify-center px-4 pt-32 pb-20">
-        <div className="w-full max-w-[440px] min-h-[530px] flex flex-col bg-white rounded-[32px] border border-slate-200/60 p-8 md:p-10 shadow-xl"
+      <main className="flex-1 flex items-center justify-center px-4 pt-48 pb-36">
+        <div className="w-full max-w-[620px] min-h-[620px] flex flex-col bg-white rounded-[32px] border border-slate-200/60 p-8 md:p-10 shadow-xl"
           style={{ boxShadow: '0 12px 36px rgba(0,0,0,0.03)' }}>
-          
+
+          <h2 className="text-center font-heading font-extrabold text-[24px] text-[#1e2a35] mb-6">
+            Sign Up or Login
+          </h2>
+
           {/* Header tabs */}
           <div className="flex border-b border-slate-100 mb-8">
             <button
@@ -176,129 +179,133 @@ function LoginClient() {
 
           {/* Form */}
           {activeTab === 'login' ? (
-            <form onSubmit={handleLogin} className="space-y-4">
-              <div>
-                <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="name@example.com"
-                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3.5 text-[13.5px] outline-none focus:border-[#0f7c85] focus:bg-white transition-all duration-200"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3.5 text-[13.5px] outline-none focus:border-[#0f7c85] focus:bg-white transition-all duration-200"
-                  required
-                />
-              </div>
-
-              {error && (
-                <div className="bg-red-50 text-red-500 rounded-xl p-3 text-[12px] font-semibold border border-red-100">
-                  ⚠️ {error}
+            <form onSubmit={handleLogin} className="flex-1 flex flex-col justify-between">
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="name@example.com"
+                    className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3.5 text-[13.5px] outline-none focus:border-[#0f7c85] focus:bg-white transition-all duration-200"
+                    required
+                  />
                 </div>
-              )}
 
-              {successMsg && (
-                <div className="bg-green-50 text-[#00b050] rounded-xl p-3 text-[12px] font-semibold border border-green-100">
-                  ✓ {successMsg}
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3.5 text-[13.5px] outline-none focus:border-[#0f7c85] focus:bg-white transition-all duration-200"
+                    required
+                  />
                 </div>
-              )}
+
+                {error && (
+                  <div className="bg-red-50 text-red-500 rounded-xl p-3 text-[12px] font-semibold border border-red-100">
+                    ⚠️ {error}
+                  </div>
+                )}
+
+                {successMsg && (
+                  <div className="bg-green-50 text-[#00b050] rounded-xl p-3 text-[12px] font-semibold border border-green-100">
+                    ✓ {successMsg}
+                  </div>
+                )}
+              </div>
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-4 rounded-full font-heading font-bold text-[14px] text-white bg-[#0f7c85] hover:bg-[#0c6b73] transition-colors disabled:opacity-50 cursor-pointer shadow-sm"
+                className="w-full py-4 rounded-full font-heading font-bold text-[14px] text-white bg-[#0f7c85] hover:bg-[#0c6b73] transition-colors disabled:opacity-50 cursor-pointer shadow-sm mt-8"
               >
                 {loading ? 'Signing In...' : 'Sign In'}
               </button>
             </form>
           ) : (
-            <form onSubmit={handleRegister} className="space-y-4">
-              <div>
-                <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="John Doe"
-                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3.5 text-[13.5px] outline-none focus:border-[#0f7c85] focus:bg-white transition-all duration-200"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">
-                  Username
-                </label>
-                <input
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  placeholder="johndoe"
-                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3.5 text-[13.5px] outline-none focus:border-[#0f7c85] focus:bg-white transition-all duration-200"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="name@example.com"
-                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3.5 text-[13.5px] outline-none focus:border-[#0f7c85] focus:bg-white transition-all duration-200"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Min 6 characters"
-                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3.5 text-[13.5px] outline-none focus:border-[#0f7c85] focus:bg-white transition-all duration-200"
-                  required
-                />
-              </div>
-
-              {error && (
-                <div className="bg-red-50 text-red-500 rounded-xl p-3 text-[12px] font-semibold border border-red-100">
-                  ⚠️ {error}
+            <form onSubmit={handleRegister} className="flex-1 flex flex-col justify-between">
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">
+                    Full Name
+                  </label>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="John Doe"
+                    className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3.5 text-[13.5px] outline-none focus:border-[#0f7c85] focus:bg-white transition-all duration-200"
+                    required
+                  />
                 </div>
-              )}
 
-              {successMsg && (
-                <div className="bg-green-50 text-[#00b050] rounded-xl p-3 text-[12px] font-semibold border border-green-100">
-                  ✓ {successMsg}
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">
+                    Username
+                  </label>
+                  <input
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="johndoe"
+                    className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3.5 text-[13.5px] outline-none focus:border-[#0f7c85] focus:bg-white transition-all duration-200"
+                    required
+                  />
                 </div>
-              )}
+
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="name@example.com"
+                    className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3.5 text-[13.5px] outline-none focus:border-[#0f7c85] focus:bg-white transition-all duration-200"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Min 6 characters"
+                    className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3.5 text-[13.5px] outline-none focus:border-[#0f7c85] focus:bg-white transition-all duration-200"
+                    required
+                  />
+                </div>
+
+                {error && (
+                  <div className="bg-red-50 text-red-500 rounded-xl p-3 text-[12px] font-semibold border border-red-100">
+                    ⚠️ {error}
+                  </div>
+                )}
+
+                {successMsg && (
+                  <div className="bg-green-50 text-[#00b050] rounded-xl p-3 text-[12px] font-semibold border border-green-100">
+                    ✓ {successMsg}
+                  </div>
+                )}
+              </div>
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-4 rounded-full font-heading font-bold text-[14px] text-white bg-[#0f7c85] hover:bg-[#0c6b73] transition-colors disabled:opacity-50 cursor-pointer shadow-sm"
+                className="w-full py-4 rounded-full font-heading font-bold text-[14px] text-white bg-[#0f7c85] hover:bg-[#0c6b73] transition-colors disabled:opacity-50 cursor-pointer shadow-sm mt-8"
               >
                 {loading ? 'Creating Account...' : 'Create Account'}
               </button>

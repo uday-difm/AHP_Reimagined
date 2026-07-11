@@ -122,7 +122,9 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
     setCurrentPage(pageNumber);
     const section = document.getElementById('blogs-main');
     if (section) {
-      section.scrollIntoView({ behavior: 'smooth' });
+      const yOffset = -120; // Offset to account for the fixed header + marquee height
+      const y = section.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
     }
   };
 
