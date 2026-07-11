@@ -44,13 +44,15 @@ export default function Hero() {
       {/* Decorative gradient circle flare blur */}
       <div className="absolute w-[450px] h-[450px] md:w-[800px] md:h-[800px] rounded-full bg-gradient-to-tr from-accent/20 to-purple-500/15 top-[-60px] md:top-[-120px] right-[-120px] md:right-[-250px] pointer-events-none z-0 blur-xl" />
 
-      <div className="container hero-container relative z-10 flex flex-col pt-4 md:pt-8">
+      <div className="container hero-container relative z-10 flex flex-col pt-32 md:pt-40">
 
-        <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_1.1fr_0.9fr] gap-8 lg:gap-10 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 items-start">
 
-          {/* Left Column: Hero Text */}
-          <div className="flex flex-col -mt-2 md:-mt-6">
-            <div className="w-full text-left max-w-2xl md:-ml-2">
+          {/* Left Column: All Content */}
+          <div className="flex flex-col gap-8 md:gap-12">
+
+            {/* Hero Text */}
+            <div className="w-full text-left md:-ml-2">
               <div className="flex items-center gap-2 text-[#5a8b43] font-medium text-[14px] md:text-[16px] mb-4">
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M12 2C6.48 2 2 6.48 2 12c0 1.25.24 2.45.67 3.56l-1.38 1.38 1.41 1.41 1.38-1.38C5.19 20.8 7.42 22 10 22c5.52 0 10-4.48 10-10S15.52 2 10 2zm0 18c-2.03 0-3.92-.78-5.34-2.06l6.4-6.4 1.41 1.41-6.4 6.4C9.55 19.8 10.74 20 12 20c4.41 0 8-3.59 8-8s-3.59-8-8-8-8 3.59-8 8c0 1.37.34 2.65.94 3.76l6.3-6.3 1.41 1.41-6.3 6.3c1.78 2.06 4.46 3.19 7.31 3.19z" />
@@ -112,15 +114,8 @@ export default function Hero() {
               </div>
             </div>
           </div> */}
-
-          {/* Right Column: Ad Space */}
-          {/* <div className="flex flex-col w-full lg:max-w-xs ml-auto -mt-2 md:-mt-6">
-            <div className="bg-white/40 border border-slate-200/40 rounded-2xl p-4.5 shadow-sm backdrop-blur-md">
-              <AdSlot zone="hero-sidebar-bottom" />
-            </div>
-          </div> */}
-
         </div>
+
       </div>
     </section>
   );
