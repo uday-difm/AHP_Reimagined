@@ -504,6 +504,7 @@ body.hb-no-scroll {
   from {
     transform: translate3d(100%, 0, 0);
   }
+
   to {
     transform: translate3d(0, 0, 0);
   }
@@ -513,6 +514,7 @@ body.hb-no-scroll {
   from {
     transform: translate3d(0, 0, 0);
   }
+
   to {
     transform: translate3d(100%, 0, 0);
   }
@@ -533,6 +535,7 @@ body.hb-no-scroll {
   from {
     transform: translate3d(100%, 0, 0);
   }
+
   to {
     transform: translate3d(0, 0, 0);
   }
@@ -542,6 +545,7 @@ body.hb-no-scroll {
   from {
     transform: translate3d(0, 0, 0);
   }
+
   to {
     transform: translate3d(100%, 0, 0);
   }
@@ -558,7 +562,8 @@ body.hb-no-scroll {
 }
 
 /* ─── Lenis Scroll Smoother ─── */
-html.lenis, html.lenis body {
+html.lenis,
+html.lenis body {
   height: auto;
 }
 
@@ -589,15 +594,18 @@ html.lenis, html.lenis body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #0f7c85; /* brand teal */
+  background: #0f7c85;
+  /* brand teal */
   border: 3px solid transparent;
-  background-clip: padding-box; /* keeps padding transparent around thumb */
+  background-clip: padding-box;
+  /* keeps padding transparent around thumb */
   border-radius: 9999px;
   transition: background 0.3s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #3aadaf; /* lighter hover teal */
+  background: #3aadaf;
+  /* lighter hover teal */
 }
 
 /* Firefox compatibility */
@@ -616,4 +624,8 @@ html.lenis, html.lenis body {
   height: auto !important;
   align-self: stretch !important;
   display: flex !important;
+}
+
+canvas {
+  display: block;
 }

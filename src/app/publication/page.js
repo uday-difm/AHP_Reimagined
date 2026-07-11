@@ -9,6 +9,7 @@ import CustomCursor from '@/components/CustomCursor';
 import ScrollReveal from '@/components/ScrollReveal';
 import BackdropBlobs from '@/components/BackdropBlobs';
 import Button from '@/components/Button';
+import Scene from '@/components/Scene';
 
 const stats = [
   { value: '145k+', label: 'Active Readers' },
@@ -229,57 +230,8 @@ export default function PublicationPage() {
           <div className="flex flex-col md:flex-row items-center gap-10 xl:gap-14 justify-between">
 
             {/* Left — 3D Magazine Cover (3D Book effect) */}
-            <Link href="/blogs/the-mindfulness-issue" className="flex-shrink-0 reveal-scale book-3d-container block no-underline">
-              <div className="book-3d">
-                {/* Spine */}
-                <div className="book-3d-spine" />
-                
-                {/* Top & Bottom page stack edges */}
-                <div className="book-3d-pages-top" />
-                <div className="book-3d-pages-bottom" />
-                
-                {/* Front Cover */}
-                <div className="book-3d-cover">
-                  <Image
-                    src="/images/mag_mindfulness.png"
-                    alt="The Mindfulness Issue – Spring 2024"
-                    fill
-                    sizes="(max-width: 768px) 200px, 240px"
-                    className="object-cover"
-                    priority
-                  />
-                </div>
-                
-                {/* Pages Thickness */}
-                <div className="book-3d-pages" />
-                
-                {/* Back Cover */}
-                <div className="book-3d-back p-5 text-white flex flex-col justify-between select-none">
-                  <div className="flex flex-col gap-3.5 text-left">
-                    <div className="border-b border-white/20 pb-2.5">
-                      <span className="text-[9px] font-bold text-white/70 uppercase tracking-[2px] block mb-0.5">EDITORIAL BOARD</span>
-                      <h4 className="font-heading font-extrabold text-[14px] md:text-[15px] text-white tracking-[-0.5px]">Spring 2024 Issue</h4>
-                    </div>
 
-                    <div className="flex flex-col gap-2">
-                      <span className="text-[10px] text-white/50 font-bold uppercase tracking-[1px] block">Inside This Issue:</span>
-                      <ul className="text-[11.5px] leading-relaxed text-white/90 list-disc pl-3.5 space-y-1 font-medium">
-                        <li>Neuroscience of Focus</li>
-                        <li>Anxiety Somatic Resets</li>
-                        <li>Circadian Rhythms & Sleep</li>
-                        <li>Dosha-Balanced Nutrition</li>
-                      </ul>
-                    </div>
-                  </div>
-
-                  <span
-                    className="w-full text-center bg-white text-[#0f7c85] font-bold text-[11px] py-2 rounded-full hover:bg-white/90 transition-all duration-300 shadow-md no-underline block"
-                  >
-                    Read Digital Issue →
-                  </span>
-                </div>
-              </div>
-            </Link>
+            <Scene />
 
             {/* Middle — Info */}
             <div className="flex-grow max-w-xl reveal-slide">
@@ -322,7 +274,7 @@ export default function PublicationPage() {
                   <span className="inline-block bg-[#27ae60]/10 border border-[#27ae60]/20 text-[#27ae60] font-bold text-[9px] uppercase tracking-[1.5px] px-2.5 py-1 rounded-full mb-3.5">
                     Partner Highlight
                   </span>
-                  
+
                   <div className="relative w-full h-[120px] rounded-2xl overflow-hidden mb-4 border border-slate-100 shadow-sm bg-slate-50">
                     <Image
                       src="/images/service_partner_roundup_mockup.png"
