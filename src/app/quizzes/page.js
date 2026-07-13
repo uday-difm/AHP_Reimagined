@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useSession } from 'next-auth/react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -15,9 +15,45 @@ export default function QuizzesPage() {
   const { status } = useSession();
   const isAuthenticated = status === 'authenticated';
   const [searchQuery, setSearchQuery] = useState('');
+  const [dbQuestions, setDbQuestions] = useState(null);
+
+  useEffect(() => {
+    // We use standard fetch since this is a Client Component
+    fetch('/api/quizess/quiz?category=general-wellness')
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => {
+        if (data && data.length > 0) {
+          const formatted = data.map((q) => ({
+            id: q._id,
+            text: q.question,
+            options: q.options.map((opt, idx) => ({
+              label: opt,
+              score: idx === q.correctAnswer ? 3 : 0,
+            })),
+            correctAnswer: q.correctAnswer,
+            explanation: q.explanation || "",
+          }));
+          setDbQuestions(formatted);
+        }
+      })
+      .catch((err) => console.error("Error loading db quizzes:", err));
+  }, []);
+
+  const displayQuizzes = useMemo(() => {
+    return quizzes.map((q) => {
+      if (q.slug === 'general-wellness' && dbQuestions && dbQuestions.length > 0) {
+        return {
+          ...q,
+          questions: dbQuestions,
+          questionCount: dbQuestions.length,
+        };
+      }
+      return q;
+    });
+  }, [dbQuestions]);
 
   // Only keep the single General Wellness Quiz
-  const filteredQuizzes = quizzes.filter(
+  const filteredQuizzes = displayQuizzes.filter(
     (quiz) => quiz.slug === 'general-wellness' &&
     (quiz.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
      quiz.description.toLowerCase().includes(searchQuery.toLowerCase()))

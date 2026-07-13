@@ -959,6 +959,7 @@ model AdAnalytic {
 
 model Quiz {
   id            Int     @id @default(autoincrement()) @map("_id")
+  category      String? @default("general-wellness") @db.VarChar(100)
   question      String  @db.Text
   options       String  @db.Text
   correctAnswer String  @db.Text

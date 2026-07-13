@@ -19,8 +19,18 @@ import {
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
+const QUIZ_CATEGORIES = [
+  { value: "home-page", label: "Home Page" },
+  { value: "general-wellness", label: "General Wellness" },
+  { value: "sleep-quality", label: "Sleep Quality" },
+  { value: "stress-burnout", label: "Stress & Burnout" },
+  { value: "nutrition-gut", label: "Nutrition & Gut Health" },
+  { value: "dosha-body-type", label: "Ayurvedic Dosha" }
+];
+
 function emptyForm() {
   return {
+    category: "general-wellness",
     question: "",
     options: ["", "", "", ""],
     correctAnswer: "0",
@@ -101,6 +111,24 @@ function QuizForm({ initial, onSave, onCancel, saving }) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      {/* Quiz Type */}
+      <div>
+        <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+          Quiz Type <span className="text-red-500">*</span>
+        </label>
+        <select
+          value={form.category}
+          onChange={(e) => setField("category", e.target.value)}
+          className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition cursor-pointer"
+        >
+          {QUIZ_CATEGORIES.map((cat) => (
+            <option key={cat.value} value={cat.value}>
+              {cat.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
       {/* Question */}
       <div>
         <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">
@@ -215,6 +243,9 @@ function QuizRow({ quiz, onEdit, onDelete, deleting }) {
             {quiz.question}
           </p>
           <div className="flex flex-wrap items-center gap-3 mt-1.5">
+            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-800 uppercase tracking-wide">
+              {QUIZ_CATEGORIES.find((c) => c.value === quiz.category)?.label || quiz.category || "General"}
+            </span>
             <span className="text-[11px] text-slate-400">
               {quiz.options.length} options
             </span>
@@ -296,12 +327,16 @@ export default function QuizzesAdminPage() {
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(null);
   const [search, setSearch] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("all");
 
   const load = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/dashboard/quizzes");
+      const url = categoryFilter !== "all" 
+        ? `/api/dashboard/quizzes?category=${categoryFilter}` 
+        : "/api/dashboard/quizzes";
+      const res = await fetch(url);
       if (!res.ok) throw new Error("Failed to load quizzes");
       setQuizzes(await res.json());
     } catch (e) {
@@ -309,9 +344,9 @@ export default function QuizzesAdminPage() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [categoryFilter]);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { load(); }, [load, categoryFilter]);
 
   // Save (create or update)
   const handleSave = async (form) => {
@@ -441,6 +476,7 @@ export default function QuizzesAdminPage() {
               options: editTarget.options,
               correctAnswer: editTarget.correctAnswer,
               explanation: editTarget.explanation || "",
+              category: editTarget.category || "general-wellness",
             } : undefined}
             onSave={handleSave}
             onCancel={() => { setShowForm(false); setEditTarget(null); }}
@@ -449,9 +485,8 @@ export default function QuizzesAdminPage() {
         </div>
       )}
 
-      {/* ── Search + List ── */}
       <div className="space-y-3">
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3">
           <input
             type="search"
             value={search}
@@ -459,6 +494,18 @@ export default function QuizzesAdminPage() {
             placeholder="Search questions…"
             className="flex-1 max-w-sm px-4 py-2.5 text-sm bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-xs transition"
           />
+          
+          <select
+            value={categoryFilter}
+            onChange={(e) => setCategoryFilter(e.target.value)}
+            className="px-3.5 py-2.5 text-xs font-bold text-slate-700 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer w-full sm:w-auto"
+          >
+            <option value="all">All Quiz Types</option>
+            {QUIZ_CATEGORIES.map(cat => (
+              <option key={cat.value} value={cat.value}>{cat.label}</option>
+            ))}
+          </select>
+
           {search && (
             <span className="text-xs text-slate-500">
               {filtered.length} of {quizzes.length} shown
