@@ -991,6 +991,9 @@ model Magazine {
   magazineId         String    @map("magazine_id") @db.VarChar(255)
   title              String    @map("magazine_title") @db.VarChar(255)
   description        String    @map("magazine_description") @db.Text
+  introduction       String?   @map("magazine_introduction") @db.Text
+  backImage          String?   @map("magazine_back_image") @db.VarChar(255)
+  spineImage         String?   @map("magazine_spine_image") @db.VarChar(255)
   tags               String    @map("magazine_tags") @db.VarChar(255)
   coverImage         String    @map("magazine_cover_image") @db.VarChar(255)
   link               String    @map("magazine_link") @db.VarChar(255)

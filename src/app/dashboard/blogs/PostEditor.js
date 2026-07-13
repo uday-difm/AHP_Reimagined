@@ -29,6 +29,7 @@ export default function PostEditor({
   siteId,
   post,
   categories = [],
+  tags = [],
   authors = [],
 }) {
   const router = useRouter();
@@ -49,6 +50,13 @@ export default function PostEditor({
   const [newCatName, setNewCatName] = useState("");
   const [catCreating, setCatCreating] = useState(false);
   const [catSearch, setCatSearch] = useState("");
+
+  /* ─────────────── Tags ─────────────── */
+  const [selectedTagIds, setSelectedTagIds] = useState([]);
+  const [localTags, setLocalTags] = useState(tags);
+  const [newTagName, setNewTagName] = useState("");
+  const [tagCreating, setTagCreating] = useState(false);
+  const [tagSearch, setTagSearch] = useState("");
 
   /* ─────────────── Scheduling ─────────────── */
   const [customPublishDate, setCustomPublishDate] = useState(false);
@@ -133,6 +141,10 @@ export default function PostEditor({
         setSelectedCategoryIds(post.categories.map((c) => c.id));
       }
 
+      if (post.tags) {
+        setSelectedTagIds(post.tags.map((t) => t.id));
+      }
+
       if (post.featuredImage) {
         setFeaturedImageId(post.featuredImage.id);
         setFeaturedImageUrl(
@@ -169,6 +181,7 @@ export default function PostEditor({
     canonicalUrl,
     ogImage,
     selectedCategoryIds,
+    selectedTagIds,
     featuredImageId,
     publishDate,
     status,
@@ -198,6 +211,7 @@ export default function PostEditor({
     seoTitle,
     seoDescription,
     selectedCategoryIds,
+    selectedTagIds,
   ]);
 
   async function autosaveDraft() {
@@ -219,6 +233,7 @@ export default function PostEditor({
           ogImage: ogImage || null,
           featuredImageId: featuredImageId || null,
           categoryIds: selectedCategoryIds,
+          tagIds: selectedTagIds,
           authorId: authorId || null,
           // Never auto-publish — only save as current status
         }),
@@ -299,6 +314,42 @@ export default function PostEditor({
     }
   };
 
+  const handleTagToggle = (id) => {
+    setSelectedTagIds((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
+    );
+  };
+
+  const handleCreateTag = async (e) => {
+    e.preventDefault();
+    if (!newTagName.trim()) return;
+    setTagCreating(true);
+    try {
+      const res = await fetch("/api/dashboard/tags", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-site-id": siteId,
+        },
+        body: JSON.stringify({ name: newTagName }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to create tag");
+      const tagObj = data.data?.tag ?? data.tag;
+      setLocalTags((prev) =>
+        [...prev, { ...tagObj, _count: { posts: 0 } }].sort((a, b) =>
+          a.name.localeCompare(b.name),
+        ),
+      );
+      setSelectedTagIds((prev) => [...prev, tagObj.id]);
+      setNewTagName("");
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setTagCreating(false);
+    }
+  };
+
   const handleSelectMedia = (media) => {
     if (mediaPickerTarget === "ogImage") {
       setOgImage(media.secureUrl || media.url);
@@ -338,6 +389,7 @@ export default function PostEditor({
       authorId: authorId || null,
       featuredImageId: featuredImageId || null,
       categoryIds: selectedCategoryIds,
+      tagIds: selectedTagIds,
       seoTitle: seoTitle || null,
       seoDescription: seoDescription || null,
       canonicalUrl: canonicalUrl || null,
@@ -384,6 +436,15 @@ export default function PostEditor({
 
   const selectedCategories = localCategories.filter((c) =>
     selectedCategoryIds.includes(c.id),
+  );
+
+  /* ─────────────── Filtered tags ─────────────── */
+  const filteredTags = localTags.filter((t) =>
+    t.name.toLowerCase().includes(tagSearch.toLowerCase()),
+  );
+
+  const selectedTags = localTags.filter((t) =>
+    selectedTagIds.includes(t.id),
   );
 
   /* ─────────────── Author display ─────────────── */
@@ -708,6 +769,291 @@ export default function PostEditor({
 
         {/* ── Right Sidebar ── */}
         <div className="space-y-5">
+          {/* Featured Image */}
+          <div className="bg-white border border-slate-100 rounded-2xl p-6 shadow-xs space-y-3">
+            <h2 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider pb-2 border-b border-slate-100">
+              Featured Image
+            </h2>
+
+            {featuredImageUrl ? (
+              <div className="space-y-2">
+                <div className="group relative aspect-video rounded-xl overflow-hidden border border-slate-100 bg-slate-50">
+                  <img
+                    src={featuredImageUrl}
+                    alt={featuredImageAlt || "Featured image"}
+                    className="w-full h-full object-cover transition duration-300 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-slate-900/50 opacity-0 group-hover:opacity-100 transition duration-200 flex items-center justify-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setMediaPickerTarget("featuredImage");
+                        setShowMediaPicker(true);
+                      }}
+                      className="px-3 py-1.5 bg-white text-slate-800 hover:bg-slate-50 rounded-lg text-[10px] font-bold shadow-sm transition"
+                    >
+                      Change
+                    </button>
+                    <button
+                      type="button"
+                      onClick={removeFeaturedImage}
+                      className="px-3 py-1.5 bg-rose-600 text-white hover:bg-rose-700 rounded-lg text-[10px] font-bold shadow-sm transition"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+                    Image Alt Text
+                  </label>
+                  <input
+                    type="text"
+                    value={featuredImageAlt}
+                    onChange={(e) => setFeaturedImageAlt(e.target.value)}
+                    placeholder="Describe the image for accessibility..."
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50/30 px-3 py-2 text-xs text-slate-700 outline-none hover:border-slate-300 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all duration-200"
+                  />
+                </div>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => {
+                  setMediaPickerTarget("featuredImage");
+                  setShowMediaPicker(true);
+                }}
+                className="w-full aspect-video border-2 border-dashed border-slate-200 hover:border-indigo-400 hover:bg-indigo-50/5 rounded-xl flex flex-col items-center justify-center gap-2 text-center p-4 transition-all duration-200 cursor-pointer group"
+              >
+                <div className="p-3 bg-slate-50 group-hover:bg-indigo-50 group-hover:text-indigo-600 text-slate-400 rounded-full transition">
+                  <ImageIcon size={20} />
+                </div>
+                <div>
+                  <span className="text-xs font-bold text-slate-700 block">
+                    Select Featured Image
+                  </span>
+                  <span className="text-[10px] text-slate-400 block mt-0.5">
+                    JPEG, PNG or WebP
+                  </span>
+                </div>
+              </button>
+            )}
+          </div>
+
+          {/* Categories */}
+          <div className="bg-white border border-slate-100 rounded-2xl p-6 shadow-xs space-y-3">
+            <h2 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider pb-2 border-b border-slate-100 flex items-center gap-1.5">
+              <Tag size={11} />
+              Categories
+            </h2>
+
+            {/* Selected chips */}
+            {selectedCategories.length > 0 && (
+              <div className="flex flex-wrap gap-1.5">
+                {selectedCategories.map((cat) => (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => handleCategoryToggle(cat.id)}
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-200 transition-colors group"
+                    title="Click to remove"
+                  >
+                    {cat.name}
+                    <X
+                      size={9}
+                      className="opacity-60 group-hover:opacity-100"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Category search */}
+            <div className="relative">
+              <Search
+                size={12}
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+              />
+              <input
+                type="text"
+                placeholder="Search categories..."
+                value={catSearch}
+                onChange={(e) => setCatSearch(e.target.value)}
+                className="w-full rounded-xl border border-slate-200 bg-slate-50/30 pl-8 pr-3 py-2 text-xs text-slate-700 outline-none hover:border-slate-300 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all duration-200"
+              />
+            </div>
+
+            {/* Category list */}
+            <div className="max-h-40 overflow-y-auto space-y-1 pr-1">
+              {filteredCategories.length === 0 ? (
+                <p className="text-[10px] text-slate-400 italic p-2">
+                  No categories match.
+                </p>
+              ) : (
+                filteredCategories.map((cat) => (
+                  <label
+                    key={cat.id}
+                    className="flex items-center justify-between p-2 rounded-lg hover:bg-slate-50 cursor-pointer transition-colors"
+                  >
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={selectedCategoryIds.includes(cat.id)}
+                        onChange={() => handleCategoryToggle(cat.id)}
+                        className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500/20 h-3.5 w-3.5"
+                      />
+                      <span className="text-xs font-semibold text-slate-700">
+                        {cat.name}
+                      </span>
+                    </div>
+                    <span className="text-[10px] text-slate-400">
+                      {cat._count?.posts ?? 0}
+                    </span>
+                  </label>
+                ))
+              )}
+            </div>
+
+            {/* Quick add */}
+            <div className="pt-1 border-t border-slate-100">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  placeholder="New category..."
+                  value={newCatName}
+                  onChange={(e) => setNewCatName(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      handleCreateCategory(e);
+                    }
+                  }}
+                  className="flex-1 rounded-xl border border-slate-200 bg-slate-50/30 px-3 py-2 text-xs text-slate-700 outline-none hover:border-slate-300 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all duration-200"
+                />
+                <button
+                  type="button"
+                  onClick={handleCreateCategory}
+                  disabled={catCreating || !newCatName.trim()}
+                  className="inline-flex items-center gap-1 px-3 py-2 bg-slate-800 hover:bg-slate-900 text-white disabled:bg-slate-300 text-[10px] font-bold rounded-xl transition-colors cursor-pointer"
+                >
+                  {catCreating ? (
+                    <Loader2 size={10} className="animate-spin" />
+                  ) : (
+                    <Plus size={10} />
+                  )}
+                  Add
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Tags */}
+          <div className="bg-white border border-slate-100 rounded-2xl p-6 shadow-xs space-y-3">
+            <h2 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider pb-2 border-b border-slate-100 flex items-center gap-1.5">
+              <Tag size={11} />
+              Tags
+            </h2>
+
+            {/* Selected chips */}
+            {selectedTags.length > 0 && (
+              <div className="flex flex-wrap gap-1.5">
+                {selectedTags.map((t) => (
+                  <button
+                    key={t.id}
+                    type="button"
+                    onClick={() => handleTagToggle(t.id)}
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#e8f4ff] text-[#0f7c85] border border-indigo-200 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-200 transition-colors group"
+                    title="Click to remove"
+                  >
+                    {t.name}
+                    <X
+                      size={9}
+                      className="opacity-60 group-hover:opacity-100"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Tag search */}
+            <div className="relative">
+              <Search
+                size={12}
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+              />
+              <input
+                type="text"
+                placeholder="Search tags..."
+                value={tagSearch}
+                onChange={(e) => setTagSearch(e.target.value)}
+                className="w-full rounded-xl border border-slate-200 bg-slate-50/30 pl-8 pr-3 py-2 text-xs text-slate-700 outline-none hover:border-slate-300 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all duration-200"
+              />
+            </div>
+
+            {/* Tag list */}
+            <div className="max-h-40 overflow-y-auto space-y-1 pr-1">
+              {filteredTags.length === 0 ? (
+                <p className="text-[10px] text-slate-400 italic p-2">
+                  No tags match.
+                </p>
+              ) : (
+                filteredTags.map((t) => (
+                  <label
+                    key={t.id}
+                    className="flex items-center justify-between p-2 rounded-lg hover:bg-slate-50 cursor-pointer transition-colors"
+                  >
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={selectedTagIds.includes(t.id)}
+                        onChange={() => handleTagToggle(t.id)}
+                        className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500/20 h-3.5 w-3.5"
+                      />
+                      <span className="text-xs font-semibold text-slate-700">
+                        {t.name}
+                      </span>
+                    </div>
+                    <span className="text-[10px] text-slate-400">
+                      {t._count?.posts ?? 0}
+                    </span>
+                  </label>
+                ))
+              )}
+            </div>
+
+            {/* Quick add */}
+            <div className="pt-1 border-t border-slate-100">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  placeholder="New tag..."
+                  value={newTagName}
+                  onChange={(e) => setNewTagName(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      handleCreateTag(e);
+                    }
+                  }}
+                  className="flex-1 rounded-xl border border-slate-200 bg-slate-50/30 px-3 py-2 text-xs text-slate-700 outline-none hover:border-slate-300 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all duration-200"
+                />
+                <button
+                  type="button"
+                  onClick={handleCreateTag}
+                  disabled={tagCreating || !newTagName.trim()}
+                  className="inline-flex items-center gap-1 px-3 py-2 bg-slate-800 hover:bg-slate-900 text-white disabled:bg-slate-300 text-[10px] font-bold rounded-xl transition-colors cursor-pointer"
+                >
+                  {tagCreating ? (
+                    <Loader2 size={10} className="animate-spin" />
+                  ) : (
+                    <Plus size={10} />
+                  )}
+                  Add
+                </button>
+              </div>
+            </div>
+          </div>
+
           {/* Publish Console */}
           <div className="bg-white border border-slate-100 rounded-2xl p-6 shadow-xs space-y-4">
             <h2 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider pb-2 border-b border-slate-100">
@@ -899,184 +1245,6 @@ export default function PostEditor({
                   </>
                 )}
               </button>
-            </div>
-          </div>
-
-          {/* Featured Image */}
-          <div className="bg-white border border-slate-100 rounded-2xl p-6 shadow-xs space-y-3">
-            <h2 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider pb-2 border-b border-slate-100">
-              Featured Image
-            </h2>
-
-            {featuredImageUrl ? (
-              <div className="space-y-2">
-                <div className="group relative aspect-video rounded-xl overflow-hidden border border-slate-100 bg-slate-50">
-                  <img
-                    src={featuredImageUrl}
-                    alt={featuredImageAlt || "Featured image"}
-                    className="w-full h-full object-cover transition duration-300 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-slate-900/50 opacity-0 group-hover:opacity-100 transition duration-200 flex items-center justify-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setMediaPickerTarget("featuredImage");
-                        setShowMediaPicker(true);
-                      }}
-                      className="px-3 py-1.5 bg-white text-slate-800 hover:bg-slate-50 rounded-lg text-[10px] font-bold shadow-sm transition"
-                    >
-                      Change
-                    </button>
-                    <button
-                      type="button"
-                      onClick={removeFeaturedImage}
-                      className="px-3 py-1.5 bg-rose-600 text-white hover:bg-rose-700 rounded-lg text-[10px] font-bold shadow-sm transition"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                    Image Alt Text
-                  </label>
-                  <input
-                    type="text"
-                    value={featuredImageAlt}
-                    onChange={(e) => setFeaturedImageAlt(e.target.value)}
-                    placeholder="Describe the image for accessibility..."
-                    className="w-full rounded-xl border border-slate-200 bg-slate-50/30 px-3 py-2 text-xs text-slate-700 outline-none hover:border-slate-300 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all duration-200"
-                  />
-                </div>
-              </div>
-            ) : (
-              <button
-                type="button"
-                onClick={() => {
-                  setMediaPickerTarget("featuredImage");
-                  setShowMediaPicker(true);
-                }}
-                className="w-full aspect-video border-2 border-dashed border-slate-200 hover:border-indigo-400 hover:bg-indigo-50/5 rounded-xl flex flex-col items-center justify-center gap-2 text-center p-4 transition-all duration-200 cursor-pointer group"
-              >
-                <div className="p-3 bg-slate-50 group-hover:bg-indigo-50 group-hover:text-indigo-600 text-slate-400 rounded-full transition">
-                  <ImageIcon size={20} />
-                </div>
-                <div>
-                  <span className="text-xs font-bold text-slate-700 block">
-                    Select Featured Image
-                  </span>
-                  <span className="text-[10px] text-slate-400 block mt-0.5">
-                    JPEG, PNG or WebP
-                  </span>
-                </div>
-              </button>
-            )}
-          </div>
-
-          {/* Categories */}
-          <div className="bg-white border border-slate-100 rounded-2xl p-6 shadow-xs space-y-3">
-            <h2 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider pb-2 border-b border-slate-100 flex items-center gap-1.5">
-              <Tag size={11} />
-              Categories
-            </h2>
-
-            {/* Selected chips */}
-            {selectedCategories.length > 0 && (
-              <div className="flex flex-wrap gap-1.5">
-                {selectedCategories.map((cat) => (
-                  <button
-                    key={cat.id}
-                    type="button"
-                    onClick={() => handleCategoryToggle(cat.id)}
-                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-200 transition-colors group"
-                    title="Click to remove"
-                  >
-                    {cat.name}
-                    <X
-                      size={9}
-                      className="opacity-60 group-hover:opacity-100"
-                    />
-                  </button>
-                ))}
-              </div>
-            )}
-
-            {/* Category search */}
-            <div className="relative">
-              <Search
-                size={12}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
-              />
-              <input
-                type="text"
-                placeholder="Search categories..."
-                value={catSearch}
-                onChange={(e) => setCatSearch(e.target.value)}
-                className="w-full rounded-xl border border-slate-200 bg-slate-50/30 pl-8 pr-3 py-2 text-xs text-slate-700 outline-none hover:border-slate-300 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all duration-200"
-              />
-            </div>
-
-            {/* Category list */}
-            <div className="max-h-40 overflow-y-auto space-y-1 pr-1">
-              {filteredCategories.length === 0 ? (
-                <p className="text-[10px] text-slate-400 italic p-2">
-                  No categories match.
-                </p>
-              ) : (
-                filteredCategories.map((cat) => (
-                  <label
-                    key={cat.id}
-                    className="flex items-center justify-between p-2 rounded-lg hover:bg-slate-50 cursor-pointer transition-colors"
-                  >
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="checkbox"
-                        checked={selectedCategoryIds.includes(cat.id)}
-                        onChange={() => handleCategoryToggle(cat.id)}
-                        className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500/20 h-3.5 w-3.5"
-                      />
-                      <span className="text-xs font-semibold text-slate-700">
-                        {cat.name}
-                      </span>
-                    </div>
-                    <span className="text-[10px] text-slate-400">
-                      {cat._count?.posts ?? 0}
-                    </span>
-                  </label>
-                ))
-              )}
-            </div>
-
-            {/* Quick add */}
-            <div className="pt-1 border-t border-slate-100">
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  placeholder="New category..."
-                  value={newCatName}
-                  onChange={(e) => setNewCatName(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault();
-                      handleCreateCategory(e);
-                    }
-                  }}
-                  className="flex-1 rounded-xl border border-slate-200 bg-slate-50/30 px-3 py-2 text-xs text-slate-700 outline-none hover:border-slate-300 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all duration-200"
-                />
-                <button
-                  type="button"
-                  onClick={handleCreateCategory}
-                  disabled={catCreating || !newCatName.trim()}
-                  className="inline-flex items-center gap-1 px-3 py-2 bg-slate-800 hover:bg-slate-900 text-white disabled:bg-slate-300 text-[10px] font-bold rounded-xl transition-colors cursor-pointer"
-                >
-                  {catCreating ? (
-                    <Loader2 size={10} className="animate-spin" />
-                  ) : (
-                    <Plus size={10} />
-                  )}
-                  Add
-                </button>
-              </div>
             </div>
           </div>
         </div>

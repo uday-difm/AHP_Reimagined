@@ -74,6 +74,8 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
 
+  const tagFilter = searchParams.get('tag') || null;
+
   // Sync category filter with search parameter
   useEffect(() => {
     const filter = searchParams.get('filter');
@@ -87,7 +89,7 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
   // Reset pagination to first page when search or filters change
   useEffect(() => {
     setCurrentPage(1);
-  }, [categoryFilter, searchQuery]);
+  }, [categoryFilter, searchQuery, tagFilter]);
 
   // Derive categories list from DB or fall back to standard defaults
   const defaultCategories = ['Physical Health', 'Mental Health', 'Holistic Ayurveda', 'Insurance Mappings'];
@@ -103,7 +105,8 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
       title: p.title,
       desc: p.excerpt || 'Read our medically vetted guide.',
       img: p.featuredImage?.url || '/images/holistic.png',
-      slug: p.slug
+      slug: p.slug,
+      tags: p.tags || []
     }))
     : mockArticles;
 
@@ -114,6 +117,16 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
       params.delete('filter');
     } else {
       params.set('filter', cat);
+    }
+    router.push(`/blogs?${params.toString()}`, { scroll: false });
+  };
+
+  const handleTagFilter = (tag) => {
+    const params = new URLSearchParams(searchParams);
+    if (!tag) {
+      params.delete('tag');
+    } else {
+      params.set('tag', tag);
     }
     router.push(`/blogs?${params.toString()}`, { scroll: false });
   };
@@ -130,9 +143,12 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
 
   const filteredArticles = displayArticles.filter(art => {
     const matchesFilter = categoryFilter === 'All' || art.category === categoryFilter;
+    const matchesTag = !tagFilter || (art.tags && art.tags.some(t => 
+      t.slug === tagFilter || t.name.toLowerCase() === tagFilter.toLowerCase()
+    ));
     const matchesSearch = art.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       art.desc.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesFilter && matchesSearch;
+    return matchesFilter && matchesTag && matchesSearch;
   });
 
   // Inject advertisement card into the display sequence at the 3rd position (index 2)
@@ -249,6 +265,21 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
               />
             </div>
           </div>
+
+          {/* Active Tag filter indicator */}
+          {tagFilter && (
+            <div className="flex items-center gap-2 bg-[#e8f4ff] border border-blue-200/30 text-[#0f7c85] px-3.5 py-1.5 rounded-xl text-xs font-semibold w-fit mb-4">
+              <span>Filtering by Tag: <strong>{tagFilter}</strong></span>
+              <button 
+                type="button"
+                onClick={() => handleTagFilter(null)}
+                className="hover:text-rose-650 transition-colors ml-1 font-bold font-sans cursor-pointer bg-transparent border-0 text-xs text-[#0f7c85]"
+              >
+                ✕
+              </button>
+            </div>
+          )}
+
           {/* Grid of Articles */}
           {displayedArticles.length === 0 ? (
             <div className="text-center py-20 bg-white border border-slate-200/50 rounded-3xl w-full">
@@ -308,6 +339,24 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
                       <p className="text-[12.5px] text-secondary leading-relaxed">
                         {art.desc}
                       </p>
+                      {art.tags && art.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-1 mt-1.5 relative z-10">
+                          {art.tags.map((t) => (
+                            <button
+                              key={t.id}
+                              type="button"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                handleTagFilter(t.slug || t.name);
+                              }}
+                              className="text-[9.5px] font-bold bg-[#e8f4ff] hover:bg-[#d4eaff] text-[#0f7c85] px-2 py-0.5 rounded-md uppercase tracking-[0.3px] transition cursor-pointer border-0"
+                            >
+                              #{t.name}
+                            </button>
+                          ))}
+                        </div>
+                      )}
                       <span className="text-[11px] font-bold text-accent mt-auto inline-flex items-center gap-1">
                         Read Guide <ChevronRight size={12} />
                       </span>

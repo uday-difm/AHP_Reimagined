@@ -273,9 +273,117 @@ const ARTICLES_DB = {
 export default function ArticlePage({ params: paramsPromise }) {
   const params = use(paramsPromise);
   const { slug } = params;
-  const article = ARTICLES_DB[slug];
+  const staticArticle = ARTICLES_DB[slug];
 
+  const [article, setArticle] = useState(staticArticle || null);
+  const [loading, setLoading] = useState(!staticArticle);
+  const [error, setError] = useState(null);
   const [activeCursor, setActiveCursor] = useState(false);
+
+  useEffect(() => {
+    if (staticArticle) {
+      setArticle(staticArticle);
+      setLoading(false);
+      return;
+    }
+
+    let active = true;
+    const fetchPost = async () => {
+      try {
+        setLoading(true);
+        let dbPost = null;
+        let mappedArticle = null;
+
+        try {
+          const res = await fetch(`/api/posts/${slug}`);
+          if (res.ok) {
+            const json = await res.json();
+            dbPost = json.data?.post ?? json.post;
+          }
+        } catch (e) {
+          console.log("Post fetch error, checking magazine fallback...", e);
+        }
+
+        if (dbPost) {
+          mappedArticle = {
+            title: dbPost.title,
+            category: dbPost.categories?.[0]?.name || 'General',
+            author: dbPost.author?.name || dbPost.author?.email?.split('@')[0] || 'A Health Place Expert',
+            reviewer: 'Editorial Team',
+            date: new Date(dbPost.publishedAt || dbPost.createdAt).toLocaleDateString('en-US', {
+              month: 'long',
+              day: 'numeric',
+              year: 'numeric'
+            }),
+            readTime: `${Math.max(1, Math.ceil((dbPost.content || '').replace(/<[^>]+>/g, '').trim().split(/\s+/).length / 200))} min read`,
+            img: dbPost.featuredImage?.url || '/images/holistic.png',
+            intro: dbPost.excerpt || '',
+            contentHtml: dbPost.content,
+            tags: dbPost.tags || []
+          };
+        } else {
+          // Fallback: Try fetching as a magazine from /api/magazine/${slug}
+          const magRes = await fetch(`/api/magazine/${slug}`);
+          if (!magRes.ok) {
+            throw new Error("Article or Magazine not found");
+          }
+          const magData = await magRes.json();
+          
+          mappedArticle = {
+            title: magData.magazine_title,
+            category: 'Digital Journal', // Force category to trigger the digital magazine view!
+            author: 'A Health Place Team',
+            reviewer: 'Editorial Team',
+            date: new Date(magData.magazine_date).toLocaleDateString('en-US', {
+              month: 'long',
+              day: 'numeric',
+              year: 'numeric'
+            }),
+            readTime: '15 min read',
+            img: magData.coverImage || magData.magazine_cover_image || '/images/holistic.png',
+            intro: magData.magazine_description || '', // Short description
+            letterTitle: 'Dear Readers,',
+            letterBody: magData.magazine_introduction || '', // Rich HTML/Text introduction given by backend dashboard!
+            letterSignature: 'A Health Place Team',
+            iframeUrl: magData.magazine_link || '', // PDF/Read link for Heyzine iframe reader
+            magCloudLink: magData.MagCloudLink || '',
+            tags: magData.magazine_tags ? magData.magazine_tags.split(',').map((t, idx) => ({ id: idx, name: t.trim() })) : []
+          };
+        }
+
+        if (active) {
+          setArticle(mappedArticle);
+          setError(null);
+        }
+      } catch (err) {
+        if (active) {
+          setError(err.message);
+        }
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchPost();
+
+    return () => {
+      active = false;
+    };
+  }, [slug, staticArticle]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-bg-light flex flex-col justify-between">
+        <Header />
+        <main className="container flex-grow flex flex-col items-center justify-center py-20 text-center">
+          <div className="w-10 h-10 border-4 border-accent border-t-transparent rounded-full animate-spin" />
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   if (!article) {
     return (
@@ -345,9 +453,10 @@ In this edition, we explore the core principles of ${article.title.toLowerCase()
                 <h3 className="font-heading font-extrabold text-primary text-[16px] mb-4">
                   {article.letterTitle || "Dear Readers,"}
                 </h3>
-                <div className="whitespace-pre-line space-y-4">
-                  {letterBody}
-                </div>
+                <div 
+                  className="space-y-4 prose prose-slate max-w-none text-[15px] md:text-[16px] leading-[1.8] text-slate-700 font-serif"
+                  dangerouslySetInnerHTML={{ __html: letterBody }}
+                />
                 <div className="mt-6 border-t border-slate-200/50 pt-4">
                   <p className="font-bold text-primary mb-0.5">Warm regards,</p>
                   <p className="font-semibold text-accent">{article.letterSignature || "A Health Place Team"}</p>
@@ -484,17 +593,24 @@ In this edition, we explore the core principles of ${article.title.toLowerCase()
 
             <AdSlot zone="article-body-inline" layout="float" />
 
-            {/* Structured Paragraphs */}
-            <div className="flex flex-col gap-10 text-[15px] md:text-[16px] leading-[1.8] text-secondary">
-              {article.body.map((section, idx) => (
-                <div key={idx} className="section-block flex flex-col gap-3">
-                  <h3 className="font-heading font-extrabold text-[20px] md:text-[22px] text-primary tracking-[-0.5px]">
-                    {section.heading}
-                  </h3>
-                  <p>{section.text}</p>
-                </div>
-              ))}
-            </div>
+            {/* Structured Paragraphs or contentHtml */}
+            {article.contentHtml ? (
+              <div 
+                className="prose prose-slate max-w-none text-[15px] md:text-[16px] leading-[1.8] text-secondary space-y-4"
+                dangerouslySetInnerHTML={{ __html: article.contentHtml }}
+              />
+            ) : (
+              <div className="flex flex-col gap-10 text-[15px] md:text-[16px] leading-[1.8] text-secondary">
+                {article.body.map((section, idx) => (
+                  <div key={idx} className="section-block flex flex-col gap-3">
+                    <h3 className="font-heading font-extrabold text-[20px] md:text-[22px] text-primary tracking-[-0.5px]">
+                      {section.heading}
+                    </h3>
+                    <p>{section.text}</p>
+                  </div>
+                ))}
+              </div>
+            )}
 
             {/* Blockquote Quote */}
             {article.quote && (
@@ -503,6 +619,22 @@ In this edition, we explore the core principles of ${article.title.toLowerCase()
                   &ldquo;{article.quote}&rdquo;
                 </span>
               </blockquote>
+            )}
+
+            {/* Tags */}
+            {article.tags && article.tags.length > 0 && (
+              <div className="flex flex-wrap items-center gap-2 mt-8 pt-6 border-t border-slate-200/60">
+                <span className="text-sm font-bold text-slate-800 mr-2">Tags:</span>
+                {article.tags.map(t => (
+                  <Link 
+                    key={t.id} 
+                    href={`/blogs?tag=${t.slug || t.name}`}
+                    className="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 px-3.5 py-2 rounded-md transition duration-200 no-underline"
+                  >
+                    {t.name}
+                  </Link>
+                ))}
+              </div>
             )}
           </article>
 

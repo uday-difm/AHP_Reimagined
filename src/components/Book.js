@@ -53,15 +53,15 @@ function makeTopEdge() {
  *   /public/back.jpg    ← back cover
  *   /public/spine.jpg   ← spine (tall & narrow, rotated 90° CCW in the file)
  */
-export default function Book() {
+export default function Book({ frontUrl, backUrl, spineUrl }) {
     const group = useRef();
     const time = useRef(0);
 
     // Load all 3 user-supplied images at once
     const [frontTex, backTex, spineTex] = useTexture([
-        '/front.jpg',
-        '/back.jpg',
-        '/spine.jpg',
+        frontUrl || '/front.jpg',
+        backUrl || '/back.jpg',
+        spineUrl || '/spine.jpg',
     ]);
 
     const mats = useMemo(() => {

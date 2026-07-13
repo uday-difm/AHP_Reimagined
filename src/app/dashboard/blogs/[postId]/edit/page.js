@@ -32,6 +32,7 @@ export default async function EditPostPage({ params: rawParams }) {
     where: { id: postId, deletedAt: null },
     include: {
       categories: true,
+      tags: true,
       featuredImage: true,
       author: { select: { id: true, email: true } },
     },
@@ -79,6 +80,12 @@ export default async function EditPostPage({ params: rawParams }) {
 
   const authors = Array.from(authorMap.values());
 
+  // Tags scoped to this site
+  const tags = await prisma.tag.findMany({
+    where: { siteId: site.id, deletedAt: null },
+    orderBy: { name: "asc" },
+  });
+
   return (
     <div className="space-y-6">
       <div>
@@ -97,6 +104,7 @@ export default async function EditPostPage({ params: rawParams }) {
         siteId={site.id}
         post={post}
         categories={categories}
+        tags={tags}
         authors={authors}
       />
     </div>

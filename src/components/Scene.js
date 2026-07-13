@@ -5,7 +5,7 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Environment } from "@react-three/drei";
 import Book from "./Book";
 
-export default function Scene() {
+export default function Scene({ frontUrl, backUrl, spineUrl }) {
     return (
         <Canvas
             shadows
@@ -59,7 +59,7 @@ export default function Scene() {
             </mesh>
 
             <Suspense fallback={null}>
-                <Book />
+                <Book frontUrl={frontUrl} backUrl={backUrl} spineUrl={spineUrl} />
             </Suspense>
 
             {/* Y-axis only drag — lock polar angle to prevent camera tilt */}

@@ -114,13 +114,96 @@ export default function PublicationPage() {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [dbIssues, setDbIssues] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   // Refs for 3D card tilt
   const cardRefs = useRef([]);
 
+  useEffect(() => {
+    const fetchMagazines = async () => {
+      try {
+        const res = await fetch("/api/magazine");
+        if (res.ok) {
+          const data = await res.json();
+          // Map database magazines to the frontend format
+          const mapped = data.map((mag) => ({
+            season: getSeasonFromDate(mag.magazine_date),
+            title: mag.magazine_title,
+            slug: mag.magazine_slug,
+            img: mag.magazine_cover_image || '/images/mag_sleep.png',
+            backImg: mag.magazine_back_image || '/back.jpg',
+            spineImg: mag.magazine_spine_image || '/spine.jpg',
+            contents: mag.magazine_tags ? mag.magazine_tags.split(',').map(t => t.trim()) : [],
+            description: mag.magazine_description,
+            introduction: mag.magazine_introduction || '',
+            magazineId: mag.magazine_id || '',
+            magCloudLink: mag.MagCloudLink,
+            pdfLink: mag.magazine_link,
+            timestamp: new Date(mag.magazine_date).getTime()
+          }));
+          setDbIssues(mapped);
+        }
+      } catch (err) {
+        console.error("Failed to load magazines:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchMagazines();
+  }, []);
+
+  function getSeasonFromDate(dateStr) {
+    if (!dateStr) return 'LATEST ISSUE';
+    const d = new Date(dateStr);
+    const month = d.getMonth();
+    const year = d.getFullYear();
+    let season = 'WINTER';
+    if (month >= 2 && month <= 4) season = 'SPRING';
+    else if (month >= 5 && month <= 7) season = 'SUMMER';
+    else if (month >= 8 && month <= 10) season = 'FALL';
+    return `${season} ${year}`;
+  }
+
+  function getTimestampFromSeason(seasonStr) {
+    if (!seasonStr) return 0;
+    const parts = seasonStr.split(' ');
+    if (parts.length !== 2) return 0;
+    const season = parts[0].toUpperCase();
+    const year = parseInt(parts[1]);
+    let month = 0;
+    if (season === 'SPRING') month = 2;
+    else if (season === 'SUMMER') month = 5;
+    else if (season === 'FALL') month = 8;
+    else if (season === 'WINTER') month = 11;
+    return new Date(year, month, 1).getTime();
+  }
+
+  const allIssues = useMemo(() => {
+    const staticIssuesMapped = recentIssues.map(issue => ({
+      ...issue,
+      timestamp: getTimestampFromSeason(issue.season)
+    }));
+    return [
+      ...dbIssues,
+      ...staticIssuesMapped
+    ].sort((a, b) => b.timestamp - a.timestamp);
+  }, [dbIssues]);
+
   const itemsPerPage = 6;
-  const totalPages = Math.ceil(recentIssues.length / itemsPerPage);
-  const displayedIssues = recentIssues.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const totalPages = Math.ceil(allIssues.length / itemsPerPage);
+  const displayedIssues = allIssues.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const latestIssue = allIssues[0] || {
+    season: 'SPRING 2024',
+    title: 'The Mindfulness Issue',
+    slug: 'the-mindfulness-issue',
+    img: '/images/mag_sleep.png',
+    backImg: '/back.jpg',
+    spineImg: '/spine.jpg',
+    description: 'Explore the intersection of ancient wisdom and modern neuroscience. Our latest issue dives deep into meditative practices, cognitive health, and the art of intentional living.',
+    magCloudLink: 'https://www.magcloud.com/'
+  };
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -156,7 +239,7 @@ export default function PublicationPage() {
     });
     revealElements.forEach(el => observer.observe(el));
     return () => observer.disconnect();
-  }, [currentPage]);
+  }, [currentPage, dbIssues]);
 
   // Ref & State for Terracotta CTA cursor tracking
   const subscribeCardRef = useRef(null);
@@ -231,25 +314,29 @@ export default function PublicationPage() {
 
             {/* Left — 3D Magazine Cover (3D Book effect) */}
 
-            <Scene />
+            <Scene 
+              frontUrl={latestIssue.img} 
+              backUrl={latestIssue.backImg} 
+              spineUrl={latestIssue.spineImg} 
+            />
 
             {/* Middle — Info */}
             <div className="flex-grow max-w-xl reveal-slide">
               <div className="inline-flex items-center gap-2 bg-[#27ae60]/10 border border-[#27ae60]/20 rounded-full px-3.5 py-1.5 mb-6">
                 <span className="w-2 h-2 bg-accent-green rounded-full animate-pulse-slow" />
-                <span className="text-accent-green text-[10.5px] font-extrabold uppercase tracking-[2px]">LATEST ISSUE • Spring 2024</span>
+                <span className="text-accent-green text-[10.5px] font-extrabold uppercase tracking-[2px]">LATEST ISSUE • {latestIssue.season}</span>
               </div>
 
               <h1 className="text-primary font-heading font-extrabold text-4xl md:text-5xl leading-tight mb-5 tracking-[-1.5px]">
-                The Mindfulness<br />Issue
+                {latestIssue.title}
               </h1>
 
               <p className="text-secondary text-[15px] md:text-base leading-relaxed mb-10 max-w-md">
-                Explore the intersection of ancient wisdom and modern neuroscience. Our latest issue dives deep into meditative practices, cognitive health, and the art of intentional living.
+                {latestIssue.description}
               </p>
 
               <div className="flex flex-wrap gap-4 mb-12">
-                <Link href="/blogs/the-mindfulness-issue" className="btn-primary hover-glow bg-[#0f7c85] hover:bg-[#0c646b] text-white px-8 py-4 rounded-full font-bold text-[14px] border border-[#0f7c85] transition-all duration-500 hover:-translate-y-0.5 shadow-md hover:shadow-[0_8px_24px_rgba(15,124,133,0.25)] cursor-pointer flex items-center justify-center no-underline">
+                <Link href={`/magazine/${latestIssue.slug}`} className="btn-primary hover-glow bg-[#0f7c85] hover:bg-[#0c646b] text-white px-8 py-4 rounded-full font-bold text-[14px] border border-[#0f7c85] transition-all duration-500 hover:-translate-y-0.5 shadow-md hover:shadow-[0_8px_24px_rgba(15,124,133,0.25)] cursor-pointer flex items-center justify-center no-underline">
                   Read Digital Issue
                 </Link>
                 <a href="#recent-issues" className="border-2 border-[#0f7c85]/20 text-[#0f7c85] hover:border-[#0f7c85] hover:bg-[#0f7c85]/5 font-bold text-[14px] px-8 py-4 rounded-full transition-all duration-500 hover:-translate-y-0.5 cursor-pointer flex items-center justify-center no-underline">
@@ -363,7 +450,7 @@ export default function PublicationPage() {
                         />
                       </div>
                       <div className="flex flex-col gap-1 mt-auto">
-                        <p className="text-accent text-[11px] font-extrabold uppercase tracking-[1.5px] mb-1">{issue.season}</p>
+                        <p className="text-accent text-[11px] font-extrabold uppercase tracking-[1.5px] mb-1">{issue.magazineId || issue.season}</p>
                         <p className="text-primary font-heading font-extrabold text-[15px] leading-snug tracking-[-0.3px] group-hover:text-accent transition-colors duration-300">{issue.title}</p>
                       </div>
                     </div>
@@ -372,22 +459,28 @@ export default function PublicationPage() {
                     <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)] bg-[#0f7c85] rounded-2xl p-6 text-white flex flex-col justify-between shadow-2xl border border-white/20 select-none">
                       <div className="flex flex-col gap-4.5 text-left">
                         <div className="border-b border-white/20 pb-3">
-                          <span className="text-[10px] font-extrabold text-[#4FC0C3] uppercase tracking-[1.5px] block mb-0.5">{issue.season}</span>
+                          <span className="text-[10px] font-extrabold text-[#4FC0C3] uppercase tracking-[1.5px] block mb-0.5">{issue.magazineId || issue.season}</span>
                           <h4 className="font-heading font-extrabold text-[15px] md:text-[17px] text-white leading-tight tracking-tight">{issue.title}</h4>
                         </div>
 
                         <div className="flex flex-col gap-2.5">
                           <span className="text-[11px] text-white/50 font-bold uppercase tracking-[1px] block">Inside:</span>
-                          <ul className="text-[12px] md:text-[13.5px] leading-relaxed text-white/90 list-disc pl-4 space-y-1.5 font-medium">
-                            {issue.contents.map((item, idx) => (
-                              <li key={idx}>{item}</li>
-                            ))}
-                          </ul>
+                          {issue.description ? (
+                            <p className="text-[12px] leading-relaxed text-white/90 font-medium line-clamp-6 overflow-hidden text-ellipsis">
+                              {issue.description}
+                            </p>
+                          ) : (
+                            <ul className="text-[12px] md:text-[13.5px] leading-relaxed text-white/90 list-disc pl-4 space-y-1.5 font-medium">
+                              {issue.contents.map((item, idx) => (
+                                <li key={idx}>{item}</li>
+                              ))}
+                            </ul>
+                          )}
                         </div>
                       </div>
 
                       <Link
-                        href={`/blogs/${slug}`}
+                        href={`/magazine/${slug}`}
                         className="w-full text-center bg-white text-[#0f7c85] font-extrabold text-[12px] py-3 rounded-full hover:bg-primary hover:text-white transition-all duration-300 shadow-md no-underline block border border-transparent"
                       >
                         Read Issue →
