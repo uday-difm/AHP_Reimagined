@@ -81,9 +81,8 @@ export default function Footer({ className = "" }) {
                 <li>
                   <a
                     href="mailto:support@ahealthplace.com"
-                    className="footer-link text-[14px] text-white/90 font-semibold no-underline transition-all duration-300 hover:text-teal-300 hover:pl-2 flex items-center group font-body"
+                    className="footer-link text-[14px] text-white/90 font-semibold no-underline transition-all duration-300 hover:text-teal-300 flex items-center font-body"
                   >
-                    <span className="w-1.5 h-1.5 rounded-full bg-teal-300 mr-2 opacity-0 group-hover:opacity-100 transition-all duration-300"></span>
                     support@ahealthplace.com
                   </a>
                 </li>
@@ -93,9 +92,8 @@ export default function Footer({ className = "" }) {
                   <li key={idx}>
                     <a
                       href={item.link}
-                      className="footer-link text-[14px] text-white/80 no-underline transition-all duration-300 hover:text-teal-300 hover:pl-2 flex items-center group font-body"
+                      className="footer-link text-[14px] text-white/80 no-underline transition-all duration-300 hover:text-teal-300 flex items-center font-body"
                     >
-                      <span className="w-1.5 h-1.5 rounded-full bg-teal-300 mr-2 opacity-0 group-hover:opacity-100 transition-all duration-300"></span>
                       {item.label}
                     </a>
                   </li>
