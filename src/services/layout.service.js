@@ -38,7 +38,9 @@ export async function getLayoutData() {
           analytics: true,
           securityControls: true,
           emailSettings: true,
-          ctaConfig: true
+          ctaConfig: true,
+          scripts: true,
+          performanceConfig: true
         }
       }),
       prisma.legalPage.findMany({
@@ -95,6 +97,9 @@ export async function getLayoutData() {
       footerLogoUrl: dbFooterLogoUrl || FALLBACK.footerLogoUrl,
       tagline: ws.tagline || FALLBACK.tagline,
       faviconUrl: ws.favicon || FALLBACK.faviconUrl,
+      titleTemplate: ws.titleTemplate || null,
+      description: ws.description || null,
+      ogImageUrl: ws.ogImageUrl || null,
       navigation: navItems,
       footerLinks,
       footerColumns: footer.columns || [],
@@ -112,7 +117,9 @@ export async function getLayoutData() {
         compliance: settings?.compliance || null,
         analytics: settings?.analytics || null,
         securityControls: publicSecurityControls,
-        oneSignalAppId
+        oneSignalAppId,
+        scripts: settings?.scripts || null,
+        performanceConfig: settings?.performanceConfig || null
       },
     };
   } catch (err) {

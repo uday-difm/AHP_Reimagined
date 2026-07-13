@@ -11,15 +11,21 @@ export default async function MaintenancePage(props) {
   const searchParams = await props.searchParams;
   const message =
     typeof searchParams?.message === "string" ? searchParams.message : null;
+  const image =
+    typeof searchParams?.image === "string" ? searchParams.image : null;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 via-white to-amber-50 px-4">
       <div className="w-full max-w-md text-center space-y-6">
-        {/* Icon */}
+        {/* Icon or Custom Image */}
         <div className="flex justify-center">
-          <div className="p-4 bg-amber-100 rounded-full inline-flex">
-            <Wrench className="w-10 h-10 text-amber-600" />
-          </div>
+          {image ? (
+            <img src={image} alt="Maintenance Graphic" className="max-h-48 rounded-xl object-contain" />
+          ) : (
+            <div className="p-4 bg-amber-100 rounded-full inline-flex">
+              <Wrench className="w-10 h-10 text-amber-600" />
+            </div>
+          )}
         </div>
 
         {/* Title */}
