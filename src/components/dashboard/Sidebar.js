@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import {
   LayoutDashboard,
@@ -345,6 +345,15 @@ export default function Sidebar({ isOpen, setIsOpen }) {
   const { data: session } = useSession();
 
   const [advancedOpen, setAdvancedOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return <aside className="w-56 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 hidden md:flex flex-col" />;
+  }
 
   const userRole = session?.user?.globalRole || "VIEWER";
   const isCrmMode = pathname.startsWith("/crm");

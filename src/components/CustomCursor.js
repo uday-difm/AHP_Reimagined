@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 // Persist mouse position globally so that the cursor doesn't jump to (0,0) on page/tab navigation remounts
 let globalMousePosition = { x: 0, y: 0 };
@@ -19,8 +19,10 @@ if (typeof window !== 'undefined') {
 export default function CustomCursor() {
   const cursorRef = useRef(null);
   const cursorDotRef = useRef(null);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     // Disable cursor if user prefers reduced motion or is on a touch device
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
@@ -147,6 +149,8 @@ export default function CustomCursor() {
       if (animId) cancelAnimationFrame(animId);
     };
   }, []);
+
+  if (!mounted) return null;
 
   // Return markup but it stays hidden on touch/mobile devices via CSS/checks
   return (

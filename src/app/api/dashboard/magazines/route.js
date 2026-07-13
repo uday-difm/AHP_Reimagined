@@ -95,7 +95,10 @@ export async function POST(request) {
       const buffer = Buffer.from(await magazine_cover_image.arrayBuffer());
       
       // Check S3 credentials
-      if (process.env.ACCESSKEY && process.env.SECRETKEY && process.env.BUCKET) {
+      const hasS3 = (process.env.S3_ACCESS_KEY || process.env.ACCESSKEY) &&
+                    (process.env.S3_SECRET_KEY || process.env.SECRETKEY) &&
+                    (process.env.S3_BUCKET || process.env.BUCKET);
+      if (hasS3) {
         try {
           imageUrl = await uploadToS3("magazines", {
             originalname: magazine_cover_image.name,

@@ -449,19 +449,34 @@ export default function PerformanceConsole({ siteId, user }) {
                 </div>
 
                 {/* Configuration items */}
-                <div className="border rounded-xl p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="border rounded-xl p-5 grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div className="flex justify-between items-center py-2 border-b sm:border-b-0 sm:border-r sm:pr-4">
                     <span className="text-xs text-gray-500 font-semibold">
                       Cloudinary Status
                     </span>
                     <span
                       className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${
-                        healthData.checks.cloudinary.status === "Configured"
+                        healthData.checks.cloudinary?.status === "Configured"
                           ? "bg-green-50 text-green-700 border-green-200"
                           : "bg-red-50 text-red-700 border-red-200"
                       }`}
                     >
-                      {healthData.checks.cloudinary.status}
+                      {healthData.checks.cloudinary?.status || "Not Configured"}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between items-center py-2 border-b sm:border-b-0 sm:border-r sm:px-4">
+                    <span className="text-xs text-gray-500 font-semibold">
+                      S3/MinIO Status
+                    </span>
+                    <span
+                      className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${
+                        healthData.checks.s3?.status === "Configured"
+                          ? "bg-green-50 text-green-700 border-green-200"
+                          : "bg-red-50 text-red-700 border-red-200"
+                      }`}
+                    >
+                      {healthData.checks.s3?.status || "Not Configured"}
                     </span>
                   </div>
 
