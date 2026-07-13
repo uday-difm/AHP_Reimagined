@@ -9,6 +9,15 @@ import AdSlot from '@/components/AdSlot';
 import Button from '@/components/Button';
 import { Search, ChevronRight, HelpCircle, Star, X, CheckCircle, Mail, ArrowLeft, ShieldAlert } from 'lucide-react';
 
+// Proxy external URLs through the Next.js server to avoid CORS / hostname issues
+function proxyUrl(url) {
+  if (!url) return url;
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return `/api/media/proxy?url=${encodeURIComponent(url)}`;
+  }
+  return url;
+}
+
 const STANDARD_PACKAGES = [
   {
     id: 's1',
@@ -163,19 +172,42 @@ const HIDDEN_PACKAGES = [
   },
 ];
 
-export default function ServicesClient({ showConfidential = false }) {
+export default function ServicesClient({ initialServices = [], showConfidential = false }) {
   const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFaq, setActiveFaq] = useState(null);
 
+  // Map DB services → frontend card format
+  const dbPackages = initialServices.map((s) => ({
+    id: s.id,
+    title: s.title || '',
+    dropdownVal: s.price ? `${s.title} (${s.price})` : s.title,
+    description: s.description || '',
+    includes: Array.isArray(s.includes) && s.includes.length > 0
+      ? s.includes
+      : Array.isArray(s.faqs) ? s.faqs.map(f => f.question || f.q || String(f)) : [],
+    price: s.price || '',
+    ctaButtonText: s.ctaButtonText || 'Know More',
+    ctaButtonLink: s.ctaButtonLink || '',
+    category: s.category || 'Service',
+    badge: s.badge || null,
+    img: (s.featuredImage?.secureUrl || s.featuredImage?.url) || '/images/mag_sleep.png',
+    visible: s.visible !== false,
+  })).filter(s => s.visible);
+
+  // Use DB services if available, otherwise fall back to static packages
+  const baseList = dbPackages.length > 0 ? dbPackages : STANDARD_PACKAGES;
+
   // Check showConfidential prop or query parameters
   const showSecret = showConfidential || searchParams.get('secret') === 'true' || searchParams.get('show') === 'confidential';
-  const packagesList = showSecret ? [...STANDARD_PACKAGES, ...HIDDEN_PACKAGES] : STANDARD_PACKAGES;
+  const packagesList = showSecret
+    ? (dbPackages.length > 0 ? dbPackages : [...STANDARD_PACKAGES, ...HIDDEN_PACKAGES])
+    : baseList;
 
   // Form Modal States
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalStep, setModalStep] = useState('details'); // 'details' | 'form' | 'success'
-  const [selectedService, setSelectedService] = useState(STANDARD_PACKAGES[0]);
+  const [selectedService, setSelectedService] = useState(packagesList[0] || STANDARD_PACKAGES[0]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -326,12 +358,11 @@ export default function ServicesClient({ showConfidential = false }) {
                     <div>
                       {/* Cover image & category */}
                       <div className="relative w-full h-[180px] overflow-hidden">
-                        <Image
-                          src={service.img}
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={proxyUrl(service.img)}
                           alt={service.title}
-                          fill
-                          className="object-cover transition-transform duration-500 group-hover:scale-105"
-                          sizes="(max-width: 768px) 100vw, 33vw"
+                          className="object-cover transition-transform duration-500 group-hover:scale-105 w-full h-full"
                         />
                         <span className="absolute top-4 left-4 px-3 py-1.5 rounded-full text-[8.5px] font-bold uppercase tracking-[1px] bg-[#f0f6f3] text-[#0f4c4e]">
                           {service.category}

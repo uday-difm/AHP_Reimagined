@@ -17,7 +17,7 @@ export async function PUT(req, { params }) {
 
   try {
     const body = await req.json();
-    const { question, options, correctAnswer, explanation } = body;
+    const { question, options, correctAnswer, explanation, category } = body;
 
     const optionsJson = JSON.stringify(
       Array.isArray(options) ? options : options.split(",").map((o) => o.trim())
@@ -30,6 +30,7 @@ export async function PUT(req, { params }) {
         options: optionsJson,
         correctAnswer: String(correctAnswer),
         explanation: (explanation || "").trim(),
+        category: (category || "general-wellness").trim(),
       },
     });
 

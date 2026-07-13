@@ -1,11 +1,20 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CustomCursor from '@/components/CustomCursor';
+
+// Proxy external URLs through the Next.js server to avoid CORS / hostname issues
+function proxyUrl(url) {
+  if (!url) return url;
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return `/api/media/proxy?url=${encodeURIComponent(url)}`;
+  }
+  return url;
+}
 import ScrollReveal from '@/components/ScrollReveal';
 import BackdropBlobs from '@/components/BackdropBlobs';
 import Button from '@/components/Button';
@@ -191,8 +200,10 @@ export default function PublicationPage() {
   }, [dbIssues]);
 
   const itemsPerPage = 6;
-  const totalPages = Math.ceil(allIssues.length / itemsPerPage);
-  const displayedIssues = allIssues.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  // Exclude the hero (latest) issue from Recent Issues grid
+  const recentIssuesList = allIssues.slice(1);
+  const totalPages = Math.ceil(recentIssuesList.length / itemsPerPage);
+  const displayedIssues = recentIssuesList.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   const latestIssue = allIssues[0] || {
     season: 'SPRING 2024',
@@ -314,17 +325,17 @@ export default function PublicationPage() {
 
             {/* Left — 3D Magazine Cover (3D Book effect) */}
 
-            <Scene 
-              frontUrl={latestIssue.img} 
-              backUrl={latestIssue.backImg} 
-              spineUrl={latestIssue.spineImg} 
+            <Scene
+              frontUrl={latestIssue.img}
+              backUrl={latestIssue.backImg}
+              spineUrl={latestIssue.spineImg}
             />
 
             {/* Middle — Info */}
             <div className="flex-grow max-w-xl reveal-slide">
               <div className="inline-flex items-center gap-2 bg-[#27ae60]/10 border border-[#27ae60]/20 rounded-full px-3.5 py-1.5 mb-6">
                 <span className="w-2 h-2 bg-accent-green rounded-full animate-pulse-slow" />
-                <span className="text-accent-green text-[10.5px] font-extrabold uppercase tracking-[2px]">LATEST ISSUE • {latestIssue.season}</span>
+                <span className="text-accent-green text-[10.5px] font-extrabold uppercase tracking-[2px]">LATEST ISSUE • {latestIssue.magazineId || latestIssue.season}</span>
               </div>
 
               <h1 className="text-primary font-heading font-extrabold text-4xl md:text-5xl leading-tight mb-5 tracking-[-1.5px]">
@@ -441,12 +452,11 @@ export default function PublicationPage() {
                     {/* Front Face */}
                     <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] flex flex-col justify-between">
                       <div className="relative rounded-2xl overflow-hidden shadow-[0_12px_28px_rgba(0,0,0,0.04)] border border-slate-100 transition-all duration-500 mb-5 flex-grow h-[240px] md:h-[330px]">
-                        <Image
-                          src={issue.img}
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={proxyUrl(issue.img)}
                           alt={issue.title}
-                          fill
-                          sizes="(max-width: 768px) 50vw, 33vw"
-                          className="object-cover"
+                          className="object-cover w-full h-full"
                         />
                       </div>
                       <div className="flex flex-col gap-1 mt-auto">

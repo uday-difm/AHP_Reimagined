@@ -23,8 +23,29 @@ export default async function ServicesPage() {
     console.error('Error fetching services from Prisma:', error);
   }
 
-  // Serialize dates and DB values for the client boundary
-  const serializedServices = JSON.parse(JSON.stringify(dbServices));
+  // Serialize dates and DB values for the client boundary and extract includes from packaged faqs
+  const serializedServices = dbServices.map((service) => {
+    let faqs = [];
+    let includes = [];
+    if (service.faqs) {
+      try {
+        const parsed = typeof service.faqs === "string" ? JSON.parse(service.faqs) : service.faqs;
+        if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+          faqs = parsed.faqs || [];
+          includes = parsed.includes || [];
+        } else if (Array.isArray(parsed)) {
+          faqs = parsed;
+        }
+      } catch (e) {
+        console.error("Failed to parse service faqs:", e);
+      }
+    }
+    return {
+      ...JSON.parse(JSON.stringify(service)),
+      faqs,
+      includes,
+    };
+  });
 
   return (
     <Suspense fallback={
