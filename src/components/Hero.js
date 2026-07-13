@@ -32,7 +32,7 @@ const trendingArticles = [
 
 export default function Hero() {
   return (
-    <section className="hero-section min-h-[90vh] flex items-center  py-5 relative overflow-hidden">
+    <section className="hero-section min-h-screen w-full flex items-center py-5 relative overflow-hidden">
       {/* Background Image */}
       <Image
         src="/images/background.png"
