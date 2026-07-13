@@ -26,6 +26,14 @@ export async function GET(req) {
   // Check Cloudinary configs
   const cloudinaryStatus = (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY) ? "Configured" : "Not Configured";
 
+  // Check S3 configs
+  const s3Status = (
+    (process.env.S3_ACCESS_KEY || process.env.ACCESSKEY || process.env.AWS_ACCESS_KEY_ID) &&
+    (process.env.S3_SECRET_KEY || process.env.SECRETKEY || process.env.AWS_SECRET_ACCESS_KEY) &&
+    (process.env.S3_BUCKET || process.env.BUCKET || process.env.AWS_BUCKET_NAME)
+  ) ? "Configured" : "Not Configured";
+
+
   // Check Env configurations
   const nextAuthUrl = process.env.NEXTAUTH_URL || "Not set";
 
@@ -78,6 +86,9 @@ export async function GET(req) {
       cloudinary: {
         status: cloudinaryStatus,
       },
+      s3: {
+        status: s3Status,
+      },
       environment: {
         nextAuthUrl,
         nodeEnv: process.env.NODE_ENV,
@@ -91,3 +102,4 @@ export async function GET(req) {
     },
     responseTime: `${Date.now() - start}ms` }));
 }
+

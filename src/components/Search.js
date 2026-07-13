@@ -165,7 +165,7 @@ export default function Search() {
         <div className={`w-full max-w-[800px] flex flex-col items-center flex-1 transition-transform duration-700 ${isOpen ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
           }`}>
           {/* Top Row: Close button */}
-          <div className="w-full flex justify-end mb-6">
+          <div className="w-full flex justify-end mb-2">
             <button
               onClick={() => setIsOpen(false)}
               className="w-10 h-10 rounded-full flex items-center justify-center border border-slate-200 bg-white/80 hover:bg-slate-50 transition-colors shadow-sm cursor-pointer"
@@ -174,8 +174,14 @@ export default function Search() {
             </button>
           </div>
 
+          {/* Modal Title/Subtitle */}
+          <div className="text-center text-secondary mb-8 flex flex-col items-center">
+            <span className="text-[11px] font-bold tracking-[2px] text-accent uppercase block mb-2">Guides Database</span>
+            <p className="text-sm font-medium text-slate-400">Type to explore expert-backed medical guides.</p>
+          </div>
+
           {/* Search Bar Container */}
-          <div className="w-full relative mb-12">
+          <div className="w-full relative mb-8">
             <div className="relative flex items-center border border-slate-200/80 rounded-2xl bg-white shadow-md px-5 py-4 focus-within:border-accent/40 focus-within:shadow-[0_8px_30px_rgba(31,185,251,0.06)] transition-all duration-300">
               <SearchIcon className="w-6 h-6 text-slate-400 mr-4" />
               <input
@@ -200,9 +206,22 @@ export default function Search() {
           {/* Results Area */}
           <div className="w-full flex-1 overflow-y-auto pr-2 custom-scrollbar">
             {query.trim() === '' ? (
-              <div className="text-center text-secondary py-12">
-                <span className="text-[11px] font-bold tracking-[2px] text-accent uppercase block mb-2">Guides Database</span>
-                <p className="text-sm font-medium text-slate-400">Type to explore expert-backed medical guides.</p>
+              <div className="flex flex-col items-center mt-4">
+                {/* Trending Keywords */}
+                <div className="w-full max-w-lg flex flex-col items-center">
+                  <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4 block">Trending Searches</span>
+                  <div className="flex flex-wrap justify-center gap-2">
+                    {['Ayurveda', 'Mental Health', 'Nutrition', 'Fitness', 'Sleep', 'Heart Health', 'Immunity'].map(keyword => (
+                      <button
+                        key={keyword}
+                        onClick={() => setQuery(keyword)}
+                        className="px-4 py-2 bg-white border border-slate-200 text-sm font-medium text-slate-600 rounded-full hover:bg-accent/10 hover:border-accent/40 hover:text-accent transition-all duration-300 shadow-[0_2px_8px_rgba(0,0,0,0.02)] cursor-pointer hover:-translate-y-0.5"
+                      >
+                        {keyword}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
             ) : allResults.length > 0 ? (
               <div className="flex flex-col gap-4">

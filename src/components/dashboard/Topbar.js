@@ -86,7 +86,7 @@ export default function Topbar({ siteId, sites = [], onMenuClick }) {
 
   async function handleLogout() {
     setMenuOpen(false);
-    await signOut({ callbackUrl: `${window.location.origin}/login` });
+    await signOut({ callbackUrl: `${window.location.origin}/dashboard/login` });
   }
 
   const handleMarkAllRead = async () => {
@@ -163,8 +163,8 @@ export default function Topbar({ siteId, sites = [], onMenuClick }) {
 
   const filteredItems = searchQuery
     ? searchItems.filter((item) =>
-        item.name.toLowerCase().includes(searchQuery.toLowerCase()),
-      )
+      item.name.toLowerCase().includes(searchQuery.toLowerCase()),
+    )
     : searchItems;
   useEffect(() => {
     const handler = (e) => {
@@ -192,7 +192,7 @@ export default function Topbar({ siteId, sites = [], onMenuClick }) {
             >
               <Menu size={20} />
             </button>
- 
+
             <div className="hidden xl:block">
               <h1 className="text-lg font-semibold text-gray-900 dark:text-white md:text-xl">
                 Admin Panel
@@ -201,7 +201,7 @@ export default function Topbar({ siteId, sites = [], onMenuClick }) {
                 Manage your website content
               </p>
             </div>
- 
+
             {sites.length > 1 && (
               <div className="relative ml-1 sm:ml-2">
                 <select
@@ -236,7 +236,7 @@ export default function Topbar({ siteId, sites = [], onMenuClick }) {
               </div>
             )}
           </div>
- 
+
           {/* Right */}
           <div className="flex items-center gap-1.5 sm:gap-2.5 md:gap-4">
             {/* Desktop Search */}
@@ -343,11 +343,10 @@ export default function Topbar({ siteId, sites = [], onMenuClick }) {
                     {alerts.map((alert) => (
                       <div
                         key={alert.id}
-                        className={`p-3 transition-colors ${
-                          alert.isRead
+                        className={`p-3 transition-colors ${alert.isRead
                             ? "bg-white dark:bg-slate-800"
                             : "bg-blue-50/30 hover:bg-blue-50/50 dark:bg-blue-900/10 dark:hover:bg-blue-900/20"
-                        }`}
+                          }`}
                       >
                         <div className="flex gap-2.5 items-start">
                           <div className="mt-0.5 shrink-0">
@@ -413,34 +412,33 @@ export default function Topbar({ siteId, sites = [], onMenuClick }) {
 
                 <ChevronDown
                   size={14}
-                  className={`hidden lg:block text-gray-400 transition-transform ${
-                    menuOpen ? "rotate-180" : ""
-                  }`}
+                  className={`hidden lg:block text-gray-400 transition-transform ${menuOpen ? "rotate-180" : ""
+                    }`}
                 />
               </button>
 
               {/* Dropdown */}
               {menuOpen && (
-                 <div className="absolute right-0 mt-2 w-52 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-lg overflow-hidden z-50">
-                   {/* User info header */}
-                   <div className="px-4 py-3 border-b border-gray-100 dark:border-slate-700 bg-gray-50 dark:bg-slate-900">
-                     <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                       Signed in as
-                     </p>
-                     <p className="text-sm font-medium text-gray-900 dark:text-slate-100 truncate mt-0.5">
-                       {userEmail}
-                     </p>
-                     <span className="inline-block mt-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300">
-                       {userRole}
-                     </span>
-                   </div>
- 
-                   {/* Logout */}
-                   <button
-                     id="logout-btn"
-                     onClick={handleLogout}
-                     className="flex w-full items-center gap-2.5 px-4 py-3 text-sm font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors cursor-pointer"
-                   >
+                <div className="absolute right-0 mt-2 w-52 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-lg overflow-hidden z-50">
+                  {/* User info header */}
+                  <div className="px-4 py-3 border-b border-gray-100 dark:border-slate-700 bg-gray-50 dark:bg-slate-900">
+                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                      Signed in as
+                    </p>
+                    <p className="text-sm font-medium text-gray-900 dark:text-slate-100 truncate mt-0.5">
+                      {userEmail}
+                    </p>
+                    <span className="inline-block mt-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300">
+                      {userRole}
+                    </span>
+                  </div>
+
+                  {/* Logout */}
+                  <button
+                    id="logout-btn"
+                    onClick={handleLogout}
+                    className="flex w-full items-center gap-2.5 px-4 py-3 text-sm font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors cursor-pointer"
+                  >
                     <LogOut size={15} />
                     Sign out
                   </button>

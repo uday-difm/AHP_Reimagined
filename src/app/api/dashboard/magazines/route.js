@@ -34,7 +34,11 @@ async function handleImageUpload(file, folder = "magazines") {
   const buffer = Buffer.from(await file.arrayBuffer());
   let imageUrl = "";
 
-  if (process.env.ACCESSKEY && process.env.SECRETKEY && process.env.BUCKET) {
+  const accessKey = process.env.S3_ACCESS_KEY || process.env.ACCESSKEY;
+  const secretKey = process.env.S3_SECRET_KEY || process.env.SECRETKEY;
+  const bucket = process.env.S3_BUCKET || process.env.BUCKET;
+
+  if (accessKey && secretKey && bucket) {
     try {
       imageUrl = await uploadToS3(folder, {
         originalname: file.name,

@@ -12,7 +12,11 @@ export default async function Layout({ children }) {
   const pathname = headersList.get("x-pathname") || "";
 
   if (pathname.includes("/dashboard/login")) {
-    return <>{children}</>;
+    return (
+      <DashboardLayout siteId={null} sites={[]}>
+        {children}
+      </DashboardLayout>
+    );
   }
 
   const user = await requireAuth();

@@ -105,10 +105,10 @@ export default function Book({ frontUrl, backUrl, spineUrl }) {
         // Gentle floating bob
         group.current.position.y = Math.sin(time.current * 0.45) * 0.07;
     });
-
-    const W = 2.5;   // width  (front face)
-    const H = 3.7;   // height
-    const D = 0.05;  // depth  (thickness / spine width)
+    const Scale = 11 / 10;
+    const W = 2.5 * Scale;   // width  (front face)
+    const H = 3.7 * Scale;   // height
+    const D = 0.05 * Scale;  // depth  (thickness / spine width)
 
     return (
         <group ref={group} rotation={[0, Math.PI / 2, 0]}>
