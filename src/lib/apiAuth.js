@@ -40,6 +40,13 @@ async function resolveApiKey(rawKey, siteId) {
   return record ? { siteId: record.siteId } : null;
 }
 
+// Simple in-memory cache to prevent database connection pool overload on frequent API/polling requests
+const securityCache = {
+  ipBlocks: {},
+  controls: {},
+};
+const CACHE_TTL_MS = 30000; // 30 seconds
+
 export async function checkSitePermission(req, requiredRole) {
   let siteId;
   try {
@@ -51,13 +58,31 @@ export async function checkSitePermission(req, requiredRole) {
   // --- IP block & rate limiting (shared for all auth paths) ---
   try {
     const ip = req.headers.get("x-forwarded-for") || "unknown";
-    const { securityService } = await import("@/services/security.service");
-    const isBlocked = await securityService.isIpBlocked(siteId, ip);
+    const now = Date.now();
+    const ipCacheKey = `${siteId}_${ip}`;
+
+    let isBlocked = false;
+    if (securityCache.ipBlocks[ipCacheKey] && securityCache.ipBlocks[ipCacheKey].expiresAt > now) {
+      isBlocked = securityCache.ipBlocks[ipCacheKey].blocked;
+    } else {
+      const { securityService } = await import("@/services/security.service");
+      isBlocked = await securityService.isIpBlocked(siteId, ip);
+      securityCache.ipBlocks[ipCacheKey] = { blocked: isBlocked, expiresAt: now + CACHE_TTL_MS };
+    }
+
     if (isBlocked) {
       return { error: "Access Denied: Your IP is blocked", status: 403 };
     }
 
-    const controls = await securityService.getSecurityControls(siteId);
+    let controls;
+    if (securityCache.controls[siteId] && securityCache.controls[siteId].expiresAt > now) {
+      controls = securityCache.controls[siteId].data;
+    } else {
+      const { securityService } = await import("@/services/security.service");
+      controls = await securityService.getSecurityControls(siteId);
+      securityCache.controls[siteId] = { data: controls, expiresAt: now + CACHE_TTL_MS };
+    }
+
     const limitRps = controls.rateLimitRps || 60;
     const { checkRateLimit } = await import("@/lib/rateLimiter");
     const allowed = checkRateLimit(ip, limitRps);
