@@ -1,17 +1,39 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { usePathname } from "next/navigation";
 import Sidebar from "@/components/dashboard/Sidebar";
 import Topbar from "@/components/dashboard/Topbar";
 
 export default function DashboardLayout({ children, siteId, sites = [] }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const { data: session, status } = useSession();
+  const pathname = usePathname();
+  const isLoginPage = pathname.includes("/dashboard/login");
 
   useEffect(() => {
+    setMounted(true);
     if (siteId && typeof window !== "undefined") {
       localStorage.setItem("x-site-id", siteId);
     }
   }, [siteId]);
+
+  if (isLoginPage) {
+    return <>{children}</>;
+  }
+
+  if (!mounted || status === "loading") {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-slate-50 dark:bg-slate-950">
+        <div className="flex flex-col items-center gap-3">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-indigo-650 border-t-transparent" />
+          <p className="text-xs text-slate-500 font-medium animate-pulse">Loading Admin Panel...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="dashboard-layout flex min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">

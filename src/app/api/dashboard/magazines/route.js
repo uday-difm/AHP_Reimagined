@@ -26,6 +26,41 @@ async function uploadToCloudinary(buffer, fileName, folder = "magazines") {
 }
 
 
+// Helper to upload files to either S3 or Cloudinary
+async function handleImageUpload(file, folder = "magazines") {
+  if (!file || typeof file !== "object" || !("arrayBuffer" in file)) {
+    return "";
+  }
+  const buffer = Buffer.from(await file.arrayBuffer());
+  let imageUrl = "";
+
+  const accessKey = process.env.S3_ACCESS_KEY || process.env.ACCESSKEY;
+  const secretKey = process.env.S3_SECRET_KEY || process.env.SECRETKEY;
+  const bucket = process.env.S3_BUCKET || process.env.BUCKET;
+
+  if (accessKey && secretKey && bucket) {
+    try {
+      imageUrl = await uploadToS3(folder, {
+        originalname: file.name,
+        buffer,
+        mimetype: file.type,
+      });
+    } catch (s3Error) {
+      console.error("S3 upload failed, trying Cloudinary...", s3Error);
+    }
+  }
+
+  if (!imageUrl) {
+    try {
+      imageUrl = await uploadToCloudinary(buffer, file.name, folder);
+    } catch (cloudinaryError) {
+      console.error("Cloudinary upload failed:", cloudinaryError);
+      throw new Error(`Failed to upload file ${file.name}`);
+    }
+  }
+  return imageUrl;
+}
+
 export async function GET(request) {
   try {
     const user = await requireAuth();
@@ -62,14 +97,15 @@ export async function POST(request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-
-
     const formData = await request.formData();
     const magazine_id = formData.get("magazine_id");
     const magazine_title = formData.get("magazine_title");
     const magazine_description = formData.get("magazine_description");
+    const magazine_introduction = formData.get("magazine_introduction");
     const magazine_tags = formData.get("magazine_tags");
     const magazine_cover_image = formData.get("magazine_cover_image"); // File
+    const magazine_back_image = formData.get("magazine_back_image"); // File
+    const magazine_spine_image = formData.get("magazine_spine_image"); // File
     const magazine_link = formData.get("magazine_link");
     const magazine_date = formData.get("magazine_date");
     const magazine_category = formData.get("magazine_category");
@@ -89,34 +125,10 @@ export async function POST(request) {
       return NextResponse.json({ error: "Slug already exists. Please choose a different title." }, { status: 400 });
     }
 
-    // Handle cover image upload
-    let imageUrl = "";
-    if (magazine_cover_image && typeof magazine_cover_image === "object" && "arrayBuffer" in magazine_cover_image) {
-      const buffer = Buffer.from(await magazine_cover_image.arrayBuffer());
-      
-      // Check S3 credentials
-      if (process.env.ACCESSKEY && process.env.SECRETKEY && process.env.BUCKET) {
-        try {
-          imageUrl = await uploadToS3("magazines", {
-            originalname: magazine_cover_image.name,
-            buffer,
-            mimetype: magazine_cover_image.type,
-          });
-        } catch (s3Error) {
-          console.error("S3 upload failed, trying Cloudinary...", s3Error);
-        }
-      }
-
-      // Fallback to Cloudinary if S3 upload didn't run or failed
-      if (!imageUrl) {
-        try {
-          imageUrl = await uploadToCloudinary(buffer, magazine_cover_image.name);
-        } catch (cloudinaryError) {
-          console.error("Cloudinary upload failed:", cloudinaryError);
-          return NextResponse.json({ error: "Failed to upload cover image." }, { status: 500 });
-        }
-      }
-    }
+    // Handle uploads
+    const imageUrl = await handleImageUpload(magazine_cover_image);
+    const backImageUrl = await handleImageUpload(magazine_back_image);
+    const spineImageUrl = await handleImageUpload(magazine_spine_image);
 
     // Create magazine issue in Prisma
     const magazine = await prisma.magazine.create({
@@ -124,6 +136,9 @@ export async function POST(request) {
         magazineId: magazine_id || "",
         title: magazine_title,
         description: magazine_description || "",
+        introduction: magazine_introduction || "",
+        backImage: backImageUrl || "",
+        spineImage: spineImageUrl || "",
         tags: magazine_tags || "",
         coverImage: imageUrl,
         link: magazine_link || "",

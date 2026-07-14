@@ -1,6 +1,4 @@
-'use client';
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import BackdropBlobs from '@/components/BackdropBlobs';
@@ -15,10 +13,22 @@ export default function ContactPage() {
     message: ''
   });
   const [submitted, setSubmitted] = useState(false);
+  const [contactDetails, setContactDetails] = useState(null);
+
+  useEffect(() => {
+    const siteId = process.env.NEXT_PUBLIC_SITE_ID || "AHP";
+    fetch(`/api/contact/details?siteId=${siteId}`)
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.success && json.data?.contactDetails) {
+          setContactDetails(json.data.contactDetails);
+        }
+      })
+      .catch((err) => console.error("Failed to fetch contact details:", err));
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Simulate contact submission
     console.log('Form submission data:', formData);
     setSubmitted(true);
     setTimeout(() => {
@@ -69,11 +79,46 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h4 className="text-primary font-heading font-bold text-[15px] mb-1">Email Inquiry</h4>
-                      <a href="mailto:support@ahealthplace.com" className="text-accent text-[14px] font-medium hover:underline transition-all">
-                        support@ahealthplace.com
+                      <a href={`mailto:${contactDetails?.email || "support@ahealthplace.com"}`} className="text-accent text-[14px] font-medium hover:underline transition-all">
+                        {contactDetails?.email || "support@ahealthplace.com"}
                       </a>
                     </div>
                   </div>
+
+                  {/* Phone */}
+                  {contactDetails?.phone && (
+                    <div className="flex gap-4 items-start">
+                      <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center text-accent shrink-0">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-2.824-1.48-5.17-3.826-6.65-6.65l1.293-.97c.362-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <h4 className="text-primary font-heading font-bold text-[15px] mb-1">Phone Inquiry</h4>
+                        <a href={`tel:${contactDetails.phone}`} className="text-accent text-[14px] font-medium hover:underline transition-all">
+                          {contactDetails.phone}
+                        </a>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Office HQ */}
+                  {contactDetails?.address && (
+                    <div className="flex gap-4 items-start">
+                      <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center text-accent shrink-0">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25s-7.5-4.108-7.5-11.25a7.5 7.5 0 1115 0z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <h4 className="text-primary font-heading font-bold text-[15px] mb-1">Office HQ</h4>
+                        <p className="text-secondary text-[14px] leading-relaxed">
+                          {contactDetails.address}
+                        </p>
+                      </div>
+                    </div>
+                  )}
 
                   {/* Hours */}
                   <div className="flex gap-4 items-start">
@@ -85,7 +130,7 @@ export default function ContactPage() {
                     <div>
                       <h4 className="text-primary font-heading font-bold text-[15px] mb-1">Support Hours</h4>
                       <p className="text-secondary text-[14px] leading-relaxed">
-                        Monday - Friday, 9:00 AM - 5:00 PM EST
+                        {contactDetails?.operatingHours || "Monday - Friday, 9:00 AM - 5:00 PM EST"}
                       </p>
                     </div>
                   </div>

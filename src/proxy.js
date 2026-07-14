@@ -124,6 +124,9 @@ export async function proxy(request) {
           if (ws.maintenanceMessage) {
             maintenanceUrl.searchParams.set("message", ws.maintenanceMessage);
           }
+          if (ws.maintenanceImage) {
+            maintenanceUrl.searchParams.set("image", ws.maintenanceImage);
+          }
           return NextResponse.redirect(maintenanceUrl);
         }
       }

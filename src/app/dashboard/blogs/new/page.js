@@ -57,6 +57,12 @@ export default async function NewPostPage() {
 
   const authors = Array.from(authorMap.values());
 
+  // Tags scoped to this site
+  const tags = await prisma.tag.findMany({
+    where: { siteId: site.id, deletedAt: null },
+    orderBy: { name: "asc" },
+  });
+
   return (
     <div className="space-y-6">
       <div>
@@ -68,7 +74,12 @@ export default async function NewPostPage() {
           <span className="font-semibold text-slate-700">{site.name}</span>
         </p>
       </div>
-      <PostEditor siteId={site.id} categories={categories} authors={authors} />
+      <PostEditor
+        siteId={site.id}
+        categories={categories}
+        tags={tags}
+        authors={authors}
+      />
     </div>
   );
 }

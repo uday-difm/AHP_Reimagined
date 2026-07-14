@@ -19,6 +19,13 @@ export async function getSeoMetadata(pageSlug) {
     const slugWithSlash = formattedSlug;
     const slugWithoutSlash = formattedSlug.startsWith("/") ? formattedSlug.substring(1) : formattedSlug;
 
+    // Fetch site domain setting with fallback
+    const settings = await prisma.globalSettings.findUnique({
+      where: { siteId },
+      select: { websiteSettings: true }
+    });
+    let domain = (settings?.websiteSettings?.domain || process.env.NEXT_PUBLIC_APP_URL || "").replace(/\/+$/, "");
+
     // 1. Try to find a Page
     const page = await prisma.page.findFirst({
       where: {
@@ -33,7 +40,7 @@ export async function getSeoMetadata(pageSlug) {
       return {
         title: page.seoTitle || page.title,
         description: page.seoDescription || null,
-        canonical: page.canonicalUrl || `${process.env.NEXT_PUBLIC_APP_URL || ""}${formattedSlug}`,
+        canonical: page.canonicalUrl || `${domain}${formattedSlug}`,
         ogImage: page.ogImage || null,
         jsonLd: page.jsonLd
       };
@@ -69,7 +76,7 @@ export async function getSeoMetadata(pageSlug) {
         return {
           title: legalPage.seoTitle || legalPage.title,
           description: legalPage.seoDescription || null,
-          canonical: `${process.env.NEXT_PUBLIC_APP_URL || ""}${formattedSlug}`,
+          canonical: `${domain}${formattedSlug}`,
           ogImage: null
         };
       }
@@ -91,7 +98,7 @@ export async function getSeoMetadata(pageSlug) {
       return {
         title: post.seoTitle || post.title,
         description: post.seoDescription || null,
-        canonical: `${process.env.NEXT_PUBLIC_APP_URL || ""}/posts/${post.slug}`,
+        canonical: `${domain}/posts/${post.slug}`,
         ogImage: post.featuredImage?.url || null
       };
     }

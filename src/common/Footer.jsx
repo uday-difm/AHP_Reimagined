@@ -139,7 +139,7 @@ const Footer = () => {
     ...link,
     href: normalizeLegalLink(link.href),
   }));
-  const contactEmail = footerConfig?.contact_email || contactDetails?.emails?.[0]?.address || "info@earthbyhumans.com";
+  const contactEmail = footerConfig?.contact_email || contactDetails?.email || contactDetails?.emails?.[0]?.address || "info@earthbyhumans.com";
   
   const socials = contactDetails?.socials || {};
   const socialLinks = {

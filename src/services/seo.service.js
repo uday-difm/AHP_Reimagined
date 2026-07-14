@@ -82,6 +82,8 @@ export class SeoService extends BaseService {
 Allow: /
 Disallow: /api/
 Disallow: /dashboard/
+Disallow: /crm/
+Disallow: /marketing/
 
 Sitemap: ${domain}/sitemap.xml
 `;

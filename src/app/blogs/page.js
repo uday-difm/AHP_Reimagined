@@ -20,6 +20,7 @@ export default async function BlogsPage() {
       where: { status: 'PUBLISHED' },
       include: { 
         categories: true, 
+        tags: true,
         featuredImage: true 
       },
       orderBy: { publishedAt: 'desc' }

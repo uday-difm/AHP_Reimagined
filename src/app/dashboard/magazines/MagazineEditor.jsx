@@ -14,12 +14,18 @@ export default function MagazineEditor({ initialData = null }) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [coverPreview, setCoverPreview] = useState(initialData?.coverImage || null);
+  const [backPreview, setBackPreview] = useState(initialData?.backImage || null);
+  const [spinePreview, setSpinePreview] = useState(initialData?.spineImage || null);
+  
   const coverFileRef = useRef(null);
+  const backFileRef = useRef(null);
+  const spineFileRef = useRef(null);
 
   const [values, setValues] = useState({
     magazine_id: initialData?.magazineId || "",
     magazine_title: initialData?.title || "",
     magazine_description: initialData?.description || "",
+    magazine_introduction: initialData?.introduction || "",
     magazine_tags: initialData?.tags || "",
     magazine_link: initialData?.link || "",
     magazine_date: initialData?.date ? new Date(initialData.date).toISOString().split("T")[0] : "",
@@ -31,16 +37,18 @@ export default function MagazineEditor({ initialData = null }) {
 
   const editorConfig = {
     readonly: false,
-    placeholder: "Write magazine description...",
+    placeholder: "Write magazine introduction...",
     minHeight: 300,
   };
 
-  const handleFileChange = (e) => {
+  const handleFileChange = (e, type) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setCoverPreview(reader.result);
+        if (type === "cover") setCoverPreview(reader.result);
+        else if (type === "back") setBackPreview(reader.result);
+        else if (type === "spine") setSpinePreview(reader.result);
       };
       reader.readAsDataURL(file);
     }
@@ -78,6 +86,7 @@ export default function MagazineEditor({ initialData = null }) {
     formData.append("magazine_id", values.magazine_id);
     formData.append("magazine_title", values.magazine_title);
     formData.append("magazine_description", values.magazine_description);
+    formData.append("magazine_introduction", values.magazine_introduction);
     formData.append("magazine_tags", values.magazine_tags);
     formData.append("magazine_link", values.magazine_link);
     formData.append("magazine_date", values.magazine_date);
@@ -88,6 +97,12 @@ export default function MagazineEditor({ initialData = null }) {
 
     if (coverFileRef.current?.files[0]) {
       formData.append("magazine_cover_image", coverFileRef.current.files[0]);
+    }
+    if (backFileRef.current?.files[0]) {
+      formData.append("magazine_back_image", backFileRef.current.files[0]);
+    }
+    if (spineFileRef.current?.files[0]) {
+      formData.append("magazine_spine_image", spineFileRef.current.files[0]);
     }
 
     try {
@@ -206,12 +221,29 @@ export default function MagazineEditor({ initialData = null }) {
           {/* Description */}
           <div>
             <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
-              Description / Introduction
+              Short Description (Summary for Archive Card)
+            </label>
+            <textarea
+              value={values.magazine_description}
+              onChange={(e) => setValues({ ...values, magazine_description: e.target.value })}
+              placeholder="Enter a brief summary of this issue..."
+              rows={3}
+              className="w-full text-xs rounded-lg border border-slate-200 dark:border-slate-800 py-2.5 px-3 bg-transparent focus:ring-2 focus:ring-indigo-500 outline-none text-slate-700 dark:text-slate-100"
+            />
+          </div>
+
+          {/* Introduction */}
+          <div>
+            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
+              Introduction (Letter to Readers shown inside the reader)
             </label>
             <JoditEditor
-              value={values.magazine_description}
-              config={editorConfig}
-              onBlur={(val) => setValues((prev) => ({ ...prev, magazine_description: val }))}
+              value={values.magazine_introduction}
+              config={{
+                ...editorConfig,
+                placeholder: "Write the introduction / letter to readers...",
+              }}
+              onBlur={(val) => setValues((prev) => ({ ...prev, magazine_introduction: val }))}
             />
           </div>
         </div>
@@ -253,7 +285,7 @@ export default function MagazineEditor({ initialData = null }) {
           {/* Cover image */}
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 shadow-sm space-y-4">
             <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider">
-              Cover Image
+              Cover Image (Front Cover)
             </label>
             {coverPreview ? (
               <div className="relative aspect-[3/4] max-w-[200px] mx-auto rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm group">
@@ -281,7 +313,81 @@ export default function MagazineEditor({ initialData = null }) {
             <input
               type="file"
               ref={coverFileRef}
-              onChange={handleFileChange}
+              onChange={(e) => handleFileChange(e, "cover")}
+              accept="image/*"
+              className="hidden"
+            />
+          </div>
+
+          {/* Back Cover image */}
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 shadow-sm space-y-4">
+            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              Back Cover Image
+            </label>
+            {backPreview ? (
+              <div className="relative aspect-[3/4] max-w-[200px] mx-auto rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm group">
+                <img src={backPreview} alt="Back Preview" className="h-full w-full object-cover" />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setBackPreview(null);
+                    if (backFileRef.current) backFileRef.current.value = "";
+                  }}
+                  className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-[10px] font-bold transition-opacity cursor-pointer"
+                >
+                  Change Image
+                </button>
+              </div>
+            ) : (
+              <div
+                onClick={() => backFileRef.current?.click()}
+                className="aspect-[3/4] max-w-[200px] mx-auto bg-slate-50 dark:bg-slate-900/50 hover:bg-slate-100 dark:hover:bg-slate-800/50 rounded-lg border border-dashed border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-slate-400 gap-2 cursor-pointer transition"
+              >
+                <Upload size={24} />
+                <span className="text-[10px] font-semibold">Upload Back Cover</span>
+              </div>
+            )}
+            <input
+              type="file"
+              ref={backFileRef}
+              onChange={(e) => handleFileChange(e, "back")}
+              accept="image/*"
+              className="hidden"
+            />
+          </div>
+
+          {/* Spine Image */}
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 shadow-sm space-y-4">
+            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              Spine Image
+            </label>
+            {spinePreview ? (
+              <div className="relative aspect-[1/5] max-w-[80px] mx-auto rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm group">
+                <img src={spinePreview} alt="Spine Preview" className="h-full w-full object-cover" />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSpinePreview(null);
+                    if (spineFileRef.current) spineFileRef.current.value = "";
+                  }}
+                  className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-[10px] font-bold transition-opacity cursor-pointer text-center"
+                >
+                  Change Image
+                </button>
+              </div>
+            ) : (
+              <div
+                onClick={() => spineFileRef.current?.click()}
+                className="aspect-[1/5] max-w-[80px] h-[150px] mx-auto bg-slate-50 dark:bg-slate-900/50 hover:bg-slate-100 dark:hover:bg-slate-800/50 rounded-lg border border-dashed border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-slate-400 gap-2 cursor-pointer transition"
+              >
+                <Upload size={20} />
+                <span className="text-[9px] font-semibold text-center px-1">Upload Spine</span>
+              </div>
+            )}
+            <input
+              type="file"
+              ref={spineFileRef}
+              onChange={(e) => handleFileChange(e, "spine")}
               accept="image/*"
               className="hidden"
             />
