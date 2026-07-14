@@ -148,7 +148,7 @@ function LoginAndProjectLanding() {
     }
   }
 
-  if (status === "loading" || status === "authenticated") {
+  if (status === "loading" || (status === "authenticated" && session?.user?.globalRole !== "USER")) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-950">
         <div className="text-center">

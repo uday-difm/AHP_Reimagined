@@ -730,6 +730,7 @@ src/
     CookieBanner.js
     CustomCursor.js
     DynamicBlockEditor.js
+    DynamicScene.js
     Footer.js
     Header.js
     Hero.js
@@ -38290,6 +38291,56 @@ cloudinary.config({
 export default cloudinary;
 </file>
 
+<file path="src/lib/cms.js">
+import { CMSClient } from "@yourcompany/global-backend-next";
+
+// Abort fetch after this many ms when the backend is unreachable
+const FETCH_TIMEOUT = 15_000;
+
+const _origRequest = CMSClient.prototype._request;
+CMSClient.prototype._request = function (...args) {
+  // Race the original SDK request against a timeout so the frontend never
+  // hangs for minutes when the backend is unreachable.
+  return Promise.race([
+    _origRequest.apply(this, args),
+    new Promise((_, reject) =>
+      setTimeout(
+        () => reject(new Error("CMS request timed out")),
+        FETCH_TIMEOUT,
+      ),
+    ),
+  ]);
+};
+CMSClient.prototype.getPosts = function (options = {}) {
+  const params = new URLSearchParams();
+  if (options.page) params.set("page", options.page);
+  if (options.limit) params.set("limit", options.limit);
+  if (options.search) params.set("search", options.search);
+  const qs = params.toString();
+  return this._request(`/api/posts${qs ? "?" + qs : ""}`);
+};
+
+CMSClient.prototype.getMagazines = function (options = {}) {
+  const params = new URLSearchParams();
+  if (options.siteId) params.set("siteId", options.siteId);
+  const qs = params.toString();
+  return this._request(`/api/magazine${qs ? "?" + qs : ""}`);
+};
+
+CMSClient.prototype.getMagazineBySlug = function (slug) {
+  if (!slug) throw new Error("Magazine slug is required");
+  return this._request(`/api/magazine/${slug}`);
+};
+
+export const cms = new CMSClient({
+  baseUrl: process.env.NEXT_PUBLIC_CMS_BASE_URL ||
+    (typeof window === "undefined"
+      ? "http://localhost:3000"
+      : window.location.origin),
+  siteId: process.env.NEXT_PUBLIC_SITE_ID || "infinium",
+});
+</file>
+
 <file path="src/lib/cmsPage.js">
 import { pageService } from "@/services/page.service";
 import prisma from "@/lib/prisma";
@@ -55647,6 +55698,19 @@ export default function ContactFormSection({ siteId = "", content = {}, recaptch
 }
 </file>
 
+<file path="src/components/DynamicScene.js">
+'use client';
+
+import React from 'react';
+import dynamic from 'next/dynamic';
+
+const Scene = dynamic(() => import('./Scene'), { ssr: false });
+
+export default function DynamicScene(props) {
+  return <Scene {...props} />;
+}
+</file>
+
 <file path="src/components/HomepageAuthenticatedSections.js">
 "use client";
 
@@ -56410,56 +56474,6 @@ export async function checkSitePermission(req, requiredRole) {
 }
 </file>
 
-<file path="src/lib/cms.js">
-import { CMSClient } from "@yourcompany/global-backend-next";
-
-// Abort fetch after this many ms when the backend is unreachable
-const FETCH_TIMEOUT = 15_000;
-
-const _origRequest = CMSClient.prototype._request;
-CMSClient.prototype._request = function (...args) {
-  // Race the original SDK request against a timeout so the frontend never
-  // hangs for minutes when the backend is unreachable.
-  return Promise.race([
-    _origRequest.apply(this, args),
-    new Promise((_, reject) =>
-      setTimeout(
-        () => reject(new Error("CMS request timed out")),
-        FETCH_TIMEOUT,
-      ),
-    ),
-  ]);
-};
-CMSClient.prototype.getPosts = function (options = {}) {
-  const params = new URLSearchParams();
-  if (options.page) params.set("page", options.page);
-  if (options.limit) params.set("limit", options.limit);
-  if (options.search) params.set("search", options.search);
-  const qs = params.toString();
-  return this._request(`/api/posts${qs ? "?" + qs : ""}`);
-};
-
-CMSClient.prototype.getMagazines = function (options = {}) {
-  const params = new URLSearchParams();
-  if (options.siteId) params.set("siteId", options.siteId);
-  const qs = params.toString();
-  return this._request(`/api/magazine${qs ? "?" + qs : ""}`);
-};
-
-CMSClient.prototype.getMagazineBySlug = function (slug) {
-  if (!slug) throw new Error("Magazine slug is required");
-  return this._request(`/api/magazine/${slug}`);
-};
-
-export const cms = new CMSClient({
-  baseUrl: process.env.NEXT_PUBLIC_CMS_BASE_URL ||
-    (typeof window === "undefined"
-      ? "http://localhost:3000"
-      : window.location.origin),
-  siteId: process.env.NEXT_PUBLIC_SITE_ID || "infinium",
-});
-</file>
-
 <file path="src/lib/discovered-routes.json">
 [
   {
@@ -56992,24 +57006,6 @@ export class ServiceService extends BaseService {
 }
 
 export const serviceService = new ServiceService();
-</file>
-
-<file path="next.config.mjs">
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  /* config options here */
-  reactCompiler: true,
-  images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'res.cloudinary.com',
-      },
-    ],
-  },
-};
-
-export default nextConfig;
 </file>
 
 <file path="prisma/schema.prisma">
@@ -59115,183 +59111,6 @@ export default function LoginPage() {
 }
 </file>
 
-<file path="src/app/magazine/[slug]/page.js">
-import React from "react";
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import prisma from "@/lib/prisma";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import Scene from "@/components/Scene";
-
-export const revalidate = 60; // ISR: Revalidate every 60 seconds
-
-export async function generateMetadata({ params }) {
-  const { slug } = await params;
-  const mag = await prisma.magazine.findFirst({
-    where: { slug, status: 1 },
-    select: { title: true, description: true, coverImage: true },
-  });
-
-  if (!mag) return { title: "Issue Not Found" };
-
-  return {
-    title: `${mag.title} | Digital Magazine`,
-    description: mag.description || undefined,
-    openGraph: mag.coverImage ? { images: [{ url: mag.coverImage }] } : undefined,
-  };
-}
-
-export default async function MagazineIssuePage({ params }) {
-  const { slug } = await params;
-  const mag = await prisma.magazine.findFirst({
-    where: { slug, status: 1 },
-  });
-
-  if (!mag) {
-    notFound();
-  }
-
-  const tagsList = mag.tags
-    ? mag.tags.split(",").map((t) => t.trim()).filter(Boolean)
-    : [];
-
-  const displayDate = mag.date
-    ? new Date(mag.date).toLocaleDateString("en-US", {
-        month: "long",
-        day: "numeric",
-        year: "numeric",
-      })
-    : "";
-
-  return (
-    <div className="min-h-screen bg-bg-light relative">
-      <Header />
-
-      <main className="pt-[140px] pb-20">
-        <div className="container mx-auto px-4">
-          {/* Breadcrumb */}
-          <div className="breadcrumb flex items-center gap-2 text-[12px] text-muted font-semibold uppercase tracking-[1px] mb-8">
-            <Link href="/" className="hover:text-accent transition-colors">Home</Link>
-            <span>•</span>
-            <Link href="/publication" className="hover:text-accent transition-colors">
-              Publications
-            </Link>
-            <span>•</span>
-            <span className="text-secondary truncate">{mag.title}</span>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-            {/* Left Column: 3D Book Viewer / Fallback Image */}
-            <div className="lg:col-span-5 flex flex-col items-center gap-6">
-              <div className="w-full max-w-[320px] aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl bg-white/40 p-4 border border-white/60 relative">
-                <Scene
-                  frontUrl={mag.coverImage}
-                  backUrl={mag.backImage || mag.coverImage}
-                  spineUrl={mag.spineImage || mag.coverImage}
-                />
-              </div>
-
-              {/* MagCloud/Link Purchase Buttons */}
-              <div className="flex flex-col gap-3 w-full max-w-[320px]">
-                {mag.magCloudLink && (
-                  <a
-                    href={mag.magCloudLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full bg-[#d92128] hover:bg-[#b81b21] text-white text-[11px] font-bold py-3.5 px-4 rounded-xl text-center tracking-wide shadow-md transition-all duration-300 block leading-snug no-underline uppercase"
-                  >
-                    Find Out More On
-                    <span className="block text-[14px] font-extrabold mt-0.5">MagCloud</span>
-                  </a>
-                )}
-                {(mag.link || !mag.magCloudLink) && (
-                  <a
-                    href={mag.link || "https://heyzine.com/"}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full bg-primary hover:bg-accent text-white text-xs font-bold py-4 px-4 rounded-xl text-center tracking-wide shadow-md transition-all duration-300 block no-underline uppercase"
-                  >
-                    Read Full Digital Issue
-                  </a>
-                )}
-              </div>
-            </div>
-
-            {/* Right Column: Title and Descriptions */}
-            <div className="lg:col-span-7 text-left">
-              <span className="inline-block bg-accent/10 border border-accent/20 text-accent font-bold text-[10px] uppercase tracking-[1.5px] px-3.5 py-1.5 rounded-full mb-4">
-                {mag.category || "Digital Journal"}
-              </span>
-
-              <h1 className="font-heading font-extrabold text-[36px] md:text-[50px] text-primary leading-[1.1] tracking-[-1.5px] mb-4">
-                {mag.title}
-              </h1>
-
-              {displayDate && (
-                <p className="text-sm font-semibold text-accent-green mb-8">
-                  Released on {displayDate}
-                </p>
-              )}
-
-              {/* Introduction */}
-              {mag.introduction && (
-                <div className="bg-white/40 p-6 md:p-8 rounded-3xl border border-white/60 mb-8">
-                  <h3 className="font-heading font-bold text-primary text-[15px] uppercase tracking-wider mb-3">
-                    Dear Readers,
-                  </h3>
-                  <p className="font-serif text-[15px] md:text-[16px] leading-[1.8] text-slate-700 whitespace-pre-line">
-                    {mag.introduction}
-                  </p>
-                </div>
-              )}
-
-              {/* Description / Summary */}
-              {mag.description && (
-                <div className="prose prose-slate max-w-none text-slate-600 mb-8">
-                  <h3 className="font-heading font-extrabold text-[20px] text-primary tracking-[-0.5px] mb-3">
-                    Issue Overview
-                  </h3>
-                  <p className="text-[15px] leading-relaxed">
-                    {mag.description}
-                  </p>
-                </div>
-              )}
-
-              {/* Tags */}
-              {tagsList.length > 0 && (
-                <div className="flex flex-wrap items-center gap-2 pt-6 border-t border-slate-200/60">
-                  <span className="text-sm font-bold text-slate-800 mr-2">Featured Topics:</span>
-                  {tagsList.map((tag, idx) => (
-                    <span
-                      key={idx}
-                      className="text-xs bg-slate-100 text-slate-600 px-3.5 py-2 rounded-md font-medium"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </main>
-
-      <Footer className="pt-0 pb-20" />
-    </div>
-  );
-}
-
-export async function generateStaticParams() {
-  const mags = await prisma.magazine.findMany({
-    where: { status: 1 },
-    select: { slug: true },
-    take: 100,
-  });
-  return mags.map((m) => ({ slug: m.slug }));
-}
-</file>
-
 <file path="src/app/services/page.js">
 import React, { Suspense } from 'react';
 import prisma from '@/lib/prisma';
@@ -61011,6 +60830,42 @@ export async function getObjectFromS3(key) {
 }
 </file>
 
+<file path="next.config.mjs">
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactCompiler: true,
+  // Treat these as server external packages so Next.js server-side bundler doesn't try to bundle JSDOM/dompurify sub-dependencies.
+  serverExternalPackages: ["isomorphic-dompurify", "jsdom"],
+  transpilePackages: ["@yourcompany/global-backend-next"],
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "res.cloudinary.com" },
+    ],
+  },
+  webpack: (config, { isServer, nextRuntime }) => {
+    if (!isServer || nextRuntime !== "nodejs") {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        path: false,
+        dns: false,
+        net: false,
+        tls: false,
+        crypto: false,
+      };
+    }
+    if (isServer) {
+      config.externals = config.externals || [];
+      config.externals.push("jsdom", "isomorphic-dompurify");
+    }
+    return config;
+  },
+  turbopack: {},
+};
+
+export default nextConfig;
+</file>
+
 <file path="scripts/generate-routes.js">
 const fs = require("fs");
 const path = require("path");
@@ -62002,6 +61857,183 @@ export default function LoginPage() {
       <LoginAndProjectLanding />
     </Suspense>
   );
+}
+</file>
+
+<file path="src/app/magazine/[slug]/page.js">
+import React from "react";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import prisma from "@/lib/prisma";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import DynamicScene from "@/components/DynamicScene";
+
+export const revalidate = 60; // ISR: Revalidate every 60 seconds
+
+export async function generateMetadata({ params }) {
+  const { slug } = await params;
+  const mag = await prisma.magazine.findFirst({
+    where: { slug, status: 1 },
+    select: { title: true, description: true, coverImage: true },
+  });
+
+  if (!mag) return { title: "Issue Not Found" };
+
+  return {
+    title: `${mag.title} | Digital Magazine`,
+    description: mag.description || undefined,
+    openGraph: mag.coverImage ? { images: [{ url: mag.coverImage }] } : undefined,
+  };
+}
+
+export default async function MagazineIssuePage({ params }) {
+  const { slug } = await params;
+  const mag = await prisma.magazine.findFirst({
+    where: { slug, status: 1 },
+  });
+
+  if (!mag) {
+    notFound();
+  }
+
+  const tagsList = mag.tags
+    ? mag.tags.split(",").map((t) => t.trim()).filter(Boolean)
+    : [];
+
+  const displayDate = mag.date
+    ? new Date(mag.date).toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      })
+    : "";
+
+  return (
+    <div className="min-h-screen bg-bg-light relative">
+      <Header />
+
+      <main className="pt-[140px] pb-20">
+        <div className="container mx-auto px-4">
+          {/* Breadcrumb */}
+          <div className="breadcrumb flex items-center gap-2 text-[12px] text-muted font-semibold uppercase tracking-[1px] mb-8">
+            <Link href="/" className="hover:text-accent transition-colors">Home</Link>
+            <span>•</span>
+            <Link href="/publication" className="hover:text-accent transition-colors">
+              Publications
+            </Link>
+            <span>•</span>
+            <span className="text-secondary truncate">{mag.title}</span>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            {/* Left Column: 3D Book Viewer / Fallback Image */}
+            <div className="lg:col-span-5 flex flex-col items-center gap-6">
+              <div className="w-full max-w-[320px] aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl bg-white/40 p-4 border border-white/60 relative">
+                <DynamicScene
+                  frontUrl={mag.coverImage}
+                  backUrl={mag.backImage || mag.coverImage}
+                  spineUrl={mag.spineImage || mag.coverImage}
+                />
+              </div>
+
+              {/* MagCloud/Link Purchase Buttons */}
+              <div className="flex flex-col gap-3 w-full max-w-[320px]">
+                {mag.magCloudLink && (
+                  <a
+                    href={mag.magCloudLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full bg-[#d92128] hover:bg-[#b81b21] text-white text-[11px] font-bold py-3.5 px-4 rounded-xl text-center tracking-wide shadow-md transition-all duration-300 block leading-snug no-underline uppercase"
+                  >
+                    Find Out More On
+                    <span className="block text-[14px] font-extrabold mt-0.5">MagCloud</span>
+                  </a>
+                )}
+                {(mag.link || !mag.magCloudLink) && (
+                  <a
+                    href={mag.link || "https://heyzine.com/"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full bg-primary hover:bg-accent text-white text-xs font-bold py-4 px-4 rounded-xl text-center tracking-wide shadow-md transition-all duration-300 block no-underline uppercase"
+                  >
+                    Read Full Digital Issue
+                  </a>
+                )}
+              </div>
+            </div>
+
+            {/* Right Column: Title and Descriptions */}
+            <div className="lg:col-span-7 text-left">
+              <span className="inline-block bg-accent/10 border border-accent/20 text-accent font-bold text-[10px] uppercase tracking-[1.5px] px-3.5 py-1.5 rounded-full mb-4">
+                {mag.category || "Digital Journal"}
+              </span>
+
+              <h1 className="font-heading font-extrabold text-[36px] md:text-[50px] text-primary leading-[1.1] tracking-[-1.5px] mb-4">
+                {mag.title}
+              </h1>
+
+              {displayDate && (
+                <p className="text-sm font-semibold text-accent-green mb-8">
+                  Released on {displayDate}
+                </p>
+              )}
+
+              {/* Introduction */}
+              {mag.introduction && (
+                <div className="bg-white/40 p-6 md:p-8 rounded-3xl border border-white/60 mb-8">
+                  <h3 className="font-heading font-bold text-primary text-[15px] uppercase tracking-wider mb-3">
+                    Dear Readers,
+                  </h3>
+                  <p className="font-serif text-[15px] md:text-[16px] leading-[1.8] text-slate-700 whitespace-pre-line">
+                    {mag.introduction}
+                  </p>
+                </div>
+              )}
+
+              {/* Description / Summary */}
+              {mag.description && (
+                <div className="prose prose-slate max-w-none text-slate-600 mb-8">
+                  <h3 className="font-heading font-extrabold text-[20px] text-primary tracking-[-0.5px] mb-3">
+                    Issue Overview
+                  </h3>
+                  <p className="text-[15px] leading-relaxed">
+                    {mag.description}
+                  </p>
+                </div>
+              )}
+
+              {/* Tags */}
+              {tagsList.length > 0 && (
+                <div className="flex flex-wrap items-center gap-2 pt-6 border-t border-slate-200/60">
+                  <span className="text-sm font-bold text-slate-800 mr-2">Featured Topics:</span>
+                  {tagsList.map((tag, idx) => (
+                    <span
+                      key={idx}
+                      className="text-xs bg-slate-100 text-slate-600 px-3.5 py-2 rounded-md font-medium"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <Footer className="pt-0 pb-20" />
+    </div>
+  );
+}
+
+export async function generateStaticParams() {
+  const mags = await prisma.magazine.findMany({
+    where: { status: 1 },
+    select: { slug: true },
+    take: 100,
+  });
+  return mags.map((m) => ({ slug: m.slug }));
 }
 </file>
 
@@ -67359,131 +67391,6 @@ export default function QuizzesPage() {
 }
 </file>
 
-<file path="src/components/Hero.js">
-import Image from 'next/image';
-import Link from 'next/link';
-import AdSlot from '@/components/AdSlot';
-import Button from '@/components/Button';
-
-const trendingArticles = [
-  {
-    slug: 'ayurvedic-secrets-for-better-digestion',
-    category: 'Ayurveda',
-    title: 'Ayurvedic Secrets for Better Digestion',
-    img: '/images/ayurveda.webp',
-  },
-  {
-    slug: 'how-ai-is-changing-healthcare',
-    category: 'Modern Health',
-    title: 'How AI is Changing Healthcare',
-    img: '/images/disease.webp',
-  },
-  {
-    slug: 'breathwork-vs-meditation-for-anxiety',
-    category: 'Holistic',
-    title: 'Breathwork vs. Meditation for Anxiety',
-    img: '/images/holistic.webp',
-  },
-  {
-    slug: 'exercise-for-better-mental-health',
-    category: 'Mental Health',
-    title: 'Exercise for Better Mental Health',
-    img: '/images/hero_exercise.webp',
-  },
-];
-
-export default function Hero() {
-  return (
-    <section className="hero-section min-h-screen w-full flex items-center py-5 relative overflow-hidden">
-      {/* Background Image */}
-      <Image
-        src="/images/background.webp"
-        alt="Hero Background"
-        fill
-        priority
-        className="object-cover object-center z-[-1] absolute inset-0 opacity-100"
-      />
-      {/* Decorative gradient circle flare blur */}
-      <div className="absolute w-[450px] h-[450px] md:w-[800px] md:h-[800px] rounded-full bg-gradient-to-tr from-accent/20 to-purple-500/15 top-[-60px] md:top-[-120px] right-[-120px] md:right-[-250px] pointer-events-none z-0 blur-xl" />
-
-      <div className="container hero-container relative z-10 flex flex-col pt-32 md:pt-40">
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 items-start">
-
-          {/* Left Column: All Content */}
-          <div className="flex flex-col gap-8 md:gap-12">
-
-            {/* Hero Text */}
-            <div className="w-full text-left md:-ml-2">
-              <div className="flex items-center gap-2 text-[#5a8b43] font-medium text-[14px] md:text-[16px] mb-4">
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2C6.48 2 2 6.48 2 12c0 1.25.24 2.45.67 3.56l-1.38 1.38 1.41 1.41 1.38-1.38C5.19 20.8 7.42 22 10 22c5.52 0 10-4.48 10-10S15.52 2 10 2zm0 18c-2.03 0-3.92-.78-5.34-2.06l6.4-6.4 1.41 1.41-6.4 6.4C9.55 19.8 10.74 20 12 20c4.41 0 8-3.59 8-8s-3.59-8-8-8-8 3.59-8 8c0 1.37.34 2.65.94 3.76l6.3-6.3 1.41 1.41-6.3 6.3c1.78 2.06 4.46 3.19 7.31 3.19z" />
-                  <path d="M17.2 3.8a10.9 10.9 0 0 0-7.3-1.6A11.1 11.1 0 0 0 4 8.7a11.1 11.1 0 0 0-1.8 7.1l-1.5 1.5 1.4 1.4 1.5-1.5a11 11 0 0 0 7.2-1.7 11.1 11.1 0 0 0 6.5-6.5 11 11 0 0 0 0-7V3.8zM15 9c-.8 2.3-2.3 4.2-4.2 5.5l-4-4c1.3-1.8 3.2-3.3 5.5-4.1 2.3-.8 4.7-.6 6.5.6-1.1 1.7-2.6 2.8-3.8 2z" />
-                </svg>
-                Your Health, Our Priority
-              </div>
-              <h1 className="font-heading font-extrabold text-[36px] md:text-[48px] lg:text-[60px] leading-[1.1] tracking-[-1.5px] mb-6 capitalize">
-                <span className="text-[#1e2a35] block">Your Daily Guide To</span>
-                <span className="text-[#0f7c85] block">Health &amp; Wellness</span>
-              </h1>
-              <p className="text-secondary text-[16px] md:text-[20px] leading-relaxed max-w-xl mb-8">
-                Discover trusted health blogs, expert magazines, disease awareness,
-                nutrition tips, mental wellness, and practical lifestyle guidance—
-                everything you need to make informed decisions for a healthier life.
-              </p>
-
-              <div className="flex flex-wrap items-center gap-4">
-                <Button href="/blogs" variant="primary">
-                  Explore Blogs
-                </Button>
-                <Button href="/publication" variant="glass">
-                  Explore Magazines
-                </Button>
-              </div>
-            </div>
-          </div>
-
-          {/* Middle Column: Trending Sidebar */}
-          {/* <div className="flex flex-col w-full lg:max-w-sm -mt-2 md:-mt-6">
-            <div className="bg-white/60 border border-slate-200/50 rounded-[32px] p-6 md:p-8 shadow-sm backdrop-blur-xl">
-              <div className="flex items-center gap-2.5 text-primary font-heading font-extrabold text-[16px] md:text-[18px] mb-8 tracking-tight">
-                <svg className="w-5.5 h-5.5 text-accent-green" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
-                </svg>
-                Trending
-              </div>
-
-              <div className="flex flex-col gap-6">
-                {trendingArticles.map((art, i) => (
-                  <div key={i} className="flex gap-4.5 items-center group">
-                    <Link href={`/blogs/${art.slug}`} className="relative w-[100px] h-[75px] rounded-xl overflow-hidden shrink-0 shadow-sm border border-slate-100/50">
-                      <Image
-                        src={art.img}
-                        alt={art.title}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-104"
-                        sizes="100px"
-                      />
-                    </Link>
-                    <div className="flex flex-col gap-1">
-                      <span className="text-accent font-bold text-[10px] uppercase tracking-wider">{art.category}</span>
-                      <Link href={`/blogs/${art.slug}`} className="text-primary font-heading font-bold text-[13.5px] md:text-[14.5px] leading-snug group-hover:text-accent transition-colors no-underline">
-                        {art.title}
-                      </Link>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div> */}
-        </div>
-
-      </div>
-    </section>
-  );
-}
-</file>
-
 <file path="src/components/Footer.js">
 import Image from 'next/image';
 import Link from 'next/link';
@@ -67617,6 +67524,131 @@ export default function Footer({ className = "" }) {
         </div>
       </div>
     </footer>
+  );
+}
+</file>
+
+<file path="src/components/Hero.js">
+import Image from 'next/image';
+import Link from 'next/link';
+import AdSlot from '@/components/AdSlot';
+import Button from '@/components/Button';
+
+const trendingArticles = [
+  {
+    slug: 'ayurvedic-secrets-for-better-digestion',
+    category: 'Ayurveda',
+    title: 'Ayurvedic Secrets for Better Digestion',
+    img: '/images/ayurveda.webp',
+  },
+  {
+    slug: 'how-ai-is-changing-healthcare',
+    category: 'Modern Health',
+    title: 'How AI is Changing Healthcare',
+    img: '/images/disease.webp',
+  },
+  {
+    slug: 'breathwork-vs-meditation-for-anxiety',
+    category: 'Holistic',
+    title: 'Breathwork vs. Meditation for Anxiety',
+    img: '/images/holistic.webp',
+  },
+  {
+    slug: 'exercise-for-better-mental-health',
+    category: 'Mental Health',
+    title: 'Exercise for Better Mental Health',
+    img: '/images/hero_exercise.webp',
+  },
+];
+
+export default function Hero() {
+  return (
+    <section className="hero-section min-h-screen w-full flex items-center py-5 relative overflow-hidden">
+      {/* Background Image */}
+      <Image
+        src="/images/background.webp"
+        alt="Hero Background"
+        fill
+        priority
+        className="object-cover object-center z-[-1] absolute inset-0 opacity-100"
+      />
+      {/* Decorative gradient circle flare blur */}
+      <div className="absolute w-[450px] h-[450px] md:w-[800px] md:h-[800px] rounded-full bg-gradient-to-tr from-accent/20 to-purple-500/15 top-[-60px] md:top-[-120px] right-[-120px] md:right-[-250px] pointer-events-none z-0 blur-xl" />
+
+      <div className="container hero-container relative z-10 flex flex-col pt-32 md:pt-40">
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 items-start">
+
+          {/* Left Column: All Content */}
+          <div className="flex flex-col gap-8 md:gap-12">
+
+            {/* Hero Text */}
+            <div className="w-full text-left md:-ml-2">
+              <div className="flex items-center gap-2 text-[#5a8b43] font-medium text-[14px] md:text-[16px] mb-4">
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2C6.48 2 2 6.48 2 12c0 1.25.24 2.45.67 3.56l-1.38 1.38 1.41 1.41 1.38-1.38C5.19 20.8 7.42 22 10 22c5.52 0 10-4.48 10-10S15.52 2 10 2zm0 18c-2.03 0-3.92-.78-5.34-2.06l6.4-6.4 1.41 1.41-6.4 6.4C9.55 19.8 10.74 20 12 20c4.41 0 8-3.59 8-8s-3.59-8-8-8-8 3.59-8 8c0 1.37.34 2.65.94 3.76l6.3-6.3 1.41 1.41-6.3 6.3c1.78 2.06 4.46 3.19 7.31 3.19z" />
+                  <path d="M17.2 3.8a10.9 10.9 0 0 0-7.3-1.6A11.1 11.1 0 0 0 4 8.7a11.1 11.1 0 0 0-1.8 7.1l-1.5 1.5 1.4 1.4 1.5-1.5a11 11 0 0 0 7.2-1.7 11.1 11.1 0 0 0 6.5-6.5 11 11 0 0 0 0-7V3.8zM15 9c-.8 2.3-2.3 4.2-4.2 5.5l-4-4c1.3-1.8 3.2-3.3 5.5-4.1 2.3-.8 4.7-.6 6.5.6-1.1 1.7-2.6 2.8-3.8 2z" />
+                </svg>
+                Your Health, Our Priority
+              </div>
+              <h1 className="font-heading font-extrabold text-[36px] md:text-[48px] lg:text-[60px] leading-[1.1] tracking-[-1.5px] mb-6 capitalize">
+                <span className="text-[#1e2a35] block">Your Daily Guide To</span>
+                <span className="text-[#0f7c85] block">Health &amp; Wellness</span>
+              </h1>
+              <p className="text-secondary text-[16px] md:text-[20px] leading-relaxed max-w-xl mb-8">
+                Discover trusted health blogs, expert magazines, disease awareness,
+                nutrition tips, mental wellness, and practical lifestyle guidance—
+                everything you need to make informed decisions for a healthier life.
+              </p>
+
+              <div className="flex flex-wrap items-center gap-4">
+                <Button href="/blogs" variant="primary">
+                  Explore Blogs
+                </Button>
+                <Button href="/publication" variant="glass">
+                  Explore Magazines
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          {/* Middle Column: Trending Sidebar */}
+          {/* <div className="flex flex-col w-full lg:max-w-sm -mt-2 md:-mt-6">
+            <div className="bg-white/60 border border-slate-200/50 rounded-[32px] p-6 md:p-8 shadow-sm backdrop-blur-xl">
+              <div className="flex items-center gap-2.5 text-primary font-heading font-extrabold text-[16px] md:text-[18px] mb-8 tracking-tight">
+                <svg className="w-5.5 h-5.5 text-accent-green" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
+                </svg>
+                Trending
+              </div>
+
+              <div className="flex flex-col gap-6">
+                {trendingArticles.map((art, i) => (
+                  <div key={i} className="flex gap-4.5 items-center group">
+                    <Link href={`/blogs/${art.slug}`} className="relative w-[100px] h-[75px] rounded-xl overflow-hidden shrink-0 shadow-sm border border-slate-100/50">
+                      <Image
+                        src={art.img}
+                        alt={art.title}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-104"
+                        sizes="100px"
+                      />
+                    </Link>
+                    <div className="flex flex-col gap-1">
+                      <span className="text-accent font-bold text-[10px] uppercase tracking-wider">{art.category}</span>
+                      <Link href={`/blogs/${art.slug}`} className="text-primary font-heading font-bold text-[13.5px] md:text-[14.5px] leading-snug group-hover:text-accent transition-colors no-underline">
+                        {art.title}
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div> */}
+        </div>
+
+      </div>
+    </section>
   );
 }
 </file>

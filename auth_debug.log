@@ -118,3 +118,25 @@
 [2026-07-14T05:32:16.041Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
 [2026-07-14T05:32:16.050Z] [Auth] Authenticating against authService for: admin@example.com
 [2026-07-14T05:32:16.752Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh
+[2026-07-14T09:45:09.546Z] [Auth] Attempt started. Email: uday.verma@difm.tech
+[2026-07-14T09:45:09.548Z] [Auth] Request Host: localhost:3000
+[2026-07-14T09:45:09.548Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-14T09:45:09.549Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-14T09:45:09.563Z] [Auth] Authenticating against authService for: uday.verma@difm.tech
+[2026-07-14T09:45:09.685Z] [Auth] Admin authentication failed, trying frontend auth table for: uday.verma@difm.tech
+[2026-07-14T09:45:09.811Z] [Auth] All authentication methods failed for: uday.verma@difm.tech
+[2026-07-14T09:45:23.797Z] [Auth] Attempt started. Email: uday.verma@difm.tech
+[2026-07-14T09:45:23.798Z] [Auth] Request Host: localhost:3000
+[2026-07-14T09:45:23.799Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-14T09:45:23.799Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-14T09:45:23.810Z] [Auth] Authenticating against authService for: uday.verma@difm.tech
+[2026-07-14T09:45:23.874Z] [Auth] Admin authentication failed, trying frontend auth table for: uday.verma@difm.tech
+[2026-07-14T09:45:23.938Z] [Auth] Frontend user authenticated successfully: uday.verma@difm.tech
+[2026-07-14T10:03:45.864Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-14T10:03:45.866Z] [Auth] Request Host: localhost:3000
+[2026-07-14T10:03:45.869Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-14T10:03:45.871Z] [Auth] Token received (length: 1657): 0cAFcWeA7Acnk2ztFjkznpqbbzJnlV...
+[2026-07-14T10:03:45.872Z] [Auth] Sending request to google siteverify (x-www-form-urlencoded POST body)...
+[2026-07-14T10:03:46.034Z] [Auth] reCAPTCHA verifyJson: {"success":true,"challenge_ts":"2026-07-14T10:03:47Z","hostname":"testkey.google.com"}
+[2026-07-14T10:03:46.035Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-14T10:03:46.779Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh
