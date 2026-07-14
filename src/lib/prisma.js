@@ -7,9 +7,22 @@ if (globalForPrisma.prisma && !globalForPrisma.prisma.notificationAlert) {
   globalForPrisma.prisma = undefined;
 }
 
+// Dynamically tune the DATABASE_URL connection limit for serverless environment if not set
+let databaseUrl = process.env.DATABASE_URL || "";
+if (process.env.NODE_ENV === "production" && databaseUrl && !databaseUrl.includes("connection_limit")) {
+  const separator = databaseUrl.includes("?") ? "&" : "?";
+  databaseUrl = `${databaseUrl}${separator}connection_limit=1&pool_timeout=10`;
+}
+
 export const prisma =
   globalForPrisma.prisma ||
-  new PrismaClient();
+  new PrismaClient({
+    datasources: {
+      db: {
+        url: databaseUrl || undefined,
+      },
+    },
+  });
 
 globalForPrisma.prisma = prisma;
 

@@ -3,6 +3,7 @@
  * directly from the database for the infinium frontend, avoiding local HTTP requests.
  */
 import prisma from "@/lib/prisma";
+import { cache } from "react";
 
 const FALLBACK = {
   siteName: "The Infinium",
@@ -17,9 +18,9 @@ const FALLBACK = {
 
 /**
  * Fetch all layout data from DB in parallel.
- * Returns { siteName, logoUrl, footerLogoUrl, tagline, faviconUrl, navigation, footerLinks, footerColumns, copyright, isActive, maintenanceMode, maintenanceMessage }.
+ * Mapped to React request cache to run once per page render.
  */
-export async function getLayoutData() {
+export const getLayoutData = cache(async () => {
   const siteId = process.env.NEXT_PUBLIC_SITE_ID || "infinium";
   try {
     const [site, settings, legalPages] = await Promise.all([
@@ -131,4 +132,4 @@ export async function getLayoutData() {
       maintenanceMessage: "",
     };
   }
-}
+});
