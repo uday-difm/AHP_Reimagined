@@ -194,11 +194,10 @@ export default function NavigationEditor({
       {/* Messages */}
       {message && (
         <div
-          className={`p-4 border-l-4 rounded-lg flex items-start gap-3 shadow-sm ${
-            message.type === "success"
+          className={`p-4 border-l-4 rounded-lg flex items-start gap-3 shadow-sm ${message.type === "success"
               ? "bg-emerald-50 border-emerald-500 text-emerald-800"
               : "bg-red-50 border-red-500 text-red-800"
-          }`}
+            }`}
         >
           {message.type === "success" ? (
             <CheckCircle2 className="w-5 h-5 shrink-0 mt-0.5" />
@@ -221,26 +220,24 @@ export default function NavigationEditor({
           <div className="space-y-4">
             {/* Header Tabs & Save Button */}
             <div className="flex justify-between items-center border-b pb-3.5">
-              <div className="bg-gray-100 p-0.5 rounded-lg flex border">
+              <div className="bg-gray-200 p-0.5 rounded-lg flex border border-gray-300">
                 <button
                   type="button"
                   onClick={() => handleTabChange("main")}
-                  className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all ${
-                    activeTab === "main"
+                  className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all ${activeTab === "main"
                       ? "bg-white text-gray-900 shadow-sm"
-                      : "text-gray-500 hover:text-gray-950"
-                  }`}
+                      : "text-gray-700 hover:text-gray-900"
+                    }`}
                 >
                   Main Header Menu
                 </button>
                 <button
                   type="button"
                   onClick={() => handleTabChange("footer")}
-                  className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all ${
-                    activeTab === "footer"
+                  className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all ${activeTab === "footer"
                       ? "bg-white text-gray-900 shadow-sm"
-                      : "text-gray-500 hover:text-gray-950"
-                  }`}
+                      : "text-gray-700 hover:text-gray-900"
+                    }`}
                 >
                   Footer Menu
                 </button>
@@ -263,11 +260,10 @@ export default function NavigationEditor({
                 <div key={parentIdx} className="space-y-2">
                   {/* Parent Menu Item Block */}
                   <div
-                    className={`flex items-center justify-between p-3 border rounded-xl transition ${
-                      editingIndex === parentIdx && editingSubIndex === null
+                    className={`flex items-center justify-between p-3 border rounded-xl transition ${editingIndex === parentIdx && editingSubIndex === null
                         ? "bg-blue-50/50 border-blue-400"
                         : "bg-gray-50/40 border-gray-200"
-                    }`}
+                      }`}
                   >
                     <div className="flex items-center gap-2">
                       {/* Reorder Buttons */}
@@ -297,11 +293,10 @@ export default function NavigationEditor({
                             {item.label}
                           </span>
                           <span
-                            className={`text-[8px] px-1.5 py-0.2 rounded-full border ${
-                              item.type === "external"
+                            className={`text-[8px] px-1.5 py-0.2 rounded-full border ${item.type === "external"
                                 ? "bg-amber-50 text-amber-600 border-amber-200"
                                 : "bg-blue-50 text-blue-600 border-blue-200"
-                            }`}
+                              }`}
                           >
                             {item.type === "external" ? "External" : "Internal"}
                           </span>
@@ -343,12 +338,11 @@ export default function NavigationEditor({
                   {(item.children || []).map((subItem, childIdx) => (
                     <div
                       key={childIdx}
-                      className={`flex items-center justify-between p-2.5 border rounded-xl ml-8 transition ${
-                        editingIndex === parentIdx &&
-                        editingSubIndex === childIdx
+                      className={`flex items-center justify-between p-2.5 border rounded-xl ml-8 transition ${editingIndex === parentIdx &&
+                          editingSubIndex === childIdx
                           ? "bg-blue-50/30 border-blue-300"
                           : "bg-white border-gray-150"
-                      }`}
+                        }`}
                     >
                       <div className="flex items-center gap-2">
                         {/* Reorder Buttons */}
@@ -416,8 +410,8 @@ export default function NavigationEditor({
               ))}
 
               {items.length === 0 && (
-                <div className="text-center py-12 bg-gray-50 rounded-xl border border-dashed text-gray-400 space-y-2">
-                  <p className="text-xs italic">
+                <div className="text-center py-12 bg-gray-100 rounded-xl border border-dashed text-gray-700 space-y-2">
+                  <p className="text-xs italic font-medium">
                     No menu links configured. Click "Add Main Item" to start.
                   </p>
                 </div>
@@ -428,7 +422,7 @@ export default function NavigationEditor({
           <button
             type="button"
             onClick={handleAddItem}
-            className="w-full flex items-center justify-center gap-1.5 border border-dashed border-gray-300 hover:border-blue-500 hover:text-blue-600 py-3 rounded-xl text-xs font-bold text-gray-500 bg-gray-50/20 transition-all mt-4"
+            className="w-full flex items-center justify-center gap-1.5 border border-dashed border-gray-300 hover:border-blue-500 hover:text-blue-600 py-3 rounded-xl text-xs font-bold text-gray-700 bg-gray-100/50 transition-all mt-4"
           >
             <Plus size={14} />
             Add Main Item
@@ -483,11 +477,10 @@ export default function NavigationEditor({
                         setFormLinkType("internal");
                         setFormUrl("/");
                       }}
-                      className={`py-1.5 rounded-md text-[10px] font-bold transition-all ${
-                        formLinkType === "internal"
+                      className={`py-1.5 rounded-md text-[10px] font-bold transition-all ${formLinkType === "internal"
                           ? "bg-white text-gray-900 shadow-xs"
                           : "text-gray-500"
-                      }`}
+                        }`}
                     >
                       Internal Page
                     </button>
@@ -497,11 +490,10 @@ export default function NavigationEditor({
                         setFormLinkType("external");
                         setFormUrl("https://");
                       }}
-                      className={`py-1.5 rounded-md text-[10px] font-bold transition-all ${
-                        formLinkType === "external"
+                      className={`py-1.5 rounded-md text-[10px] font-bold transition-all ${formLinkType === "external"
                           ? "bg-white text-gray-900 shadow-xs"
                           : "text-gray-500"
-                      }`}
+                        }`}
                     >
                       External URL / Anchor
                     </button>
@@ -608,15 +600,15 @@ export default function NavigationEditor({
               </div>
             </form>
           ) : (
-            <div className="flex-1 flex flex-col justify-center items-center text-center p-6 text-gray-400 space-y-3">
-              <div className="p-3 bg-gray-100 rounded-full text-gray-500">
+            <div className="flex-1 flex flex-col justify-center items-center text-center p-6 space-y-3">
+              <div className="p-3 bg-gray-200 rounded-full text-gray-600">
                 <HelpCircle size={20} />
               </div>
               <div>
-                <h5 className="font-bold text-xs text-gray-700 uppercase tracking-wide">
+                <h5 className="font-bold text-xs text-gray-800 uppercase tracking-wide">
                   Select an Item to Edit
                 </h5>
-                <p className="text-[11px] text-gray-400 mt-1">
+                <p className="text-[11px] text-gray-700 mt-1 max-w-[250px] mx-auto">
                   Click the edit pencil button next to any link or sub-link to
                   customize its target path, destination type, or labels.
                 </p>

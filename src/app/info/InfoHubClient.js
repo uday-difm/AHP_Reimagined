@@ -318,7 +318,7 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
             <div className="flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-visible pb-4 md:pb-0 border-b md:border-b-0 md:border-r border-slate-200 pr-0 md:pr-6 shrink-0">
               <button
                 onClick={() => handleLegalDocToggle('privacy')}
-                className={`flex items-center gap-2.5 px-4.5 py-3.5 rounded-xl text-left font-bold text-[12.5px] transition-all cursor-pointer whitespace-nowrap md:w-full ${activeLegalDoc === 'privacy'
+                className={`shrink-0 flex items-center gap-2.5 px-5 py-3.5 rounded-xl text-left font-bold text-[12.5px] transition-all cursor-pointer whitespace-nowrap md:w-full ${activeLegalDoc === 'privacy'
                     ? 'bg-primary text-white shadow-sm'
                     : 'text-secondary hover:bg-slate-100'
                   }`}
@@ -328,7 +328,7 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
               </button>
               <button
                 onClick={() => handleLegalDocToggle('terms')}
-                className={`flex items-center gap-2.5 px-4.5 py-3.5 rounded-xl text-left font-bold text-[12.5px] transition-all cursor-pointer whitespace-nowrap md:w-full ${activeLegalDoc === 'terms'
+                className={`shrink-0 flex items-center gap-2.5 px-5 py-3.5 rounded-xl text-left font-bold text-[12.5px] transition-all cursor-pointer whitespace-nowrap md:w-full ${activeLegalDoc === 'terms'
                     ? 'bg-primary text-white shadow-sm'
                     : 'text-secondary hover:bg-slate-100'
                   }`}
@@ -338,7 +338,7 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
               </button>
               <button
                 onClick={() => handleLegalDocToggle('disclaimer')}
-                className={`flex items-center gap-2.5 px-4.5 py-3.5 rounded-xl text-left font-bold text-[12.5px] transition-all cursor-pointer whitespace-nowrap md:w-full ${activeLegalDoc === 'disclaimer'
+                className={`shrink-0 flex items-center gap-2.5 px-5 py-3.5 rounded-xl text-left font-bold text-[12.5px] transition-all cursor-pointer whitespace-nowrap md:w-full ${activeLegalDoc === 'disclaimer'
                     ? 'bg-primary text-white shadow-sm'
                     : 'text-secondary hover:bg-slate-100'
                   }`}

@@ -14,7 +14,7 @@ export default function Button({
   ...props
 }) {
   // Base classes for the AHP premium button design system
-  const baseClasses = 'btn inline-flex items-center justify-center font-heading font-bold text-[14px] md:text-[15px] px-8 py-4 rounded-full transition-all duration-300 select-none no-underline cursor-pointer active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none';
+  const baseClasses = 'btn inline-flex items-center justify-center font-heading font-bold text-sm md:text-base px-8 py-4 rounded-full transition-all duration-300 select-none no-underline cursor-pointer active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none';
 
   // Variant mappings matching AHP brand colors and shadows
   const variants = {

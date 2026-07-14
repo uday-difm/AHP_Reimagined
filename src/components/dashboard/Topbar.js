@@ -225,7 +225,7 @@ export default function Topbar({ siteId, sites = [], onMenuClick }) {
                       console.error(err);
                     }
                   }}
-                  className="bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 text-gray-900 dark:text-slate-100 text-[11px] font-bold rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-1.5 px-2.5 outline-none cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors max-w-[120px] xs:max-w-[160px] sm:max-w-xs truncate"
+                  className="bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 text-gray-900 dark:text-slate-100 text-xs font-bold rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-1.5 px-2.5 outline-none cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors max-w-[120px] xs:max-w-[160px] sm:max-w-xs truncate"
                 >
                   {sites.map((s) => (
                     <option key={s.id} value={s.id}>
@@ -305,7 +305,7 @@ export default function Topbar({ siteId, sites = [], onMenuClick }) {
               >
                 <Bell size={18} />
                 {unreadCount > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 inline-flex items-center justify-center px-1.5 py-0.5 text-[9px] font-bold leading-none text-white bg-red-600 rounded-full animate-pulse">
+                  <span className="absolute -top-0.5 -right-0.5 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-white bg-red-600 rounded-full animate-pulse">
                     {unreadCount}
                   </span>
                 )}
@@ -316,21 +316,21 @@ export default function Topbar({ siteId, sites = [], onMenuClick }) {
                 <div className="absolute right-0 mt-2 w-80 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-xl overflow-hidden z-50 text-xs text-left">
                   {/* Popover Header */}
                   <div className="flex items-center justify-between border-b border-gray-100 dark:border-slate-700 bg-gray-50 dark:bg-slate-900 px-4 py-3">
-                    <span className="font-bold text-gray-800 dark:text-slate-300 uppercase tracking-wider text-[10px]">
+                    <span className="font-bold text-gray-800 dark:text-slate-300 uppercase tracking-wider text-xs">
                       Notifications ({unreadCount} new)
                     </span>
                     {alerts.length > 0 && (
                       <div className="flex gap-2">
                         <button
                           onClick={handleMarkAllRead}
-                          className="text-[9px] font-bold text-blue-600 hover:text-blue-700 select-none border-0 bg-transparent cursor-pointer"
+                          className="text-xs font-bold text-blue-600 hover:text-blue-700 select-none border-0 bg-transparent cursor-pointer"
                         >
                           Mark all read
                         </button>
                         <span className="text-gray-300">|</span>
                         <button
                           onClick={handleClearAll}
-                          className="text-[9px] font-bold text-red-600 hover:text-red-700 select-none border-0 bg-transparent cursor-pointer"
+                          className="text-xs font-bold text-red-600 hover:text-red-700 select-none border-0 bg-transparent cursor-pointer"
                         >
                           Clear all
                         </button>
@@ -361,10 +361,10 @@ export default function Topbar({ siteId, sites = [], onMenuClick }) {
                                 <span className="w-1.5 h-1.5 rounded-full bg-blue-600 shrink-0 mt-1" />
                               )}
                             </div>
-                            <p className="text-gray-500 dark:text-slate-400 leading-normal text-[11px]">
+                            <p className="text-gray-500 dark:text-slate-400 leading-normal text-xs">
                               {alert.message}
                             </p>
-                            <span className="text-[9px] text-gray-400 dark:text-slate-500 block mt-1">
+                            <span className="text-xs text-gray-400 dark:text-slate-500 block mt-1">
                               {new Date(alert.createdAt).toLocaleString()}
                             </span>
                           </div>
@@ -383,7 +383,7 @@ export default function Topbar({ siteId, sites = [], onMenuClick }) {
                   <Link
                     href="/notifications"
                     onClick={() => setNotificationsOpen(false)}
-                    className="block text-center border-t border-gray-100 dark:border-slate-700 py-2.5 bg-gray-50/50 dark:bg-slate-900/50 hover:bg-gray-50 dark:hover:bg-slate-700 font-semibold text-[10px] text-gray-600 dark:text-slate-300 transition"
+                    className="block text-center border-t border-gray-100 dark:border-slate-700 py-2.5 bg-gray-50/50 dark:bg-slate-900/50 hover:bg-gray-50 dark:hover:bg-slate-700 font-semibold text-xs text-gray-600 dark:text-slate-300 transition"
                   >
                     Manage Settings & Alerts History
                   </Link>
@@ -428,7 +428,7 @@ export default function Topbar({ siteId, sites = [], onMenuClick }) {
                     <p className="text-sm font-medium text-gray-900 dark:text-slate-100 truncate mt-0.5">
                       {userEmail}
                     </p>
-                    <span className="inline-block mt-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300">
+                    <span className="inline-block mt-1 px-2 py-0.5 rounded-full text-xs font-bold bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300">
                       {userRole}
                     </span>
                   </div>

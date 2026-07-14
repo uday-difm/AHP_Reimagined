@@ -56,14 +56,14 @@ export default function LoginWallModal({ quizTitle, onAfterLogin }) {
           </div>
 
           {/* Heading */}
-          <h2 className="font-heading font-extrabold text-[24px] text-primary leading-tight tracking-tight mb-2">
+          <h2 className="font-heading font-extrabold text-2xl text-primary leading-tight tracking-tight mb-2">
             You're halfway there!
           </h2>
 
-          <p className="text-secondary text-[14px] leading-relaxed mb-1 max-w-[300px]">
+          <p className="text-secondary text-sm leading-relaxed mb-1 max-w-[300px]">
             Sign in to unlock the rest of the
           </p>
-          <p className="font-heading font-bold text-[15px] mb-5" style={{ color: '#0f7c85' }}>
+          <p className="font-heading font-bold text-base mb-5" style={{ color: '#0f7c85' }}>
             "{quizTitle}"
           </p>
 
@@ -75,7 +75,7 @@ export default function LoginWallModal({ quizTitle, onAfterLogin }) {
               'Access your quiz history & dashboard',
               'Save results & track your progress',
             ].map((item, i) => (
-              <li key={i} className="flex items-center gap-2.5 text-[13px] text-secondary">
+              <li key={i} className="flex items-center gap-2.5 text-sm text-secondary">
                 <span
                   className="w-5 h-5 rounded-full flex items-center justify-center shrink-0"
                   style={{ background: '#e8f8f0' }}
@@ -108,7 +108,7 @@ export default function LoginWallModal({ quizTitle, onAfterLogin }) {
             Create Free Account
           </a>
 
-          <p className="text-[11px] text-muted mt-4">
+          <p className="text-xs text-muted mt-4">
             Free forever · No credit card required
           </p>
         </div>

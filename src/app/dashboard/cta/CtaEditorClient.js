@@ -279,33 +279,30 @@ export default function CtaEditorClient({ siteId, initialCtaConfig }) {
             <div className="flex border-b border-gray-100 bg-gray-50/50">
               <button
                 onClick={() => setActiveTab("main")}
-                className={`flex-1 py-4 text-center font-medium text-sm border-b-2 transition flex items-center justify-center gap-2 ${
-                  activeTab === "main"
+                className={`flex-1 py-4 text-center font-medium text-sm border-b-2 transition flex items-center justify-center gap-2 ${activeTab === "main"
                     ? "border-blue-600 text-blue-600 bg-white"
-                    : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50/80"
-                }`}
+                    : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+                  }`}
               >
                 <MousePointerClick className="w-4 h-4" />
                 Main Call-To-Action
               </button>
               <button
                 onClick={() => setActiveTab("floating")}
-                className={`flex-1 py-4 text-center font-medium text-sm border-b-2 transition flex items-center justify-center gap-2 ${
-                  activeTab === "floating"
+                className={`flex-1 py-4 text-center font-medium text-sm border-b-2 transition flex items-center justify-center gap-2 ${activeTab === "floating"
                     ? "border-blue-600 text-blue-600 bg-white"
-                    : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50/80"
-                }`}
+                    : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+                  }`}
               >
                 <Sparkles className="w-4 h-4" />
                 Floating Buttons
               </button>
               <button
                 onClick={() => setActiveTab("popups")}
-                className={`flex-1 py-4 text-center font-medium text-sm border-b-2 transition flex items-center justify-center gap-2 ${
-                  activeTab === "popups"
+                className={`flex-1 py-4 text-center font-medium text-sm border-b-2 transition flex items-center justify-center gap-2 ${activeTab === "popups"
                     ? "border-blue-600 text-blue-600 bg-white"
-                    : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50/80"
-                }`}
+                    : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+                  }`}
               >
                 <Megaphone className="w-4 h-4" />
                 Popups & Lead Magnets
@@ -1049,7 +1046,7 @@ export default function CtaEditorClient({ siteId, initialCtaConfig }) {
                           triggerOn: e.target.value,
                           triggerValue:
                             e.target.value === "page-load" ||
-                            e.target.value === "exit-intent"
+                              e.target.value === "exit-intent"
                               ? "0"
                               : prev.triggerValue,
                         }))
@@ -1255,7 +1252,7 @@ export default function CtaEditorClient({ siteId, initialCtaConfig }) {
                   <span className="font-mono font-semibold">
                     {activeTestPopup.triggerOn}
                     {activeTestPopup.triggerValue &&
-                    activeTestPopup.triggerValue !== "0"
+                      activeTestPopup.triggerValue !== "0"
                       ? ` (${activeTestPopup.triggerValue})`
                       : ""}
                   </span>

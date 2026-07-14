@@ -266,7 +266,7 @@ function LogsTable({ logs }) {
                   </td>
                   <td className="px-4 py-2.5">
                     <span
-                      className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold ${getSourceColor(
+                      className={`inline-block px-2 py-0.5 rounded-full text-xs font-semibold ${getSourceColor(
                         log.trafficSource,
                       )}`}
                     >
@@ -337,7 +337,7 @@ function LiveFeed({ liveVisitors }) {
             <p className="font-semibold text-xs text-gray-800 dark:text-green-200 truncate">
               {v.pageViewed}
             </p>
-            <p className="text-[10px] text-gray-500 dark:text-green-400/70 flex items-center gap-1 mt-0.5">
+            <p className="text-xs text-gray-500 dark:text-green-400/70 flex items-center gap-1 mt-0.5">
               <MapPin size={9} />
               {v.location || "Unknown"}
               &nbsp;·&nbsp;
@@ -347,7 +347,7 @@ function LiveFeed({ liveVisitors }) {
               {v.trafficSource || "Direct"}
             </p>
           </div>
-          <span className="text-[10px] text-gray-400 dark:text-green-500/80 shrink-0">
+          <span className="text-xs text-gray-400 dark:text-green-500/80 shrink-0">
             {formatDuration(v.duration)}
           </span>
         </div>
@@ -596,7 +596,7 @@ export default function VisitorDashboardClient({
             <Sparkline data={timeSeries} width={560} height={80} />
           </div>
           {timeSeries && timeSeries.length > 0 && (
-            <div className="flex justify-between text-[10px] text-gray-400 mt-2 px-1">
+            <div className="flex justify-between text-xs text-gray-400 mt-2 px-1">
               <span>{timeSeries[0]?.date}</span>
               <span>{timeSeries[timeSeries.length - 1]?.date}</span>
             </div>

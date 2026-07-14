@@ -25,15 +25,15 @@ export default function ServicesBanner() {
 
           {/* Left: Info Copy */}
           <div className="flex flex-col gap-6 max-w-[560px] relative z-10 text-left">
-            <span className="inline-flex items-center gap-1.5 bg-accent/15 border border-accent/20 text-accent px-4 py-1.5 rounded-full text-[10px] font-extrabold uppercase tracking-[2px] w-max select-none">
+            <span className="inline-flex items-center gap-1.5 bg-accent/15 border border-accent/20 text-accent px-4 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-[2px] w-max select-none">
               <Sparkles size={11} /> PR & Editorial Placements
             </span>
 
-            <h2 className="font-heading font-extrabold text-[28px] md:text-[40px] leading-tight text-white tracking-tight">
+            <h2 className="font-heading font-extrabold text-3xl md:text-5xl text-white tracking-[-1px] leading-[1.15] mb-4">
               Want to get featured in AHealthPlace?
             </h2>
 
-            <p className="text-white/80 text-[14px] md:text-[15px] leading-relaxed">
+            <p className="text-white/80 text-base md:text-lg leading-relaxed">
               Unlock authority status and reach our highly engaged, health-conscious readers. Align your expertise with a publication vetted by a medical review board.
             </p>
 

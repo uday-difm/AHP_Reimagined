@@ -45,7 +45,11 @@ export default function PublishToggle({ pageId, initialStatus, siteId }) {
     <button
       onClick={toggle}
       disabled={loading}
-      className={`px-2 py-1 text-xs rounded ${status === "PUBLISHED" ? "bg-gray-200 text-black" : "bg-gray-200 text-black"}`}
+      className={`inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded font-bold shadow-sm transition text-white ${
+        status === "PUBLISHED"
+          ? "bg-slate-600 hover:bg-slate-700"
+          : "bg-indigo-600 hover:bg-indigo-700"
+      }`}
       title={status === "PUBLISHED" ? "Unpublish" : "Publish"}
     >
       {loading ? "..." : status === "PUBLISHED" ? "Unpublish" : "Publish"}
