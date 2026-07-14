@@ -3,7 +3,6 @@ import Link from "next/link";
 import { cms } from "../lib/cms";
 import ClientRedirect from "./ClientRedirect";
 
-export const dynamic = "force-dynamic";
 
 export default async function NotFoundPage() {
   let custom404 = null;
