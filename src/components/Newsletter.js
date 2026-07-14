@@ -21,11 +21,11 @@ export default function Newsletter() {
       <div className="container relative z-10">
         <div className="max-w-3xl mx-auto text-center reveal-slide">
 
-          <span className="text-accent text-[11px] font-bold uppercase tracking-[2.5px] block mb-4">STAY CONNECTED</span>
-          <h2 className="cta-title font-heading font-extrabold text-[36px] md:text-[52px] text-primary tracking-[-1.5px] leading-[1.1] mb-5">
+          <span className="text-accent text-xs font-bold uppercase tracking-[2.5px] block mb-4">STAY CONNECTED</span>
+          <h2 className="cta-title font-heading font-extrabold text-3xl md:text-5xl text-primary tracking-[-1px] leading-[1.15] mb-4">
             Subscribe to our newsletter
           </h2>
-          <p className="cta-subtitle text-[15px] md:text-[16px] text-secondary leading-relaxed mb-10 max-w-xl mx-auto">
+          <p className="cta-subtitle text-base md:text-lg text-secondary leading-relaxed mb-10 max-w-xl mx-auto">
             Join 50,000+ wellness readers receiving expert medical guidelines directly in their inbox every week. Zero spam, unsubscribe at any time.
           </p>
 
@@ -36,14 +36,14 @@ export default function Newsletter() {
               onChange={(e) => setNewsEmail(e.target.value)}
               placeholder="Enter your email"
               required
-              className="flex-grow bg-white border border-slate-200 rounded-full px-6 py-4 text-[14px] outline-none text-primary focus:border-accent focus:shadow-[0_0_0_4px_rgba(31,185,251,0.1)] transition-all shadow-sm"
+              className="flex-grow bg-white border border-slate-200 rounded-full px-6 py-4 text-sm outline-none text-primary focus:border-accent focus:shadow-[0_0_0_4px_rgba(31,185,251,0.1)] transition-all shadow-sm"
             />
             <Button type="submit" variant="primary" className="whitespace-nowrap !py-4 !px-8">
               Subscribe
             </Button>
           </form>
 
-          <p className="text-slate-400 text-[12px] mt-5 font-medium">
+          <p className="text-slate-400 text-xs mt-5 font-medium">
             No credit card required · Cancel anytime
           </p>
         </div>

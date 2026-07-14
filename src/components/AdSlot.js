@@ -126,7 +126,7 @@ export default function AdSlot({ zone, layout = 'strip', width, height, classNam
                 })}
               </div>
               <div>
-                <a href="/info?tab=support" className="text-[10px] text-muted hover:text-accent font-semibold uppercase tracking-[1.5px] block text-center mt-2 transition-colors">
+                <a href="/info?tab=support" className="text-xs text-muted hover:text-accent font-semibold uppercase tracking-[1.5px] block text-center mt-2 transition-colors">
                   Advertise with us
                 </a>
               </div>
@@ -139,7 +139,7 @@ export default function AdSlot({ zone, layout = 'strip', width, height, classNam
     if (layout === 'card') {
       return (
         <div className={`w-full h-full flex flex-col items-center justify-center ${className || ''}`}>
-          <span className="block text-[9px] font-semibold text-muted uppercase tracking-[1.5px] mb-1.5 text-center font-body">Ad</span>
+          <span className="block text-xs font-semibold text-muted uppercase tracking-[1.5px] mb-1.5 text-center font-body">Ad</span>
           <div 
             className="flex justify-center items-center overflow-hidden rounded-[32px] bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800/80 shadow-[0_2px_12px_rgba(0,0,0,0.03)] w-full h-full min-h-[300px]"
           >
@@ -178,7 +178,7 @@ export default function AdSlot({ zone, layout = 'strip', width, height, classNam
 
     return (
       <div className={wrapClass}>
-        <span className="block text-[9px] font-semibold text-muted uppercase tracking-[1.5px] mb-1.5 text-center font-body">Ad</span>
+        <span className="block text-xs font-semibold text-muted uppercase tracking-[1.5px] mb-1.5 text-center font-body">Ad</span>
         <div 
           className="flex justify-center items-center overflow-hidden rounded-lg bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800/80 shadow-[0_2px_12px_rgba(0,0,0,0.03)]" 
           style={containerStyle}
@@ -220,7 +220,7 @@ export default function AdSlot({ zone, layout = 'strip', width, height, classNam
                 Partner Spot
               </span>
             </div>
-            <h4 className="font-heading font-bold text-[17px] text-primary group-hover:text-teal-600 transition-colors mt-2">
+            <h4 className="font-heading font-bold text-lg text-primary group-hover:text-teal-600 transition-colors mt-2">
               Want to get featured?
             </h4>
             <p className="text-[12.5px] text-secondary leading-relaxed mt-1">
@@ -229,7 +229,7 @@ export default function AdSlot({ zone, layout = 'strip', width, height, classNam
           </div>
 
           <div className="mt-6">
-            <span className="w-full text-center bg-teal-600 hover:bg-teal-700 text-white font-extrabold text-[11px] py-2.5 rounded-full shadow-sm tracking-wider uppercase transition-colors block">
+            <span className="w-full text-center bg-teal-600 hover:bg-teal-700 text-white font-extrabold text-xs py-2.5 rounded-full shadow-sm tracking-wider uppercase transition-colors block">
               Advertise with us →
             </span>
           </div>
@@ -241,14 +241,14 @@ export default function AdSlot({ zone, layout = 'strip', width, height, classNam
   if (layout === 'card') {
     const cardContent = (
       <div className="flex flex-col items-center justify-center text-center p-6 gap-4 h-full w-full">
-        <span className="text-[10px] font-bold text-teal-600 dark:text-teal-400 uppercase tracking-widest">Partner Spot</span>
+        <span className="text-xs font-bold text-teal-600 dark:text-teal-400 uppercase tracking-widest">Partner Spot</span>
         <div className="flex flex-col gap-2">
-          <h5 className="text-[15px] font-extrabold text-slate-800 dark:text-white leading-snug">Want to get featured here?</h5>
-          <p className="text-[12px] text-slate-500 dark:text-slate-400 leading-relaxed max-w-[200px] mx-auto">
+          <h5 className="text-base font-extrabold text-slate-800 dark:text-white leading-snug">Want to get featured here?</h5>
+          <p className="text-xs text-slate-600 dark:text-slate-200 leading-relaxed max-w-[200px] mx-auto font-medium">
             Align your brand with medically verified health guides.
           </p>
         </div>
-        <span className="bg-teal-600 hover:bg-teal-700 dark:bg-teal-500 text-white font-heading font-extrabold text-[10px] py-2 px-5 rounded-full shadow-sm tracking-wider uppercase transition-all duration-300 hover:scale-105 mt-2">
+        <span className="bg-teal-600 hover:bg-teal-700 dark:bg-teal-500 text-white font-heading font-extrabold text-xs py-2 px-5 rounded-full shadow-sm tracking-wider uppercase transition-all duration-300 hover:scale-105 mt-2">
           Advertise with us →
         </span>
       </div>
@@ -258,7 +258,7 @@ export default function AdSlot({ zone, layout = 'strip', width, height, classNam
       <div className={`w-full h-full flex ${className || ''}`}>
         <a 
           href="/info?tab=support"
-          className="flex flex-col justify-center items-center overflow-hidden rounded-[32px] bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900/60 dark:to-slate-900/40 border border-slate-200/60 dark:border-slate-800/40 hover:border-teal-500/40 dark:hover:border-teal-500/30 hover:shadow-[0_8px_30px_rgba(15,124,133,0.06)] transition-all duration-500 group cursor-pointer no-underline select-none w-full h-full min-h-[300px]"
+          className="flex flex-col justify-center items-center overflow-hidden rounded-[32px] bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900 border border-slate-200/60 dark:border-slate-700 hover:border-teal-500/40 dark:hover:border-teal-500/60 hover:shadow-[0_8px_30px_rgba(15,124,133,0.06)] dark:hover:shadow-[0_8px_30px_rgba(20,184,166,0.15)] transition-all duration-500 group cursor-pointer no-underline select-none w-full h-full min-h-[300px]"
         >
           {cardContent}
         </a>
@@ -282,16 +282,25 @@ export default function AdSlot({ zone, layout = 'strip', width, height, classNam
     // Determine content based on aspect ratio
     const isWide = w >= 468 && h <= 120;
     const isTall = w <= 200 && h >= 400;
+    const isSmallStrip = w <= 400 && h <= 100;
 
     let ctaContent;
-    if (isWide) {
+    if (isSmallStrip) {
+      ctaContent = (
+        <div className="flex items-center justify-center w-full h-full px-2">
+          <span className="text-[11px] font-bold text-slate-800 dark:text-white uppercase tracking-wider">
+            Advertise with us →
+          </span>
+        </div>
+      );
+    } else if (isWide) {
       ctaContent = (
         <div className="flex items-center justify-between w-full px-6 md:px-10 h-full">
           <div className="text-left">
-            <span className="text-[10px] font-bold text-teal-600 dark:text-teal-400 uppercase tracking-widest block">Partner Spot</span>
-            <p className="text-[13px] md:text-[14px] font-bold text-slate-800 dark:text-white leading-tight">Want to get featured here?</p>
+            <span className="text-xs font-bold text-teal-600 dark:text-teal-400 uppercase tracking-widest block">Partner Spot</span>
+            <p className="text-sm md:text-sm font-bold text-slate-800 dark:text-white leading-tight">Want to get featured here?</p>
           </div>
-          <span className="bg-teal-600 hover:bg-teal-700 dark:bg-teal-505 text-white font-heading font-extrabold text-[10px] md:text-[11px] py-1.5 px-4 rounded-full shadow-sm tracking-wider uppercase transition-colors">
+          <span className="bg-teal-600 hover:bg-teal-700 dark:bg-teal-500 text-white font-heading font-extrabold text-xs md:text-xs py-1.5 px-4 rounded-full shadow-sm tracking-wider uppercase transition-colors">
             Advertise with us →
           </span>
         </div>
@@ -299,12 +308,12 @@ export default function AdSlot({ zone, layout = 'strip', width, height, classNam
     } else if (isTall) {
       ctaContent = (
         <div className="flex flex-col items-center justify-center text-center p-4 gap-4 h-full">
-          <span className="text-[9px] font-bold text-teal-600 dark:text-teal-400 uppercase tracking-widest">Partner Spot</span>
+          <span className="text-xs font-bold text-teal-600 dark:text-teal-400 uppercase tracking-widest">Partner Spot</span>
           <div>
-            <p className="text-[13px] font-bold text-slate-800 dark:text-white leading-snug">Want to get featured?</p>
-            <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-1">Reach 100k+ readers</p>
+            <p className="text-sm font-bold text-slate-800 dark:text-white leading-snug">Want to get featured?</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Reach 100k+ readers</p>
           </div>
-          <span className="bg-teal-600 hover:bg-teal-700 dark:bg-teal-500 text-white font-heading font-extrabold text-[9px] py-1.5 px-3 rounded-full shadow-sm tracking-wider uppercase transition-colors mt-auto mb-2">
+          <span className="bg-teal-600 hover:bg-teal-700 dark:bg-teal-500 text-white font-heading font-extrabold text-xs py-1.5 px-3 rounded-full shadow-sm tracking-wider uppercase transition-colors mt-auto mb-2">
             Advertise →
           </span>
         </div>
@@ -313,12 +322,12 @@ export default function AdSlot({ zone, layout = 'strip', width, height, classNam
       // Box / Square / Default
       ctaContent = (
         <div className="flex flex-col items-center justify-center text-center p-4 gap-2.5 h-full">
-          <span className="text-[9px] font-bold text-teal-600 dark:text-teal-400 uppercase tracking-widest">Partner Spot</span>
+          <span className="text-xs font-bold text-teal-600 dark:text-teal-400 uppercase tracking-widest">Partner Spot</span>
           <div>
-            <h5 className="text-[14px] font-bold text-slate-800 dark:text-white leading-tight">Want to get featured here?</h5>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 max-w-[200px]">Align your brand with medically verified health guides.</p>
+            <h5 className="text-sm font-bold text-slate-800 dark:text-white leading-tight">Want to get featured here?</h5>
+            <p className="text-xs text-slate-600 dark:text-slate-200 mt-1 max-w-[200px] font-medium">Align your brand with medically verified health guides.</p>
           </div>
-          <span className="bg-teal-600 hover:bg-teal-700 dark:bg-teal-500 text-white font-heading font-extrabold text-[10px] py-1.5 px-4 rounded-full shadow-sm tracking-wider uppercase transition-colors mt-1">
+          <span className="bg-teal-600 hover:bg-teal-700 dark:bg-teal-500 text-white font-heading font-extrabold text-xs py-1.5 px-4 rounded-full shadow-sm tracking-wider uppercase transition-colors mt-1">
             Advertise with us →
           </span>
         </div>
@@ -329,7 +338,7 @@ export default function AdSlot({ zone, layout = 'strip', width, height, classNam
       <div className={wrapClass}>
         <a 
           href="/info?tab=support"
-          className="flex justify-center items-center overflow-hidden rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900/60 dark:to-slate-900/40 border border-slate-200/50 dark:border-slate-800/40 hover:border-teal-500/40 dark:hover:border-teal-500/30 hover:shadow-[0_8px_30px_rgba(15,124,133,0.06)] transition-all duration-500 group cursor-pointer no-underline select-none"
+          className="flex justify-center items-center overflow-hidden rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900 border border-slate-200/50 dark:border-slate-700 hover:border-teal-500/40 dark:hover:border-teal-500/60 hover:shadow-[0_8px_30px_rgba(15,124,133,0.06)] transition-all duration-500 group cursor-pointer no-underline select-none"
           style={containerStyle}
         >
           {ctaContent}
@@ -344,11 +353,11 @@ export default function AdSlot({ zone, layout = 'strip', width, height, classNam
     return (
       <a href="/info?tab=support"
         className="float-right clear-right ml-6 mb-4 w-[180px] flex flex-col gap-2 bg-bg-light border border-slate-200/80 rounded-xl p-4 no-underline hover:border-accent/30 hover:shadow-[0_4px_16px_rgba(31,185,251,0.06)] transition-all duration-300 group">
-        <span className="text-[9px] font-bold text-accent uppercase tracking-[1.5px]">Partner with us</span>
-        <p className="text-[12px] font-semibold text-primary leading-snug group-hover:text-accent transition-colors">
+        <span className="text-xs font-bold text-accent uppercase tracking-[1.5px]">Partner with us</span>
+        <p className="text-xs font-semibold text-primary leading-snug group-hover:text-accent transition-colors">
           Advertise to our health audience
         </p>
-        <span className="text-[10px] text-muted group-hover:text-accent transition-colors">Contact us →</span>
+        <span className="text-xs text-muted group-hover:text-accent transition-colors">Contact us →</span>
       </a>
     );
   }
@@ -356,9 +365,9 @@ export default function AdSlot({ zone, layout = 'strip', width, height, classNam
   // Strip variant fallback if no dimensions specified
   return (
     <div className="w-full flex items-center justify-between px-1 py-2 my-1">
-      <span className="text-[9px] font-semibold text-slate-300 uppercase tracking-[2px]">Ad space</span>
+      <span className="text-xs font-semibold text-slate-300 uppercase tracking-[2px]">Ad space</span>
       <a href="/info?tab=support"
-        className="text-[9px] font-semibold text-muted hover:text-accent uppercase tracking-[1px] transition-colors duration-200">
+        className="text-xs font-semibold text-muted hover:text-accent uppercase tracking-[1px] transition-colors duration-200">
         Advertise with us →
       </a>
     </div>

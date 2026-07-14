@@ -499,6 +499,32 @@ body.hb-no-scroll {
   box-shadow: 0 20px 45px rgba(0, 0, 0, 0.22);
 }
 
+/* Responsive constraints for mobile to prevent overflow */
+@media (max-width: 640px) {
+  .spread-stack-container {
+    height: 180px;
+  }
+  .spread-card {
+    width: 110px;
+    height: 146px;
+  }
+  .spread-card-left {
+    transform: translate3d(-50px, 5px, 0) rotate(-10deg) scale(0.9);
+  }
+  .spread-card-right {
+    transform: translate3d(50px, 5px, 0) rotate(10deg) scale(0.9);
+  }
+  .spread-stack-container:hover .spread-card-left {
+    transform: translate3d(-75px, -5px, 0) rotate(-15deg) scale(0.95);
+  }
+  .spread-stack-container:hover .spread-card-right {
+    transform: translate3d(75px, -5px, 0) rotate(15deg) scale(0.95);
+  }
+  .spread-stack-container:hover .spread-card-center {
+    transform: translate3d(0, -10px, 0) rotate(0deg) scale(1.08);
+  }
+}
+
 /* ─── Cinematic Page Wipe Transition ─── */
 @keyframes slide-in-wipe {
   from {

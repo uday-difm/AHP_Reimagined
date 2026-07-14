@@ -384,11 +384,10 @@ export default function SettingsEditor({ siteId, initialSettings }) {
           <button
             type="button"
             onClick={() => setActiveTab("brand")}
-            className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${
-              activeTab === "brand"
+            className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${activeTab === "brand"
                 ? "border-blue-600 text-blue-600 bg-white"
-                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50/80"
-            }`}
+                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+              }`}
           >
             <Layout className="w-4 h-4" />
             Brand & Identity
@@ -397,11 +396,10 @@ export default function SettingsEditor({ siteId, initialSettings }) {
           <button
             type="button"
             onClick={() => setActiveTab("header")}
-            className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${
-              activeTab === "header"
+            className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${activeTab === "header"
                 ? "border-blue-600 text-blue-600 bg-white"
-                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50/80"
-            }`}
+                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+              }`}
           >
             <Menu className="w-4 h-4" />
             Header Settings
@@ -410,11 +408,10 @@ export default function SettingsEditor({ siteId, initialSettings }) {
           <button
             type="button"
             onClick={() => setActiveTab("footer")}
-            className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${
-              activeTab === "footer"
+            className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${activeTab === "footer"
                 ? "border-blue-600 text-blue-600 bg-white"
-                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50/80"
-            }`}
+                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+              }`}
           >
             <Grid className="w-4 h-4" />
             Footer Settings
@@ -423,11 +420,10 @@ export default function SettingsEditor({ siteId, initialSettings }) {
           <button
             type="button"
             onClick={() => setActiveTab("contact")}
-            className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${
-              activeTab === "contact"
+            className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${activeTab === "contact"
                 ? "border-blue-600 text-blue-600 bg-white"
-                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50/80"
-            }`}
+                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+              }`}
           >
             <PhoneCallIcon className="w-4 h-4" />
             Default Contact Info
@@ -436,11 +432,10 @@ export default function SettingsEditor({ siteId, initialSettings }) {
           <button
             type="button"
             onClick={() => setActiveTab("seo")}
-            className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${
-              activeTab === "seo"
+            className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${activeTab === "seo"
                 ? "border-blue-600 text-blue-600 bg-white"
-                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50/80"
-            }`}
+                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+              }`}
           >
             <Search className="w-4 h-4" />
             SEO Defaults
@@ -449,11 +444,10 @@ export default function SettingsEditor({ siteId, initialSettings }) {
           <button
             type="button"
             onClick={() => setActiveTab("analytics")}
-            className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${
-              activeTab === "analytics"
+            className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${activeTab === "analytics"
                 ? "border-blue-600 text-blue-600 bg-white"
-                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50/80"
-            }`}
+                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+              }`}
           >
             <Activity className="w-4 h-4" />
             Analytics & Tracking
@@ -462,11 +456,10 @@ export default function SettingsEditor({ siteId, initialSettings }) {
           <button
             type="button"
             onClick={() => setActiveTab("robots")}
-            className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${
-              activeTab === "robots"
+            className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${activeTab === "robots"
                 ? "border-blue-600 text-blue-600 bg-white"
-                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50/80"
-            }`}
+                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+              }`}
           >
             <Bot className="w-4 h-4" />
             Robots & AI
@@ -475,11 +468,10 @@ export default function SettingsEditor({ siteId, initialSettings }) {
           <button
             type="button"
             onClick={() => setActiveTab("scripts")}
-            className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${
-              activeTab === "scripts"
+            className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${activeTab === "scripts"
                 ? "border-blue-600 text-blue-600 bg-white"
-                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50/80"
-            }`}
+                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+              }`}
           >
             <Code className="w-4 h-4" />
             Custom Scripts

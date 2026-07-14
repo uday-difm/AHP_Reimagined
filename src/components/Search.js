@@ -148,13 +148,16 @@ export default function Search() {
 
   return (
     <>
-      {/* Search Trigger Button */}
+      {/* Search Trigger (Inline Bar style) */}
       <button
         onClick={() => setIsOpen(true)}
-        className="w-12 h-12 rounded-full flex justify-center items-center cursor-pointer transition-all duration-300 border bg-white/90 border-[var(--color-border)]/80 text-primary hover:scale-105 hover:border-accent hover:shadow-[0_6px_24px_rgba(31,185,251,0.12)] mr-2"
+        className="flex items-center gap-2 bg-[#F3F4F6] hover:bg-[#E5E7EB] text-slate-500 px-4 py-2.5 rounded-full transition-colors w-[220px] xl:w-[260px] border border-transparent hover:border-[#E6EEF0] group mr-2"
         aria-label="Open Search"
       >
-        <SearchIcon className="w-5 h-5" />
+        <span className="flex-1 text-left text-[13px] font-medium text-slate-400 group-hover:text-slate-500 transition-colors truncate">
+          Search articles, topics...
+        </span>
+        <SearchIcon className="w-4 h-4 text-slate-400 group-hover:text-primary transition-colors" />
       </button>
 
       {/* Glassmorphic Search Overlay Modal */}
@@ -176,7 +179,7 @@ export default function Search() {
 
           {/* Modal Title/Subtitle */}
           <div className="text-center text-secondary mb-8 flex flex-col items-center">
-            <span className="text-[11px] font-bold tracking-[2px] text-accent uppercase block mb-2">Guides Database</span>
+            <span className="text-xs font-bold tracking-[2px] text-accent uppercase block mb-2">Guides Database</span>
             <p className="text-sm font-medium text-slate-400">Type to explore expert-backed medical guides.</p>
           </div>
 
@@ -225,7 +228,7 @@ export default function Search() {
               </div>
             ) : allResults.length > 0 ? (
               <div className="flex flex-col gap-4">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
                   Found {allResults.length} matching guides
                 </span>
 
@@ -244,10 +247,10 @@ export default function Search() {
                       />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <span className="text-[9px] font-bold text-accent uppercase tracking-wider block mb-1">
+                      <span className="text-xs font-bold text-accent uppercase tracking-wider block mb-1">
                         {art.category}
                       </span>
-                      <h4 className="font-heading font-bold text-[15px] text-primary truncate group-hover:text-accent transition-colors leading-snug">
+                      <h4 className="font-heading font-bold text-base text-primary truncate group-hover:text-accent transition-colors leading-snug">
                         {art.title}
                       </h4>
                       <p className="text-xs text-secondary truncate mt-0.5">

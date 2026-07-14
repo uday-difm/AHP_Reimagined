@@ -78,13 +78,13 @@ export default function ArticlesGrid() {
           
           {/* Left Column — 3D Book & Title (4 cols) */}
           <div className="lg:col-span-4 flex flex-col items-center text-center lg:items-start lg:text-left reveal-slide">
-            <span className="section-tag text-[10px] font-extrabold tracking-[3px] text-accent uppercase mb-2 bg-[#0f7c85]/10 px-3.5 py-1.5 rounded-full w-max">
+            <span className="section-tag text-xs font-extrabold tracking-[3px] text-accent uppercase mb-2 bg-[#0f7c85]/10 px-3.5 py-1.5 rounded-full w-max">
               DIGITAL ISSUES
             </span>
-            <h2 className="font-heading font-extrabold text-[32px] md:text-[44px] text-primary tracking-[-1px] leading-[1.1] mb-5">
+            <h2 className="font-heading font-extrabold text-3xl md:text-5xl text-primary tracking-[-1px] leading-[1.15] mb-4">
               Latest Magazine
             </h2>
-            <p className="text-secondary text-[14px] leading-relaxed max-w-sm mb-8">
+            <p className="text-secondary text-base md:text-lg leading-relaxed max-w-sm mb-8">
               Step into our latest featured edition containing clinically reviewed blueprints, expert columns, and mindfulness guides.
             </p>
             
@@ -117,12 +117,12 @@ export default function ArticlesGrid() {
                 <div className="book-3d-back p-5 text-white flex flex-col justify-between select-none">
                   <div className="flex flex-col gap-3.5 text-left">
                     <div className="border-b border-white/20 pb-2.5">
-                      <span className="text-[9px] font-bold text-white/70 uppercase tracking-[2px] block mb-0.5">EDITORIAL BOARD</span>
-                      <h4 className="font-heading font-extrabold text-[14px] md:text-[15px] text-white tracking-[-0.5px]">Spring 2024 Issue</h4>
+                      <span className="text-xs font-bold text-white/70 uppercase tracking-[2px] block mb-0.5">EDITORIAL BOARD</span>
+                      <h4 className="font-heading font-extrabold text-sm md:text-base text-white tracking-[-0.5px]">Spring 2024 Issue</h4>
                     </div>
 
                     <div className="flex flex-col gap-2">
-                      <span className="text-[10px] text-white/50 font-bold uppercase tracking-[1px] block">Inside This Issue:</span>
+                      <span className="text-xs text-white/50 font-bold uppercase tracking-[1px] block">Inside This Issue:</span>
                       <ul className="text-[11.5px] leading-relaxed text-white/90 list-disc pl-3.5 space-y-1 font-medium">
                         <li>Neuroscience of Focus</li>
                         <li>Anxiety Somatic Resets</li>
@@ -133,7 +133,7 @@ export default function ArticlesGrid() {
                   </div>
 
                   <span
-                    className="w-full text-center bg-white text-[#0f7c85] font-bold text-[11px] py-2 rounded-full hover:bg-white/90 transition-all duration-300 shadow-md no-underline block"
+                    className="w-full text-center bg-white text-[#0f7c85] font-bold text-xs py-2 rounded-full hover:bg-white/90 transition-all duration-300 shadow-md no-underline block"
                   >
                     Read Digital Issue →
                   </span>
@@ -152,13 +152,13 @@ export default function ArticlesGrid() {
 
           {/* Middle Column — Editorial Greeting & Spread Stack (5 cols) */}
           <div className="lg:col-span-5 reveal-fade flex flex-col">
-            <div className="bg-bg-light rounded-[32px] p-8 border border-slate-200/60 shadow-[0_12px_40px_rgba(0,0,0,0.02)] flex flex-col gap-8 h-full justify-between hover:border-[#0f7c85]/20 transition-all duration-300">
+            <div className="bg-bg-light rounded-[32px] p-5 sm:p-8 border border-slate-200/60 shadow-[0_12px_40px_rgba(0,0,0,0.02)] flex flex-col gap-8 h-full justify-between hover:border-[#0f7c85]/20 transition-all duration-300">
               
               {/* Header Details */}
               <div className="flex flex-col gap-4">
                 <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200/50 pb-5">
                   <div>
-                    <span className="text-[10px] font-extrabold text-[#0f7c85] uppercase tracking-[1.5px] block mb-1">FEATURED EDITION</span>
+                    <span className="text-xs font-extrabold text-[#0f7c85] uppercase tracking-[1.5px] block mb-1">FEATURED EDITION</span>
                     <h3 className="font-heading font-extrabold text-2xl text-primary tracking-tight">
                       Spring 2024 Issue
                     </h3>
@@ -173,8 +173,8 @@ export default function ArticlesGrid() {
                 </div>
 
                 <div className="flex flex-col gap-3">
-                  <span className="text-secondary font-bold text-[14px]">Dear Readers,</span>
-                  <p className="text-secondary text-[14px] leading-relaxed">
+                  <span className="text-secondary font-bold text-sm">Dear Readers,</span>
+                  <p className="text-secondary text-sm leading-relaxed">
                     Welcome to the Spring 2024 Edition of A Health Place Magazine. This issue explores the powerful somatic resets, circadian sleep guidelines, and neuroscience-backed habits designed to quiet stress loops and ground your mental clarity.
                   </p>
                 </div>
@@ -182,7 +182,7 @@ export default function ArticlesGrid() {
 
               {/* Fan-Out Spreads Preview Stack */}
               <div className="flex flex-col items-center gap-4 py-4">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">
                   Hover to fan out preview sheets
                 </span>
                 

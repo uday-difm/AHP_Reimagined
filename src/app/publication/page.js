@@ -565,10 +565,10 @@ export default function PublicationPage() {
             <div className="absolute inset-0 bg-gradient-to-tr from-[#df7f60]/20 to-transparent pointer-events-none rounded-[40px]" />
 
             {/* Text content — left */}
-            <div className="relative z-10 flex flex-col justify-center gap-5 flex-1 py-10 pl-10 pr-6">
+            <div className="relative z-10 flex flex-col justify-center gap-5 flex-1 py-8 px-6 md:py-10 md:pl-10 md:pr-6 min-w-0">
               <div>
-                <h2 className="text-primary font-heading font-extrabold text-2xl md:text-3xl leading-tight mb-3 tracking-[-1px]">
-                  Never miss a moment<br />of wellness.
+                <h2 className="text-primary font-heading font-extrabold text-2xl md:text-3xl leading-tight mb-3 tracking-[-1px] break-words">
+                  Never miss a moment<br className="hidden md:block" /> of wellness.
                 </h2>
                 <p className="text-[#3a2520]/80 text-[13.5px] leading-relaxed max-w-md">
                   Subscribe to our digital edition for just $15/year. Get exclusive interviews, medically-vetted health guides, and a sanctuary of inspiration delivered to your inbox every quarter.

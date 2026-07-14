@@ -63,6 +63,7 @@ export default function DashboardLayout({ children, siteId, sites = [] }) {
                   
                   /* Cards & Panels */
                   .dark .dashboard-layout :where(.dark\\:bg-slate-800, .dark\\:bg-slate-900, .bg-white, .bg-gray-50, .bg-slate-50, .bg-gray-100, .bg-slate-100, .bg-gray-200) { background-color: #1E293B !important; }
+                  .dark .dashboard-layout :where(.bg-gray-50\\/50, .bg-slate-50\\/50 , .bg-blue-50\\/50) { background-color: #0F172A !important; }
                   
                   /* Borders */
                   .dark .dashboard-layout :where(td, th, .border-gray-100, .border-gray-200, .border-gray-300, .border-gray-150, .border-slate-100, .border-slate-200, .border-slate-300, .dark\\:border-slate-700, .dark\\:border-slate-800, .dark\\:border-slate-900) { border-color: #334155 !important; }
@@ -78,7 +79,7 @@ export default function DashboardLayout({ children, siteId, sites = [] }) {
                   .dark .dashboard-layout :where(.text-gray-600, .text-slate-600, .text-gray-500, .text-slate-500, .text-gray-400, .text-slate-400, .dark\\:text-slate-400, .dark\\:text-slate-500) { color: #94A3B8 !important; }
                   
                   /* Primary Accent (Emerald) overrides for Indigo/Blue */
-                  .dark .dashboard-layout :where(.text-blue-600, .text-blue-700, .text-blue-800, .text-indigo-600, .text-indigo-700, .text-indigo-800, .dark\\:text-indigo-300, .dark\\:text-indigo-400) { color: #10B981 !important; }
+                  .dark .dashboard-layout :where(.text-blue-600, .text-blue-700, .text-blue-900, .text-indigo-600, .text-indigo-700, .text-indigo-800, .dark\\:text-indigo-300, .dark\\:text-indigo-400) { color: #10B981 !important; }
                   .dark .dashboard-layout :where(.hover\\:text-indigo-800):hover,
                   .dark .dashboard-layout :where(.hover\\:text-blue-800):hover { color: #34D399 !important; }
                   

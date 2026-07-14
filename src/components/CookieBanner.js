@@ -113,7 +113,7 @@ export default function CookieBanner({ complianceSettings }) {
     <div className="fixed bottom-6 left-6 right-6 md:left-auto md:right-8 md:max-w-md bg-white/80 backdrop-blur-xl border border-slate-200/80 rounded-2xl p-6 shadow-[0_20px_50px_rgba(0,0,0,0.12)] z-[9999] animate-slide-up">
       <div className="flex flex-col gap-4">
         <div>
-          <h3 className="font-heading font-extrabold text-[16px] text-primary mb-1.5 tracking-tight">
+          <h3 className="font-heading font-extrabold text-base text-primary mb-1.5 tracking-tight">
             We value your privacy
           </h3>
           
@@ -131,7 +131,7 @@ export default function CookieBanner({ complianceSettings }) {
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <h4 className="text-xs font-bold text-slate-800">Essential Cookies</h4>
-                  <p className="text-[10px] text-slate-500">Required for the website to function properly. Cannot be disabled.</p>
+                  <p className="text-xs text-slate-500">Required for the website to function properly. Cannot be disabled.</p>
                 </div>
                 <input type="checkbox" checked disabled className="h-4 w-4 rounded border-slate-300 text-accent focus:ring-accent accent-accent mt-0.5" />
               </div>
@@ -139,7 +139,7 @@ export default function CookieBanner({ complianceSettings }) {
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <h4 className="text-xs font-bold text-slate-800">Analytics & Performance</h4>
-                  <p className="text-[10px] text-slate-500">Helps us understand how visitors interact with the site to improve user experience.</p>
+                  <p className="text-xs text-slate-500">Helps us understand how visitors interact with the site to improve user experience.</p>
                 </div>
                 <input 
                   type="checkbox" 
@@ -152,7 +152,7 @@ export default function CookieBanner({ complianceSettings }) {
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <h4 className="text-xs font-bold text-slate-800">Marketing & Advertising</h4>
-                  <p className="text-[10px] text-slate-500">Used to deliver personalized ads and content based on your interests.</p>
+                  <p className="text-xs text-slate-500">Used to deliver personalized ads and content based on your interests.</p>
                 </div>
                 <input 
                   type="checkbox" 
