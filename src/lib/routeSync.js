@@ -1,7 +1,18 @@
+/**
+ * routeSync.js
+ *
+ * Route synchronization strategy:
+ * - Build-time discovery is the single source of truth for WHICH routes exist (scanning src/app and writing to discovered-routes.json).
+ * - Production runtime sync (instrumentation.js) reads directly from the compile-time imported discovered-routes.json snapshot
+ *   and pushes it to the database on cold starts, completely bypassing filesystem reads which are unreliable on serverless.
+ * - Development runtime sync attempts live filesystem scans and falls back to discovered-routes.json if the scan is empty.
+ */
 import path from "path";
 import fs from "fs";
-import prisma from "@/lib/prisma";
-import prebuiltRoutes from "./discovered-routes.json";
+import prisma from "./prisma.js";
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+const prebuiltRoutes = require("./discovered-routes.json");
 
 const SITE_ID = process.env.SITE_ID || "AHP";
 
@@ -67,25 +78,31 @@ function dirToSlug(dir, appDir) {
 
 export async function syncRoutes() {
   try {
-    let routes = prebuiltRoutes || [];
-    if (routes.length > 0) {
-      console.log(`[${SITE_ID} Startup] Loaded ${routes.length} pre-built routes from discovered-routes.json`);
-    }
+    let routes = [];
+    const isProd = process.env.NODE_ENV === "production";
 
-    if (routes.length === 0) {
+    if (isProd) {
+      routes = prebuiltRoutes || [];
+      console.log(`[${SITE_ID} Startup] Production mode: Loaded ${routes.length} pre-built routes from discovered-routes.json`);
+    } else {
       const appDir = path.join(process.cwd(), "src", "app");
       const pageDirs = discoverPageDirs(appDir);
 
-      routes = pageDirs
-        .map((dir) => dirToSlug(dir, appDir))
-        .filter(
-          (slug) => !EXCLUDED_PREFIXES.some((prefix) => slug.startsWith(prefix))
-        )
-        .map((slug) => ({
-          slug,
-          title: slugToTitle(slug),
-          isDynamic: slug.includes("["),
-        }));
+      if (pageDirs.length > 0) {
+        routes = pageDirs
+          .map((dir) => dirToSlug(dir, appDir))
+          .filter((slug) => !EXCLUDED_PREFIXES.some((prefix) => slug.startsWith(prefix)))
+          .map((slug) => ({
+            slug,
+            title: slugToTitle(slug),
+            isDynamic: slug.includes("["),
+          }));
+      } else {
+        routes = prebuiltRoutes || [];
+        if (routes.length > 0) {
+          console.warn(`[${SITE_ID} Startup] Live route discovery found 0 pages — falling back to discovered-routes.json`);
+        }
+      }
     }
 
     // Ensure site exists
@@ -134,22 +151,33 @@ export async function syncRoutes() {
     }
 
     const activeSlugs = routes.map((r) => r.slug);
-    const deleteResult = await prisma.page.deleteMany({
-      where: {
-        siteId: SITE_ID,
-        isDiscovered: true,
-        slug: {
-          notIn: activeSlugs,
+    let deleteCount = 0;
+    try {
+      const deleteResult = await prisma.page.deleteMany({
+        where: {
+          siteId: SITE_ID,
+          isDiscovered: true,
+          slug: {
+            notIn: activeSlugs,
+          },
         },
-      },
-    });
+      });
+      deleteCount = deleteResult.count;
+    } catch (delErr) {
+      const delMsg = delErr.message || "";
+      if (delMsg.includes("Lock wait timeout") || delMsg.includes("deadlock") || delMsg.includes("1205")) {
+        console.warn(`[${SITE_ID} Startup] ⚠️ Lock wait timeout/deadlock on cleaning up obsolete pages. Skipping cleanup (concurrent instance active).`);
+      } else {
+        console.error(`[${SITE_ID} Startup] ⚠️ Failed to delete obsolete pages:`, delErr.message);
+      }
+    }
 
     console.log(
       `[${SITE_ID} Startup] ✅ Auto-discovered and synced ${synced} routes to global backend.`
     );
-    if (deleteResult.count > 0) {
+    if (deleteCount > 0) {
       console.log(
-        `[${SITE_ID} Startup] 🗑️ Cleaned up ${deleteResult.count} obsolete pages from database.`
+        `[${SITE_ID} Startup] 🗑️ Cleaned up ${deleteCount} obsolete pages from database.`
       );
     }
   } catch (err) {

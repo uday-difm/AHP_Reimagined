@@ -84,18 +84,42 @@ async function run() {
     fs.mkdirSync(libDir, { recursive: true });
   }
 
+  if (routes.length === 0) {
+    console.error("❌ ERROR: Route discovery failed! Found 0 routes. Failing build loudly.");
+    process.exit(1);
+  }
+
   fs.writeFileSync(outputPath, JSON.stringify(routes, null, 2));
   console.log(`✅ Successfully discovered and wrote ${routes.length} routes to ${outputPath}`);
 
   // Sync routes to the database during build
-  if (process.env.DATABASE_URL) {
+  if (!process.env.DATABASE_URL) {
+    console.warn(`
+========================================================================
+⚠️  WARNING: DATABASE_URL is missing during build time!
+------------------------------------------------------------------------
+- Route sync to the database could NOT run during compilation.
+- Syncing will fall back entirely to runtime (instrument://instrumentation.js)
+  on Vercel cold starts.
+- Please ensure "discovered-routes.json" is committed and up to date.
+========================================================================
+    `);
+  } else {
     try {
       console.log("🗄️ Syncing routes to database during build...");
       // Prisma uses ts/esm config, so we dynamic import routeSync
       const { syncRoutes } = await import("../src/lib/routeSync.js");
       await syncRoutes();
     } catch (dbErr) {
-      console.warn("⚠️ Database route sync failed during build:", dbErr.message);
+      console.error(`
+========================================================================
+❌ ERROR: Database route sync failed during build!
+------------------------------------------------------------------------
+- Error: ${dbErr.message}
+- Details: ${dbErr.stack || dbErr}
+- The build will continue, and routes will attempt to sync at runtime instead.
+========================================================================
+      `);
     }
   }
 }
