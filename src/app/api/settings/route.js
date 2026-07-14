@@ -41,7 +41,7 @@ export async function GET(req) {
     const emailSettings = settings?.emailSettings || {};
     const oneSignalAppId = emailSettings.oneSignalAppId || null;
 
-    return NextResponse.json(apiSuccess({ 
+    const response = NextResponse.json(apiSuccess({ 
       isActive: site.isActive,
       websiteSettings: settings?.websiteSettings || null,
       ctaConfig: settings?.ctaConfig || null,
@@ -50,6 +50,8 @@ export async function GET(req) {
       securityControls: publicSecurityControls,
       oneSignalAppId
     }));
+    response.headers.set("Cache-Control", "public, max-age=10, s-maxage=60, stale-while-revalidate=30");
+    return response;
   } catch (err) {
     return NextResponse.json({ error: "Internal Server Error", message: err.message }, { status: 500 });
   }
