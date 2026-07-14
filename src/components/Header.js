@@ -15,7 +15,6 @@ export default function Header() {
   const isAuthenticated = status === 'authenticated';
   const [navItems, setNavItems] = useState([]);
   const [headerConfig, setHeaderConfig] = useState(null);
-  console.log(headerConfig)
 
   // Fetch header configurations from DB
   useEffect(() => {
