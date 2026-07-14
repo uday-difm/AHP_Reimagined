@@ -59,13 +59,13 @@ export const authOptions = {
         writeLog(`[Auth] Request Host: ${host}`);
 
         if (secretKey) {
-          const isTestKeyHost = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}/.test(host) || 
-                                host.includes("localhost") ||
-                                host.includes("127.0.0.1") ||
-                                host.includes(".ngrok.io") || 
-                                host.includes(".ngrok-free.dev") ||
-                                host.includes(".vercel.app");
-          
+          const isTestKeyHost = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}/.test(host) ||
+            host.includes("localhost") ||
+            host.includes("127.0.0.1") ||
+            host.includes(".ngrok.io") ||
+            host.includes(".ngrok-free.dev") ||
+            host.includes(".vercel.app");
+
           if (isTestKeyHost) {
             writeLog("[Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.");
             secretKey = "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe";
@@ -73,7 +73,7 @@ export const authOptions = {
         }
 
         const isDev = process.env.NODE_ENV === "development";
-        if (secretKey && !isDev) {
+        if (secretKey && isDashboardUser && !isDev) {
           const recaptchaToken = credentials?.recaptchaToken;
           writeLog(`[Auth] Token received (length: ${recaptchaToken?.length}): ${recaptchaToken ? recaptchaToken.substring(0, 30) : "empty"}...`);
           if (!recaptchaToken) {
@@ -130,12 +130,12 @@ export const authOptions = {
           return user;
         } catch (err) {
           writeLog(`[Auth] Admin authentication failed, trying frontend auth table for: ${credentials.email}`);
-          
+
           try {
             const shasum = crypto.createHash("sha256");
             shasum.update(credentials.password);
             const hashedPassword = shasum.digest("hex");
-            
+
             const frontendUser = await prisma.auth.findFirst({
               where: {
                 OR: [
@@ -144,7 +144,7 @@ export const authOptions = {
                 ]
               }
             });
-            
+
             if (frontendUser && frontendUser.password === hashedPassword) {
               writeLog(`[Auth] Frontend user authenticated successfully: ${frontendUser.email}`);
               return {
@@ -157,7 +157,7 @@ export const authOptions = {
           } catch (frontendErr) {
             writeLog(`[Auth] Frontend authentication error: ${frontendErr.message}`);
           }
-          
+
           writeLog(`[Auth] All authentication methods failed for: ${credentials.email}`);
           throw new Error(err.message || "Invalid credentials");
         }

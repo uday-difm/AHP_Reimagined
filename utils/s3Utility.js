@@ -153,12 +153,40 @@ export async function getObjectFromS3(key) {
 
   const s3Client = getS3Client();
 
-  const response = await s3Client.send(
-    new GetObjectCommand({
-      Bucket: bucket,
-      Key: key,
-    })
-  );
+  let response;
+  try {
+    response = await s3Client.send(
+      new GetObjectCommand({
+        Bucket: bucket,
+        Key: key,
+      })
+    );
+  } catch (err) {
+    const endpoint = process.env.S3_ENDPOINT || process.env.ENDPOINT;
+    if (endpoint) {
+      console.warn(`[S3 Proxy] Signed fetch failed for key "${key}", trying anonymous HTTP fallback... Reason: ${err.message}`);
+      const protocol = endpoint.startsWith("https") ? "https" : "http";
+      const cleanedEndpoint = endpoint.replace(/^https?:\/\//, "");
+      const url = `${protocol}://${cleanedEndpoint}/${bucket}/${key}`;
+
+      try {
+        const fetchRes = await fetch(url);
+        if (!fetchRes.ok) {
+          throw new Error(`Anonymous fetch failed with status ${fetchRes.status}`);
+        }
+        const arrayBuffer = await fetchRes.arrayBuffer();
+        return {
+          body: Buffer.from(arrayBuffer),
+          contentType: fetchRes.headers.get("content-type") || "application/octet-stream",
+          contentLength: parseInt(fetchRes.headers.get("content-length") || "0", 10) || arrayBuffer.byteLength,
+        };
+      } catch (fallbackErr) {
+        console.error(`[S3 Proxy] Anonymous fallback also failed for key "${key}":`, fallbackErr.message);
+        throw err; // throw original S3 signature error if fallback also fails
+      }
+    }
+    throw err;
+  }
 
   const streamToBuffer = (stream) =>
     new Promise((resolve, reject) => {
