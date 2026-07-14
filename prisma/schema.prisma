@@ -592,16 +592,17 @@ model LegalPage {
   site        Site      @relation(fields: [siteId], references: [id], onDelete: Cascade)
   type        String @db.VarChar(50)
   title       String
-  content     String
-  contentJson String?
+  content     String    @db.LongText
+  contentJson String?   @db.LongText
   published   Boolean   @default(false)
   lastUpdated DateTime  @default(now())
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  deletedAt   DateTime?
+  deletedAt   DateTime? // Add soft delete support just in case
 
   @@unique([siteId, type])
   @@index([siteId])
+  @@index([type])
 }
 
 model Redirect {

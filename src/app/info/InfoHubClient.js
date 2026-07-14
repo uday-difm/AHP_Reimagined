@@ -7,17 +7,18 @@ import Footer from '@/components/Footer';
 import CustomCursor from '@/components/CustomCursor';
 import ScrollReveal from '@/components/ScrollReveal';
 import BackdropBlobs from '@/components/BackdropBlobs';
+import Button from '@/components/Button';
 import Image from 'next/image';
 import Link from 'next/link';
-import { 
-  BookOpen, 
-  Users, 
-  HelpCircle, 
-  ShieldAlert, 
-  Search, 
-  ChevronRight, 
-  Mail, 
-  Phone, 
+import {
+  BookOpen,
+  Users,
+  HelpCircle,
+  ShieldAlert,
+  Search,
+  ChevronRight,
+  Mail,
+  Phone,
   CheckCircle,
   FileText
 } from 'lucide-react';
@@ -97,7 +98,7 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
 
   // Active tab state: 'support' | 'legal'
   const [activeTab, setActiveTab] = useState('support');
-  
+
   // Support form state
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formValues, setFormValues] = useState({ name: '', email: '', subject: '', message: '' });
@@ -124,6 +125,8 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
   const dbPrivacy = initialLegalPages.find(p => p.type?.toLowerCase().includes('privacy'));
   const dbTerms = initialLegalPages.find(p => p.type?.toLowerCase().includes('term'));
   const dbDisclaimer = initialLegalPages.find(p => p.type?.toLowerCase().includes('disclaimer') || p.type?.toLowerCase().includes('medical'));
+  const dbCookies = initialLegalPages.find(p => p.type?.toLowerCase().includes('cookie') || p.type?.toLowerCase() === 'cookies');
+  const dbRefund = initialLegalPages.find(p => p.type?.toLowerCase().includes('refund'));
 
   const handleTabChange = (tabName) => {
     setActiveTab(tabName);
@@ -168,34 +171,28 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
 
           {/* Info Hub Navigation Tabs */}
           <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3 bg-white/80 p-2 rounded-2xl shadow-sm border border-slate-200/50 max-w-2xl mx-auto reveal-scale">
-            <button
+            <Button
               onClick={() => handleTabChange('support')}
-              className={`flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-[13px] transition-all cursor-pointer ${
-                activeTab === 'support'
-                  ? 'bg-primary text-white shadow-sm'
-                  : 'text-secondary hover:bg-slate-100 hover:text-primary'
-              }`}
+              variant={activeTab === 'support' ? 'primary' : 'white'}
+              className="flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-[13px] !shadow-none border-none cursor-pointer"
             >
               <HelpCircle size={16} />
               Contact Support
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={() => handleTabChange('legal')}
-              className={`flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-[13px] transition-all cursor-pointer ${
-                activeTab === 'legal'
-                  ? 'bg-primary text-white shadow-sm'
-                  : 'text-secondary hover:bg-slate-100 hover:text-primary'
-              }`}
+              variant={activeTab === 'legal' ? 'primary' : 'white'}
+              className="flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-[13px] !shadow-none border-none cursor-pointer"
             >
               <ShieldAlert size={16} />
               Legal & Policies
-            </button>
+            </Button>
           </div>
         </div>
       </section>
 
-        {/* Main Tab Content */}
-        <main className="container py-16 max-w-6xl min-h-[500px]">
+      {/* Main Tab Content */}
+      <main className="container py-16 max-w-6xl min-h-[500px]">
 
 
         {/* Tab 3: Contact & Support */}
@@ -260,7 +257,7 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
                         type="text"
                         required
                         value={formValues.name}
-                        onChange={(e) => setFormValues({...formValues, name: e.target.value})}
+                        onChange={(e) => setFormValues({ ...formValues, name: e.target.value })}
                         placeholder="John Doe"
                         className="w-full px-4.5 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:ring-1 focus:ring-accent focus:bg-white"
                       />
@@ -271,7 +268,7 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
                         type="email"
                         required
                         value={formValues.email}
-                        onChange={(e) => setFormValues({...formValues, email: e.target.value})}
+                        onChange={(e) => setFormValues({ ...formValues, email: e.target.value })}
                         placeholder="john@example.com"
                         className="w-full px-4.5 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:ring-1 focus:ring-accent focus:bg-white"
                       />
@@ -283,7 +280,7 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
                     <input
                       type="text"
                       value={formValues.subject}
-                      onChange={(e) => setFormValues({...formValues, subject: e.target.value})}
+                      onChange={(e) => setFormValues({ ...formValues, subject: e.target.value })}
                       placeholder="Feedback on Guide / Editorial Support"
                       className="w-full px-4.5 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:ring-1 focus:ring-accent focus:bg-white"
                     />
@@ -295,18 +292,19 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
                       required
                       rows={5}
                       value={formValues.message}
-                      onChange={(e) => setFormValues({...formValues, message: e.target.value})}
+                      onChange={(e) => setFormValues({ ...formValues, message: e.target.value })}
                       placeholder="Write your query or feedback here..."
                       className="w-full px-4.5 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:ring-1 focus:ring-accent focus:bg-white resize-none"
                     />
                   </div>
 
-                  <button
+                  <Button
                     type="submit"
-                    className="w-full bg-primary hover:bg-primary/95 text-white font-bold text-xs py-3.5 rounded-xl transition shadow-md cursor-pointer"
+                    variant="primary"
+                    className="w-full py-3.5 text-xs rounded-xl shadow-md cursor-pointer"
                   >
                     Submit Support Ticket
-                  </button>
+                  </Button>
                 </form>
               )}
             </div>
@@ -318,39 +316,23 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
           <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-[1fr_2.5fr] gap-10">
             {/* Document Select Sidebar */}
             <div className="flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-visible pb-4 md:pb-0 border-b md:border-b-0 md:border-r border-slate-200 pr-0 md:pr-6 shrink-0">
-              <button
-                onClick={() => handleLegalDocToggle('privacy')}
-                className={`flex items-center gap-2.5 px-4.5 py-3.5 rounded-xl text-left font-bold text-[12.5px] transition-all cursor-pointer whitespace-nowrap md:w-full ${
-                  activeLegalDoc === 'privacy'
-                    ? 'bg-primary text-white shadow-sm'
-                    : 'text-secondary hover:bg-slate-100'
-                }`}
-              >
-                <FileText size={15} />
-                Privacy Policy
-              </button>
-              <button
-                onClick={() => handleLegalDocToggle('terms')}
-                className={`flex items-center gap-2.5 px-4.5 py-3.5 rounded-xl text-left font-bold text-[12.5px] transition-all cursor-pointer whitespace-nowrap md:w-full ${
-                  activeLegalDoc === 'terms'
-                    ? 'bg-primary text-white shadow-sm'
-                    : 'text-secondary hover:bg-slate-100'
-                }`}
-              >
-                <FileText size={15} />
-                Terms of Service
-              </button>
-              <button
-                onClick={() => handleLegalDocToggle('disclaimer')}
-                className={`flex items-center gap-2.5 px-4.5 py-3.5 rounded-xl text-left font-bold text-[12.5px] transition-all cursor-pointer whitespace-nowrap md:w-full ${
-                  activeLegalDoc === 'disclaimer'
-                    ? 'bg-primary text-white shadow-sm'
-                    : 'text-secondary hover:bg-slate-100'
-                }`}
-              >
-                <FileText size={15} />
-                Medical Disclaimer
-              </button>
+              {[
+                { key: 'privacy', label: 'Privacy Policy' },
+                { key: 'terms', label: 'Terms of Service' },
+                { key: 'cookies', label: 'Cookie Policy' },
+                { key: 'disclaimer', label: 'Medical Disclaimer' },
+                { key: 'refund', label: 'Refund Policy' },
+              ].map((doc) => (
+                <Button
+                  key={doc.key}
+                  onClick={() => handleLegalDocToggle(doc.key)}
+                  variant={activeLegalDoc === doc.key ? 'primary' : 'white'}
+                  className="flex items-center gap-2.5 px-4.5 py-3 rounded-xl justify-start text-[12.5px] text-left md:w-full whitespace-nowrap cursor-pointer !shadow-none border-none"
+                >
+                  <FileText size={15} />
+                  {doc.label}
+                </Button>
+              ))}
             </div>
 
             {/* Document Content View */}
@@ -359,9 +341,9 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
                 <>
                   <h2 className="font-heading font-extrabold text-2xl text-primary mb-6">{dbPrivacy?.title || 'Privacy Policy'}</h2>
                   <p className="text-slate-400 text-xs mb-4">Last Updated: {dbPrivacy?.lastUpdated ? new Date(dbPrivacy.lastUpdated).toLocaleDateString() : 'January 1, 2026'}</p>
-                  
+
                   {dbPrivacy?.content ? (
-                    <div dangerouslySetInnerHTML={{ __html: dbPrivacy.content }} />
+                    <div className="legal-content-html" dangerouslySetInnerHTML={{ __html: dbPrivacy.content }} />
                   ) : (
                     <>
                       <h3 className="font-heading font-bold text-primary text-[15px] mt-6">1. Information We Collect</h3>
@@ -394,7 +376,7 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
                   <p className="text-slate-400 text-xs mb-4">Last Updated: {dbTerms?.lastUpdated ? new Date(dbTerms.lastUpdated).toLocaleDateString() : 'January 1, 2026'}</p>
 
                   {dbTerms?.content ? (
-                    <div dangerouslySetInnerHTML={{ __html: dbTerms.content }} />
+                    <div className="legal-content-html" dangerouslySetInnerHTML={{ __html: dbTerms.content }} />
                   ) : (
                     <>
                       <h3 className="font-heading font-bold text-primary text-[15px] mt-6">1. Acceptance of Terms</h3>
@@ -421,6 +403,34 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
                 </>
               )}
 
+              {activeLegalDoc === 'cookies' && (
+                <>
+                  <h2 className="font-heading font-extrabold text-2xl text-primary mb-6">{dbCookies?.title || 'Cookie Policy'}</h2>
+                  <p className="text-slate-400 text-xs mb-4">Last Updated: {dbCookies?.lastUpdated ? new Date(dbCookies.lastUpdated).toLocaleDateString() : 'January 1, 2026'}</p>
+
+                  {dbCookies?.content ? (
+                    <div className="legal-content-html" dangerouslySetInnerHTML={{ __html: dbCookies.content }} />
+                  ) : (
+                    <>
+                      <h3 className="font-heading font-bold text-primary text-[15px] mt-6">1. What Are Cookies</h3>
+                      <p>
+                        Cookies are small text files placed on your device to collect standard Internet log information and visitor behavior information. When you visit our website, we may collect information from you automatically through cookies or similar technology.
+                      </p>
+
+                      <h3 className="font-heading font-bold text-primary text-[15px] mt-6">2. How We Use Cookies</h3>
+                      <p>
+                        Our company uses cookies in a range of ways to improve your experience on our website, including keeping you signed in, managing site consent settings, and understanding how you use our website.
+                      </p>
+
+                      <h3 className="font-heading font-bold text-primary text-[15px] mt-6">3. Managing Cookie Settings</h3>
+                      <p>
+                        You can set your browser not to accept cookies, or decline tracking preferences in our Cookie Banner option. However, in a few cases, some of our website features may not function as a result.
+                      </p>
+                    </>
+                  )}
+                </>
+              )}
+
               {activeLegalDoc === 'disclaimer' && (
                 <>
                   <div className="flex items-center gap-3 p-4 bg-amber-50 border border-amber-200 rounded-2xl text-amber-800 text-xs font-semibold mb-6">
@@ -432,7 +442,7 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
                   <p className="text-slate-400 text-xs mb-4">Last Updated: {dbDisclaimer?.lastUpdated ? new Date(dbDisclaimer.lastUpdated).toLocaleDateString() : 'January 1, 2026'}</p>
 
                   {dbDisclaimer?.content ? (
-                    <div dangerouslySetInnerHTML={{ __html: dbDisclaimer.content }} />
+                    <div className="legal-content-html" dangerouslySetInnerHTML={{ __html: dbDisclaimer.content }} />
                   ) : (
                     <>
                       <h3 className="font-heading font-bold text-primary text-[15px] mt-6">1. No Medical Advice</h3>
@@ -448,6 +458,29 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
                       <h3 className="font-heading font-bold text-primary text-[15px] mt-6">3. Endorsement and Liability</h3>
                       <p>
                         A Health Place does not recommend or endorse any specific tests, medical physicians, clinic setups, pharmaceuticals, or traditional wellness herbal routines that may be mentioned. Reliance on any details provided by the editorial team or review board is solely at your own risk.
+                      </p>
+                    </>
+                  )}
+                </>
+              )}
+
+              {activeLegalDoc === 'refund' && (
+                <>
+                  <h2 className="font-heading font-extrabold text-2xl text-primary mb-6">{dbRefund?.title || 'Refund Policy'}</h2>
+                  <p className="text-slate-400 text-xs mb-4">Last Updated: {dbRefund?.lastUpdated ? new Date(dbRefund.lastUpdated).toLocaleDateString() : 'January 1, 2026'}</p>
+
+                  {dbRefund?.content ? (
+                    <div className="legal-content-html" dangerouslySetInnerHTML={{ __html: dbRefund.content }} />
+                  ) : (
+                    <>
+                      <h3 className="font-heading font-bold text-primary text-[15px] mt-6">1. Subscription Refunds</h3>
+                      <p>
+                        Since our articles and digital calculators are free or available under open licensing, digital premium issues are non-refundable once delivered.
+                      </p>
+
+                      <h3 className="font-heading font-bold text-primary text-[15px] mt-6">2. Billing Disputes</h3>
+                      <p>
+                        If you believe you were charged in error for a premium newsletter membership, submit a ticket through our Contact Support tab.
                       </p>
                     </>
                   )}
