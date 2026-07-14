@@ -1,13 +1,14 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { apiSuccess } from "@/core/errors";
+import { getSiteId } from "@/lib/siteGuard";
 
 export async function GET(req, context) {
   try {
     const params = await context.params;
     const menuType = params?.menuType;
     const { searchParams } = new URL(req.url);
-    const siteId = searchParams.get("siteId");
+    const siteId = searchParams.get("siteId") || getSiteId(req);
 
     if (!siteId || !menuType) {
       return NextResponse.json({ error: "siteId and menuType parameters are required" }, { status: 400 });

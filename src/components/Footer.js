@@ -1,7 +1,36 @@
+'use client';
+
+import { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
 export default function Footer({ className = "" }) {
+  const [footerLinks, setFooterLinks] = useState([]);
+
+  // Fetch footer navigation menu from DB
+  useEffect(() => {
+    fetch('/api/navigation/footer')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.success && Array.isArray(data.data?.items)) {
+          setFooterLinks(data.data.items);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  // Default footer links fallback
+  const defaultFooterLinks = useMemo(() => [
+    { label: 'About Us', url: '/about' },
+    { label: 'Our Blogs', url: '/blogs' },
+    { label: 'Interactive Quizzes', url: '/quizzes' },
+    { label: 'Contact Us', url: '/contact' },
+  ], []);
+
+  const displayFooterLinks = useMemo(() => {
+    return footerLinks.length > 0 ? footerLinks : defaultFooterLinks;
+  }, [footerLinks, defaultFooterLinks]);
+
   return (
     <footer className="footer bg-cyan-900 text-white relative overflow-hidden rounded-t-[48px] border-t border-white/5 pt-24 pb-12 mt-[-48px] z-10">
       {/* Top Accent Gradient Line */}
@@ -72,12 +101,12 @@ export default function Footer({ className = "" }) {
               </div>
             </div>
 
-            {/* Company */}
+            {/* Company / Quick Links from DB */}
             <div className="footer-col">
               <h4 className="footer-title font-heading text-[12px] font-extrabold uppercase tracking-[2.5px] text-teal-300 mb-6">
                 Company
               </h4>
-              <ul className="footer-links list-none flex flex-col gap-4">
+              <ul className="footer-links list-none flex flex-col gap-3.5 pl-0">
                 <li>
                   <a
                     href="mailto:support@ahealthplace.com"
@@ -87,17 +116,15 @@ export default function Footer({ className = "" }) {
                     support@ahealthplace.com
                   </a>
                 </li>
-                {[
-                  { label: 'Contact Support', link: '#' }
-                ].map((item, idx) => (
+                {displayFooterLinks.map((item, idx) => (
                   <li key={idx}>
-                    <a
-                      href={item.link}
+                    <Link
+                      href={item.url}
                       className="footer-link text-[14px] text-white/80 no-underline transition-all duration-300 hover:text-teal-300 hover:pl-2 flex items-center group font-body"
                     >
                       <span className="w-1.5 h-1.5 rounded-full bg-teal-300 mr-2 opacity-0 group-hover:opacity-100 transition-all duration-300"></span>
                       {item.label}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -122,12 +149,12 @@ export default function Footer({ className = "" }) {
             © 2026 A Health Place. All rights reserved. Professional medical advice should be sought for any health concerns.
           </p>
           <div className="footer-bottom-links flex gap-6">
-            <a href="/legal/privacy" className="footer-bottom-link text-[12.5px] text-white/40 no-underline hover:text-accent transition-colors duration-300 font-body">
+            <Link href="/info?tab=legal&doc=privacy" className="footer-bottom-link text-[12.5px] text-white/40 no-underline hover:text-accent transition-colors duration-300 font-body">
               Privacy Policy
-            </a>
-            <a href="/legal/terms" className="footer-bottom-link text-[12.5px] text-white/40 no-underline hover:text-accent transition-colors duration-300 font-body">
+            </Link>
+            <Link href="/info?tab=legal&doc=terms" className="footer-bottom-link text-[12.5px] text-white/40 no-underline hover:text-accent transition-colors duration-300 font-body">
               Terms & Conditions
-            </a>
+            </Link>
           </div>
         </div>
       </div>
