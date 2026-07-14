@@ -1,6 +1,7 @@
 import path from "path";
 import fs from "fs";
 import prisma from "@/lib/prisma";
+import prebuiltRoutes from "./discovered-routes.json";
 
 const SITE_ID = process.env.SITE_ID || "AHP";
 
@@ -66,16 +67,9 @@ function dirToSlug(dir, appDir) {
 
 export async function syncRoutes() {
   try {
-    let routes = [];
-    const staticRoutesPath = path.join(process.cwd(), "src", "lib", "discovered-routes.json");
-
-    if (fs.existsSync(staticRoutesPath)) {
-      try {
-        routes = JSON.parse(fs.readFileSync(staticRoutesPath, "utf-8"));
-        console.log(`[${SITE_ID} Startup] Loaded ${routes.length} pre-built routes from discovered-routes.json`);
-      } catch (readErr) {
-        console.warn(`Failed to parse pre-built routes JSON: ${readErr.message}. Falling back to fs scan.`);
-      }
+    let routes = prebuiltRoutes || [];
+    if (routes.length > 0) {
+      console.log(`[${SITE_ID} Startup] Loaded ${routes.length} pre-built routes from discovered-routes.json`);
     }
 
     if (routes.length === 0) {
