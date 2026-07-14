@@ -9,15 +9,15 @@ import ScrollReveal from '@/components/ScrollReveal';
 import BackdropBlobs from '@/components/BackdropBlobs';
 import Image from 'next/image';
 import Link from 'next/link';
-import { 
-  BookOpen, 
-  Users, 
-  HelpCircle, 
-  ShieldAlert, 
-  Search, 
-  ChevronRight, 
-  Mail, 
-  Phone, 
+import {
+  BookOpen,
+  Users,
+  HelpCircle,
+  ShieldAlert,
+  Search,
+  ChevronRight,
+  Mail,
+  Phone,
   CheckCircle,
   FileText
 } from 'lucide-react';
@@ -97,7 +97,7 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
 
   // Active tab state: 'support' | 'legal'
   const [activeTab, setActiveTab] = useState('support');
-  
+
   // Support form state
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formValues, setFormValues] = useState({ name: '', email: '', subject: '', message: '' });
@@ -149,7 +149,7 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
   };
 
   return (
-    <div className="min-h-screen bg-bg-light relative pb-10">
+    <div className="min-h-screen bg-bg-light relative ">
       <CustomCursor />
       <ScrollReveal />
       <BackdropBlobs />
@@ -170,22 +170,20 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
           <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3 bg-white/80 p-2 rounded-2xl shadow-sm border border-slate-200/50 max-w-2xl mx-auto reveal-scale">
             <button
               onClick={() => handleTabChange('support')}
-              className={`flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-[13px] transition-all cursor-pointer ${
-                activeTab === 'support'
+              className={`flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-[13px] transition-all cursor-pointer ${activeTab === 'support'
                   ? 'bg-primary text-white shadow-sm'
                   : 'text-secondary hover:bg-slate-100 hover:text-primary'
-              }`}
+                }`}
             >
               <HelpCircle size={16} />
               Contact Support
             </button>
             <button
               onClick={() => handleTabChange('legal')}
-              className={`flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-[13px] transition-all cursor-pointer ${
-                activeTab === 'legal'
+              className={`flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-[13px] transition-all cursor-pointer ${activeTab === 'legal'
                   ? 'bg-primary text-white shadow-sm'
                   : 'text-secondary hover:bg-slate-100 hover:text-primary'
-              }`}
+                }`}
             >
               <ShieldAlert size={16} />
               Legal & Policies
@@ -194,8 +192,8 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
         </div>
       </section>
 
-        {/* Main Tab Content */}
-        <main className="container py-16 max-w-6xl min-h-[500px]">
+      {/* Main Tab Content */}
+      <main className="container py-16 max-w-6xl min-h-[500px]">
 
 
         {/* Tab 3: Contact & Support */}
@@ -260,7 +258,7 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
                         type="text"
                         required
                         value={formValues.name}
-                        onChange={(e) => setFormValues({...formValues, name: e.target.value})}
+                        onChange={(e) => setFormValues({ ...formValues, name: e.target.value })}
                         placeholder="John Doe"
                         className="w-full px-4.5 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:ring-1 focus:ring-accent focus:bg-white"
                       />
@@ -271,7 +269,7 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
                         type="email"
                         required
                         value={formValues.email}
-                        onChange={(e) => setFormValues({...formValues, email: e.target.value})}
+                        onChange={(e) => setFormValues({ ...formValues, email: e.target.value })}
                         placeholder="john@example.com"
                         className="w-full px-4.5 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:ring-1 focus:ring-accent focus:bg-white"
                       />
@@ -283,7 +281,7 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
                     <input
                       type="text"
                       value={formValues.subject}
-                      onChange={(e) => setFormValues({...formValues, subject: e.target.value})}
+                      onChange={(e) => setFormValues({ ...formValues, subject: e.target.value })}
                       placeholder="Feedback on Guide / Editorial Support"
                       className="w-full px-4.5 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:ring-1 focus:ring-accent focus:bg-white"
                     />
@@ -295,7 +293,7 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
                       required
                       rows={5}
                       value={formValues.message}
-                      onChange={(e) => setFormValues({...formValues, message: e.target.value})}
+                      onChange={(e) => setFormValues({ ...formValues, message: e.target.value })}
                       placeholder="Write your query or feedback here..."
                       className="w-full px-4.5 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:ring-1 focus:ring-accent focus:bg-white resize-none"
                     />
@@ -320,33 +318,30 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
             <div className="flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-visible pb-4 md:pb-0 border-b md:border-b-0 md:border-r border-slate-200 pr-0 md:pr-6 shrink-0">
               <button
                 onClick={() => handleLegalDocToggle('privacy')}
-                className={`flex items-center gap-2.5 px-4.5 py-3.5 rounded-xl text-left font-bold text-[12.5px] transition-all cursor-pointer whitespace-nowrap md:w-full ${
-                  activeLegalDoc === 'privacy'
+                className={`flex items-center gap-2.5 px-4.5 py-3.5 rounded-xl text-left font-bold text-[12.5px] transition-all cursor-pointer whitespace-nowrap md:w-full ${activeLegalDoc === 'privacy'
                     ? 'bg-primary text-white shadow-sm'
                     : 'text-secondary hover:bg-slate-100'
-                }`}
+                  }`}
               >
                 <FileText size={15} />
                 Privacy Policy
               </button>
               <button
                 onClick={() => handleLegalDocToggle('terms')}
-                className={`flex items-center gap-2.5 px-4.5 py-3.5 rounded-xl text-left font-bold text-[12.5px] transition-all cursor-pointer whitespace-nowrap md:w-full ${
-                  activeLegalDoc === 'terms'
+                className={`flex items-center gap-2.5 px-4.5 py-3.5 rounded-xl text-left font-bold text-[12.5px] transition-all cursor-pointer whitespace-nowrap md:w-full ${activeLegalDoc === 'terms'
                     ? 'bg-primary text-white shadow-sm'
                     : 'text-secondary hover:bg-slate-100'
-                }`}
+                  }`}
               >
                 <FileText size={15} />
                 Terms of Service
               </button>
               <button
                 onClick={() => handleLegalDocToggle('disclaimer')}
-                className={`flex items-center gap-2.5 px-4.5 py-3.5 rounded-xl text-left font-bold text-[12.5px] transition-all cursor-pointer whitespace-nowrap md:w-full ${
-                  activeLegalDoc === 'disclaimer'
+                className={`flex items-center gap-2.5 px-4.5 py-3.5 rounded-xl text-left font-bold text-[12.5px] transition-all cursor-pointer whitespace-nowrap md:w-full ${activeLegalDoc === 'disclaimer'
                     ? 'bg-primary text-white shadow-sm'
                     : 'text-secondary hover:bg-slate-100'
-                }`}
+                  }`}
               >
                 <FileText size={15} />
                 Medical Disclaimer
@@ -359,7 +354,7 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
                 <>
                   <h2 className="font-heading font-extrabold text-2xl text-primary mb-6">{dbPrivacy?.title || 'Privacy Policy'}</h2>
                   <p className="text-slate-400 text-xs mb-4">Last Updated: {dbPrivacy?.lastUpdated ? new Date(dbPrivacy.lastUpdated).toLocaleDateString() : 'January 1, 2026'}</p>
-                  
+
                   {dbPrivacy?.content ? (
                     <div dangerouslySetInnerHTML={{ __html: dbPrivacy.content }} />
                   ) : (

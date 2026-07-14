@@ -105,9 +105,9 @@ export async function PUT(request, context) {
     const magazine_description = formData.get("magazine_description");
     const magazine_introduction = formData.get("magazine_introduction");
     const magazine_tags = formData.get("magazine_tags");
-    const magazine_cover_image = formData.get("magazine_cover_image"); // File (optional)
-    const magazine_back_image = formData.get("magazine_back_image"); // File (optional)
-    const magazine_spine_image = formData.get("magazine_spine_image"); // File (optional)
+    const magazine_cover_image = formData.get("magazine_cover_image");
+    const magazine_back_image = formData.get("magazine_back_image");
+    const magazine_spine_image = formData.get("magazine_spine_image");
     const magazine_link = formData.get("magazine_link");
     const magazine_date = formData.get("magazine_date");
     const magazine_category = formData.get("magazine_category");
@@ -129,7 +129,7 @@ export async function PUT(request, context) {
       }
     }
 
-    // Handle uploads
+    // Handle uploads — retain existing if no new file provided
     let imageUrl = existing.coverImage;
     if (magazine_cover_image) {
       const coverUrl = await handleImageUpload(magazine_cover_image);

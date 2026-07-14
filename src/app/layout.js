@@ -80,12 +80,14 @@ export default async function RootLayout({ children }) {
     );
   }
 
+  const compliance = layout?.rawSettings?.compliance || {};
   const complianceSettings = {
-    cookieConsentEnabled: true,
-    cookieText: "We use cookies to enhance your browsing experience, serve personalized content, and analyze our traffic.",
-    cookieButtonText: "Accept All",
-    cookieDeclineButtonText: "Reject All",
-    ...(layout?.rawSettings?.compliance || {})
+    cookieConsentEnabled: compliance.cookieConsentEnabled !== false,
+    cookieText: compliance.cookieConsentMessage || compliance.cookieText || "We use cookies to enhance your browsing experience, serve personalized content, and analyze our traffic.",
+    cookieButtonText: compliance.acceptButtonText || compliance.cookieButtonText || "Accept All",
+    cookieDeclineButtonText: compliance.declineButtonText || compliance.cookieDeclineButtonText || "Reject All",
+    settingsButtonText: compliance.settingsButtonText || compliance.cookieSettingsButtonText || "Preferences",
+    cookiePrivacyLink: compliance.cookiePrivacyLink || "/info?tab=legal&doc=privacy",
   };
 
   return (

@@ -49,6 +49,12 @@ export default function ServiceEditor({ siteId, service }) {
   const [faqAnswer, setFaqAnswer] = useState("");
   const [faqError, setFaqError] = useState(null);
 
+  // Includes state — bullet list of features shown on the service card
+  const [includes, setIncludes] = useState([]);
+  const [newInclude, setNewInclude] = useState("");
+  const [editingIncludeIndex, setEditingIncludeIndex] = useState(null);
+  const [editingIncludeText, setEditingIncludeText] = useState("");
+
   const isEditMode = !!service;
 
   // Load service data
@@ -72,8 +78,27 @@ export default function ServiceEditor({ siteId, service }) {
         );
       }
 
-      if (service.faqs && Array.isArray(service.faqs)) {
-        setFaqs(service.faqs);
+      let parsedFaqs = [];
+      let parsedIncludes = [];
+      if (service.faqs) {
+        try {
+          const parsed = typeof service.faqs === "string" ? JSON.parse(service.faqs) : service.faqs;
+          if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+            parsedFaqs = parsed.faqs || [];
+            parsedIncludes = parsed.includes || [];
+          } else if (Array.isArray(parsed)) {
+            parsedFaqs = parsed;
+          }
+        } catch (e) {
+          console.error("Failed to parse faqs:", e);
+        }
+      }
+      setFaqs(parsedFaqs);
+
+      if (service.includes && Array.isArray(service.includes)) {
+        setIncludes(service.includes);
+      } else if (parsedIncludes.length > 0) {
+        setIncludes(parsedIncludes);
       }
     }
   }, [service, isEditMode]);
@@ -97,7 +122,7 @@ export default function ServiceEditor({ siteId, service }) {
     setIsSubmitting(true);
     setError(null);
 
-    const serviceData = { ...formData, siteId, faqs };
+    const serviceData = { ...formData, siteId, faqs, includes };
 
     const url = isEditMode
       ? `/api/dashboard/services/${service.id}`
@@ -309,6 +334,93 @@ export default function ServiceEditor({ siteId, service }) {
             </div>
           </div>
         </div>
+
+          {/* What's Included Card */}
+          <div className="lg:col-span-2 bg-white border border-slate-100 rounded-2xl p-6 shadow-xs space-y-5">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-4 border-b border-slate-100">
+              <div>
+                <h2 className="text-sm font-bold text-slate-800 tracking-wide uppercase flex items-center gap-2">
+                  <CheckCircle size={16} className="text-emerald-500" />
+                  What&apos;s Included
+                </h2>
+                <p className="text-[10px] text-slate-400 mt-0.5">
+                  Bullet points shown on the public service card.
+                </p>
+              </div>
+            </div>
+
+            {/* Add new include */}
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={newInclude}
+                onChange={(e) => setNewInclude(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const val = newInclude.trim();
+                    if (val) { setIncludes(prev => [...prev, val]); setNewInclude(''); }
+                  }
+                }}
+                placeholder="e.g., Full-page magazine placement"
+                className="flex-1 rounded-xl border border-slate-200 bg-slate-50/30 px-3.5 py-2.5 text-xs font-semibold text-slate-800 outline-none hover:border-slate-300 focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all duration-200"
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  const val = newInclude.trim();
+                  if (val) { setIncludes(prev => [...prev, val]); setNewInclude(''); }
+                }}
+                className="inline-flex items-center gap-1 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-sm transition"
+              >
+                <Plus size={13} />
+                Add
+              </button>
+            </div>
+
+            {/* Includes list */}
+            {includes.length === 0 ? (
+              <div className="text-center py-8 border-2 border-dashed border-slate-100 rounded-xl bg-slate-50/30">
+                <CheckCircle className="mx-auto text-slate-300 mb-2" size={28} />
+                <p className="text-xs font-bold text-slate-500">No feature bullets added yet.</p>
+                <p className="text-[10px] text-slate-400 mt-0.5">Type a bullet point above and press Add or Enter.</p>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {includes.map((item, index) => (
+                  <div key={index} className="group flex items-center gap-3 p-3 border border-slate-100 rounded-xl hover:border-slate-200 hover:bg-white hover:shadow-xs transition">
+                    <span className="w-5 h-5 flex items-center justify-center rounded-full bg-emerald-50 text-emerald-600 shrink-0">
+                      <CheckCircle size={12} />
+                    </span>
+                    {editingIncludeIndex === index ? (
+                      <input
+                        type="text"
+                        value={editingIncludeText}
+                        onChange={(e) => setEditingIncludeText(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') { e.preventDefault(); setIncludes(prev => prev.map((it, i) => i === index ? editingIncludeText.trim() || it : it)); setEditingIncludeIndex(null); }
+                          if (e.key === 'Escape') { setEditingIncludeIndex(null); }
+                        }}
+                        onBlur={() => { setIncludes(prev => prev.map((it, i) => i === index ? editingIncludeText.trim() || it : it)); setEditingIncludeIndex(null); }}
+                        autoFocus
+                        className="flex-1 rounded-lg border border-emerald-300 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-800 outline-none focus:ring-2 focus:ring-emerald-500/20 transition"
+                      />
+                    ) : (
+                      <span className="flex-1 text-xs font-medium text-slate-700">{item}</span>
+                    )}
+                    <div className="flex gap-1.5 opacity-0 group-hover:opacity-100 transition">
+                      <button type="button" onClick={() => { setEditingIncludeIndex(index); setEditingIncludeText(item); }} className="p-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-600 transition">
+                        <Edit size={11} />
+                      </button>
+                      <button type="button" onClick={() => setIncludes(prev => prev.filter((_, i) => i !== index))} className="p-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 transition">
+                        <Trash2 size={11} />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
 
         {/* Right Settings Sidebar */}
         <div className="space-y-6">

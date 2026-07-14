@@ -5,12 +5,22 @@ import { requireAuth } from "@/lib/requireAuth";
 export const dynamic = "force-dynamic";
 
 // GET /api/dashboard/quizzes — list all questions with analytics counts
-export async function GET() {
+export async function GET(req) {
   const user = await requireAuth();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   try {
+    const { searchParams } = new URL(req.url);
+    const categoryFilter = searchParams.get("category");
+
+    const where = categoryFilter
+      ? categoryFilter === "general-wellness"
+        ? { OR: [{ category: "general-wellness" }, { category: null }] }
+        : { category: categoryFilter }
+      : {};
+
     const quizzes = await prisma.quiz.findMany({
+      where,
       orderBy: { id: "asc" },
     });
 
@@ -51,7 +61,7 @@ export async function POST(req) {
 
   try {
     const body = await req.json();
-    const { question, options, correctAnswer, explanation } = body;
+    const { question, options, correctAnswer, explanation, category } = body;
 
     if (!question || !options || correctAnswer === undefined || correctAnswer === "") {
       return NextResponse.json({ error: "question, options, and correctAnswer are required" }, { status: 400 });
@@ -67,6 +77,7 @@ export async function POST(req) {
         options: optionsJson,
         correctAnswer: String(correctAnswer),
         explanation: (explanation || "").trim(),
+        category: (category || "general-wellness").trim(),
       },
     });
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
@@ -32,9 +32,31 @@ export default function HomeQuizWidget() {
   const [animating, setAnimating] = useState(false);
   const [showGate, setShowGate] = useState(false);
   const [answers, setAnswers] = useState([]);
+  const [dbQuestions, setDbQuestions] = useState(null);
+
+  useEffect(() => {
+    fetch('/api/quizess/quiz?category=home-page')
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => {
+        if (data && data.length > 0) {
+          const formatted = data.map((q) => ({
+            id: q._id,
+            text: q.question,
+            options: q.options.map((opt, idx) => ({
+              label: opt,
+              score: idx === q.correctAnswer ? 3 : 0,
+            })),
+            correctAnswer: q.correctAnswer,
+            explanation: q.explanation || "",
+          }));
+          setDbQuestions(formatted);
+        }
+      })
+      .catch((err) => console.error("Error loading db quizzes:", err));
+  }, []);
 
   const quiz = quizzes[FEATURED_QUIZ_INDEX];
-  const questions = quiz.questions;
+  const questions = dbQuestions && dbQuestions.length > 0 ? dbQuestions : quiz.questions;
   const currentQ = questions[currentIndex];
   const isLastQuestion = currentIndex === questions.length - 1;
 

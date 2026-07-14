@@ -3,9 +3,18 @@ import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(req) {
   try {
-    const quizzes = await prisma.quiz.findMany();
+    const { searchParams } = new URL(req.url);
+    const categoryFilter = searchParams.get("category") || "general-wellness";
+
+    const where = categoryFilter === "general-wellness"
+      ? { OR: [{ category: "general-wellness" }, { category: null }] }
+      : { category: categoryFilter };
+
+    const quizzes = await prisma.quiz.findMany({
+      where
+    });
     const formatted = quizzes.map((q) => {
       let parsedOptions = [];
       try {
