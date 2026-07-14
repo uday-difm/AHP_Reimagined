@@ -114,7 +114,7 @@ export async function proxy(request) {
         { headers: { "x-internal-check": "1" } }
       );
 
-      if (settingsRes.ok) {
+      if (settingsRes.ok && settingsRes.headers.get("content-type")?.includes("application/json")) {
         const settingsData = await settingsRes.json();
         const ws = settingsData?.data?.websiteSettings ?? settingsData?.websiteSettings;
         const isMaintenanceMode = ws?.maintenanceMode === true;
@@ -149,7 +149,7 @@ export async function proxy(request) {
         { headers: { "x-internal-check": "1" } }
       );
 
-      if (redirectRes.ok) {
+      if (redirectRes.ok && redirectRes.headers.get("content-type")?.includes("application/json")) {
         const redirectData = await redirectRes.json();
         const rule = redirectData?.data?.redirect ?? redirectData?.redirect;
 
