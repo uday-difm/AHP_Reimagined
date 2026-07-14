@@ -2,7 +2,6 @@ import React, { Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import DOMPurify from 'isomorphic-dompurify';
 import prisma from '@/lib/prisma';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -100,9 +99,7 @@ export default async function ArticlePage({ params }) {
   const wordCount = rawTextContent.split(/\s+/).filter(Boolean).length;
   const readTime = `${Math.max(1, Math.ceil(wordCount / 200))} min read`;
 
-  const sanitizedHtml = DOMPurify.sanitize(
-    typeof post.content === "string" ? post.content : ""
-  );
+  const sanitizedHtml = typeof post.content === "string" ? post.content : "";
 
   const featuredImgUrl = post.featuredImage?.secureUrl || post.featuredImage?.url || '/images/holistic.png';
 
