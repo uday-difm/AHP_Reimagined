@@ -60,7 +60,7 @@ function dirToSlug(dir, appDir) {
   return relative === "" ? "/" : `/${relative}`;
 }
 
-function run() {
+async function run() {
   console.log("🔍 Running route discovery script...");
   const appDir = path.join(process.cwd(), "src", "app");
   const pageDirs = discoverPageDirs(appDir);
@@ -86,6 +86,18 @@ function run() {
 
   fs.writeFileSync(outputPath, JSON.stringify(routes, null, 2));
   console.log(`✅ Successfully discovered and wrote ${routes.length} routes to ${outputPath}`);
+
+  // Sync routes to the database during build
+  if (process.env.DATABASE_URL) {
+    try {
+      console.log("🗄️ Syncing routes to database during build...");
+      // Prisma uses ts/esm config, so we dynamic import routeSync
+      const { syncRoutes } = await import("../src/lib/routeSync.js");
+      await syncRoutes();
+    } catch (dbErr) {
+      console.warn("⚠️ Database route sync failed during build:", dbErr.message);
+    }
+  }
 }
 
 run();
