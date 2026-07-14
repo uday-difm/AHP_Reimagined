@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import prisma from "@/lib/prisma";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import Scene from "@/components/Scene";
+import DynamicScene from "@/components/DynamicScene";
 
 export const revalidate = 60; // ISR: Revalidate every 60 seconds
 
@@ -67,7 +67,7 @@ export default async function MagazineIssuePage({ params }) {
             {/* Left Column: 3D Book Viewer / Fallback Image */}
             <div className="lg:col-span-5 flex flex-col items-center gap-6">
               <div className="w-full max-w-[320px] aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl bg-white/40 p-4 border border-white/60 relative">
-                <Scene
+                <DynamicScene
                   frontUrl={mag.coverImage}
                   backUrl={mag.backImage || mag.coverImage}
                   spineUrl={mag.spineImage || mag.coverImage}
