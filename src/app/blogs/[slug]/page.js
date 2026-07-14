@@ -2,7 +2,7 @@ import React, { Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import prisma from '@/lib/prisma';
+import { cms } from '@/lib/cms';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AdSlot from '@/components/AdSlot';
@@ -14,19 +14,13 @@ export async function generateMetadata({ params }) {
   const { slug } = await params;
   const siteId = process.env.NEXT_PUBLIC_SITE_ID || process.env.SITE_ID || "infinium";
 
-  const post = await prisma.post.findUnique({
-    where: { siteId_slug: { siteId, slug } },
-    select: {
-      title: true,
-      seoTitle: true,
-      seoDescription: true,
-      excerpt: true,
-      canonicalUrl: true,
-      ogImage: true,
-      status: true,
-      deletedAt: true,
-    },
-  });
+  let post = null;
+  try {
+    const data = await cms.getPostBySlug(slug);
+    post = data?.post || null;
+  } catch (e) {
+    console.error("Error fetching post metadata via SDK:", e);
+  }
 
   if (!post || post.status !== "PUBLISHED" || post.deletedAt) {
     return { title: "Article Not Found" };
@@ -44,42 +38,19 @@ export default async function ArticlePage({ params }) {
   const { slug } = await params;
   const siteId = process.env.NEXT_PUBLIC_SITE_ID || process.env.SITE_ID || "infinium";
 
-  const [post, fallbackRelated] = await Promise.all([
-    prisma.post.findUnique({
-      where: { siteId_slug: { siteId, slug } },
-      select: {
-        id: true,
-        title: true,
-        slug: true,
-        content: true,
-        excerpt: true,
-        status: true,
-        deletedAt: true,
-        publishedAt: true,
-        author: { select: { name: true, email: true } },
-        featuredImage: { select: { url: true, secureUrl: true, altText: true } },
-        categories: { select: { id: true, name: true, slug: true } },
-        tags: { select: { id: true, name: true, slug: true } },
-      },
-    }),
-    prisma.post.findMany({
-      where: {
-        siteId,
-        status: "PUBLISHED",
-        deletedAt: null,
-        slug: { not: slug },
-      },
-      select: {
-        id: true,
-        title: true,
-        slug: true,
-        categories: { select: { name: true } },
-        featuredImage: { select: { url: true, secureUrl: true } },
-      },
-      orderBy: { publishedAt: "desc" },
-      take: 3,
-    }),
-  ]);
+  let post = null;
+  let fallbackRelated = [];
+  try {
+    const [postData, relatedData] = await Promise.all([
+      cms.getPostBySlug(slug),
+      cms.getPosts({ limit: 3 })
+    ]);
+    post = postData?.post || null;
+    fallbackRelated = relatedData?.posts || [];
+    fallbackRelated = fallbackRelated.filter(p => p.slug !== slug).slice(0, 3);
+  } catch (e) {
+    console.error("Error fetching post data via SDK:", e);
+  }
 
   if (!post || post.status !== "PUBLISHED" || post.deletedAt) {
     notFound();

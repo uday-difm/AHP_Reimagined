@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import prisma from "@/lib/prisma";
+import { cms } from "@/lib/cms";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import DynamicScene from "@/components/DynamicScene";
@@ -10,10 +10,13 @@ export const revalidate = 60; // ISR: Revalidate every 60 seconds
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const mag = await prisma.magazine.findFirst({
-    where: { slug, status: 1 },
-    select: { title: true, description: true, coverImage: true },
-  });
+  let mag = null;
+  try {
+    const data = await cms.getMagazineBySlug(slug);
+    mag = data?.magazine || null;
+  } catch (e) {
+    console.error("Error fetching magazine for metadata:", e);
+  }
 
   if (!mag) return { title: "Issue Not Found" };
 
@@ -26,11 +29,15 @@ export async function generateMetadata({ params }) {
 
 export default async function MagazineIssuePage({ params }) {
   const { slug } = await params;
-  const mag = await prisma.magazine.findFirst({
-    where: { slug, status: 1 },
-  });
+  let mag = null;
+  try {
+    const data = await cms.getMagazineBySlug(slug);
+    mag = data?.magazine || null;
+  } catch (e) {
+    console.error("Error fetching magazine for page:", e);
+  }
 
-  if (!mag) {
+  if (!mag || mag.status !== 1) {
     notFound();
   }
 
@@ -68,9 +75,9 @@ export default async function MagazineIssuePage({ params }) {
             <div className="lg:col-span-5 flex flex-col items-center gap-6">
               <div className="w-full max-w-[320px] aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl bg-white/40 p-4 border border-white/60 relative">
                 <DynamicScene
-                  frontUrl={mag.coverImage}
-                  backUrl={mag.backImage || mag.coverImage}
-                  spineUrl={mag.spineImage || mag.coverImage}
+                  frontUrl={mag.coverImage ? `/api/media/proxy?url=${encodeURIComponent(mag.coverImage)}` : ""}
+                  backUrl={mag.backImage || mag.coverImage ? `/api/media/proxy?url=${encodeURIComponent(mag.backImage || mag.coverImage)}` : ""}
+                  spineUrl={mag.spineImage || mag.coverImage ? `/api/media/proxy?url=${encodeURIComponent(mag.spineImage || mag.coverImage)}` : ""}
                 />
               </div>
 
@@ -165,11 +172,12 @@ export default async function MagazineIssuePage({ params }) {
 }
 
 export async function generateStaticParams() {
-  const mags = await prisma.magazine.findMany({
-    where: { status: 1 },
-    select: { slug: true },
-    orderBy: { date: 'desc' }, // Generate newest first
-    take: 10,
-  });
-  return mags.map((m) => ({ slug: m.slug }));
+  try {
+    const data = await cms.getMagazines({ limit: 10 });
+    const mags = data?.magazines || [];
+    return mags.map((m) => ({ slug: m.slug }));
+  } catch (e) {
+    console.error("Error generating static params for magazines:", e);
+    return [];
+  }
 }

@@ -1,8 +1,6 @@
-// src/app/not-found.js — Custom 404 page driven by CMS settings with fallback
 import Link from "next/link";
 import { cms } from "../lib/cms";
 import ClientRedirect from "./ClientRedirect";
-
 
 export default async function NotFoundPage() {
   let custom404 = null;
