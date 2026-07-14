@@ -53,52 +53,48 @@ export default async function BlogsAdmin({ searchParams: rawSearchParams }) {
     where.publishedAt = { gt: new Date() };
   }
 
-  const posts = await prisma.post.findMany({
-    where,
-    orderBy: { updatedAt: "desc" },
-    include: {
-      author: { select: { id: true, email: true } },
-      categories: true,
-      featuredImage: { select: { url: true, secureUrl: true, altText: true } },
-    },
-  });
-
-  // Full counts (unfiltered) for metric cards
-  const allPosts = await prisma.post.findMany({
-    where: { siteId: site.id, deletedAt: null },
-    select: { status: true, publishedAt: true },
-  });
   const now = new Date();
-  const totalCount = allPosts.length;
-  const publishedCount = allPosts.filter(
-    (p) =>
-      p.status === "PUBLISHED" &&
-      p.publishedAt &&
-      new Date(p.publishedAt) <= now,
-  ).length;
-  const draftCount = allPosts.filter(
-    (p) =>
-      p.status === "DRAFT" &&
-      (!p.publishedAt || new Date(p.publishedAt) <= now),
-  ).length;
-  const scheduledCount = allPosts.filter(
-    (p) => p.publishedAt && new Date(p.publishedAt) > now,
-  ).length;
 
-  // Categories scoped to this site
-  const categories = await prisma.category.findMany({
-    where: { siteId: site.id },
-    orderBy: { name: "asc" },
-    include: {
-      _count: {
-        select: {
-          posts: {
-            where: { siteId: site.id, deletedAt: null },
+  const [posts, totalCount, publishedCount, draftCount, scheduledCount, categories] = await Promise.all([
+    prisma.post.findMany({
+      where,
+      orderBy: { updatedAt: "desc" },
+      include: {
+        author: { select: { id: true, email: true } },
+        categories: true,
+        featuredImage: { select: { url: true, secureUrl: true, altText: true } },
+      },
+    }),
+    prisma.post.count({ where: { siteId: site.id, deletedAt: null } }),
+    // Published: status=PUBLISHED AND publishedAt <= now
+    prisma.post.count({
+      where: { siteId: site.id, deletedAt: null, status: "PUBLISHED", publishedAt: { lte: now } },
+    }),
+    // Draft: status=DRAFT AND (no publishedAt OR publishedAt <= now)
+    prisma.post.count({
+      where: {
+        siteId: site.id,
+        deletedAt: null,
+        status: "DRAFT",
+        OR: [{ publishedAt: null }, { publishedAt: { lte: now } }],
+      },
+    }),
+    // Scheduled: publishedAt is in the future (regardless of status)
+    prisma.post.count({ where: { siteId: site.id, deletedAt: null, publishedAt: { gt: now } } }),
+    prisma.category.findMany({
+      where: { siteId: site.id },
+      orderBy: { name: "asc" },
+      include: {
+        _count: {
+          select: {
+            posts: {
+              where: { siteId: site.id, deletedAt: null },
+            },
           },
         },
       },
-    },
-  });
+    }),
+  ]);
 
   const filters = [
     { label: "All Posts", value: "ALL", count: totalCount },

@@ -1,12 +1,16 @@
+import { cache } from "react";
 import prisma from "@/lib/prisma";
 /**
  * Resolves the active site for a given authenticated user.
  * Supporting cookie-based workspace selection switcher.
  *
+ * Wrapped in React cache() so repeated calls within the same request
+ * (e.g. from dashboard layout + page) resolve to a single DB query.
+ *
  * @param {object} user - User object from requireAuth()
  * @returns {Promise<object|null>} Prisma Site record or null
  */
-export async function getSiteForUser(user) {
+export const getSiteForUser = cache(async (user) => {
   if (!user) return null;
 
   // Resolve directly from environment variables (single-site mode)
@@ -37,7 +41,7 @@ export async function getSiteForUser(user) {
     where: { isActive: true, deletedAt: null },
     orderBy: { createdAt: "asc" },
   });
-}
+});
 
 /**
  * Convenience wrapper that returns just the siteId string.

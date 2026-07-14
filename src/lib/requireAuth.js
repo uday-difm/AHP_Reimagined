@@ -1,10 +1,10 @@
+import { cache } from "react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./auth";
 import prisma from "./prisma";
 
-export async function requireAuth() {
+export const requireAuth = cache(async () => {
   const session = await getServerSession(authOptions);
-  console.log("[requireAuth Debug] Session:", JSON.stringify(session));
 
   if (!session?.user?.id) {
     return null;
@@ -14,9 +14,7 @@ export async function requireAuth() {
     const user = await prisma.user.findUnique({
       where: { id: session.user.id }
     });
-    if (!user) {
-      return null;
-    }
+    if (!user) return null;
     return {
       ...session.user,
       ...user
@@ -25,4 +23,4 @@ export async function requireAuth() {
     console.error("requireAuth database validation failed:", err);
     return null;
   }
-}
+});
