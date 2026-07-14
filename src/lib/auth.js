@@ -39,10 +39,11 @@ export const authOptions = {
       async authorize(credentials, req) {
         const logFile = path.join(process.cwd(), "auth_debug.log");
         const writeLog = (msg) => {
+          console.log(msg); // Also output to Vercel/NextJS server console
           try {
             fs.appendFileSync(logFile, `[${new Date().toISOString()}] ${msg}\n`);
           } catch (e) {
-            console.error("Failed to write log to file:", e);
+            // Ephemeral file systems on Vercel will trigger this, which is fine
           }
         };
 
