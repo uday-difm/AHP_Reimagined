@@ -100,3 +100,16 @@
 [2026-07-13T09:58:03.855Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
 [2026-07-13T09:58:03.875Z] [Auth] Authenticating against authService for: admin@example.com
 [2026-07-13T09:58:04.281Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrfzj7vj0001tosc2a7zo1hn
+[2026-07-14T03:10:22.477Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-14T03:10:22.478Z] [Auth] Request Host: localhost:3000
+[2026-07-14T03:10:22.479Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
+[2026-07-14T03:10:22.480Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-14T03:10:22.501Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-14T03:10:22.960Z] [Auth] Admin authentication failed, trying frontend auth table for: admin@example.com
+[2026-07-14T03:10:22.967Z] [Auth] All authentication methods failed for: admin@example.com
+[2026-07-14T03:10:28.659Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-14T03:10:28.660Z] [Auth] Request Host: localhost:3000
+[2026-07-14T03:10:28.661Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
+[2026-07-14T03:10:28.661Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-14T03:10:28.662Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-14T03:10:29.053Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrfzj7vj0001tosc2a7zo1hn
