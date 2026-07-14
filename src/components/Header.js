@@ -13,6 +13,7 @@ export default function Header() {
   const isAuthenticated = status === 'authenticated';
   const [navItems, setNavItems] = useState([]);
   const [headerConfig, setHeaderConfig] = useState(null);
+  console.log(headerConfig)
 
   // Fetch header configurations from DB
   useEffect(() => {
@@ -23,7 +24,7 @@ export default function Header() {
           setHeaderConfig(data.data.header);
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   // Fetch dynamic menu based on header configuration selection (defaults to 'main')
@@ -37,7 +38,7 @@ export default function Header() {
           setNavItems(data.data.items);
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   }, [activeMenuType]);
 
   // Default links fallback
@@ -60,12 +61,12 @@ export default function Header() {
       ...displayLinks,
       ...(isAuthenticated
         ? [
-            { label: 'Dashboard', url: '/quizzes/dashboard', type: 'internal' },
-            { label: 'Logout', url: '#', type: 'internal', isLogout: true },
-          ]
+          { label: 'Dashboard', url: '/quizzes/dashboard', type: 'internal' },
+          { label: 'Logout', url: '#', type: 'internal', isLogout: true },
+        ]
         : [
-            { label: 'Login', url: '/login', type: 'internal' },
-          ]),
+          { label: 'Login', url: '/login', type: 'internal' },
+        ]),
     ];
   }, [displayLinks, isAuthenticated]);
 
@@ -193,24 +194,22 @@ export default function Header() {
 
       {/* Header Container */}
       <header
-        className={`fixed left-0 w-full flex items-center ${headerHeightClass} bg-white/30 backdrop-blur-lg z-[9000] transition-all duration-300 ${
-          borderBottom ? 'border-b border-slate-200/50' : ''
-        } ${shadowClass}`}
+        className={`fixed left-0 w-full flex items-center ${headerHeightClass} bg-white/30 backdrop-blur-lg z-[9000] transition-all duration-300 ${borderBottom ? 'border-b border-slate-200/50' : ''
+          } ${shadowClass}`}
         style={{ top: topBarHeight, WebkitBackdropFilter: 'blur(48px)' }}
       >
         <div className="header-container flex justify-between items-center w-full mx-auto px-6 md:px-10">
-          
+
           {/* Dynamic Logo rendering */}
           <Link href="/" className="logo-link flex items-center no-underline">
             {logoType === 'image' ? (
-              <Image
+              <img
                 src={logoUrl}
                 alt={logoText}
                 width={logoWidth}
                 height={logoHeight}
                 className="logo-img w-auto object-contain block transition-transform duration-300 hover:scale-[1.03]"
                 style={{ height: `${logoHeight}px` }}
-                priority
               />
             ) : (
               <span className="font-heading font-extrabold text-[20px] sm:text-[24px] tracking-tight text-primary transition-colors hover:text-[#0f7c85]">
@@ -303,11 +302,10 @@ export default function Header() {
             {/* Hamburger Menu Button */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className={`md:hidden relative w-12 h-12 rounded-full flex justify-center items-center cursor-pointer z-[10000] shadow-[0_4px_20px_rgba(0,0,0,0.05)] transition-all duration-500 border ${
-                menuOpen
-                  ? 'bg-accent border-accent shadow-[0_6px_24px_rgba(15,124,133,0.15)]'
-                  : 'bg-white/90 border-[var(--color-border)]/80 hover:scale-105 hover:border-accent hover:shadow-[0_6px_24px_rgba(31,185,251,0.12)]'
-              }`}
+              className={`md:hidden relative w-12 h-12 rounded-full flex justify-center items-center cursor-pointer z-[10000] shadow-[0_4px_20px_rgba(0,0,0,0.05)] transition-all duration-500 border ${menuOpen
+                ? 'bg-accent border-accent shadow-[0_6px_24px_rgba(15,124,133,0.15)]'
+                : 'bg-white/90 border-[var(--color-border)]/80 hover:scale-105 hover:border-accent hover:shadow-[0_6px_24px_rgba(31,185,251,0.12)]'
+                }`}
               aria-label="Toggle Menu"
             >
               <div className="w-5 h-3.5 relative">
@@ -322,9 +320,8 @@ export default function Header() {
 
       {/* Universal Hamburger Menu Overlay */}
       <div
-        className={`fixed inset-0 w-full h-[100dvh] bg-white/98 backdrop-blur-3xl z-[8999] flex flex-col justify-center transition-all duration-500 ${
-          menuOpen ? 'opacity-100 pointer-events-auto visible' : 'opacity-0 pointer-events-none invisible'
-        }`}
+        className={`fixed inset-0 w-full h-[100dvh] bg-white/98 backdrop-blur-3xl z-[8999] flex flex-col justify-center transition-all duration-500 ${menuOpen ? 'opacity-100 pointer-events-auto visible' : 'opacity-0 pointer-events-none invisible'
+          }`}
       >
         <div className={`hb-menu-container w-full h-full max-h-[100dvh] overflow-y-auto py-24 px-6 sm:px-10 md:px-20 flex flex-col justify-center transition-transform duration-700 ${menuOpen ? 'translate-y-0' : 'translate-y-10'}`}>
           <nav className="hb-nav-links flex flex-col items-end pr-0 md:pr-16 lg:pr-32 w-full my-auto">
@@ -339,9 +336,8 @@ export default function Header() {
                         signOut({ callbackUrl: '/' });
                       }}
                       style={{ transitionDelay: `${idx * 0.04}s` }}
-                      className={`hb-nav-item font-heading font-extrabold text-[28px] sm:text-[40px] md:text-[56px] lg:text-[64px] text-red-500 hover:text-red-600 no-underline leading-[1.1] tracking-[-1.5px] block w-full text-right hover:-translate-x-3 hover:scale-[1.02] hover:bg-red-500/10 px-6 py-3 rounded-2xl transition-all duration-500 border-none bg-transparent cursor-pointer ${
-                        menuOpen ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'
-                      }`}
+                      className={`hb-nav-item font-heading font-extrabold text-[28px] sm:text-[40px] md:text-[56px] lg:text-[64px] text-red-500 hover:text-red-600 no-underline leading-[1.1] tracking-[-1.5px] block w-full text-right hover:-translate-x-3 hover:scale-[1.02] hover:bg-red-500/10 px-6 py-3 rounded-2xl transition-all duration-500 border-none bg-transparent cursor-pointer ${menuOpen ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'
+                        }`}
                     >
                       Logout
                     </button>
@@ -355,9 +351,8 @@ export default function Header() {
                     <Link
                       href={item.url}
                       onClick={() => !hasChildren && setMenuOpen(false)}
-                      className={`hb-nav-item font-heading font-extrabold text-[28px] sm:text-[40px] md:text-[56px] lg:text-[64px] text-primary no-underline leading-[1.1] tracking-[-1.5px] block w-full hover:text-accent hover:-translate-x-3 hover:scale-[1.02] hover:bg-accent/10 px-6 py-3 rounded-2xl transition-all duration-500 ${
-                        menuOpen ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'
-                      }`}
+                      className={`hb-nav-item font-heading font-extrabold text-[28px] sm:text-[40px] md:text-[56px] lg:text-[64px] text-primary no-underline leading-[1.1] tracking-[-1.5px] block w-full hover:text-accent hover:-translate-x-3 hover:scale-[1.02] hover:bg-accent/10 px-6 py-3 rounded-2xl transition-all duration-500 ${menuOpen ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'
+                        }`}
                     >
                       {item.label}
                     </Link>
