@@ -6,6 +6,7 @@ import { ArrowLeft, Loader2, Upload, Calendar, Link as LinkIcon, Tag, Layers, Fi
 import Link from "next/link";
 import { toast } from "sonner";
 import dynamic from "next/dynamic";
+import { compressImage } from "@/utils/clientImageCompression";
 
 // Dynamically import Jodit Editor to prevent server-side rendering issues
 const JoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
@@ -96,13 +97,16 @@ export default function MagazineEditor({ initialData = null }) {
     formData.append("status", values.status.toString());
 
     if (coverFileRef.current?.files[0]) {
-      formData.append("magazine_cover_image", coverFileRef.current.files[0]);
+      const compressed = await compressImage(coverFileRef.current.files[0]);
+      formData.append("magazine_cover_image", compressed);
     }
     if (backFileRef.current?.files[0]) {
-      formData.append("magazine_back_image", backFileRef.current.files[0]);
+      const compressed = await compressImage(backFileRef.current.files[0]);
+      formData.append("magazine_back_image", compressed);
     }
     if (spineFileRef.current?.files[0]) {
-      formData.append("magazine_spine_image", spineFileRef.current.files[0]);
+      const compressed = await compressImage(spineFileRef.current.files[0]);
+      formData.append("magazine_spine_image", compressed);
     }
 
     try {
