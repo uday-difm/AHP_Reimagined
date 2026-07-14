@@ -57,7 +57,13 @@ export const authOptions = {
         const host = req.headers?.host || "";
         writeLog(`[Auth] Request Host: ${host}`);
 
-        if (secretKey) {
+        // Only enforce reCAPTCHA for users present in the admin database table
+        const adminUser = await prisma.user.findUnique({
+          where: { email: credentials?.email || "" }
+        });
+        const isDashboardUser = !!adminUser;
+
+        if (secretKey && isDashboardUser) {
           const isIpOrNgrok = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}/.test(host) || 
                               host.includes("localhost") ||
                               host.includes("127.0.0.1") ||
@@ -71,7 +77,7 @@ export const authOptions = {
         }
 
         const isDev = process.env.NODE_ENV === "development";
-        if (secretKey && !isDev) {
+        if (secretKey && isDashboardUser && !isDev) {
           const recaptchaToken = credentials?.recaptchaToken;
           writeLog(`[Auth] Token received (length: ${recaptchaToken?.length}): ${recaptchaToken ? recaptchaToken.substring(0, 30) : "empty"}...`);
           if (!recaptchaToken) {

@@ -34,11 +34,7 @@ async function handleImageUpload(file, folder = "magazines") {
   const buffer = Buffer.from(await file.arrayBuffer());
   let imageUrl = "";
 
-  const accessKey = process.env.S3_ACCESS_KEY || process.env.ACCESSKEY;
-  const secretKey = process.env.S3_SECRET_KEY || process.env.SECRETKEY;
-  const bucket = process.env.S3_BUCKET || process.env.BUCKET;
-
-  if (accessKey && secretKey && bucket) {
+  if (process.env.ACCESSKEY && process.env.SECRETKEY && process.env.BUCKET) {
     try {
       imageUrl = await uploadToS3(folder, {
         originalname: file.name,
@@ -125,10 +121,37 @@ export async function POST(request) {
       return NextResponse.json({ error: "Slug already exists. Please choose a different title." }, { status: 400 });
     }
 
-    // Handle uploads
-    const imageUrl = await handleImageUpload(magazine_cover_image);
-    const backImageUrl = await handleImageUpload(magazine_back_image);
-    const spineImageUrl = await handleImageUpload(magazine_spine_image);
+    // Handle cover image upload
+    let imageUrl = "";
+    if (magazine_cover_image && typeof magazine_cover_image === "object" && "arrayBuffer" in magazine_cover_image) {
+      const buffer = Buffer.from(await magazine_cover_image.arrayBuffer());
+
+      // Check S3 credentials
+      const hasS3 = (process.env.S3_ACCESS_KEY || process.env.ACCESSKEY) &&
+        (process.env.S3_SECRET_KEY || process.env.SECRETKEY) &&
+        (process.env.S3_BUCKET || process.env.BUCKET);
+      if (hasS3) {
+        try {
+          imageUrl = await uploadToS3("magazines", {
+            originalname: magazine_cover_image.name,
+            buffer,
+            mimetype: magazine_cover_image.type,
+          });
+        } catch (s3Error) {
+          console.error("S3 upload failed, trying Cloudinary...", s3Error);
+        }
+      }
+
+      // Fallback to Cloudinary if S3 upload didn't run or failed
+      if (!imageUrl) {
+        try {
+          imageUrl = await uploadToCloudinary(buffer, magazine_cover_image.name);
+        } catch (cloudinaryError) {
+          console.error("Cloudinary upload failed:", cloudinaryError);
+          return NextResponse.json({ error: "Failed to upload cover image." }, { status: 500 });
+        }
+      }
+    }
 
     // Create magazine issue in Prisma
     const magazine = await prisma.magazine.create({

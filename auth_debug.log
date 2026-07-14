@@ -113,3 +113,56 @@
 [2026-07-14T03:10:28.661Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
 [2026-07-14T03:10:28.662Z] [Auth] Authenticating against authService for: admin@example.com
 [2026-07-14T03:10:29.053Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrfzj7vj0001tosc2a7zo1hn
+[2026-07-14T08:46:59.792Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-14T08:46:59.793Z] [Auth] Request Host: localhost:3000
+[2026-07-14T08:46:59.794Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
+[2026-07-14T08:46:59.794Z] [Auth] Token received (length: undefined): empty...
+[2026-07-14T08:46:59.794Z] [Auth] Failed: reCAPTCHA token missing
+[2026-07-14T08:47:16.791Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-14T08:47:16.791Z] [Auth] Request Host: localhost:3000
+[2026-07-14T08:47:16.792Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
+[2026-07-14T08:47:16.792Z] [Auth] Token received (length: undefined): empty...
+[2026-07-14T08:47:16.793Z] [Auth] Failed: reCAPTCHA token missing
+[2026-07-14T08:47:17.485Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-14T08:47:17.486Z] [Auth] Request Host: localhost:3000
+[2026-07-14T08:47:17.488Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
+[2026-07-14T08:47:17.488Z] [Auth] Token received (length: undefined): empty...
+[2026-07-14T08:47:17.489Z] [Auth] Failed: reCAPTCHA token missing
+[2026-07-14T08:47:45.654Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-14T08:47:45.655Z] [Auth] Request Host: localhost:3000
+[2026-07-14T08:47:45.656Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
+[2026-07-14T08:47:45.656Z] [Auth] Token received (length: undefined): empty...
+[2026-07-14T08:47:45.657Z] [Auth] Failed: reCAPTCHA token missing
+[2026-07-14T08:51:55.809Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-14T08:51:55.809Z] [Auth] Request Host: localhost:3000
+[2026-07-14T08:51:55.810Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
+[2026-07-14T08:51:55.811Z] [Auth] Token received (length: undefined): empty...
+[2026-07-14T08:51:55.811Z] [Auth] Failed: reCAPTCHA token missing
+[2026-07-14T08:51:56.510Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-14T08:51:56.510Z] [Auth] Request Host: localhost:3000
+[2026-07-14T08:51:56.511Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
+[2026-07-14T08:51:56.511Z] [Auth] Token received (length: undefined): empty...
+[2026-07-14T08:51:56.512Z] [Auth] Failed: reCAPTCHA token missing
+[2026-07-14T08:52:57.423Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-14T08:52:57.424Z] [Auth] Request Host: localhost:3000
+[2026-07-14T08:52:57.424Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
+[2026-07-14T08:52:57.425Z] [Auth] Token received (length: undefined): empty...
+[2026-07-14T08:52:57.425Z] [Auth] Failed: reCAPTCHA token missing
+[2026-07-14T08:55:13.548Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-14T08:55:13.549Z] [Auth] Request Host: localhost:3000
+[2026-07-14T08:55:13.554Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
+[2026-07-14T08:55:13.554Z] [Auth] Token received (length: undefined): empty...
+[2026-07-14T08:55:13.555Z] [Auth] Failed: reCAPTCHA token missing
+[2026-07-14T08:55:14.356Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-14T08:55:14.357Z] [Auth] Request Host: localhost:3000
+[2026-07-14T08:55:14.359Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
+[2026-07-14T08:55:14.359Z] [Auth] Token received (length: undefined): empty...
+[2026-07-14T08:55:14.360Z] [Auth] Failed: reCAPTCHA token missing
+[2026-07-14T08:55:24.664Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-14T08:55:24.667Z] [Auth] Request Host: localhost:3000
+[2026-07-14T08:55:24.672Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
+[2026-07-14T08:55:24.672Z] [Auth] Token received (length: 1700): 0cAFcWeA7-VTv2p87EiIZZpsqYsN4h...
+[2026-07-14T08:55:24.673Z] [Auth] Sending request to google siteverify (x-www-form-urlencoded POST body)...
+[2026-07-14T08:55:24.873Z] [Auth] reCAPTCHA verifyJson: {"success":true,"challenge_ts":"2026-07-14T08:55:26Z","hostname":"testkey.google.com"}
+[2026-07-14T08:55:24.874Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-14T08:55:25.230Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrfzj7vj0001tosc2a7zo1hn
