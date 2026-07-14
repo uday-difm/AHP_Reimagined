@@ -34,7 +34,7 @@ async function handleImageUpload(file, folder = "magazines") {
   const buffer = Buffer.from(await file.arrayBuffer());
   let imageUrl = "";
 
-  if (process.env.ACCESSKEY && process.env.SECRETKEY && process.env.BUCKET) {
+  if ((process.env.S3_ACCESS_KEY || process.env.ACCESSKEY) && (process.env.S3_SECRET_KEY || process.env.SECRETKEY) && (process.env.S3_BUCKET || process.env.BUCKET)) {
     try {
       imageUrl = await uploadToS3(folder, {
         originalname: file.name,
@@ -55,6 +55,39 @@ async function handleImageUpload(file, folder = "magazines") {
     }
   }
   return imageUrl;
+}
+
+// Helper to register uploaded images in the global Media model
+async function registerUploadedImageInMedia(siteId, imageUrl, fileName) {
+  if (!imageUrl) return;
+  const fileExtension = fileName ? (fileName.split(".").pop() || "png") : "png";
+  let publicId = imageUrl;
+  
+  if (imageUrl.includes("key=")) {
+    publicId = imageUrl.split("key=")[1];
+  } else if (imageUrl.includes("cloudinary.com")) {
+    const parts = imageUrl.split("/");
+    publicId = parts.slice(parts.indexOf("upload") + 2).join("/");
+    publicId = publicId.split(".")[0];
+  }
+
+  try {
+    await prisma.media.create({
+      data: {
+        siteId,
+        fileName: fileName || "magazine_image",
+        originalName: fileName || "magazine_image",
+        publicId: publicId,
+        url: imageUrl,
+        secureUrl: imageUrl,
+        mimeType: "image/png", // generic fallback
+        extension: fileExtension,
+        isImage: true,
+      }
+    });
+  } catch (err) {
+    console.error("Failed to register image in Media system:", err);
+  }
 }
 
 export async function GET(request) {
@@ -121,35 +154,37 @@ export async function POST(request) {
       return NextResponse.json({ error: "Slug already exists. Please choose a different title." }, { status: 400 });
     }
 
+    // Resolve siteId
+    const site = await getSiteForUser(user);
+    const siteId = site?.id || "infinium";
+
     // Handle cover image upload
     let imageUrl = "";
-    if (magazine_cover_image && typeof magazine_cover_image === "object" && "arrayBuffer" in magazine_cover_image) {
-      const buffer = Buffer.from(await magazine_cover_image.arrayBuffer());
-
-      // Check S3 credentials
-      const hasS3 = (process.env.S3_ACCESS_KEY || process.env.ACCESSKEY) &&
-        (process.env.S3_SECRET_KEY || process.env.SECRETKEY) &&
-        (process.env.S3_BUCKET || process.env.BUCKET);
-      if (hasS3) {
-        try {
-          imageUrl = await uploadToS3("magazines", {
-            originalname: magazine_cover_image.name,
-            buffer,
-            mimetype: magazine_cover_image.type,
-          });
-        } catch (s3Error) {
-          console.error("S3 upload failed, trying Cloudinary...", s3Error);
-        }
+    if (magazine_cover_image) {
+      const coverUrl = await handleImageUpload(magazine_cover_image, "magazines");
+      if (coverUrl) {
+        imageUrl = coverUrl;
+        await registerUploadedImageInMedia(siteId, imageUrl, magazine_cover_image.name);
       }
+    }
 
-      // Fallback to Cloudinary if S3 upload didn't run or failed
-      if (!imageUrl) {
-        try {
-          imageUrl = await uploadToCloudinary(buffer, magazine_cover_image.name);
-        } catch (cloudinaryError) {
-          console.error("Cloudinary upload failed:", cloudinaryError);
-          return NextResponse.json({ error: "Failed to upload cover image." }, { status: 500 });
-        }
+    // Handle back image upload
+    let backImageUrl = "";
+    if (magazine_back_image) {
+      const backUrl = await handleImageUpload(magazine_back_image, "magazines");
+      if (backUrl) {
+        backImageUrl = backUrl;
+        await registerUploadedImageInMedia(siteId, backImageUrl, magazine_back_image.name);
+      }
+    }
+
+    // Handle spine image upload
+    let spineImageUrl = "";
+    if (magazine_spine_image) {
+      const spineUrl = await handleImageUpload(magazine_spine_image, "magazines");
+      if (spineUrl) {
+        spineImageUrl = spineUrl;
+        await registerUploadedImageInMedia(siteId, spineImageUrl, magazine_spine_image.name);
       }
     }
 
