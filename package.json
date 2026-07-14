@@ -10,7 +10,8 @@
     "db:generate": "npx prisma generate --schema=prisma/schema.prisma",
     "db:push": "npx prisma db push --schema=prisma/schema.prisma --accept-data-loss",
     "db:seed": "node prisma/seed.js",
-    "db:migrate": "npx prisma migrate deploy --schema=prisma/schema.prisma"
+    "db:migrate": "npx prisma migrate deploy --schema=prisma/schema.prisma",
+    "postinstall": "prisma generate --schema=prisma/schema.prisma"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1085.0",
