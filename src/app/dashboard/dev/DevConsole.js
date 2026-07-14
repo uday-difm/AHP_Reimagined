@@ -289,11 +289,10 @@ export default function DevConsole({
             setActiveTab("api-keys");
             setErrorMessage("");
           }}
-          className={`px-4 py-2 border-b-2 transition text-xs font-bold uppercase tracking-wider ${
-            activeTab === "api-keys"
+          className={`px-4 py-2 border-b-2 transition text-xs font-bold uppercase tracking-wider ${activeTab === "api-keys"
               ? "border-indigo-600 text-indigo-600"
               : "border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300"
-          } flex items-center gap-1.5`}
+            } flex items-center gap-1.5`}
         >
           <Key size={16} />
           API Keys Manager
@@ -304,11 +303,10 @@ export default function DevConsole({
             setActiveTab("integration-key");
             setErrorMessage("");
           }}
-          className={`px-4 py-2 border-b-2 transition text-xs font-bold uppercase tracking-wider ${
-            activeTab === "integration-key"
+          className={`px-4 py-2 border-b-2 transition text-xs font-bold uppercase tracking-wider ${activeTab === "integration-key"
               ? "border-indigo-600 text-indigo-600"
               : "border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300"
-          } flex items-center gap-1.5`}
+            } flex items-center gap-1.5`}
         >
           <Globe size={16} />
           Content Sync Key
@@ -319,11 +317,10 @@ export default function DevConsole({
             setActiveTab("env");
             setErrorMessage("");
           }}
-          className={`px-4 py-2 border-b-2 transition text-xs font-bold uppercase tracking-wider ${
-            activeTab === "env"
+          className={`px-4 py-2 border-b-2 transition text-xs font-bold uppercase tracking-wider ${activeTab === "env"
               ? "border-indigo-600 text-indigo-600"
               : "border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300"
-          } flex items-center gap-1.5`}
+            } flex items-center gap-1.5`}
         >
           <Database size={16} />
           Env Settings
@@ -334,11 +331,10 @@ export default function DevConsole({
             setActiveTab("version");
             setErrorMessage("");
           }}
-          className={`px-4 py-2 border-b-2 transition text-xs font-bold uppercase tracking-wider ${
-            activeTab === "version"
+          className={`px-4 py-2 border-b-2 transition text-xs font-bold uppercase tracking-wider ${activeTab === "version"
               ? "border-indigo-600 text-indigo-600"
               : "border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300"
-          } flex items-center gap-1.5`}
+            } flex items-center gap-1.5`}
         >
           <GitBranch size={16} />
           Version History
@@ -349,11 +345,10 @@ export default function DevConsole({
             setActiveTab("error-logs");
             setErrorMessage("");
           }}
-          className={`px-4 py-2 border-b-2 transition text-xs font-bold uppercase tracking-wider ${
-            activeTab === "error-logs"
+          className={`px-4 py-2 border-b-2 transition text-xs font-bold uppercase tracking-wider ${activeTab === "error-logs"
               ? "border-indigo-600 text-indigo-600"
               : "border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300"
-          } flex items-center gap-1.5`}
+            } flex items-center gap-1.5`}
         >
           <AlertOctagon size={16} />
           Error Logs ({errorLogs.length})
@@ -364,11 +359,10 @@ export default function DevConsole({
             setActiveTab("webhooks");
             setErrorMessage("");
           }}
-          className={`px-4 py-2 border-b-2 transition text-xs font-bold uppercase tracking-wider ${
-            activeTab === "webhooks"
+          className={`px-4 py-2 border-b-2 transition text-xs font-bold uppercase tracking-wider ${activeTab === "webhooks"
               ? "border-violet-600 text-violet-600"
               : "border-transparent text-gray-500 hover:text-gray-900 hover:border-gray-300"
-          } flex items-center gap-1.5`}
+            } flex items-center gap-1.5`}
         >
           Webhooks
         </button>

@@ -88,11 +88,11 @@ export async function uploadToS3(folder, file, customKey = null) {
         );
       } catch (createErr) {
         if (createErr.name !== "BucketAlreadyExists" && createErr.name !== "BucketAlreadyOwnedByYou") {
-          throw createErr;
+          console.warn("CreateBucket failed, attempting to upload anyway:", createErr.message);
         }
       }
     } else {
-      throw err;
+      console.warn(`HeadBucket failed (${err.message}). Attempting to upload directly to bucket "${bucket}"...`);
     }
   }
 
@@ -106,7 +106,6 @@ export async function uploadToS3(folder, file, customKey = null) {
       Key: uniqueFileName,
       Body: file.buffer,
       ContentType: file.mimetype,
-      ACL: "public-read",
     })
   );
 
