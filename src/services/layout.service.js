@@ -3,7 +3,7 @@
  * directly from the database for the infinium frontend, avoiding local HTTP requests.
  */
 import prisma from "@/lib/prisma";
-import { cache } from "react";
+import { unstable_cache } from "next/cache";
 
 const FALLBACK = {
   siteName: "The Infinium",
@@ -18,9 +18,10 @@ const FALLBACK = {
 
 /**
  * Fetch all layout data from DB in parallel.
- * Mapped to React request cache to run once per page render.
+ * Wrapped with unstable_cache to run exactly once per build/revalidation period,
+ * drastically reducing database connections during static generation of hundreds of pages.
  */
-export const getLayoutData = cache(async () => {
+const fetchLayoutData = async () => {
   const siteId = process.env.NEXT_PUBLIC_SITE_ID || "infinium";
   try {
     const [site, settings, legalPages] = await Promise.all([
@@ -124,7 +125,7 @@ export const getLayoutData = cache(async () => {
       },
     };
   } catch (err) {
-    console.error("getLayoutData failed, using fallback:", err);
+    console.error("fetchLayoutData failed, using fallback:", err);
     return {
       ...FALLBACK,
       isActive: true,
@@ -132,4 +133,10 @@ export const getLayoutData = cache(async () => {
       maintenanceMessage: "",
     };
   }
-});
+};
+
+export const getLayoutData = unstable_cache(
+  fetchLayoutData,
+  ['global-layout-data'],
+  { revalidate: 3600, tags: ['layout'] }
+);

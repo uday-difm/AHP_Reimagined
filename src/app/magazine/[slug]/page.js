@@ -168,7 +168,8 @@ export async function generateStaticParams() {
   const mags = await prisma.magazine.findMany({
     where: { status: 1 },
     select: { slug: true },
-    take: 100,
+    orderBy: { date: 'desc' }, // Generate newest first
+    take: 10,
   });
   return mags.map((m) => ({ slug: m.slug }));
 }
