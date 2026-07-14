@@ -66,19 +66,33 @@ function dirToSlug(dir, appDir) {
 
 export async function syncRoutes() {
   try {
-    const appDir = path.join(process.cwd(), "src", "app");
-    const pageDirs = discoverPageDirs(appDir);
+    let routes = [];
+    const staticRoutesPath = path.join(process.cwd(), "src", "lib", "discovered-routes.json");
 
-    const routes = pageDirs
-      .map((dir) => dirToSlug(dir, appDir))
-      .filter(
-        (slug) => !EXCLUDED_PREFIXES.some((prefix) => slug.startsWith(prefix))
-      )
-      .map((slug) => ({
-        slug,
-        title: slugToTitle(slug),
-        isDynamic: slug.includes("["),
-      }));
+    if (fs.existsSync(staticRoutesPath)) {
+      try {
+        routes = JSON.parse(fs.readFileSync(staticRoutesPath, "utf-8"));
+        console.log(`[${SITE_ID} Startup] Loaded ${routes.length} pre-built routes from discovered-routes.json`);
+      } catch (readErr) {
+        console.warn(`Failed to parse pre-built routes JSON: ${readErr.message}. Falling back to fs scan.`);
+      }
+    }
+
+    if (routes.length === 0) {
+      const appDir = path.join(process.cwd(), "src", "app");
+      const pageDirs = discoverPageDirs(appDir);
+
+      routes = pageDirs
+        .map((dir) => dirToSlug(dir, appDir))
+        .filter(
+          (slug) => !EXCLUDED_PREFIXES.some((prefix) => slug.startsWith(prefix))
+        )
+        .map((slug) => ({
+          slug,
+          title: slugToTitle(slug),
+          isDynamic: slug.includes("["),
+        }));
+    }
 
     // Ensure site exists
     const isAHP = SITE_ID === "AHP" || SITE_ID === "AHealthPlace";
