@@ -128,6 +128,7 @@ function LoginAndProjectLanding() {
         email,
         password,
         twoFaCode: twoFaCode || undefined,
+        recaptchaToken: token,
         redirect: false,
       });
 
