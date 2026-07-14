@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Save, AlertCircle, CheckCircle2, Layout, Smartphone, HelpCircle, Eye, EyeOff } from "lucide-react";
+import { Save, AlertCircle, CheckCircle2, Layout, Smartphone, HelpCircle, Eye, EyeOff, Plus, Trash2 } from "lucide-react";
 import MediaPickerModal from "@/components/media/MediaPickerModal";
 
 export default function HeaderEditor({ siteId, initialConfig, menuTypes = [], navigation = {} }) {
@@ -101,6 +101,29 @@ export default function HeaderEditor({ siteId, initialConfig, menuTypes = [], na
       announcementBar: {
         ...prev.announcementBar,
         [fieldName]: value
+      }
+    }));
+  };
+
+  const getAnnouncementItems = () => {
+    if (config.announcementBar.items && Array.isArray(config.announcementBar.items) && config.announcementBar.items.length > 0) {
+      return config.announcementBar.items;
+    }
+    if (config.announcementBar.texts && Array.isArray(config.announcementBar.texts) && config.announcementBar.texts.length > 0) {
+      return config.announcementBar.texts.map(t => ({ text: t || "", link: config.announcementBar.link || "" }));
+    }
+    return [{ text: config.announcementBar.text || "", link: config.announcementBar.link || "" }];
+  };
+
+  const updateAnnouncementItems = (newItems) => {
+    setConfig(prev => ({
+      ...prev,
+      announcementBar: {
+        ...prev.announcementBar,
+        items: newItems,
+        texts: newItems.map(i => i.text),
+        text: newItems.length > 0 ? newItems[0].text : "",
+        link: newItems.length > 0 ? newItems[0].link : ""
       }
     }));
   };
@@ -351,25 +374,100 @@ export default function HeaderEditor({ siteId, initialConfig, menuTypes = [], na
               {config.announcementBar.enabled && (
                 <>
                   <div>
-                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Announcement Text</label>
-                    <input
-                      type="text"
-                      value={config.announcementBar.text}
-                      onChange={(e) => updateAnnouncementField("text", e.target.value)}
-                      className="w-full rounded-lg border border-gray-200 p-2.5 outline-none focus:border-indigo-600 text-xs"
-                      placeholder="e.g. 50% discount this week!"
-                    />
+                    <div className="flex items-center justify-between mb-2">
+                      <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider">Announcement Messages</label>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const currentItems = getAnnouncementItems();
+                          updateAnnouncementItems([...currentItems, { text: "", link: "" }]);
+                        }}
+                        className="text-[11px] font-bold text-indigo-650 hover:text-indigo-800 flex items-center gap-1 transition"
+                      >
+                        <Plus size={12} /> Add Message
+                      </button>
+                    </div>
+
+                    <div className="space-y-3 max-h-60 overflow-y-auto pr-1">
+                      {getAnnouncementItems().map((item, idx, arr) => (
+                        <div key={idx} className="flex gap-2 items-start bg-slate-50/50 border border-slate-150 p-3 rounded-xl">
+                          <div className="flex-1 space-y-2">
+                            <input
+                              type="text"
+                              value={item.text}
+                              onChange={(e) => {
+                                const next = [...arr];
+                                next[idx] = { ...next[idx], text: e.target.value };
+                                updateAnnouncementItems(next);
+                              }}
+                              className="w-full rounded-lg border border-gray-200 px-3 py-2 outline-none focus:border-indigo-600 text-xs bg-white"
+                              placeholder={`Announcement Text #${idx + 1}`}
+                            />
+                            <input
+                              type="text"
+                              value={item.link}
+                              onChange={(e) => {
+                                const next = [...arr];
+                                next[idx] = { ...next[idx], link: e.target.value };
+                                updateAnnouncementItems(next);
+                              }}
+                              className="w-full rounded-lg border border-gray-250 px-3 py-2 outline-none focus:border-indigo-650 text-xs font-mono bg-white"
+                              placeholder="Redirect link path (e.g. /blogs)"
+                            />
+                          </div>
+                          {arr.length > 1 && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const next = arr.filter((_, i) => i !== idx);
+                                updateAnnouncementItems(next);
+                              }}
+                              className="p-2.5 border border-slate-200 hover:border-rose-200 hover:bg-rose-50 text-slate-400 hover:text-rose-600 rounded-xl transition shrink-0 self-center"
+                              title="Remove Message"
+                            >
+                              <Trash2 size={13} />
+                            </button>
+                          )}
+                        </div>
+                      ))}
+                    </div>
                   </div>
 
-                  <div>
-                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Redirect Link Path</label>
-                    <input
-                      type="text"
-                      value={config.announcementBar.link || ""}
-                      onChange={(e) => updateAnnouncementField("link", e.target.value)}
-                      className="w-full rounded-lg border border-gray-200 p-2.5 outline-none focus:border-indigo-600 text-xs font-mono"
-                      placeholder="/blogs"
-                    />
+                  <div className="grid grid-cols-2 gap-4 border-t pt-4">
+                    <div>
+                      <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5">Background Color</label>
+                      <div className="flex gap-2 items-center">
+                        <input
+                          type="color"
+                          value={config.announcementBar.bgColor || "#2563eb"}
+                          onChange={(e) => updateAnnouncementField("bgColor", e.target.value)}
+                          className="w-8 h-8 rounded border border-gray-200 cursor-pointer overflow-hidden p-0 bg-transparent shrink-0"
+                        />
+                        <input
+                          type="text"
+                          value={config.announcementBar.bgColor || "#2563eb"}
+                          onChange={(e) => updateAnnouncementField("bgColor", e.target.value)}
+                          className="w-full rounded-lg border border-gray-200 px-3 py-1.5 outline-none focus:border-indigo-600 text-xs font-mono"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5">Text Color</label>
+                      <div className="flex gap-2 items-center">
+                        <input
+                          type="color"
+                          value={config.announcementBar.textColor || "#ffffff"}
+                          onChange={(e) => updateAnnouncementField("textColor", e.target.value)}
+                          className="w-8 h-8 rounded border border-gray-200 cursor-pointer overflow-hidden p-0 bg-transparent shrink-0"
+                        />
+                        <input
+                          type="text"
+                          value={config.announcementBar.textColor || "#ffffff"}
+                          onChange={(e) => updateAnnouncementField("textColor", e.target.value)}
+                          className="w-full rounded-lg border border-gray-200 px-3 py-1.5 outline-none focus:border-indigo-600 text-xs font-mono"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </>
               )}

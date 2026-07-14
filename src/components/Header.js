@@ -12,10 +12,25 @@ export default function Header() {
   const { status } = useSession();
   const isAuthenticated = status === 'authenticated';
   const [navItems, setNavItems] = useState([]);
+  const [headerConfig, setHeaderConfig] = useState(null);
 
-  // Fetch navigation menu from DB
+  // Fetch header configurations from DB
   useEffect(() => {
-    fetch('/api/navigation/main')
+    fetch('/api/header')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.success && data.data?.header) {
+          setHeaderConfig(data.data.header);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  // Fetch dynamic menu based on header configuration selection (defaults to 'main')
+  const activeMenuType = headerConfig?.menuType || 'main';
+
+  useEffect(() => {
+    fetch(`/api/navigation/${activeMenuType}`)
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (data?.success && Array.isArray(data.data?.items)) {
@@ -23,7 +38,7 @@ export default function Header() {
         }
       })
       .catch(() => {});
-  }, []);
+  }, [activeMenuType]);
 
   // Default links fallback
   const defaultLinks = useMemo(() => [
@@ -69,25 +84,143 @@ export default function Header() {
     };
   }, [menuOpen]);
 
+  // Derived Header Configurations
+  const showAnnounce = headerConfig?.announcementBar?.enabled;
+  const announceLink = headerConfig?.announcementBar?.link || "/blogs";
+  const announceBg = headerConfig?.announcementBar?.bgColor || "#2563eb";
+  const announceColor = headerConfig?.announcementBar?.textColor || "#ffffff";
+
+  // Resolve multiple texts to display with individual links
+  const announceItems = useMemo(() => {
+    if (!headerConfig?.announcementBar) {
+      return [{ text: "Welcome to our new headless multi-site CMS console!", link: "/blogs" }];
+    }
+    // Check items array
+    if (Array.isArray(headerConfig.announcementBar.items) && headerConfig.announcementBar.items.length > 0) {
+      const valid = headerConfig.announcementBar.items.filter(item => item && item.text && item.text.trim());
+      if (valid.length > 0) return valid;
+    }
+    // Check texts array
+    if (Array.isArray(headerConfig.announcementBar.texts) && headerConfig.announcementBar.texts.length > 0) {
+      const valid = headerConfig.announcementBar.texts.filter(t => t && t.trim());
+      if (valid.length > 0) {
+        return valid.map(t => ({ text: t, link: headerConfig.announcementBar.link || "/blogs" }));
+      }
+    }
+    // Check fallback text
+    if (headerConfig.announcementBar.text) {
+      return [{ text: headerConfig.announcementBar.text, link: headerConfig.announcementBar.link || "/blogs" }];
+    }
+    return [{ text: "Welcome to our new headless multi-site CMS console!", link: "/blogs" }];
+  }, [headerConfig]);
+
+  // Repeat announcements sequence to fill screen width
+  const repeatedAnnouncements = useMemo(() => {
+    if (announceItems.length === 0) return [];
+    const repeats = Math.max(2, Math.ceil(8 / announceItems.length));
+    return Array(repeats).fill(announceItems).flat();
+  }, [announceItems]);
+
+  // If announcement bar is disabled, the marquee acts as a nice aesthetic fallback.
+  // We offset header top height based on whether a top bar exists.
+  const topBarHeight = showAnnounce ? '40px' : (headerConfig === null ? '40px' : '0px');
+
+  const logoType = headerConfig?.logoType || 'image';
+  const logoText = headerConfig?.logoText || 'A Health Place';
+  const logoUrl = headerConfig?.logoUrl || '/images/Logo-web.png';
+  const logoWidth = Number(headerConfig?.logoWidth) || 360;
+  const logoHeight = Number(headerConfig?.logoHeight) || 48;
+
+  const paddingY = headerConfig?.paddingY || 'medium';
+  const headerHeightClass = {
+    small: 'h-16',
+    medium: 'h-20',
+    large: 'h-24',
+  }[paddingY] || 'h-20';
+
+  const borderBottom = headerConfig?.borderBottom !== false;
+  const shadowSize = headerConfig?.shadowSize || 'none';
+  const shadowClass = {
+    none: '',
+    small: 'shadow-sm',
+    medium: 'shadow-md',
+    large: 'shadow-lg',
+  }[shadowSize] || '';
+
+  const ctaText = headerConfig?.ctaText;
+  const ctaLink = headerConfig?.ctaLink || '/contact';
+
   return (
     <>
-      <Marquee />
-      {/* Header */}
-      <header className="fixed top-[40px] left-0 w-full flex items-center h-20 bg-white/30 backdrop-blur-lg z-[9000]" style={{ WebkitBackdropFilter: 'blur(48px)' }}>
+      {/* Dynamic Announcement Bar or fallback Marquee */}
+      {showAnnounce ? (
+        <div
+          className="fixed top-0 left-0 right-0 h-10 flex items-center overflow-hidden whitespace-nowrap select-none z-[9001] shadow-xs"
+          style={{ backgroundColor: announceBg, color: announceColor }}
+        >
+          <div className="inline-block animate-marquee whitespace-nowrap">
+            {repeatedAnnouncements.map((item, idx) => (
+              <span key={idx} className="inline-flex items-center mx-6 font-heading text-[13px] md:text-[14px] tracking-[1.5px]">
+                <span className="w-2 h-2 rounded-full mr-4" style={{ backgroundColor: announceColor === '#ffffff' ? '#8fe9ec' : 'currentColor', opacity: 0.8 }} />
+                {item.link ? (
+                  <Link href={item.link} className="hover:underline text-inherit no-underline font-semibold">
+                    {item.text}
+                  </Link>
+                ) : (
+                  <span className="font-semibold">{item.text}</span>
+                )}
+              </span>
+            ))}
+          </div>
+          <div className="inline-block animate-marquee whitespace-nowrap" aria-hidden="true">
+            {repeatedAnnouncements.map((item, idx) => (
+              <span key={`clone-${idx}`} className="inline-flex items-center mx-6 font-heading text-[13px] md:text-[14px] tracking-[1.5px]">
+                <span className="w-2 h-2 rounded-full mr-4" style={{ backgroundColor: announceColor === '#ffffff' ? '#8fe9ec' : 'currentColor', opacity: 0.8 }} />
+                {item.link ? (
+                  <Link href={item.link} className="hover:underline text-inherit no-underline font-semibold">
+                    {item.text}
+                  </Link>
+                ) : (
+                  <span className="font-semibold">{item.text}</span>
+                )}
+              </span>
+            ))}
+          </div>
+        </div>
+      ) : (
+        headerConfig === null && <Marquee />
+      )}
+
+      {/* Header Container */}
+      <header
+        className={`fixed left-0 w-full flex items-center ${headerHeightClass} bg-white/30 backdrop-blur-lg z-[9000] transition-all duration-300 ${
+          borderBottom ? 'border-b border-slate-200/50' : ''
+        } ${shadowClass}`}
+        style={{ top: topBarHeight, WebkitBackdropFilter: 'blur(48px)' }}
+      >
         <div className="header-container flex justify-between items-center w-full mx-auto px-6 md:px-10">
-          <a href="/" className="logo-link flex items-center">
-            <Image
-              src="/images/Logo-web.png"
-              alt="A Health Place Logo"
-              width={360}
-              height={100}
-              className="logo-img h-10 sm:h-12 md:h-16 w-auto object-contain block transition-transform duration-300 hover:scale-[1.03]"
-              priority
-            />
-          </a>
+          
+          {/* Dynamic Logo rendering */}
+          <Link href="/" className="logo-link flex items-center no-underline">
+            {logoType === 'image' ? (
+              <Image
+                src={logoUrl}
+                alt={logoText}
+                width={logoWidth}
+                height={logoHeight}
+                className="logo-img w-auto object-contain block transition-transform duration-300 hover:scale-[1.03]"
+                style={{ height: `${logoHeight}px` }}
+                priority
+              />
+            ) : (
+              <span className="font-heading font-extrabold text-[20px] sm:text-[24px] tracking-tight text-primary transition-colors hover:text-[#0f7c85]">
+                {logoText}
+              </span>
+            )}
+          </Link>
 
           {/* Desktop Dynamic Nav with Dropdown support */}
-          <nav className="nav-desktop hidden md:flex items-center gap-4 md:gap-8 flex-1 justify-center">
+          <nav className="nav-desktop hidden md:flex items-center gap-4 md:gap-6 flex-1 justify-center">
             {displayLinks.map((item, idx) => {
               const hasChildren = Array.isArray(item.children) && item.children.length > 0;
 
@@ -154,8 +287,18 @@ export default function Header() {
           </nav>
 
           {/* Actions wrapper */}
-          <div className="flex items-center gap-3 z-[10000]">
+          <div className="flex items-center gap-3.5 z-[10000]">
             <Search />
+
+            {/* Configured CTA Button */}
+            {ctaText && (
+              <Link
+                href={ctaLink}
+                className="hidden sm:inline-flex items-center justify-center bg-[#0f7c85] hover:bg-[#0c6b73] text-white px-5 py-2.5 rounded-full font-bold text-xs no-underline transition-all duration-300 shadow-sm hover:shadow"
+              >
+                {ctaText}
+              </Link>
+            )}
 
             {/* Hamburger Menu Button */}
             <button
