@@ -52,39 +52,70 @@ export default function DashboardLayout({ children, siteId, sites = [] }) {
 
         <main className="flex-grow p-4 sm:p-6 overflow-y-auto">{children}</main>
         <style>{`
-                  .dark .dashboard-layout { background-color: #030712 !important; }
-                  .dark .dashboard-layout :where(.bg-white) { background-color: #0f172a !important; }
-                  .dark .dashboard-layout :where(.bg-gray-50, .bg-slate-50) { background-color: #0b0f19 !important; }
-                  .dark .dashboard-layout :where(td, th, .border-gray-100, .border-gray-200, .border-gray-150, .border-slate-100, .border-slate-200) { border-color: #1e293b !important; }
-                  .dark .dashboard-layout :where(.divide-gray-100, .divide-gray-150, .divide-slate-100) > * { border-color: #1e293b !important; }
-                  .dark .dashboard-layout :where(.text-gray-800, .text-slate-800) { color: #e2e8f0 !important; }
-                  .dark .dashboard-layout :where(.text-gray-900, .text-slate-900) { color: #f1f5f9 !important; }
-                  .dark .dashboard-layout :where(.text-gray-700, .text-slate-700) { color: #cbd5e1 !important; }
-                  .dark .dashboard-layout :where(.text-gray-600, .text-slate-600) { color: #94a3b8 !important; }
-                  .dark .dashboard-layout :where(.text-gray-500, .text-slate-500) { color: #94a3b8 !important; }
-                  .dark .dashboard-layout :where(.text-gray-400, .text-slate-400) { color: #64748b !important; }
-                  .dark .dashboard-layout :where(.text-gray-300, .text-slate-300) { color: #cbd5e1 !important; }
-                  .dark .dashboard-layout :where(.text-blue-600, .text-blue-700) { color: #60a5fa !important; }
-                  .dark .dashboard-layout :where(.text-indigo-600, .text-indigo-700) { color: #818cf8 !important; }
-                  .dark .dashboard-layout :where(.text-green-600, .text-green-700) { color: #4ade80 !important; }
+                  /* Base Backgrounds */
+                  .dark .dashboard-layout,
+                  .dark .dashboard-layout main { background-color: #020617 !important; }
+                  
+                  /* Sidebar & Navbar */
+                  .dark .dashboard-layout aside,
+                  .dark .dashboard-layout header,
+                  .dark .dashboard-layout .bg-white.dark\\:bg-slate-950 { background-color: #0F172A !important; }
+                  
+                  /* Cards & Panels */
+                  .dark .dashboard-layout :where(.dark\\:bg-slate-800, .dark\\:bg-slate-900, .bg-white, .bg-gray-50, .bg-slate-50, .bg-gray-100, .bg-slate-100, .bg-gray-200) { background-color: #1E293B !important; }
+                  
+                  /* Borders */
+                  .dark .dashboard-layout :where(td, th, .border-gray-100, .border-gray-200, .border-gray-300, .border-gray-150, .border-slate-100, .border-slate-200, .border-slate-300, .dark\\:border-slate-700, .dark\\:border-slate-800, .dark\\:border-slate-900) { border-color: #334155 !important; }
+                  .dark .dashboard-layout :where(.divide-gray-100, .divide-gray-150, .divide-slate-100) > * { border-color: #334155 !important; }
+                  
+                  /* Headings & High Contrast Text */
+                  .dark .dashboard-layout :where(h1, h2, h3, h4, h5, h6, .text-gray-900, .text-slate-900, .dark\\:text-slate-100, .dark\\:text-white) { color: #F8FAFC !important; }
+                  
+                  /* Body Text */
+                  .dark .dashboard-layout :where(.text-gray-800, .text-slate-800, .text-gray-700, .text-slate-700, .dark\\:text-slate-200, .dark\\:text-slate-300, .text-slate-900.dark\\:text-slate-100) { color: #CBD5E1 !important; }
+                  
+                  /* Muted Text */
+                  .dark .dashboard-layout :where(.text-gray-600, .text-slate-600, .text-gray-500, .text-slate-500, .text-gray-400, .text-slate-400, .dark\\:text-slate-400, .dark\\:text-slate-500) { color: #94A3B8 !important; }
+                  
+                  /* Primary Accent (Emerald) overrides for Indigo/Blue */
+                  .dark .dashboard-layout :where(.text-blue-600, .text-blue-700, .text-blue-800, .text-indigo-600, .text-indigo-700, .text-indigo-800, .dark\\:text-indigo-300, .dark\\:text-indigo-400) { color: #10B981 !important; }
+                  .dark .dashboard-layout :where(.hover\\:text-indigo-800):hover,
+                  .dark .dashboard-layout :where(.hover\\:text-blue-800):hover { color: #34D399 !important; }
+                  
+                  .dark .dashboard-layout :where(.bg-indigo-600, .bg-indigo-700, .bg-blue-600, .bg-blue-700, .dark\\:bg-indigo-500, .dark\\:bg-indigo-600) { background-color: #10B981 !important; color: #F8FAFC !important; }
+                  .dark .dashboard-layout :where(.hover\\:bg-blue-700):hover,
+                  .dark .dashboard-layout :where(.hover\\:bg-indigo-700):hover { background-color: #059669 !important; color: #F8FAFC !important; }
+                  
+                  .dark .dashboard-layout :where(.bg-indigo-50, .dark\\:bg-indigo-900\\/50, .dark\\:bg-indigo-950\\/40, .dark\\:bg-indigo-900\\/20) { background-color: rgba(16, 185, 129, 0.1) !important; color: #10B981 !important; border-color: rgba(16, 185, 129, 0.2) !important; }
+                  
+                  /* Other Accents */
+                  .dark .dashboard-layout :where(.text-green-600, .text-green-700) { color: #10B981 !important; }
                   .dark .dashboard-layout :where(.text-amber-600, .text-amber-700) { color: #fbbf24 !important; }
                   .dark .dashboard-layout :where(.text-red-600, .text-red-700) { color: #f87171 !important; }
-                  .dark .dashboard-layout :where(.text-emerald-600, .text-emerald-700) { color: #34d399 !important; }
-                  .dark .dashboard-layout :where(.shadow-sm) { box-shadow: 0 1px 2px 0 rgba(0,0,0,0.5) !important; }
-                  .dark .dashboard-layout :where(.hover\\:bg-gray-50):hover,
-                  .dark .dashboard-layout :where(.hover\\:bg-slate-50):hover { background-color: #1e293b !important; }
+                  
+                  /* Inputs & Forms */
                   .dark .dashboard-layout :where(input:not([type="checkbox"]):not([type="radio"]), textarea, select) {
-                    background-color: #070a13 !important;
-                    color: #e2e8f0 !important;
-                    border-color: #1e293b !important;
+                    background-color: #1E293B !important;
+                    color: #CBD5E1 !important;
+                    border-color: #334155 !important;
                   }
-                  .dark .dashboard-layout :where(input::placeholder, textarea::placeholder) { color: #475569 !important; }
-                  .dark .dashboard-layout :where(.bg-blue-50) { background-color: #1e3a5f !important; }
-                  .dark .dashboard-layout :where(.bg-green-50) { background-color: #064e3b !important; }
-                  .dark .dashboard-layout :where(.bg-red-50) { background-color: #7f1d1d !important; }
-                  .dark .dashboard-layout :where(.bg-amber-50) { background-color: #78350f !important; }
-                  .dark .dashboard-layout :where(.bg-emerald-50) { background-color: #064e3b !important; }
-                  .dark .dashboard-layout :where(.bg-indigo-50) { background-color: #312e81 !important; }
+                  .dark .dashboard-layout :where(input::placeholder, textarea::placeholder) { color: #94A3B8 !important; }
+                  
+                  /* Hover States & Active Rows */
+                  .dark .dashboard-layout :where(.hover\\:bg-gray-50\\/50):hover,
+                  .dark .dashboard-layout :where(.hover\\:bg-gray-50):hover,
+                  .dark .dashboard-layout :where(.hover\\:bg-slate-50):hover,
+                  .dark .dashboard-layout :where(.hover\\:bg-gray-100):hover,
+                  .dark .dashboard-layout :where(.hover\\:bg-slate-100):hover,
+                  .dark .dashboard-layout :where(.hover\\:bg-gray-200):hover,
+                  .dark .dashboard-layout :where(.hover\\:bg-slate-200):hover,
+                  .dark .dashboard-layout :where(.dark\\:hover\\:bg-slate-800):hover,
+                  .dark .dashboard-layout :where(.dark\\:hover\\:bg-slate-900):hover { background-color: #334155 !important; color: #F8FAFC !important; }
+                  
+                  .dark .dashboard-layout :where(.hover\\:bg-indigo-50\\/10):hover { background-color: rgba(16, 185, 129, 0.15) !important; }
+                  
+                  /* Shadows */
+                  .dark .dashboard-layout :where(.shadow-sm, .shadow, .shadow-md) { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -2px rgba(0, 0, 0, 0.5) !important; }
                 `}</style>
       </div>
     </div>

@@ -94,3 +94,9 @@
 [2026-07-13T08:16:55.809Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
 [2026-07-13T08:16:55.827Z] [Auth] Authenticating against authService for: admin@example.com
 [2026-07-13T08:16:56.249Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrfzj7vj0001tosc2a7zo1hn
+[2026-07-14T03:38:01.651Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-14T03:38:01.652Z] [Auth] Request Host: localhost:3000
+[2026-07-14T03:38:01.652Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
+[2026-07-14T03:38:01.652Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-14T03:38:01.660Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-14T03:38:01.949Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrj69kby0001w07smwaqn52c
