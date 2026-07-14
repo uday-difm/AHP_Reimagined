@@ -33,92 +33,6 @@ const trustBadges = [
   { icon: '📖', label: 'AD-FREE READING' },
 ];
 
-const recentIssues = [
-  {
-    season: 'WINTER 2023',
-    title: 'The Sleep Revolution',
-    slug: 'the-sleep-revolution',
-    img: '/images/mag_sleep.png',
-    contents: ['Glymphatic Clearance', 'Sleep Cycle Science', 'Behavioral Routines', 'Circadian Alignments']
-  },
-  {
-    season: 'FALL 2023',
-    title: 'Holistic Nutrition',
-    slug: 'holistic-nutrition',
-    img: '/images/mag_nutrition.png',
-    contents: ['Gut Microbiome Health', 'Prebiotics & Fibers', 'Mindful Eating Keys', 'Caloric Realignment']
-  },
-  {
-    season: 'SUMMER 2023',
-    title: 'The Strength Within',
-    slug: 'the-strength-within',
-    img: '/images/mag_strength.png',
-    contents: ['Muscular Longevity', 'Postural Alignments', 'Core Stabilization', 'Mobility & Energy']
-  },
-  {
-    season: 'SPRING 2023',
-    title: 'Digital Detox',
-    slug: 'digital-detox',
-    img: '/images/mag_detox.png',
-    contents: ['Screen Exhaustion', 'Prefrontal Decompress', 'App Boundaries', 'Attention Currencies']
-  },
-  {
-    season: 'WINTER 2022',
-    title: 'Mindful Eating Keys',
-    slug: 'mindful-eating-keys',
-    img: '/images/holistic.png',
-    contents: ['Portion Consciousness', 'Satiety Bio-feedback', 'Mindful Chewing Patterns', 'Sensory Flavor Profiles']
-  },
-  {
-    season: 'FALL 2022',
-    title: 'Somatic Healing Guides',
-    slug: 'somatic-healing-guides',
-    img: '/images/ayurveda.png',
-    contents: ['Vagus Nerve Toning', 'Trauma Release Exercises', 'Sensory Grounding Keys', 'Body Scan Meditations']
-  },
-  {
-    season: 'SUMMER 2022',
-    title: 'Active Longevity Systems',
-    slug: 'active-longevity-systems',
-    img: '/images/physical_health.png',
-    contents: ['Cardiorespiratory Reserves', 'Joint Mobility Drills', 'Muscle Density Focus', 'Longevity Biomarkers']
-  },
-  {
-    season: 'SPRING 2022',
-    title: 'Circadian Sleep Hygiene',
-    slug: 'circadian-sleep-hygiene',
-    img: '/images/hero_sleep.png',
-    contents: ['Morning Light Anchoring', 'Melatonin Blockers', 'Temperature Control', 'Adenosine Dynamics']
-  },
-  {
-    season: 'WINTER 2021',
-    title: 'Heart Health Protocols',
-    slug: 'heart-health-protocols',
-    img: '/images/disease.png',
-    contents: ['HRV Optimization', 'Endothelial Integrity', 'Inflammatory Biomarkers', 'Cardio-protective Fats']
-  },
-  {
-    season: 'FALL 2021',
-    title: 'Mental Clarity Routines',
-    slug: 'mental-clarity-routines',
-    img: '/images/hero_exercise.png',
-    contents: ['BDNF Stimulation', 'Deep Work Frameworks', 'Nootropic Whole Foods', 'Neuroplastic Habits']
-  },
-  {
-    season: 'SUMMER 2021',
-    title: 'Immune Resilience Keys',
-    slug: 'immune-resilience-keys',
-    img: '/images/hero_hospice.png',
-    contents: ['Lymphatic Flow Optimization', 'Micronutrient Synergies', 'Cold & Heat Stressors', 'Gut-Immune Axis']
-  },
-  {
-    season: 'SPRING 2021',
-    title: 'AI & Future Healthcare',
-    slug: 'ai-and-future-healthcare',
-    img: '/images/hero_ai_healthcare.png',
-    contents: ['Predictive Diagnostics', 'Personalized Bio-data', 'Wearable Integrations', 'AI Longevity Coding']
-  }
-];
 export default function PublicationPage() {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
@@ -174,29 +88,8 @@ export default function PublicationPage() {
     return `${season} ${year}`;
   }
 
-  function getTimestampFromSeason(seasonStr) {
-    if (!seasonStr) return 0;
-    const parts = seasonStr.split(' ');
-    if (parts.length !== 2) return 0;
-    const season = parts[0].toUpperCase();
-    const year = parseInt(parts[1]);
-    let month = 0;
-    if (season === 'SPRING') month = 2;
-    else if (season === 'SUMMER') month = 5;
-    else if (season === 'FALL') month = 8;
-    else if (season === 'WINTER') month = 11;
-    return new Date(year, month, 1).getTime();
-  }
-
   const allIssues = useMemo(() => {
-    const staticIssuesMapped = recentIssues.map(issue => ({
-      ...issue,
-      timestamp: getTimestampFromSeason(issue.season)
-    }));
-    return [
-      ...dbIssues,
-      ...staticIssuesMapped
-    ].sort((a, b) => b.timestamp - a.timestamp);
+    return [...dbIssues].sort((a, b) => b.timestamp - a.timestamp);
   }, [dbIssues]);
 
   const itemsPerPage = 6;
@@ -205,16 +98,7 @@ export default function PublicationPage() {
   const totalPages = Math.ceil(recentIssuesList.length / itemsPerPage);
   const displayedIssues = recentIssuesList.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-  const latestIssue = allIssues[0] || {
-    season: 'SPRING 2024',
-    title: 'The Mindfulness Issue',
-    slug: 'the-mindfulness-issue',
-    img: '/images/mag_sleep.png',
-    backImg: '/back.jpg',
-    spineImg: '/spine.jpg',
-    description: 'Explore the intersection of ancient wisdom and modern neuroscience. Our latest issue dives deep into meditative practices, cognitive health, and the art of intentional living.',
-    magCloudLink: 'https://www.magcloud.com/'
-  };
+  const latestIssue = allIssues[0] || null;
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -309,6 +193,36 @@ export default function PublicationPage() {
     card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)';
   };
 
+  if (!loading && allIssues.length === 0) {
+    return (
+      <div className="min-h-screen bg-bg-light relative flex flex-col justify-between">
+        <CustomCursor />
+        <ScrollReveal />
+        <BackdropBlobs />
+        <Header />
+        
+        <main className="pt-[140px] pb-20 flex-grow flex items-center justify-center">
+          <div className="container text-center px-4">
+            <div className="max-w-md mx-auto bg-white/40 backdrop-blur-md rounded-3xl p-10 border border-white/60 shadow-sm text-center">
+              <span className="text-4xl block mb-4">📖</span>
+              <h1 className="text-primary font-heading font-extrabold text-2xl tracking-tight mb-2">
+                No Magazines Found
+              </h1>
+              <p className="text-secondary text-sm leading-relaxed mb-6">
+                We haven't published any magazine issues yet. Please check back later!
+              </p>
+              <Link href="/" className="btn-primary bg-[#0f7c85] hover:bg-[#0c646b] text-white px-6 py-3 rounded-full font-bold text-xs inline-block no-underline">
+                Back to Home
+              </Link>
+            </div>
+          </div>
+        </main>
+        
+        <Footer />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-bg-light relative">
       {/* Global Animation Utilities */}
@@ -319,89 +233,90 @@ export default function PublicationPage() {
       <Header />
 
       {/* Hero — Current Issue */}
-      <section className="bg-[#f0f6f3]/60 pt-[140px] pb-20 rounded-b-[40px] border-b border-slate-200/20 relative">
-        <div className="container">
-          <div className="flex flex-col md:flex-row items-center gap-10 xl:gap-14 justify-between">
+      {latestIssue && (
+        <section className="bg-[#f0f6f3]/60 pt-[140px] pb-20 rounded-b-[40px] border-b border-slate-200/20 relative">
+          <div className="container">
+            <div className="flex flex-col md:flex-row items-center gap-10 xl:gap-14 justify-between">
 
-            {/* Left — 3D Magazine Cover (3D Book effect) */}
+              {/* Left — 3D Magazine Cover (3D Book effect) */}
+              <Scene
+                frontUrl={latestIssue.img}
+                backUrl={latestIssue.backImg}
+                spineUrl={latestIssue.spineImg}
+              />
 
-            <Scene
-              frontUrl={latestIssue.img}
-              backUrl={latestIssue.backImg}
-              spineUrl={latestIssue.spineImg}
-            />
-
-            {/* Middle — Info */}
-            <div className="flex-grow max-w-xl reveal-slide">
-              <div className="inline-flex items-center gap-2 bg-[#27ae60]/10 border border-[#27ae60]/20 rounded-full px-3.5 py-1.5 mb-6">
-                <span className="w-2 h-2 bg-accent-green rounded-full animate-pulse-slow" />
-                <span className="text-accent-green text-[10.5px] font-extrabold uppercase tracking-[2px]">LATEST ISSUE • {latestIssue.magazineId || latestIssue.season}</span>
-              </div>
-
-              <h1 className="text-primary font-heading font-extrabold text-4xl md:text-5xl leading-tight mb-5 tracking-[-1.5px]">
-                {latestIssue.title}
-              </h1>
-
-              <p className="text-secondary text-[15px] md:text-base leading-relaxed mb-10 max-w-md">
-                {latestIssue.description}
-              </p>
-
-              <div className="flex flex-wrap gap-4 mb-12">
-                <Link href={`/magazine/${latestIssue.slug}`} className="btn-primary hover-glow bg-[#0f7c85] hover:bg-[#0c646b] text-white px-8 py-4 rounded-full font-bold text-[14px] border border-[#0f7c85] transition-all duration-500 hover:-translate-y-0.5 shadow-md hover:shadow-[0_8px_24px_rgba(15,124,133,0.25)] cursor-pointer flex items-center justify-center no-underline">
-                  Read Digital Issue
-                </Link>
-                <a href="#recent-issues" className="border-2 border-[#0f7c85]/20 text-[#0f7c85] hover:border-[#0f7c85] hover:bg-[#0f7c85]/5 font-bold text-[14px] px-8 py-4 rounded-full transition-all duration-500 hover:-translate-y-0.5 cursor-pointer flex items-center justify-center no-underline">
-                  Browse Archive
-                </a>
-              </div>
-
-              <div className="flex flex-wrap gap-10 pt-10 border-t border-slate-200">
-                {stats.map((s, i) => (
-                  <div key={i} className="flex flex-col">
-                    <span className="text-primary font-heading font-extrabold text-lg leading-tight">{s.value}</span>
-                    <span className="text-muted text-[11px] font-semibold uppercase tracking-wider mt-1">{s.label}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Right Column — Partner Ad/Promo Card */}
-            <div className="hidden lg:block lg:w-[280px] flex-shrink-0 self-stretch reveal-scale">
-              <div className="bg-white/70 backdrop-blur-md rounded-[32px] p-5 border border-white/60 shadow-[0_12px_32px_rgba(0,0,0,0.03)] h-full flex flex-col justify-between">
-                <div>
-                  <span className="inline-block bg-[#27ae60]/10 border border-[#27ae60]/20 text-[#27ae60] font-bold text-[9px] uppercase tracking-[1.5px] px-2.5 py-1 rounded-full mb-3.5">
-                    Partner Highlight
-                  </span>
-
-                  <div className="relative w-full h-[120px] rounded-2xl overflow-hidden mb-4 border border-slate-100 shadow-sm bg-slate-50">
-                    <Image
-                      src="/images/service_partner_roundup_mockup.png"
-                      alt="Wellness Consultation Partner"
-                      fill
-                      className="object-cover animate-pulse-slow"
-                    />
-                  </div>
-
-                  <h3 className="font-heading font-extrabold text-[14px] text-primary leading-tight mb-2">
-                    Personalized Health Plans
-                  </h3>
-                  <p className="text-secondary text-[12px] leading-relaxed mb-4">
-                    Unlock tailored nutrition, circadian alignment, and somatic reset coaching from certified wellness experts.
-                  </p>
+              {/* Middle — Info */}
+              <div className="flex-grow max-w-xl reveal-slide">
+                <div className="inline-flex items-center gap-2 bg-[#27ae60]/10 border border-[#27ae60]/20 rounded-full px-3.5 py-1.5 mb-6">
+                  <span className="w-2 h-2 bg-accent-green rounded-full animate-pulse-slow" />
+                  <span className="text-accent-green text-[10.5px] font-extrabold uppercase tracking-[2px]">LATEST ISSUE • {latestIssue.magazineId || latestIssue.season}</span>
                 </div>
 
-                <a
-                  href="/services"
-                  className="w-full text-center bg-[#0f7c85] hover:bg-[#0c646b] text-white font-extrabold text-[12px] py-3 px-4 rounded-xl transition-all duration-300 no-underline block shadow-sm hover:shadow-[0_6px_20px_rgba(15,124,133,0.3)] hover:-translate-y-0.5 transform"
-                >
-                  Book Free Consultation
-                </a>
-              </div>
-            </div>
+                <h1 className="text-primary font-heading font-extrabold text-4xl md:text-5xl leading-tight mb-5 tracking-[-1.5px]">
+                  {latestIssue.title}
+                </h1>
 
+                <p className="text-secondary text-[15px] md:text-base leading-relaxed mb-10 max-w-md">
+                  {latestIssue.description}
+                </p>
+
+                <div className="flex flex-wrap gap-4 mb-12">
+                  <Link href={`/magazine/${latestIssue.slug}`} className="btn-primary hover-glow bg-[#0f7c85] hover:bg-[#0c646b] text-white px-8 py-4 rounded-full font-bold text-[14px] border border-[#0f7c85] transition-all duration-500 hover:-translate-y-0.5 shadow-md hover:shadow-[0_8px_24px_rgba(15,124,133,0.25)] cursor-pointer flex items-center justify-center no-underline">
+                    Read Digital Issue
+                  </Link>
+                  <a href="#recent-issues" className="border-2 border-[#0f7c85]/20 text-[#0f7c85] hover:border-[#0f7c85] hover:bg-[#0f7c85]/5 font-bold text-[14px] px-8 py-4 rounded-full transition-all duration-500 hover:-translate-y-0.5 cursor-pointer flex items-center justify-center no-underline">
+                    Browse Archive
+                  </a>
+                </div>
+
+                <div className="flex flex-wrap gap-10 pt-10 border-t border-slate-200">
+                  {stats.map((s, i) => (
+                    <div key={i} className="flex flex-col">
+                      <span className="text-primary font-heading font-extrabold text-lg leading-tight">{s.value}</span>
+                      <span className="text-muted text-[11px] font-semibold uppercase tracking-wider mt-1">{s.label}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Right Column — Partner Ad/Promo Card */}
+              <div className="hidden lg:block lg:w-[280px] flex-shrink-0 self-stretch reveal-scale">
+                <div className="bg-white/70 backdrop-blur-md rounded-[32px] p-5 border border-white/60 shadow-[0_12px_32px_rgba(0,0,0,0.03)] h-full flex flex-col justify-between">
+                  <div>
+                    <span className="inline-block bg-[#27ae60]/10 border border-[#27ae60]/20 text-[#27ae60] font-bold text-[9px] uppercase tracking-[1.5px] px-2.5 py-1 rounded-full mb-3.5">
+                      Partner Highlight
+                    </span>
+
+                    <div className="relative w-full h-[120px] rounded-2xl overflow-hidden mb-4 border border-slate-100 shadow-sm bg-slate-50">
+                      <Image
+                        src="/images/service_partner_roundup_mockup.png"
+                        alt="Wellness Consultation Partner"
+                        fill
+                        className="object-cover animate-pulse-slow"
+                      />
+                    </div>
+
+                    <h3 className="font-heading font-extrabold text-[14px] text-primary leading-tight mb-2">
+                      Personalized Health Plans
+                    </h3>
+                    <p className="text-secondary text-[12px] leading-relaxed mb-4">
+                      Unlock tailored nutrition, circadian alignment, and somatic reset coaching from certified wellness experts.
+                    </p>
+                  </div>
+
+                  <a
+                    href="/services"
+                    className="w-full text-center bg-[#0f7c85] hover:bg-[#0c646b] text-white font-extrabold text-[12px] py-3 px-4 rounded-xl transition-all duration-300 no-underline block shadow-sm hover:shadow-[0_6px_20px_rgba(15,124,133,0.3)] hover:-translate-y-0.5 transform"
+                  >
+                    Book Free Consultation
+                  </a>
+                </div>
+              </div>
+
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Trust Badges Bar (Text Only) */}
       <div className="bg-white border-y border-slate-200/50 shadow-[0_2px_12px_rgba(0,0,0,0.01)] py-5 relative">
@@ -417,139 +332,140 @@ export default function PublicationPage() {
       </div>
 
       {/* Recent Issues Gallery */}
-      <section id="recent-issues" className="py-20 bg-white rounded-t-[40px] shadow-[0_-20px_40px_rgba(0,0,0,0.01)] relative">
-        <div className="container">
-          <div className="flex flex-col items-center text-center max-w-xl mx-auto mb-14 reveal-slide">
-            <span className="section-tag text-[10px] font-extrabold tracking-[3px] text-accent uppercase mb-2 bg-[#0f7c85]/10 px-3.5 py-1.5 rounded-full">
-              BACK JOURNAL
-            </span>
-            <h2 className="text-primary font-heading font-extrabold text-3xl md:text-4xl tracking-[-0.5px] mt-2 mb-3">
-              Recent Issues
-            </h2>
-            <p className="text-muted text-[14px] leading-relaxed max-w-md">
-              Journey through our curated collection of wellness wisdom.
-            </p>
-            <button className="flex items-center gap-1 text-accent text-[12px] font-extrabold uppercase tracking-wider hover:underline mt-4 cursor-pointer">
-              All Years <span className="arrow">→</span>
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-12 mx-auto">
-            {displayedIssues.map((issue, i) => {
-              const slug = issue.slug || issue.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-              return (
-                <div
-                  key={issue.slug}
-                  ref={el => cardRefs.current[i] = el}
-                  onMouseMove={(e) => handleCardMouseMove(e, i)}
-                  onMouseLeave={() => handleCardMouseLeave(i)}
-                  style={{ transitionDelay: `${i * 0.1}s` }}
-                  className="project-card tilt-card bg-bg-light rounded-[24px] overflow-hidden border border-slate-200 transition-all duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer flex flex-col [transform-style:preserve-3d] [perspective:1000px] hover:border-[#0f7c85]/40 hover:shadow-[0_24px_48px_rgba(15,124,133,0.14)] hover:scale-[1.04] hover:-translate-y-2.5 active:scale-[0.98] reveal-slide p-5 min-h-[400px] md:min-h-[490px] group relative"
-                >
-                  {/* The Flipping Card Wrapper */}
-                  <div className="w-full h-full relative transition-transform duration-[800ms] [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] flex flex-col flex-grow">
-
-                    {/* Front Face */}
-                    <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] flex flex-col justify-between">
-                      <div className="relative rounded-2xl overflow-hidden shadow-[0_12px_28px_rgba(0,0,0,0.04)] border border-slate-100 transition-all duration-500 mb-5 flex-grow h-[240px] md:h-[330px]">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={proxyUrl(issue.img)}
-                          alt={issue.title}
-                          className="object-cover w-full h-full"
-                        />
-                      </div>
-                      <div className="flex flex-col gap-1 mt-auto">
-                        <p className="text-accent text-[11px] font-extrabold uppercase tracking-[1.5px] mb-1">{issue.magazineId || issue.season}</p>
-                        <p className="text-primary font-heading font-extrabold text-[15px] leading-snug tracking-[-0.3px] group-hover:text-accent transition-colors duration-300">{issue.title}</p>
-                      </div>
-                    </div>
-
-                    {/* Back Face */}
-                    <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)] bg-[#0f7c85] rounded-2xl p-6 text-white flex flex-col justify-between shadow-2xl border border-white/20 select-none">
-                      <div className="flex flex-col gap-4.5 text-left">
-                        <div className="border-b border-white/20 pb-3">
-                          <span className="text-[10px] font-extrabold text-[#4FC0C3] uppercase tracking-[1.5px] block mb-0.5">{issue.magazineId || issue.season}</span>
-                          <h4 className="font-heading font-extrabold text-[15px] md:text-[17px] text-white leading-tight tracking-tight">{issue.title}</h4>
-                        </div>
-
-                        <div className="flex flex-col gap-2.5">
-                          <span className="text-[11px] text-white/50 font-bold uppercase tracking-[1px] block">Inside:</span>
-                          {issue.description ? (
-                            <p className="text-[12px] leading-relaxed text-white/90 font-medium line-clamp-6 overflow-hidden text-ellipsis">
-                              {issue.description}
-                            </p>
-                          ) : (
-                            <ul className="text-[12px] md:text-[13.5px] leading-relaxed text-white/90 list-disc pl-4 space-y-1.5 font-medium">
-                              {issue.contents.map((item, idx) => (
-                                <li key={idx}>{item}</li>
-                              ))}
-                            </ul>
-                          )}
-                        </div>
-                      </div>
-
-                      <Link
-                        href={`/magazine/${slug}`}
-                        className="w-full text-center bg-white text-[#0f7c85] font-extrabold text-[12px] py-3 rounded-full hover:bg-primary hover:text-white transition-all duration-300 shadow-md no-underline block border border-transparent"
-                      >
-                        Read Issue →
-                      </Link>
-                    </div>
-
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Pagination Controls */}
-          {totalPages > 1 && (
-            <div className="flex items-center justify-center gap-2 mt-12 reveal-slide">
-              <button
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-                className={`flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 text-primary transition-all duration-300 font-bold text-sm cursor-pointer select-none
-                  ${currentPage === 1
-                    ? 'opacity-40 cursor-not-allowed border-slate-100 text-slate-400'
-                    : 'hover:border-accent hover:bg-accent/5 hover:text-accent active:scale-95'}`}
-                aria-label="Previous Page"
-              >
-                ←
-              </button>
-
-              {Array.from({ length: totalPages }, (_, i) => {
-                const pageNum = i + 1;
-                return (
-                  <button
-                    key={pageNum}
-                    onClick={() => handlePageChange(pageNum)}
-                    className={`flex items-center justify-center w-10 h-10 rounded-full border font-bold text-sm transition-all duration-300 cursor-pointer select-none
-                      ${currentPage === pageNum
-                        ? 'bg-primary text-white border-primary shadow-md hover:bg-primary/95'
-                        : 'border-slate-200 text-primary hover:border-accent hover:bg-accent/5 hover:text-accent active:scale-95'}`}
-                  >
-                    {pageNum}
-                  </button>
-                );
-              })}
-
-              <button
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className={`flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 text-primary transition-all duration-300 font-bold text-sm cursor-pointer select-none
-                  ${currentPage === totalPages
-                    ? 'opacity-40 cursor-not-allowed border-slate-100 text-slate-400'
-                    : 'hover:border-accent hover:bg-accent/5 hover:text-accent active:scale-95'}`}
-                aria-label="Next Page"
-              >
-                →
+      {recentIssuesList.length > 0 && (
+        <section id="recent-issues" className="py-20 bg-white rounded-t-[40px] shadow-[0_-20px_40px_rgba(0,0,0,0.01)] relative">
+          <div className="container">
+            <div className="flex flex-col items-center text-center max-w-xl mx-auto mb-14 reveal-slide">
+              <span className="section-tag text-[10px] font-extrabold tracking-[3px] text-accent uppercase mb-2 bg-[#0f7c85]/10 px-3.5 py-1.5 rounded-full">
+                BACK JOURNAL
+              </span>
+              <h2 className="text-primary font-heading font-extrabold text-3xl md:text-4xl tracking-[-0.5px] mt-2 mb-3">
+                Recent Issues
+              </h2>
+              <p className="text-muted text-[14px] leading-relaxed max-w-md">
+                Journey through our curated collection of wellness wisdom.
+              </p>
+              <button className="flex items-center gap-1 text-accent text-[12px] font-extrabold uppercase tracking-wider hover:underline mt-4 cursor-pointer">
+                All Years <span className="arrow">→</span>
               </button>
             </div>
-          )}
-        </div>
-      </section>
 
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-12 mx-auto">
+              {displayedIssues.map((issue, i) => {
+                const slug = issue.slug || issue.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                return (
+                  <div
+                    key={issue.slug}
+                    ref={el => cardRefs.current[i] = el}
+                    onMouseMove={(e) => handleCardMouseMove(e, i)}
+                    onMouseLeave={() => handleCardMouseLeave(i)}
+                    style={{ transitionDelay: `${i * 0.1}s` }}
+                    className="project-card tilt-card bg-bg-light rounded-[24px] overflow-hidden border border-slate-200 transition-all duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer flex flex-col [transform-style:preserve-3d] [perspective:1000px] hover:border-[#0f7c85]/40 hover:shadow-[0_24px_48px_rgba(15,124,133,0.14)] hover:scale-[1.04] hover:-translate-y-2.5 active:scale-[0.98] reveal-slide p-5 min-h-[400px] md:min-h-[490px] group relative"
+                  >
+                    {/* The Flipping Card Wrapper */}
+                    <div className="w-full h-full relative transition-transform duration-[800ms] [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] flex flex-col flex-grow">
+
+                      {/* Front Face */}
+                      <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] flex flex-col justify-between">
+                        <div className="relative rounded-2xl overflow-hidden shadow-[0_12px_28px_rgba(0,0,0,0.04)] border border-slate-100 transition-all duration-500 mb-5 flex-grow h-[240px] md:h-[330px]">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={proxyUrl(issue.img)}
+                            alt={issue.title}
+                            className="object-cover w-full h-full"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-1 mt-auto">
+                          <p className="text-accent text-[11px] font-extrabold uppercase tracking-[1.5px] mb-1">{issue.magazineId || issue.season}</p>
+                          <p className="text-primary font-heading font-extrabold text-[15px] leading-snug tracking-[-0.3px] group-hover:text-accent transition-colors duration-300">{issue.title}</p>
+                        </div>
+                      </div>
+
+                      {/* Back Face */}
+                      <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)] bg-[#0f7c85] rounded-2xl p-6 text-white flex flex-col justify-between shadow-2xl border border-white/20 select-none">
+                        <div className="flex flex-col gap-4.5 text-left">
+                          <div className="border-b border-white/20 pb-3">
+                            <span className="text-[10px] font-extrabold text-[#4FC0C3] uppercase tracking-[1.5px] block mb-0.5">{issue.magazineId || issue.season}</span>
+                            <h4 className="font-heading font-extrabold text-[15px] md:text-[17px] text-white leading-tight tracking-tight">{issue.title}</h4>
+                          </div>
+
+                          <div className="flex flex-col gap-2.5">
+                            <span className="text-[11px] text-white/50 font-bold uppercase tracking-[1px] block">Inside:</span>
+                            {issue.description ? (
+                              <p className="text-[12px] leading-relaxed text-white/90 font-medium line-clamp-6 overflow-hidden text-ellipsis">
+                                {issue.description}
+                              </p>
+                            ) : (
+                              <ul className="text-[12px] md:text-[13.5px] leading-relaxed text-white/90 list-disc pl-4 space-y-1.5 font-medium">
+                                {issue.contents.map((item, idx) => (
+                                  <li key={idx}>{item}</li>
+                                ))}
+                              </ul>
+                            )}
+                          </div>
+                        </div>
+
+                        <Link
+                          href={`/magazine/${slug}`}
+                          className="w-full text-center bg-white text-[#0f7c85] font-extrabold text-[12px] py-3 rounded-full hover:bg-primary hover:text-white transition-all duration-300 shadow-md no-underline block border border-transparent"
+                        >
+                          Read Issue →
+                        </Link>
+                      </div>
+
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-center gap-2 mt-12 reveal-slide">
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className={`flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 text-primary transition-all duration-300 font-bold text-sm cursor-pointer select-none
+                    ${currentPage === 1
+                      ? 'opacity-40 cursor-not-allowed border-slate-100 text-slate-400'
+                      : 'hover:border-accent hover:bg-accent/5 hover:text-accent active:scale-95'}`}
+                  aria-label="Previous Page"
+                >
+                  ←
+                </button>
+
+                {Array.from({ length: totalPages }, (_, i) => {
+                  const pageNum = i + 1;
+                  return (
+                    <button
+                      key={pageNum}
+                      onClick={() => handlePageChange(pageNum)}
+                      className={`flex items-center justify-center w-10 h-10 rounded-full border font-bold text-sm transition-all duration-300 cursor-pointer select-none
+                        ${currentPage === pageNum
+                          ? 'bg-primary text-white border-primary shadow-md hover:bg-primary/95'
+                          : 'border-slate-200 text-primary hover:border-accent hover:bg-accent/5 hover:text-accent active:scale-95'}`}
+                    >
+                      {pageNum}
+                    </button>
+                  );
+                })}
+
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className={`flex items-center justify-center w-10 h-10 rounded-full border border-slate-200 text-primary transition-all duration-300 font-bold text-sm cursor-pointer select-none
+                    ${currentPage === totalPages
+                      ? 'opacity-40 cursor-not-allowed border-slate-100 text-slate-400'
+                      : 'hover:border-accent hover:bg-accent/5 hover:text-accent active:scale-95'}`}
+                  aria-label="Next Page"
+                >
+                  →
+                </button>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* Subscribe + Advertise — Side by Side */}
       <section className="container my-14 reveal-scale">
@@ -598,47 +514,58 @@ export default function PublicationPage() {
                 <p className="text-[#3a2520]/60 text-[11px] mt-3">
                   By subscribing, you agree to our{' '}
                   <Link href="/info?tab=legal&doc=privacy" className="underline hover:text-primary">Privacy Policy</Link>.
-                  You can unsubscribe at any time.
                 </p>
               </div>
             </div>
 
-            {/* Phone mockup — right column, centered */}
-            <div
-              style={phoneTransform}
-              className="hidden md:flex shrink-0 w-[180px] items-center justify-center pr-10 pb-0 select-none [transform-style:preserve-3d]"
-            >
-              <div className="relative">
-                <div className="absolute -top-4 -right-3 w-24 h-36 bg-[#f4ded7]/50 rounded-[24px] rotate-6 opacity-60" />
-                <div className="relative z-10 rounded-[28px] overflow-hidden shadow-[0_24px_64px_rgba(0,0,0,0.15)] border-[4px] border-white/60">
-                  <Image src="/images/mag_phone.png" alt="A Health Place magazine app" width={160} height={300} className="w-full object-cover" />
+            {/* Phone graphic — right (hidden on mobile) */}
+            <div className="hidden sm:flex items-center justify-center w-[160px] md:w-[220px] overflow-hidden rounded-r-[40px] pr-8 relative">
+              <div
+                style={phoneTransform}
+                className="relative w-[130px] md:w-[170px] h-[220px] md:h-[280px] rounded-[24px] overflow-hidden border-[4px] border-[#1a1a2e] bg-[#1a1a2e] shadow-[0_15px_35px_rgba(0,0,0,0.25)] flex items-center justify-center"
+              >
+                {/* Screen content */}
+                <div className="absolute inset-1 rounded-[20px] overflow-hidden bg-bg-light flex flex-col justify-between p-3 select-none">
+                  <div className="flex items-center justify-between border-b border-slate-200/50 pb-1.5">
+                    <span className="text-[7px] font-extrabold text-[#0f7c85] tracking-wider uppercase">Wellness Guide</span>
+                    <span className="text-[6px] text-muted font-bold">12:30 PM</span>
+                  </div>
+                  <div className="flex-1 flex flex-col justify-center py-2 text-center">
+                    <span className="text-lg block mb-1">🌿</span>
+                    <h5 className="text-[10px] font-heading font-extrabold text-primary leading-tight tracking-tight mb-1">Mindful Space</h5>
+                    <p className="text-[6.5px] text-secondary leading-snug">Tap into curated micro-meditation audio tracks every week.</p>
+                  </div>
+                  <button className="w-full text-center bg-[#0f7c85] text-white font-extrabold text-[8px] py-1.5 rounded-lg border-none shadow-sm cursor-pointer">
+                    Listen Now
+                  </button>
                 </div>
               </div>
             </div>
 
           </div>
 
-          {/* Right — Advertise With Us */}
-          <div className="bg-bg-light rounded-[40px] p-8 border border-slate-200/60 shadow-[0_4px_20px_rgba(0,0,0,0.01)] flex flex-col justify-between hover:border-[#0f7c85]/20 transition-all duration-300">
-            <div>
-              <div className="w-12 h-12 bg-[#e8f4ff] rounded-full flex items-center justify-center mb-6 shadow-sm">
-                <svg className="w-5 h-5 text-[#0f7c85]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
-                </svg>
+          {/* Right — Tiny Advertise CTA */}
+          <div className="bg-[#2a5a52] rounded-[40px] p-8 text-white text-center flex flex-col justify-between shadow-[0_20px_48px_rgba(42,90,82,0.12)] border border-[#3e7d72] relative overflow-hidden min-h-[280px]">
+            <div className="absolute inset-0 bg-gradient-to-br from-white/[0.04] to-transparent pointer-events-none" />
+            <div className="relative z-10 flex flex-col justify-center gap-5 flex-grow">
+              <div>
+                <span className="inline-block bg-[#4FC0C3]/10 border border-[#4FC0C3]/20 text-[#4FC0C3] font-bold text-[9px] uppercase tracking-[1.5px] px-2.5 py-1 rounded-full mb-3">
+                  Partnerships
+                </span>
+                <h3 className="font-heading font-extrabold text-lg leading-tight mb-2 tracking-tight">
+                  Partner With Us
+                </h3>
+                <p className="text-white/80 text-[11.5px] leading-relaxed max-w-[200px] mx-auto">
+                  Align your brand with holistic health and mindful wellness in our next edition.
+                </p>
               </div>
-              <h2 className="text-primary font-heading font-extrabold text-2xl md:text-3xl mb-4 tracking-[-0.5px]">
-                Advertise With Us.
-              </h2>
-              <p className="text-secondary text-[14px] leading-relaxed mb-8">
-                Reach our highly engaged audience of health and wellness enthusiasts. Partner with us for editorial integrations, custom newsletter sponsorships, or digital media packages.
-              </p>
+              <Link
+                href="/services"
+                className="w-full text-center bg-[#e28c6f] hover:bg-[#d57a5b] text-primary font-extrabold text-[12px] py-3 rounded-full transition-all duration-300 no-underline block shadow-sm hover:shadow-[0_6px_20px_rgba(226,140,111,0.25)]"
+              >
+                View Packages
+              </Link>
             </div>
-            <Link
-              href="/info?tab=contact"
-              className="inline-flex items-center justify-center bg-[#0f7c85] hover:bg-[#0c646b] text-white font-extrabold text-[12px] py-3 px-6 rounded-xl transition-all duration-300 no-underline w-max shadow-sm hover:shadow-[0_6px_20px_rgba(15,124,133,0.2)] hover:-translate-y-0.5 transform"
-            >
-              Contact Us
-            </Link>
           </div>
 
         </div>
