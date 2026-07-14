@@ -103,25 +103,34 @@ export async function syncRoutes() {
 
     let synced = 0;
     for (const route of routes) {
-      await prisma.page.upsert({
-        where: { siteId_slug: { siteId: SITE_ID, slug: route.slug } },
-        update: {
-          title: route.title,
-          isManagedBySync: true,
-          isDiscovered: true,
-        },
-        create: {
-          siteId: SITE_ID,
-          slug: route.slug,
-          title: route.title,
-          status: "PUBLISHED",
-          isManagedBySync: true,
-          isDiscovered: true,
-          isHardcoded: !route.isDynamic,
-          publishedAt: new Date(),
-        },
-      });
-      synced++;
+      try {
+        await prisma.page.upsert({
+          where: { siteId_slug: { siteId: SITE_ID, slug: route.slug } },
+          update: {
+            title: route.title,
+            isManagedBySync: true,
+            isDiscovered: true,
+          },
+          create: {
+            siteId: SITE_ID,
+            slug: route.slug,
+            title: route.title,
+            status: "PUBLISHED",
+            isManagedBySync: true,
+            isDiscovered: true,
+            isHardcoded: !route.isDynamic,
+            publishedAt: new Date(),
+          },
+        });
+        synced++;
+      } catch (upsertErr) {
+        const errMsg = upsertErr.message || "";
+        if (errMsg.includes("Lock wait timeout") || errMsg.includes("deadlock") || errMsg.includes("1205")) {
+          console.warn(`[${SITE_ID} Startup] ⚠️ Lock wait timeout/deadlock on upserting route ${route.slug}. Skipping this route (handled by concurrent sync).`);
+        } else {
+          throw upsertErr;
+        }
+      }
     }
 
     const activeSlugs = routes.map((r) => r.slug);
