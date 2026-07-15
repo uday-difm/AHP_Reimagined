@@ -2,6 +2,7 @@ import { uploadToS3, deleteFromS3, getObjectFromS3 } from "@/../utils/s3Utility"
 import sharp from "sharp";
 import { mediaRepository } from "@/repositories/media.repository";
 import { mediaFolderRepository } from "@/repositories/mediaFolder.repository";
+import { settingsService } from "@/services/settings.service";
 import { BaseService } from "@/core/service";
 import { NotFoundError, ValidationError } from "@/core/errors";
 import prisma from "@/lib/prisma";
@@ -22,19 +23,51 @@ export class MediaService extends BaseService {
     }
 
     const fileExtension = fileName.split(".").pop() || "";
-    const key = `site-${siteId}/${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExtension}`;
+    let finalBuffer = buffer;
+    let finalMimeType = mimeType;
+    let finalFileName = fileName;
+    let finalFileExtension = fileExtension;
 
-    const url = await uploadToS3(`site-${siteId}`, {
-      originalname: fileName,
-      buffer,
-      mimetype: mimeType,
+    let performanceConfig = {};
+    try {
+      performanceConfig = await settingsService.getSettingsField(siteId, "performanceConfig") || {};
+    } catch (e) {
+      console.warn("Failed to retrieve performance config in uploadMedia:", e.message);
+    }
+
+    const shouldCompress = mimeType.startsWith("image/") && 
+      mimeType !== "image/gif" && 
+      mimeType !== "image/svg+xml" && 
+      (performanceConfig.compressImagesOnUpload ?? true);
+
+    if (shouldCompress) {
+      try {
+        const compressedBuffer = await sharp(buffer)
+          .webp({ quality: 80 })
+          .toBuffer();
+        
+        finalBuffer = compressedBuffer;
+        finalMimeType = "image/webp";
+        finalFileExtension = "webp";
+        finalFileName = fileName.replace(/\.[^/.]+$/, "") + ".webp";
+      } catch (err) {
+        console.warn("Failed to compress image on upload:", err.message);
+      }
+    }
+
+    const key = `site-${siteId}/${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${finalFileExtension}`;
+
+    await uploadToS3(`site-${siteId}`, {
+      originalname: finalFileName,
+      buffer: finalBuffer,
+      mimetype: finalMimeType,
     }, key);
 
     let width = null;
     let height = null;
-    if (mimeType.startsWith("image/")) {
+    if (finalMimeType.startsWith("image/")) {
       try {
-        const metadata = await sharp(buffer).metadata();
+        const metadata = await sharp(finalBuffer).metadata();
         width = metadata.width || null;
         height = metadata.height || null;
       } catch (err) {
@@ -43,20 +76,20 @@ export class MediaService extends BaseService {
     }
 
     const media = await mediaRepository.create(siteId, {
-      fileName,
+      fileName: finalFileName,
       originalName: fileName,
       publicId: key,
       url: `/api/media/view?key=${key}`,
       secureUrl: `/api/media/view?key=${key}`,
-      mimeType,
-      extension: fileExtension,
-      size: buffer.length,
+      mimeType: finalMimeType,
+      extension: finalFileExtension,
+      size: finalBuffer.length,
       width,
       height,
       folderId: folderIdVal,
-      isImage: mimeType.startsWith("image/"),
-      isVideo: mimeType.startsWith("video/"),
-      isDocument: !mimeType.startsWith("image/") && !mimeType.startsWith("video/"),
+      isImage: finalMimeType.startsWith("image/"),
+      isVideo: finalMimeType.startsWith("video/"),
+      isDocument: !finalMimeType.startsWith("image/") && !finalMimeType.startsWith("video/"),
     });
 
     return media;
@@ -123,19 +156,51 @@ export class MediaService extends BaseService {
     }
 
     const fileExtension = fileName.split(".").pop() || "";
-    const key = `site-${siteId}/${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExtension}`;
+    let finalBuffer = buffer;
+    let finalMimeType = mimeType;
+    let finalFileName = fileName;
+    let finalFileExtension = fileExtension;
 
-    const url = await uploadToS3(`site-${siteId}`, {
-      originalname: fileName,
-      buffer,
-      mimetype: mimeType,
+    let performanceConfig = {};
+    try {
+      performanceConfig = await settingsService.getSettingsField(siteId, "performanceConfig") || {};
+    } catch (e) {
+      console.warn("Failed to retrieve performance config in replaceMedia:", e.message);
+    }
+
+    const shouldCompress = mimeType.startsWith("image/") && 
+      mimeType !== "image/gif" && 
+      mimeType !== "image/svg+xml" && 
+      (performanceConfig.compressImagesOnUpload ?? true);
+
+    if (shouldCompress) {
+      try {
+        const compressedBuffer = await sharp(buffer)
+          .webp({ quality: 80 })
+          .toBuffer();
+        
+        finalBuffer = compressedBuffer;
+        finalMimeType = "image/webp";
+        finalFileExtension = "webp";
+        finalFileName = fileName.replace(/\.[^/.]+$/, "") + ".webp";
+      } catch (err) {
+        console.warn("Failed to compress image on replace:", err.message);
+      }
+    }
+
+    const key = `site-${siteId}/${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${finalFileExtension}`;
+
+    await uploadToS3(`site-${siteId}`, {
+      originalname: finalFileName,
+      buffer: finalBuffer,
+      mimetype: finalMimeType,
     }, key);
 
     let width = null;
     let height = null;
-    if (mimeType.startsWith("image/")) {
+    if (finalMimeType.startsWith("image/")) {
       try {
-        const metadata = await sharp(buffer).metadata();
+        const metadata = await sharp(finalBuffer).metadata();
         width = metadata.width || null;
         height = metadata.height || null;
       } catch (err) {
@@ -144,19 +209,19 @@ export class MediaService extends BaseService {
     }
 
     const updated = await mediaRepository.update(siteId, mediaId, {
-      fileName,
+      fileName: finalFileName,
       originalName: fileName,
       publicId: key,
       url: `/api/media/view?key=${key}`,
       secureUrl: `/api/media/view?key=${key}`,
-      mimeType,
-      extension: fileExtension,
-      size: buffer.length,
+      mimeType: finalMimeType,
+      extension: finalFileExtension,
+      size: finalBuffer.length,
       width,
       height,
-      isImage: mimeType.startsWith("image/"),
-      isVideo: mimeType.startsWith("video/"),
-      isDocument: !mimeType.startsWith("image/") && !mimeType.startsWith("video/"),
+      isImage: finalMimeType.startsWith("image/"),
+      isVideo: finalMimeType.startsWith("video/"),
+      isDocument: !finalMimeType.startsWith("image/") && !finalMimeType.startsWith("video/"),
     });
 
     await this._cascadeMediaUrlUpdate(siteId, oldUrl, oldSecureUrl, updated.url, updated.secureUrl);
@@ -197,9 +262,17 @@ export class MediaService extends BaseService {
     }
 
     let buffer;
-    if (media.url.startsWith("/api/media/view")) {
-      const s3Obj = await getObjectFromS3(media.publicId);
-      buffer = s3Obj.body;
+    const isCloudinary = media.url && media.url.includes("res.cloudinary.com");
+    if (!isCloudinary && media.publicId) {
+      try {
+        const s3Obj = await getObjectFromS3(media.publicId);
+        buffer = s3Obj.body;
+      } catch (s3Err) {
+        console.warn("Failed to get object from S3 directly, falling back to fetch:", s3Err.message);
+        const res = await fetch(media.url);
+        const arrayBuffer = await res.arrayBuffer();
+        buffer = Buffer.from(arrayBuffer);
+      }
     } else {
       const res = await fetch(media.url);
       const arrayBuffer = await res.arrayBuffer();

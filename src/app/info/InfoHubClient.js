@@ -152,7 +152,7 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
   };
 
   return (
-    <div className="min-h-screen bg-bg-light relative pb-10">
+    <div className="min-h-screen bg-bg-light relative ">
       <CustomCursor />
       <ScrollReveal />
       <BackdropBlobs />

@@ -70,9 +70,9 @@ export default function PageEditorClient({
 }) {
   const formattedSiteName = siteId
     ? siteId
-        .split("_")
-        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-        .join(" ")
+      .split("_")
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ")
     : "CMS Site";
 
   // Safe fetch overlay injecting site token
@@ -901,17 +901,16 @@ export default function PageEditorClient({
           {/* Autosave indicator */}
           {!isHardcoded && (
             <span
-              className={`text-[10px] font-semibold px-2 py-1 rounded-md border ${
-                autosaveStatus === "saving"
-                  ? "bg-blue-900/30 text-blue-300 border-blue-700/40"
-                  : autosaveStatus === "saved"
-                    ? "bg-green-900/30 text-green-300 border-green-700/40"
-                    : autosaveStatus === "error"
-                      ? "bg-red-900/30 text-red-300 border-red-700/40"
-                      : isDirty
-                        ? "bg-amber-900/30 text-amber-300 border-amber-700/40"
-                        : "border-transparent text-slate-500"
-              }`}
+              className={`text-[10px] font-semibold px-2 py-1 rounded-md border ${autosaveStatus === "saving"
+                ? "bg-blue-900/30 text-blue-300 border-blue-700/40"
+                : autosaveStatus === "saved"
+                  ? "bg-green-900/30 text-green-300 border-green-700/40"
+                  : autosaveStatus === "error"
+                    ? "bg-red-900/30 text-red-300 border-red-700/40"
+                    : isDirty
+                      ? "bg-amber-900/30 text-amber-300 border-amber-700/40"
+                      : "border-transparent text-slate-500"
+                }`}
             >
               {autosaveStatus === "saving" && "Autosaving…"}
               {autosaveStatus === "saved" &&
@@ -935,11 +934,10 @@ export default function PageEditorClient({
               type="button"
               onClick={handleTogglePublish}
               disabled={actionLoading}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-lg shadow transition ${
-                status === "PUBLISHED"
-                  ? "bg-emerald-600 hover:bg-emerald-700 text-white"
-                  : "bg-slate-700 hover:bg-slate-600 text-slate-200"
-              }`}
+              className={`flex items-center gap-1.5 px-4 py-2 rounded-lg shadow transition ${status === "PUBLISHED"
+                ? "bg-emerald-600 hover:bg-emerald-700 text-white"
+                : "bg-slate-700 hover:bg-slate-600 text-slate-200"
+                }`}
             >
               <CheckCircle size={14} />
               {status === "PUBLISHED" ? "PUBLISHED" : "DRAFT"}
@@ -1005,15 +1003,13 @@ export default function PageEditorClient({
                   onDrop={(e) => handleDrop(e, secIdx)}
                   onDragEnd={() => setDragSrcIndex(null)}
                   onClick={() => handleSelectSection(sec)}
-                  className={`border p-3.5 rounded-lg cursor-pointer transition flex flex-col gap-2 hover:shadow-sm ${
-                    dragSrcIndex === secIdx
-                      ? "opacity-40 ring-2 ring-indigo-300"
-                      : ""
-                  } ${
-                    selectedSection?.id === sec.id
+                  className={`border p-3.5 rounded-lg cursor-pointer transition flex flex-col gap-2 hover:shadow-sm ${dragSrcIndex === secIdx
+                    ? "opacity-40 ring-2 ring-indigo-300"
+                    : ""
+                    } ${selectedSection?.id === sec.id
                       ? "border-indigo-600 bg-indigo-50/20 shadow-sm"
                       : "border-gray-250 hover:border-gray-400 bg-white"
-                  }`}
+                    }`}
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] bg-slate-100 px-2 py-0.5 rounded text-slate-800 font-bold tracking-wider">
@@ -1140,11 +1136,10 @@ export default function PageEditorClient({
           <div className="flex bg-gray-50 border rounded-lg p-1 text-xs font-bold text-gray-500">
             <button
               onClick={() => setActiveTab("page_meta")}
-              className={`flex-1 py-2 rounded-md transition flex items-center justify-center gap-1.5 ${
-                activeTab === "page_meta"
-                  ? "bg-white text-gray-900 shadow-sm"
-                  : "hover:text-gray-900"
-              }`}
+              className={`flex-1 py-2 rounded-md transition flex items-center justify-center gap-1.5 ${activeTab === "page_meta"
+                ? "bg-white dark:bg-slate-700 text-gray-900 dark:text-white shadow-sm"
+                : "hover:text-gray-900 dark:hover:text-white"
+                }`}
             >
               <Settings size={14} />
               Page Details & SEO
@@ -1157,13 +1152,11 @@ export default function PageEditorClient({
                 setActiveTab("section_visual");
               }}
               disabled={!selectedSection}
-              className={`flex-1 py-2 rounded-md transition flex items-center justify-center gap-1.5 ${
-                !selectedSection ? "opacity-40 cursor-not-allowed" : ""
-              } ${
-                activeTab === "section_visual"
-                  ? "bg-white text-gray-900 shadow-sm"
-                  : "hover:text-gray-900"
-              }`}
+              className={`flex-1 py-2 rounded-md transition flex items-center justify-center gap-1.5 ${!selectedSection ? "opacity-75 cursor-not-allowed text-gray-400" : ""
+                } ${activeTab === "section_visual"
+                  ? "bg-white dark:bg-slate-700 text-gray-900 dark:text-white shadow-sm"
+                  : "hover:text-gray-900  dark:hover:text-white"
+                }`}
             >
               <Sliders size={14} />
               Visual Editor
@@ -1176,13 +1169,11 @@ export default function PageEditorClient({
                 setActiveTab("section_json");
               }}
               disabled={!selectedSection}
-              className={`flex-1 py-2 rounded-md transition flex items-center justify-center gap-1.5 ${
-                !selectedSection ? "opacity-40 cursor-not-allowed" : ""
-              } ${
-                activeTab === "section_json"
-                  ? "bg-white text-gray-900 shadow-sm"
-                  : "hover:text-gray-900"
-              }`}
+              className={`flex-1 py-2 rounded-md transition flex items-center justify-center gap-1.5 ${!selectedSection ? "opacity-75 cursor-not-allowed text-gray-400" : ""
+                } ${activeTab === "section_json"
+                  ? "bg-white dark:bg-slate-700 text-gray-900 dark:text-white shadow-sm"
+                  : "hover:text-gray-900  dark:hover:text-white"
+                }`}
             >
               <Code size={14} />
               Source JSON
@@ -1190,11 +1181,10 @@ export default function PageEditorClient({
 
             <button
               onClick={() => setActiveTab("help")}
-              className={`flex-1 py-2 rounded-md transition flex items-center justify-center gap-1.5 ${
-                activeTab === "help"
-                  ? "bg-white text-gray-900 shadow-sm"
-                  : "hover:text-gray-900"
-              }`}
+              className={`flex-1 py-2 rounded-md transition flex items-center justify-center gap-1.5 ${activeTab === "help"
+                ? "bg-white dark:bg-slate-700 text-gray-900 dark:text-white shadow-sm"
+                : "hover:text-gray-900  dark:hover:text-white"
+                }`}
             >
               <HelpCircle size={14} />
               Editor Guide
@@ -1929,11 +1919,10 @@ export default function PageEditorClient({
               <button
                 type="button"
                 onClick={() => setPreviewDevice("desktop")}
-                className={`px-3 py-1.5 text-[10px] font-bold rounded transition flex items-center gap-1 ${
-                  previewDevice === "desktop"
-                    ? "bg-indigo-600 text-white"
-                    : "text-slate-400 hover:text-slate-200"
-                }`}
+                className={`px-3 py-1.5 text-[10px] font-bold rounded transition flex items-center gap-1 ${previewDevice === "desktop"
+                  ? "bg-indigo-600 text-white"
+                  : "text-slate-400 hover:text-slate-200"
+                  }`}
               >
                 <Monitor size={12} />
                 Desktop
@@ -1941,11 +1930,10 @@ export default function PageEditorClient({
               <button
                 type="button"
                 onClick={() => setPreviewDevice("mobile")}
-                className={`px-3 py-1.5 text-[10px] font-bold rounded transition flex items-center gap-1 ${
-                  previewDevice === "mobile"
-                    ? "bg-indigo-600 text-white"
-                    : "text-slate-400 hover:text-slate-200"
-                }`}
+                className={`px-3 py-1.5 text-[10px] font-bold rounded transition flex items-center gap-1 ${previewDevice === "mobile"
+                  ? "bg-indigo-600 text-white"
+                  : "text-slate-400 hover:text-slate-200"
+                  }`}
               >
                 <Smartphone size={12} />
                 Mobile
@@ -1968,11 +1956,10 @@ export default function PageEditorClient({
         {/* Preview frame area */}
         <div className="flex justify-center py-5 px-4 bg-slate-900/50">
           <div
-            className={`flex flex-col overflow-hidden shadow-2xl transition-all duration-300 ${
-              previewDevice === "mobile"
-                ? "w-[390px] rounded-[2rem] border-4 border-slate-700 ring-1 ring-slate-600/50"
-                : "w-full rounded-xl border border-slate-700/60"
-            }`}
+            className={`flex flex-col overflow-hidden shadow-2xl transition-all duration-300 ${previewDevice === "mobile"
+              ? "w-[390px] rounded-[2rem] border-4 border-slate-700 ring-1 ring-slate-600/50"
+              : "w-full rounded-xl border border-slate-700/60"
+              }`}
           >
             {/* Fake browser chrome */}
             <div className="bg-slate-800 flex items-center gap-2.5 px-3 py-2.5 border-b border-slate-700 shrink-0">

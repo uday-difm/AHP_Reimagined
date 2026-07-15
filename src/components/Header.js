@@ -1,74 +1,40 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useSession, signOut } from 'next-auth/react';
 import Link from 'next/link';
+import { ChevronDown, BookOpen, PenTool, Target, PlayCircle, Activity, Heart, Brain, Calendar, Mail, FileText, Info, HelpCircle, ArrowRight, Users } from 'lucide-react';
 import Search from '@/components/Search';
 import Marquee from '@/components/Marquee';
+import { quizzes } from '@/data/quizzes';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { status } = useSession();
   const isAuthenticated = status === 'authenticated';
-  const [navItems, setNavItems] = useState([]);
-  const [headerConfig, setHeaderConfig] = useState(null);
-  console.log(headerConfig)
+  const [dynamicBlogs, setDynamicBlogs] = useState([]);
+  const [dynamicPublications, setDynamicPublications] = useState([]);
 
-  // Fetch header configurations from DB
   useEffect(() => {
-    fetch('/api/header')
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (data?.success && data.data?.header) {
-          setHeaderConfig(data.data.header);
-        }
+    // Fetch recent blogs
+    fetch('/api/posts?limit=4')
+      .then(res => res.json())
+      .then(data => {
+        if (data.posts) setDynamicBlogs(data.posts);
       })
-      .catch(() => { });
+      .catch(err => console.error("Error fetching blogs for header:", err));
+
+    // Fetch recent publications
+    fetch('/api/magazine?limit=4')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) setDynamicPublications(data);
+      })
+      .catch(err => console.error("Error fetching publications for header:", err));
   }, []);
 
-  // Fetch dynamic menu based on header configuration selection (defaults to 'main')
-  const activeMenuType = headerConfig?.menuType || 'main';
 
-  useEffect(() => {
-    fetch(`/api/navigation/${activeMenuType}`)
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (data?.success && Array.isArray(data.data?.items)) {
-          setNavItems(data.data.items);
-        }
-      })
-      .catch(() => { });
-  }, [activeMenuType]);
-
-  // Default links fallback
-  const defaultLinks = useMemo(() => [
-    { label: 'Home', url: '/', type: 'internal' },
-    { label: 'About', url: '/about', type: 'internal' },
-    { label: 'Publication', url: '/publication', type: 'internal' },
-    { label: 'Blogs', url: '/blogs', type: 'internal' },
-    { label: 'Quizzes', url: '/quizzes', type: 'internal' },
-    { label: 'Contact Us', url: '/contact', type: 'internal' },
-  ], []);
-
-  const displayLinks = useMemo(() => {
-    return navItems.length > 0 ? navItems : defaultLinks;
-  }, [navItems, defaultLinks]);
-
-  // Mobile links appending Dashboard & Authentication
-  const displayMobileLinks = useMemo(() => {
-    return [
-      ...displayLinks,
-      ...(isAuthenticated
-        ? [
-          { label: 'Dashboard', url: '/quizzes/dashboard', type: 'internal' },
-          { label: 'Logout', url: '#', type: 'internal', isLogout: true },
-        ]
-        : [
-          { label: 'Login', url: '/login', type: 'internal' },
-        ]),
-    ];
-  }, [displayLinks, isAuthenticated]);
 
   // Body and HTML scroll locking when menu is open
   useEffect(() => {
@@ -85,226 +51,179 @@ export default function Header() {
     };
   }, [menuOpen]);
 
-  // Derived Header Configurations
-  const showAnnounce = headerConfig?.announcementBar?.enabled;
-  const announceLink = headerConfig?.announcementBar?.link || "/blogs";
-  const announceBg = headerConfig?.announcementBar?.bgColor || "#2563eb";
-  const announceColor = headerConfig?.announcementBar?.textColor || "#ffffff";
-
-  // Resolve multiple texts to display with individual links
-  const announceItems = useMemo(() => {
-    if (!headerConfig?.announcementBar) {
-      return [{ text: "Welcome to our new headless multi-site CMS console!", link: "/blogs" }];
-    }
-    // Check items array
-    if (Array.isArray(headerConfig.announcementBar.items) && headerConfig.announcementBar.items.length > 0) {
-      const valid = headerConfig.announcementBar.items.filter(item => item && item.text && item.text.trim());
-      if (valid.length > 0) return valid;
-    }
-    // Check texts array
-    if (Array.isArray(headerConfig.announcementBar.texts) && headerConfig.announcementBar.texts.length > 0) {
-      const valid = headerConfig.announcementBar.texts.filter(t => t && t.trim());
-      if (valid.length > 0) {
-        return valid.map(t => ({ text: t, link: headerConfig.announcementBar.link || "/blogs" }));
-      }
-    }
-    // Check fallback text
-    if (headerConfig.announcementBar.text) {
-      return [{ text: headerConfig.announcementBar.text, link: headerConfig.announcementBar.link || "/blogs" }];
-    }
-    return [{ text: "Welcome to our new headless multi-site CMS console!", link: "/blogs" }];
-  }, [headerConfig]);
-
-  // Repeat announcements sequence to fill screen width
-  const repeatedAnnouncements = useMemo(() => {
-    if (announceItems.length === 0) return [];
-    const repeats = Math.max(2, Math.ceil(8 / announceItems.length));
-    return Array(repeats).fill(announceItems).flat();
-  }, [announceItems]);
-
-  // If announcement bar is disabled, the marquee acts as a nice aesthetic fallback.
-  // We offset header top height based on whether a top bar exists.
-  const topBarHeight = showAnnounce ? '40px' : (headerConfig === null ? '40px' : '0px');
-
-  const logoType = headerConfig?.logoType || 'image';
-  const logoText = headerConfig?.logoText || 'A Health Place';
-  const logoUrl = headerConfig?.logoUrl || '/images/Logo-web.png';
-  const logoWidth = Number(headerConfig?.logoWidth) || 360;
-  const logoHeight = Number(headerConfig?.logoHeight) || 48;
-
-  const paddingY = headerConfig?.paddingY || 'medium';
-  const headerHeightClass = {
-    small: 'h-16',
-    medium: 'h-20',
-    large: 'h-24',
-  }[paddingY] || 'h-20';
-
-  const borderBottom = headerConfig?.borderBottom !== false;
-  const shadowSize = headerConfig?.shadowSize || 'none';
-  const shadowClass = {
-    none: '',
-    small: 'shadow-sm',
-    medium: 'shadow-md',
-    large: 'shadow-lg',
-  }[shadowSize] || '';
-
-  const ctaText = headerConfig?.ctaText;
-  const ctaLink = headerConfig?.ctaLink || '/contact';
-
   return (
     <>
-      {/* Dynamic Announcement Bar or fallback Marquee */}
-      {showAnnounce ? (
-        <div
-          className="fixed top-0 left-0 right-0 h-10 flex items-center overflow-hidden whitespace-nowrap select-none z-[9001] shadow-xs"
-          style={{ backgroundColor: announceBg, color: announceColor }}
-        >
-          <div className="inline-block animate-marquee whitespace-nowrap">
-            {repeatedAnnouncements.map((item, idx) => (
-              <span key={idx} className="inline-flex items-center mx-6 font-heading text-[13px] md:text-[14px] tracking-[1.5px]">
-                <span className="w-2 h-2 rounded-full mr-4" style={{ backgroundColor: announceColor === '#ffffff' ? '#8fe9ec' : 'currentColor', opacity: 0.8 }} />
-                {item.link ? (
-                  <Link href={item.link} className="hover:underline text-inherit no-underline font-semibold">
-                    {item.text}
-                  </Link>
-                ) : (
-                  <span className="font-semibold">{item.text}</span>
-                )}
-              </span>
-            ))}
-          </div>
-          <div className="inline-block animate-marquee whitespace-nowrap" aria-hidden="true">
-            {repeatedAnnouncements.map((item, idx) => (
-              <span key={`clone-${idx}`} className="inline-flex items-center mx-6 font-heading text-[13px] md:text-[14px] tracking-[1.5px]">
-                <span className="w-2 h-2 rounded-full mr-4" style={{ backgroundColor: announceColor === '#ffffff' ? '#8fe9ec' : 'currentColor', opacity: 0.8 }} />
-                {item.link ? (
-                  <Link href={item.link} className="hover:underline text-inherit no-underline font-semibold">
-                    {item.text}
-                  </Link>
-                ) : (
-                  <span className="font-semibold">{item.text}</span>
-                )}
-              </span>
-            ))}
-          </div>
-        </div>
-      ) : (
-        headerConfig === null && <Marquee />
-      )}
+      <Marquee />
+      {/* Header */}
+      <header className="fixed top-[40px] left-0 w-full flex items-center h-20 bg-white/30 backdrop-blur-lg z-[9000]" style={{ WebkitBackdropFilter: 'blur(48px)' }}>
+        <div className="header-container flex justify-between items-center w-full  mx-auto px-6 md:px-10">
+          <a href="/" className="logo-link flex items-center">
+            <Image
+              src="/images/Logo-web.png"
+              alt="A Health Place Logo"
+              width={360}
+              height={100}
+              className="logo-img h-10 sm:h-12 md:h-16 w-auto object-contain block transition-transform duration-300 hover:scale-[1.03]"
+              priority
+            />
+          </a>
 
-      {/* Header Container */}
-      <header
-        className={`fixed left-0 w-full flex items-center ${headerHeightClass} bg-white/30 backdrop-blur-lg z-[9000] transition-all duration-300 ${borderBottom ? 'border-b border-slate-200/50' : ''
-          } ${shadowClass}`}
-        style={{ top: topBarHeight, WebkitBackdropFilter: 'blur(48px)' }}
-      >
-        <div className="header-container flex justify-between items-center w-full mx-auto px-6 md:px-10">
+          {/* Desktop Nav - Mega Menu */}
+          <nav className="nav-desktop hidden lg:flex items-center gap-2 xl:gap-4 flex-1 justify-center relative">
+            <Link href="/" className="text-[15px] font-semibold text-secondary hover:text-[#0F766E] py-2 px-3 transition-colors">
+              Home
+            </Link>
 
-          {/* Dynamic Logo rendering */}
-          <Link href="/" className="logo-link flex items-center no-underline">
-            {logoType === 'image' ? (
-              <img
-                src={logoUrl}
-                alt={logoText}
-                width={logoWidth}
-                height={logoHeight}
-                className="logo-img w-auto object-contain block transition-transform duration-300 hover:scale-[1.03]"
-                style={{ height: `${logoHeight}px` }}
-              />
-            ) : (
-              <span className="font-heading font-extrabold text-[20px] sm:text-[24px] tracking-tight text-primary transition-colors hover:text-[#0f7c85]">
-                {logoText}
-              </span>
-            )}
-          </Link>
+            {/* Resources Dropdown */}
+            <div className="relative group px-2 xl:px-3 py-6 -my-6">
+              <button className="flex items-center gap-1 text-[15px] font-semibold text-secondary hover:text-[#0F766E] group-hover:text-[#0F766E] py-2 px-3 transition-colors">
+                Resources <ChevronDown className="w-4 h-4 transition-transform duration-300 group-hover:rotate-180" />
+              </button>
+              
+              <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 opacity-0 translate-y-4 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300 z-50">
+                <div className="bg-white rounded-2xl border border-[#E6EEF0] p-8 w-[850px] shadow-[0_12px_35px_rgba(0,0,0,.08)] flex gap-8">
+                  {/* Featured Publication */}
+                  <div className="w-[30%] bg-slate-50/50 rounded-xl p-4 border border-[#E6EEF0]/80 flex flex-col">
+                    <span className="text-[10px] font-bold text-[#0F766E] uppercase tracking-wider mb-3">Latest Publication</span>
+                    <div className="relative aspect-[3/4] w-full rounded-lg overflow-hidden mb-4 shadow-sm border border-slate-100">
+                      <Image src="/images/mag_nutrition.png" alt="Holistic Living" fill className="object-cover" />
+                    </div>
+                    <h4 className="font-bold text-[#0F766E] text-lg mb-1 leading-tight">Holistic Living</h4>
+                    <p className="text-xs text-[#374151] mb-5 leading-relaxed">Summer 2026 Edition.<br/>Your guide to nutrition, mind, body and soul.</p>
+                    <Link href="/publication" className="mt-auto inline-block bg-[#0F766E] hover:bg-[#0a524c] text-white text-center py-2.5 rounded-lg font-medium text-sm transition-colors shadow-sm">
+                      Read Now &rarr;
+                    </Link>
+                  </div>
 
-          {/* Desktop Dynamic Nav with Dropdown support */}
-          <nav className="nav-desktop hidden md:flex items-center gap-4 md:gap-6 flex-1 justify-center">
-            {displayLinks.map((item, idx) => {
-              const hasChildren = Array.isArray(item.children) && item.children.length > 0;
-
-              if (hasChildren) {
-                return (
-                  <div key={idx} className="relative group/dropdown py-2">
-                    <button className="nav-item group text-sm md:text-[15px] font-medium text-secondary relative py-2 px-4 rounded-full transition-all duration-300 ease-out hover:text-[#0f7c85] flex items-center gap-1 cursor-pointer bg-transparent border-none outline-none">
-                      <span className="relative z-10">{item.label}</span>
-                      <svg className="w-3 h-3 relative z-10 transition-transform duration-300 group-hover/dropdown:rotate-180" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                      </svg>
-                    </button>
-                    {/* Floating Dropdown Panel */}
-                    <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 w-48 opacity-0 pointer-events-none group-hover/dropdown:opacity-100 group-hover/dropdown:pointer-events-auto transition-all duration-300 ease-out z-[9999]">
-                      <div className="bg-white rounded-2xl border border-slate-200/50 shadow-xl overflow-hidden p-1.5 flex flex-col gap-0.5">
-                        {item.children.map((child, cIdx) => (
-                          <Link
-                            key={cIdx}
-                            href={child.url}
-                            className="px-4 py-2 rounded-xl text-xs font-semibold text-secondary hover:text-[#0f7c85] hover:bg-[#0f7c85]/05 no-underline transition-all block"
-                          >
-                            {child.label}
-                          </Link>
-                        ))}
+                  {/* Links Grid */}
+                  <div className="w-[70%] grid grid-cols-3 gap-6">
+                    {/* Publications */}
+                    <div className="flex flex-col">
+                      <div className="flex items-center gap-2 mb-3">
+                        <BookOpen className="w-5 h-5 text-[#0F766E]" />
+                        <h4 className="font-bold text-[#0F766E] text-base">Publications</h4>
                       </div>
+                      <ul className="space-y-3 mb-4 flex-1">
+                        {dynamicPublications.length > 0 ? (
+                          dynamicPublications.slice(0, 4).map((pub) => (
+                            <li key={pub.id || pub.slug}>
+                              <Link href={`/magazine/${pub.slug}`} className="text-sm text-[#374151] hover:text-[#0F766E] hover:font-medium transition-colors block line-clamp-1" title={pub.title}>
+                                {pub.title}
+                              </Link>
+                            </li>
+                          ))
+                        ) : (
+                          <>
+                            <li><Link href="/magazine/the-sleep-revolution" className="text-sm text-[#374151] hover:text-[#0F766E] hover:font-medium transition-colors block">The Sleep Revolution</Link></li>
+                            <li><Link href="/magazine/holistic-nutrition" className="text-sm text-[#374151] hover:text-[#0F766E] hover:font-medium transition-colors block">Holistic Nutrition</Link></li>
+                            <li><Link href="/magazine/the-strength-within" className="text-sm text-[#374151] hover:text-[#0F766E] hover:font-medium transition-colors block">The Strength Within</Link></li>
+                            <li><Link href="/magazine/digital-detox" className="text-sm text-[#374151] hover:text-[#0F766E] hover:font-medium transition-colors block">Digital Detox</Link></li>
+                          </>
+                        )}
+                      </ul>
+                      <Link href="/publication" className="inline-block mt-auto text-[13px] font-bold text-[#0F766E] hover:text-[#0a524c]">View all Publications &rarr;</Link>
+                    </div>
+                    {/* Blogs */}
+                    <div className="flex flex-col">
+                      <div className="flex items-center gap-2 mb-3">
+                        <PenTool className="w-5 h-5 text-[#0F766E]" />
+                        <h4 className="font-bold text-[#0F766E] text-base">Blogs</h4>
+                      </div>
+                      <ul className="space-y-3 mb-4 flex-1">
+                        {dynamicBlogs.length > 0 ? (
+                          dynamicBlogs.slice(0, 4).map((blog) => (
+                            <li key={blog.id || blog.slug}>
+                              <Link href={`/blogs/${blog.slug}`} className="text-sm text-[#374151] hover:text-[#0F766E] hover:font-medium transition-colors block line-clamp-1" title={blog.title}>
+                                {blog.title}
+                              </Link>
+                            </li>
+                          ))
+                        ) : (
+                          <>
+                            <li><Link href="/blogs/ayurvedic-secrets-for-better-digestion" className="text-sm text-[#374151] hover:text-[#0F766E] hover:font-medium transition-colors block line-clamp-1">Ayurvedic Secrets for Better Digestion</Link></li>
+                            <li><Link href="/blogs/breathwork-vs-meditation-for-anxiety" className="text-sm text-[#374151] hover:text-[#0F766E] hover:font-medium transition-colors block line-clamp-1">Breathwork vs. Meditation for Anxiety</Link></li>
+                            <li><Link href="/blogs/how-inactivity-impacts-physical-health" className="text-sm text-[#374151] hover:text-[#0F766E] hover:font-medium transition-colors block line-clamp-1">How Inactivity Impacts Physical Health</Link></li>
+                            <li><Link href="/blogs/exercise-for-better-mental-health" className="text-sm text-[#374151] hover:text-[#0F766E] hover:font-medium transition-colors block line-clamp-1">Exercise for Better Mental Health</Link></li>
+                          </>
+                        )}
+                      </ul>
+                      <Link href="/blogs" className="inline-block mt-auto text-[13px] font-bold text-[#0F766E] hover:text-[#0a524c]">View all Blogs &rarr;</Link>
+                    </div>
+                    {/* Quizzes */}
+                    <div className="flex flex-col">
+                      <div className="flex items-center gap-2 mb-3">
+                        <Target className="w-5 h-5 text-[#0F766E]" />
+                        <h4 className="font-bold text-[#0F766E] text-base">Quizzes</h4>
+                      </div>
+                      <ul className="space-y-3 mb-4 flex-1">
+                        {quizzes && quizzes.length > 0 ? (
+                          quizzes.slice(0, 4).map((quiz) => (
+                            <li key={quiz.slug}>
+                              <Link href={`/quizzes/${quiz.slug}`} className="text-sm text-[#374151] hover:text-[#0F766E] hover:font-medium transition-colors block line-clamp-1" title={quiz.title}>
+                                {quiz.title}
+                              </Link>
+                            </li>
+                          ))
+                        ) : (
+                          <li><Link href="/quizzes" className="text-sm text-[#374151] hover:text-[#0F766E] hover:font-medium transition-colors block line-clamp-1">General Wellness</Link></li>
+                        )}
+                      </ul>
+                      <Link href="/quizzes" className="inline-block mt-auto text-[13px] font-bold text-[#0F766E] hover:text-[#0a524c]">View all Quizzes &rarr;</Link>
                     </div>
                   </div>
-                );
-              }
+                </div>
+              </div>
+            </div>
 
-              return (
-                <Link
-                  key={idx}
-                  href={item.url}
-                  className="nav-item group text-sm md:text-[15px] font-medium text-secondary relative py-2 px-4 rounded-full transition-all duration-300 ease-out hover:text-[#0f7c85] overflow-hidden"
-                >
-                  <span className="relative z-10">{item.label}</span>
-                  <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-accent transition-all duration-300 ease-out group-hover:w-[60%] rounded-full"></span>
-                </Link>
-              );
-            })}
+            {/* Services - No dropdown since subpages don't exist */}
+            <Link href="/services" className="text-[15px] font-semibold text-secondary hover:text-[#0F766E] py-2 px-3 transition-colors">
+              Services
+            </Link>
 
-            {/* Auth section */}
-            {isAuthenticated ? (
-              <>
-                <Link href="/quizzes/dashboard" className="nav-item group text-sm md:text-[15px] font-medium text-secondary relative py-2 px-4 rounded-full transition-all duration-300 ease-out hover:text-[#0f7c85] overflow-hidden">
-                  <span className="relative z-10">Dashboard</span>
-                  <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-accent transition-all duration-300 ease-out group-hover:w-[60%] rounded-full"></span>
-                </Link>
-                <button
-                  onClick={() => signOut({ callbackUrl: '/' })}
-                  className="nav-item group text-sm md:text-[15px] font-medium text-secondary relative py-2 px-4 rounded-full transition-all duration-300 ease-out hover:text-red-500 border-none bg-transparent cursor-pointer overflow-hidden"
-                >
-                  <span className="relative z-10">Logout</span>
-                  <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-red-500 transition-all duration-300 ease-out group-hover:w-[60%] rounded-full"></span>
-                </button>
-              </>
-            ) : (
-              <Link href="/login" className="nav-item group text-sm md:text-[15px] font-medium text-secondary relative py-2 px-4 rounded-full transition-all duration-300 ease-out hover:text-[#0f7c85] hover:bg-[#0f7c85]/10 overflow-hidden">
-                <span className="relative z-10">Login</span>
-                <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-accent transition-all duration-300 ease-out group-hover:w-[60%] rounded-full"></span>
-              </Link>
-            )}
+
+
+            {/* About Dropdown */}
+            <div className="relative group px-2 xl:px-3 py-6 -my-6">
+              <button className="flex items-center gap-1 text-[15px] font-semibold text-secondary hover:text-[#0F766E] group-hover:text-[#0F766E] py-2 px-3 transition-colors">
+                About <ChevronDown className="w-4 h-4 transition-transform duration-300 group-hover:rotate-180" />
+              </button>
+              <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 opacity-0 translate-y-4 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300 z-50">
+                <div className="bg-white rounded-2xl border border-[#E6EEF0] p-4 w-[240px] shadow-[0_12px_35px_rgba(0,0,0,.08)]">
+                  <ul className="space-y-1">
+                    <li><Link href="/about" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#374151] hover:text-[#0F766E] hover:bg-[#ECFEFF] transition-colors"><Info className="w-4 h-4 text-[#0F766E]" /> About Us</Link></li>
+                    <li><Link href="/contact" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#374151] hover:text-[#0F766E] hover:bg-[#ECFEFF] transition-colors"><FileText className="w-4 h-4 text-[#0F766E]" /> Contact</Link></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </nav>
 
-          {/* Actions wrapper */}
-          <div className="flex items-center gap-3.5 z-[10000]">
-            <Search />
 
-            {/* Configured CTA Button */}
-            {ctaText && (
-              <Link
-                href={ctaLink}
-                className="hidden sm:inline-flex items-center justify-center bg-[#0f7c85] hover:bg-[#0c6b73] text-white px-5 py-2.5 rounded-full font-bold text-xs no-underline transition-all duration-300 shadow-sm hover:shadow"
-              >
-                {ctaText}
-              </Link>
-            )}
+          {/* Actions wrapper */}
+          <div className="flex items-center gap-2 lg:gap-3 z-[10000]">
+            <Search />
+            
+            <div className="hidden lg:flex items-center">
+              {isAuthenticated ? (
+                <div className="flex items-center gap-3">
+                  <Link href="/quizzes/dashboard" className="bg-[#0F766E] hover:bg-[#0d655e] text-white px-5 py-2.5 rounded-full text-[13px] font-semibold transition-colors shadow-sm">
+                    Dashboard
+                  </Link>
+                  <button onClick={() => signOut({ callbackUrl: '/' })} className="text-[13px] font-semibold text-red-500 hover:text-red-600 transition-colors py-2.5 px-2">
+                    Logout
+                  </button>
+                </div>
+              ) : (
+                <Link href="/login" className="bg-[#0F766E] hover:bg-[#0d655e] text-white px-6 py-2.5 rounded-full text-[13px] font-semibold transition-colors shadow-sm">
+                  Login
+                </Link>
+              )}
+            </div>
 
             {/* Hamburger Menu Button */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className={`md:hidden relative w-12 h-12 rounded-full flex justify-center items-center cursor-pointer z-[10000] shadow-[0_4px_20px_rgba(0,0,0,0.05)] transition-all duration-500 border ${menuOpen
-                ? 'bg-accent border-accent shadow-[0_6px_24px_rgba(15,124,133,0.15)]'
-                : 'bg-white/90 border-[var(--color-border)]/80 hover:scale-105 hover:border-accent hover:shadow-[0_6px_24px_rgba(31,185,251,0.12)]'
+              className={`lg:hidden relative w-12 h-12 rounded-full flex justify-center items-center cursor-pointer z-[10000] shadow-[0_4px_20px_rgba(0,0,0,0.05)] transition-all duration-500 border ${menuOpen ? 'bg-accent border-accent shadow-[0_6px_24px_rgba(15,124,133,0.15)]' : 'bg-white/90 border-[var(--color-border)]/80 hover:scale-105 hover:border-accent hover:shadow-[0_6px_24px_rgba(31,185,251,0.12)]'
                 }`}
               aria-label="Toggle Menu"
             >
@@ -324,53 +243,75 @@ export default function Header() {
           }`}
       >
         <div className={`hb-menu-container w-full h-full max-h-[100dvh] overflow-y-auto py-24 px-6 sm:px-10 md:px-20 flex flex-col justify-center transition-transform duration-700 ${menuOpen ? 'translate-y-0' : 'translate-y-10'}`}>
+
+          {/* 
+          <div className={`hb-meta-panel hidden md:flex flex-col gap-10 border-r border-primary/10 pr-12 transition-all duration-500 delay-300 ${menuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[30px]'}`}>
+            <div className="hb-quote-section flex items-start justify-start py-6 px-6 md:px-8 max-w-[650px]">
+              <div className="hb-quote-container font-['Optima',_'Candara',_'Noto_Sans',_sans-serif] text-[#1a1a1a] py-6 leading-[1.1] uppercase">
+                <h1 className="hb-main-text text-4xl md:text-5xl lg:text-6xl tracking-[2px] font-normal m-0 leading-[1.1]">
+                  "Small Changes Big Impact"
+                </h1>
+                <p className="hb-sub-text text-2xl md:text-2xl lg:text-3xl tracking-[1px] mt-2 md:mt-3 font-normal pl-1 leading-[1.1] text-secondary">
+                  Start today—your future self will thank you.
+                </p>
+              </div>
+            </div>
+          </div> 
+          */}
           <nav className="hb-nav-links flex flex-col items-end pr-0 md:pr-16 lg:pr-32 w-full my-auto">
-            <div className="flex flex-col items-end text-right gap-2 sm:gap-4 w-full">
-              {displayMobileLinks.map((item, idx) => {
-                if (item.isLogout) {
+            <div className="flex flex-col items-start text-left gap-2 sm:gap-4 w-fit px-6 md:px-0">
+              {['Home', 'About', 'Publication', 'Blogs', 'Quizzes', 'Contact Us', ...(isAuthenticated ? ['Dashboard', 'Logout'] : ['Login'])].map((label, i) => {
+                const isPublication = label === 'Publication';
+                const isBlogs = label === 'Blogs';
+                const isHome = label === 'Home';
+                const isAbout = label === 'About';
+                const isQuizzes = label === 'Quizzes';
+                const isContact = label === 'Contact Us';
+                const isDashboard = label === 'Dashboard';
+                const isLogin = label === 'Login';
+                const isLogout = label === 'Logout';
+
+                const href = isHome
+                  ? '/'
+                  : isAbout
+                    ? '/about'
+                    : isContact
+                      ? '/contact'
+                      : isPublication
+                        ? '/publication'
+                        : isBlogs
+                          ? '/blogs'
+                          : isQuizzes
+                            ? '/quizzes'
+                            : isDashboard
+                              ? '/quizzes/dashboard'
+                              : isLogin
+                                ? '/login'
+                                : '#';
+
+                if (isLogout) {
                   return (
                     <button
-                      key={idx}
-                      onClick={() => {
-                        setMenuOpen(false);
-                        signOut({ callbackUrl: '/' });
-                      }}
-                      style={{ transitionDelay: `${idx * 0.04}s` }}
-                      className={`hb-nav-item font-heading font-extrabold text-[28px] sm:text-[40px] md:text-[56px] lg:text-[64px] text-red-500 hover:text-red-600 no-underline leading-[1.1] tracking-[-1.5px] block w-full text-right hover:-translate-x-3 hover:scale-[1.02] hover:bg-red-500/10 px-6 py-3 rounded-2xl transition-all duration-500 border-none bg-transparent cursor-pointer ${menuOpen ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'
-                        }`}
+                      key={i}
+                      onClick={() => { setMenuOpen(false); signOut({ callbackUrl: '/' }); }}
+                      style={{ transitionDelay: `${i * 0.05}s` }}
+                      className={`hb-nav-item font-heading font-extrabold text-2xl sm:text-4xl md:text-6xl lg:text-6xl text-red-500 hover:text-red-600 no-underline leading-[1.1] tracking-[-1.5px] block w-full text-left hover:-translate-x-3 hover:scale-[1.02] hover:bg-red-500/10 px-4 md:px-6 py-3 rounded-2xl transition-all duration-500 border-none bg-transparent cursor-pointer ${menuOpen ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'}`}
                     >
                       Logout
                     </button>
                   );
                 }
 
-                const hasChildren = Array.isArray(item.children) && item.children.length > 0;
-
                 return (
-                  <div key={idx} className="w-full text-right" style={{ transitionDelay: `${idx * 0.04}s` }}>
-                    <Link
-                      href={item.url}
-                      onClick={() => !hasChildren && setMenuOpen(false)}
-                      className={`hb-nav-item font-heading font-extrabold text-[28px] sm:text-[40px] md:text-[56px] lg:text-[64px] text-primary no-underline leading-[1.1] tracking-[-1.5px] block w-full hover:text-accent hover:-translate-x-3 hover:scale-[1.02] hover:bg-accent/10 px-6 py-3 rounded-2xl transition-all duration-500 ${menuOpen ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'
-                        }`}
-                    >
-                      {item.label}
-                    </Link>
-                    {hasChildren && (
-                      <div className="flex flex-col items-end gap-1.5 mt-2 pr-6 border-r border-slate-200">
-                        {item.children.map((child, cIdx) => (
-                          <Link
-                            key={cIdx}
-                            href={child.url}
-                            onClick={() => setMenuOpen(false)}
-                            className="text-secondary hover:text-[#0f7c85] font-semibold text-lg no-underline py-1 px-3 rounded-xl hover:bg-[#0f7c85]/05 transition"
-                          >
-                            {child.label}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-                  </div>
+                  <a
+                    key={i}
+                    href={href}
+                    onClick={() => setMenuOpen(false)}
+                    style={{ transitionDelay: `${i * 0.05}s` }}
+                    className={`hb-nav-item font-heading font-extrabold text-2xl sm:text-4xl md:text-6xl lg:text-6xl text-primary no-underline leading-[1.1] tracking-[-1.5px] block w-full text-left hover:text-accent hover:-translate-x-3 hover:scale-[1.02] hover:bg-accent/10 px-4 md:px-6 py-3 rounded-2xl transition-all duration-500 ${menuOpen ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'}`}
+                  >
+                    {label}
+                  </a>
                 );
               })}
             </div>

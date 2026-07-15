@@ -256,7 +256,7 @@ export default async function DashboardPage() {
           </div>
           <div className="mt-4 pt-3 border-t border-gray-100 dark:border-slate-700">
             <Link
-              href="/leads"
+              href="/crm/leads"
               className="text-xs text-blue-600 dark:text-indigo-400 font-semibold hover:underline flex items-center gap-1"
             >
               View Leads CRM <Play size={10} fill="currentColor" />
@@ -299,7 +299,7 @@ export default async function DashboardPage() {
           </div>
           <div className="mt-4 pt-3 border-t border-gray-100 dark:border-slate-700">
             <Link
-              href="/leads"
+              href="/crm/leads"
               className="text-xs text-blue-600 dark:text-indigo-400 font-semibold hover:underline flex items-center gap-1"
             >
               View Inbox Submissions <Play size={10} fill="currentColor" />

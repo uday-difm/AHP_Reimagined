@@ -14,10 +14,19 @@ export async function GET(req) {
 
     const settings = await prisma.globalSettings.findUnique({
       where: { siteId },
-      select: { header: true }
+      select: { header: true, websiteSettings: true }
     });
 
-    return NextResponse.json(apiSuccess({ header: settings?.header || null }));
+    const header = settings?.header || {};
+    const websiteSettings = settings?.websiteSettings || {};
+    const logoUrl = header.logoUrl || websiteSettings.logoUrl || null;
+
+    return NextResponse.json(apiSuccess({
+      header: {
+        ...header,
+        logoUrl
+      }
+    }));
   } catch (err) {
     return NextResponse.json({ error: "Internal Server Error", message: err.message }, { status: 500 });
   }

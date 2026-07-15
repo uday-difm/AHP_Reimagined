@@ -56,7 +56,7 @@ export default function QuizCard({ quiz }) {
           {/* Overlay elements */}
           <div className="absolute top-4 left-4 z-10 flex flex-wrap gap-2">
             <span
-              className="text-[9px] font-extrabold uppercase tracking-widest px-2.5 py-1 rounded-md backdrop-blur-md border border-white/20"
+              className="text-xs font-extrabold uppercase tracking-widest px-2.5 py-1 rounded-md backdrop-blur-md border border-white/20"
               style={{
                 backgroundColor: 'rgba(255, 255, 255, 0.95)',
                 color: '#1a1a2e',
@@ -76,7 +76,7 @@ export default function QuizCard({ quiz }) {
         <div className="p-6 flex flex-col flex-1">
           {/* Title */}
           <h3
-            className="font-heading font-extrabold text-[19px] text-[#1a2a35] leading-snug tracking-tight mb-3 transition-colors duration-300 group-hover:text-[#0f7c85]"
+            className="font-heading font-extrabold text-xl text-[#1a2a35] leading-snug tracking-tight mb-3 transition-colors duration-300 group-hover:text-[#0f7c85]"
           >
             {quiz.title}
           </h3>
@@ -87,10 +87,10 @@ export default function QuizCard({ quiz }) {
           </p>
 
           {/* Card footer details */}
-          <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-            <div className="flex items-center gap-2">
+          <div className="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center gap-2">
               <span
-                className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full"
+                className="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full whitespace-nowrap"
                 style={{
                   backgroundColor: difficultyColors.bg,
                   color: difficultyColors.text,
@@ -98,16 +98,16 @@ export default function QuizCard({ quiz }) {
               >
                 {quiz.difficulty}
               </span>
-              <span className="text-[11px] text-muted-foreground text-slate-400 font-medium">
+              <span className="text-xs text-muted-foreground text-slate-400 font-medium whitespace-nowrap">
                 {quiz.questionCount} Questions
               </span>
             </div>
 
             {/* Play Button CTA */}
-            <div className="flex items-center gap-1 text-[#0f7c85] font-extrabold text-[12.5px] uppercase tracking-wider transition-all duration-300">
+            <div className="flex items-center gap-1 text-[#0f7c85] font-extrabold text-[12.5px] uppercase tracking-wider transition-all duration-300 shrink-0 whitespace-nowrap">
               <span className="group-hover:mr-1 transition-all">Play Quiz</span>
               <div
-                className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300"
+                className="w-8 h-8 rounded-full flex shrink-0 items-center justify-center transition-all duration-300"
                 style={{
                   backgroundColor: hovered ? '#0f7c85' : '#f0fdfd',
                   color: hovered ? '#fff' : '#0f7c85',

@@ -53,52 +53,48 @@ export default async function BlogsAdmin({ searchParams: rawSearchParams }) {
     where.publishedAt = { gt: new Date() };
   }
 
-  const posts = await prisma.post.findMany({
-    where,
-    orderBy: { updatedAt: "desc" },
-    include: {
-      author: { select: { id: true, email: true } },
-      categories: true,
-      featuredImage: { select: { url: true, secureUrl: true, altText: true } },
-    },
-  });
-
-  // Full counts (unfiltered) for metric cards
-  const allPosts = await prisma.post.findMany({
-    where: { siteId: site.id, deletedAt: null },
-    select: { status: true, publishedAt: true },
-  });
   const now = new Date();
-  const totalCount = allPosts.length;
-  const publishedCount = allPosts.filter(
-    (p) =>
-      p.status === "PUBLISHED" &&
-      p.publishedAt &&
-      new Date(p.publishedAt) <= now,
-  ).length;
-  const draftCount = allPosts.filter(
-    (p) =>
-      p.status === "DRAFT" &&
-      (!p.publishedAt || new Date(p.publishedAt) <= now),
-  ).length;
-  const scheduledCount = allPosts.filter(
-    (p) => p.publishedAt && new Date(p.publishedAt) > now,
-  ).length;
 
-  // Categories scoped to this site
-  const categories = await prisma.category.findMany({
-    where: { siteId: site.id },
-    orderBy: { name: "asc" },
-    include: {
-      _count: {
-        select: {
-          posts: {
-            where: { siteId: site.id, deletedAt: null },
+  const [posts, totalCount, publishedCount, draftCount, scheduledCount, categories] = await Promise.all([
+    prisma.post.findMany({
+      where,
+      orderBy: { updatedAt: "desc" },
+      include: {
+        author: { select: { id: true, email: true } },
+        categories: true,
+        featuredImage: { select: { url: true, secureUrl: true, altText: true } },
+      },
+    }),
+    prisma.post.count({ where: { siteId: site.id, deletedAt: null } }),
+    // Published: status=PUBLISHED AND publishedAt <= now
+    prisma.post.count({
+      where: { siteId: site.id, deletedAt: null, status: "PUBLISHED", publishedAt: { lte: now } },
+    }),
+    // Draft: status=DRAFT AND (no publishedAt OR publishedAt <= now)
+    prisma.post.count({
+      where: {
+        siteId: site.id,
+        deletedAt: null,
+        status: "DRAFT",
+        OR: [{ publishedAt: null }, { publishedAt: { lte: now } }],
+      },
+    }),
+    // Scheduled: publishedAt is in the future (regardless of status)
+    prisma.post.count({ where: { siteId: site.id, deletedAt: null, publishedAt: { gt: now } } }),
+    prisma.category.findMany({
+      where: { siteId: site.id },
+      orderBy: { name: "asc" },
+      include: {
+        _count: {
+          select: {
+            posts: {
+              where: { siteId: site.id, deletedAt: null },
+            },
           },
         },
       },
-    },
-  });
+    }),
+  ]);
 
   const filters = [
     { label: "All Posts", value: "ALL", count: totalCount },
@@ -133,7 +129,7 @@ export default async function BlogsAdmin({ searchParams: rawSearchParams }) {
       {/* Metrics Row */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-xs flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-indigo-50 text-indigo-600">
+          <div className="p-2.5 rounded-xl text-indigo-600" style={{ backgroundColor: 'white' }} >
             <FileText size={18} />
           </div>
           <div>
@@ -146,7 +142,7 @@ export default async function BlogsAdmin({ searchParams: rawSearchParams }) {
           </div>
         </div>
         <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-xs flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-green-50 text-green-600">
+          <div className="p-2.5 rounded-xl text-green-600" style={{ backgroundColor: 'white' }}>
             <CheckCircle size={18} />
           </div>
           <div>
@@ -159,7 +155,7 @@ export default async function BlogsAdmin({ searchParams: rawSearchParams }) {
           </div>
         </div>
         <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-xs flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-slate-100 text-slate-500">
+          <div className="p-2.5 rounded-xl  text-slate-500" style={{ backgroundColor: 'white' }}>
             <Clock size={18} />
           </div>
           <div>
@@ -198,19 +194,17 @@ export default async function BlogsAdmin({ searchParams: rawSearchParams }) {
                 <Link
                   key={f.value}
                   href={`/dashboard/blogs${f.value === "ALL" ? "" : `?status=${f.value}`}`}
-                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-150 ${
-                    isActive
-                      ? "bg-indigo-600 text-white shadow-sm"
-                      : "text-slate-500 hover:text-slate-800 hover:bg-slate-50"
-                  }`}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all duration-150 ${isActive
+                    ? "bg-indigo-600 text-white shadow-sm"
+                    : "text-slate-500 hover:text-slate-800 hover:bg-slate-50"
+                    }`}
                 >
                   {f.label}
                   <span
-                    className={`inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-bold ${
-                      isActive
-                        ? "bg-white/20 text-white"
-                        : "bg-slate-100 text-slate-600"
-                    }`}
+                    className={`inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-bold ${isActive
+                      ? "bg-white/20 text-white"
+                      : "bg-slate-100 text-slate-600"
+                      }`}
                   >
                     {f.count}
                   </span>

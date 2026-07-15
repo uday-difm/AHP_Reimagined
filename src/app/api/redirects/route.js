@@ -26,14 +26,18 @@ export async function GET(req) {
         }
       });
 
-      return NextResponse.json(apiSuccess({ redirect }));
+      const response = NextResponse.json(apiSuccess({ redirect }));
+      response.headers.set("Cache-Control", "public, max-age=10, s-maxage=60, stale-while-revalidate=30");
+      return response;
     }
 
     const redirects = await prisma.redirect.findMany({
       where: { siteId }
     });
 
-    return NextResponse.json(apiSuccess({ redirects }));
+    const response = NextResponse.json(apiSuccess({ redirects }));
+    response.headers.set("Cache-Control", "public, max-age=10, s-maxage=60, stale-while-revalidate=30");
+    return response;
   } catch (err) {
     return NextResponse.json({ error: "Internal Server Error", message: err.message }, { status: 500 });
   }

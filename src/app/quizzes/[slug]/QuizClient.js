@@ -323,7 +323,7 @@ export default function QuizClient({ quiz }) {
               {/* Blurry dashboard background */}
               <div className="filter blur-md select-none pointer-events-none opacity-40">
                 <h2 className="text-center font-heading font-extrabold text-[24px] mb-8 text-primary">Track Your Score</h2>
-                <div className="grid grid-cols-3 gap-4 mb-8">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
                   {[
                     { l: 'Correct Answers', v: '0/0', c: '#cbd5e1' },
                     { l: 'Daily Streak', v: '0 Days', c: '#cbd5e1' },

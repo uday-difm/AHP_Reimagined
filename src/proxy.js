@@ -1,5 +1,12 @@
 import { NextResponse } from "next/server";
 
+// In-memory cache for middleware settings and redirects (30s TTL)
+const middlewareCache = {
+  settings: {},   // key: siteId, value: { data: ws, expiresAt: number }
+  redirects: {},  // key: siteId_source, value: { data: rule, expiresAt: number }
+};
+const CACHE_TTL_MS = 30000;
+
 /** Path prefixes that should never be blocked by maintenance mode */
 const SKIP_PREFIXES = [
   "/api/",
@@ -106,58 +113,93 @@ export async function proxy(request) {
     }
   }
 
-  // --------------- Maintenance Mode Check (public pages only) ---------------
-  if (!shouldSkipMaintenanceCheck(pathname)) {
-    try {
-      const settingsRes = await fetch(
+  // --------------- Parallelized Maintenance & Redirect Checks ---------------
+  const checkMaintenance = !shouldSkipMaintenanceCheck(pathname);
+  const checkRedirect = !pathname.startsWith("/api/") &&
+                        !pathname.startsWith("/_next") &&
+                        !pathname.startsWith("/maintenance") &&
+                        !isDashboardPath &&
+                        process.env.NODE_ENV !== "development";
+
+  if (checkMaintenance || checkRedirect) {
+    const now = Date.now();
+    const settingsCacheKey = siteId;
+    const redirectCacheKey = `${siteId}_${pathname}`;
+
+    // Determine if we need to fetch settings
+    let settingsPromise = null;
+    let cachedSettings = middlewareCache.settings[settingsCacheKey];
+    if (checkMaintenance && (!cachedSettings || cachedSettings.expiresAt < now)) {
+      settingsPromise = fetch(
         `${url.origin}/api/settings?siteId=${encodeURIComponent(siteId)}`,
         { headers: { "x-internal-check": "1" } }
-      );
-
-      if (settingsRes.ok) {
-        const settingsData = await settingsRes.json();
-        const ws = settingsData?.data?.websiteSettings ?? settingsData?.websiteSettings;
-        const isMaintenanceMode = ws?.maintenanceMode === true;
-
-        if (isMaintenanceMode) {
-          const maintenanceUrl = new URL("/maintenance", url);
-          if (ws.maintenanceMessage) {
-            maintenanceUrl.searchParams.set("message", ws.maintenanceMessage);
-          }
-          return NextResponse.redirect(maintenanceUrl);
-        }
-      }
-    } catch (err) {
-      console.error("Maintenance mode check error:", err.message);
+      ).then(res => res.ok && res.headers.get("content-type")?.includes("application/json") ? res.json() : null)
+       .catch(err => { console.error("Maintenance check fetch failed:", err.message); return null; });
     }
-  }
 
-  // --------------- Redirect Resolution ---------------
-  if (
-    !pathname.startsWith("/api/") &&
-    !pathname.startsWith("/_next") &&
-    !pathname.startsWith("/maintenance") &&
-    !isDashboardPath &&
-    process.env.NODE_ENV !== "development"
-  ) {
-    try {
-      const redirectRes = await fetch(
+    // Determine if we need to fetch redirect
+    let redirectPromise = null;
+    let cachedRedirect = middlewareCache.redirects[redirectCacheKey];
+    if (checkRedirect && (!cachedRedirect || cachedRedirect.expiresAt < now)) {
+      redirectPromise = fetch(
         `${url.origin}/api/redirects?siteId=${encodeURIComponent(siteId)}&source=${encodeURIComponent(pathname)}`,
         { headers: { "x-internal-check": "1" } }
-      );
+      ).then(res => res.ok && res.headers.get("content-type")?.includes("application/json") ? res.json() : null)
+       .catch(err => { console.error("Redirect check fetch failed:", err.message); return null; });
+    }
 
-      if (redirectRes.ok) {
-        const redirectData = await redirectRes.json();
-        const rule = redirectData?.data?.redirect ?? redirectData?.redirect;
+    if (settingsPromise || redirectPromise) {
+      console.log(`[Middleware] Fetching updates in parallel: settings=${!!settingsPromise}, redirect=${!!redirectPromise}`);
+      try {
+        const [settingsResult, redirectResult] = await Promise.all([settingsPromise, redirectPromise]);
 
-        if (rule && rule.target && rule.target !== pathname) {
-          const redirectUrl = new URL(rule.target, url);
-          const status = rule.type === 302 ? 302 : 301;
-          return NextResponse.redirect(redirectUrl, { status });
+        if (settingsPromise) {
+          const ws = settingsResult?.data?.websiteSettings ?? settingsResult?.websiteSettings;
+          middlewareCache.settings[settingsCacheKey] = {
+            data: ws || null,
+            expiresAt: now + CACHE_TTL_MS
+          };
+          cachedSettings = middlewareCache.settings[settingsCacheKey];
         }
+
+        if (redirectPromise) {
+          const rule = redirectResult?.data?.redirect ?? redirectResult?.redirect;
+          middlewareCache.redirects[redirectCacheKey] = {
+            data: rule || null,
+            expiresAt: now + CACHE_TTL_MS
+          };
+          cachedRedirect = middlewareCache.redirects[redirectCacheKey];
+        }
+      } catch (err) {
+        console.error("Parallel fetch failed in middleware:", err.message);
       }
-    } catch (err) {
-      console.error("Redirect resolution error:", err.message);
+    } else {
+      console.log(`[Middleware] Cache hit for settings & redirect. Skipping fetch.`);
+    }
+
+    // Handle Maintenance Mode
+    if (checkMaintenance && cachedSettings?.data) {
+      const ws = cachedSettings.data;
+      if (ws.maintenanceMode === true) {
+        const maintenanceUrl = new URL("/maintenance", url);
+        if (ws.maintenanceMessage) {
+          maintenanceUrl.searchParams.set("message", ws.maintenanceMessage);
+        }
+        if (ws.maintenanceImage) {
+          maintenanceUrl.searchParams.set("image", ws.maintenanceImage);
+        }
+        return NextResponse.redirect(maintenanceUrl);
+      }
+    }
+
+    // Handle Redirects
+    if (checkRedirect && cachedRedirect?.data) {
+      const rule = cachedRedirect.data;
+      if (rule.target && rule.target !== pathname) {
+        const redirectUrl = new URL(rule.target, url);
+        const status = rule.type === 302 ? 302 : 301;
+        return NextResponse.redirect(redirectUrl, { status });
+      }
     }
   }
 

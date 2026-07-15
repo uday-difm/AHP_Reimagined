@@ -2,6 +2,8 @@ import React, { Suspense } from 'react';
 import prisma from '@/lib/prisma';
 import BlogsClient from './BlogsClient';
 
+export const revalidate = 60; // ISR: revalidate at most every 60 seconds
+
 export const metadata = {
   title: 'Blogs & Guides | A Health Place',
   description: 'Browse our collection of health articles, holistic treatments, and expert medical guides.',
@@ -12,19 +14,27 @@ export default async function BlogsPage() {
   let posts = [];
 
   try {
-    categories = await prisma.category.findMany({
-      orderBy: { name: 'asc' }
-    });
-
-    posts = await prisma.post.findMany({
-      where: { status: 'PUBLISHED' },
-      include: { 
-        categories: true, 
-        tags: true,
-        featuredImage: true 
-      },
-      orderBy: { publishedAt: 'desc' }
-    });
+    [categories, posts] = await Promise.all([
+      prisma.category.findMany({
+        orderBy: { name: 'asc' },
+        select: { id: true, name: true, slug: true },
+      }),
+      prisma.post.findMany({
+        where: { status: 'PUBLISHED' },
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          excerpt: true,
+          publishedAt: true,
+          categories: { select: { id: true, name: true, slug: true } },
+          tags: { select: { id: true, name: true, slug: true } },
+          featuredImage: { select: { url: true, secureUrl: true, altText: true } },
+        },
+        orderBy: { publishedAt: 'desc' },
+        take: 50,
+      }),
+    ]);
   } catch (error) {
     console.error('Error fetching database data on BlogsPage:', error);
   }

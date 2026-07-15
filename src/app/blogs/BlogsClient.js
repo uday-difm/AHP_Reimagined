@@ -104,7 +104,7 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
       category: p.categories?.[0]?.name || 'General',
       title: p.title,
       desc: p.excerpt || 'Read our medically vetted guide.',
-      img: p.featuredImage?.url || '/images/holistic.png',
+      img: p.featuredImage?.url,
       slug: p.slug,
       tags: p.tags || []
     }))
@@ -143,7 +143,7 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
 
   const filteredArticles = displayArticles.filter(art => {
     const matchesFilter = categoryFilter === 'All' || art.category === categoryFilter;
-    const matchesTag = !tagFilter || (art.tags && art.tags.some(t => 
+    const matchesTag = !tagFilter || (art.tags && art.tags.some(t =>
       t.slug === tagFilter || t.name.toLowerCase() === tagFilter.toLowerCase()
     ));
     const matchesSearch = art.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -270,7 +270,7 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
           {tagFilter && (
             <div className="flex items-center gap-2 bg-[#e8f4ff] border border-blue-200/30 text-[#0f7c85] px-3.5 py-1.5 rounded-xl text-xs font-semibold w-fit mb-4">
               <span>Filtering by Tag: <strong>{tagFilter}</strong></span>
-              <button 
+              <button
                 type="button"
                 onClick={() => handleTagFilter(null)}
                 className="hover:text-rose-650 transition-colors ml-1 font-bold font-sans cursor-pointer bg-transparent border-0 text-xs text-[#0f7c85]"

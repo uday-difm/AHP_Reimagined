@@ -31,9 +31,10 @@ function LoginAndProjectLanding() {
     const hostname = window.location.hostname;
     const isIpAddress = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/.test(hostname);
     const isNgrok = hostname.endsWith(".ngrok.io") ||
-      hostname.endsWith(".ngrok-free.dev");
+      hostname.endsWith(".ngrok-free.dev") ||
+      hostname.endsWith(".vercel.app");
 
-    // Use test key on localhost, IPs, and ngrok domains
+    // Use test key on localhost, IPs, and ngrok/vercel domains
     const useTestKey = isIpAddress || isNgrok || hostname === "localhost" || hostname === "127.0.0.1";
     const activeKey = useTestKey
       ? "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
@@ -147,7 +148,7 @@ function LoginAndProjectLanding() {
     }
   }
 
-  if (status === "loading" || status === "authenticated") {
+  if (status === "loading" || (status === "authenticated" && session?.user?.globalRole !== "USER")) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-950">
         <div className="text-center">

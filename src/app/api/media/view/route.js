@@ -17,6 +17,7 @@ export async function GET(request) {
     if (contentLength) {
       headers.set("Content-Length", contentLength.toString());
     }
+    // Cache static media assets in CDN and browser for 1 year (31,536,000 seconds)
     headers.set("Cache-Control", "public, max-age=31536000, immutable");
 
     // Convert the S3 readable stream to a web Response stream

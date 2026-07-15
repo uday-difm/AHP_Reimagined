@@ -84,11 +84,11 @@ export default function ContactFormSection({ siteId = "", content = {}, recaptch
     <section className="py-16 bg-white text-slate-800 border-t border-b animate-fade-in">
       <div className="w-full px-6">
         <div className="text-center mb-10">
-          <h2 className="text-3xl font-extrabold tracking-tight text-slate-900">
+          <h2 className="font-heading font-extrabold text-3xl md:text-5xl text-primary tracking-[-1px] leading-[1.15] mb-4">
             {content?.title || "Get In Touch"}
           </h2>
           {content?.description && (
-            <p className="text-slate-500 mt-2 text-sm max-w-xl mx-auto leading-relaxed">
+            <p className="text-secondary text-base md:text-lg leading-relaxed max-w-xl mx-auto">
               {content.description}
             </p>
           )}
@@ -109,7 +109,7 @@ export default function ContactFormSection({ siteId = "", content = {}, recaptch
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
-              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
+              <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">
                 Full Name
               </label>
               <input
@@ -122,7 +122,7 @@ export default function ContactFormSection({ siteId = "", content = {}, recaptch
               />
             </div>
             <div>
-              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
+              <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">
                 Email Address
               </label>
               <input
@@ -137,7 +137,7 @@ export default function ContactFormSection({ siteId = "", content = {}, recaptch
           </div>
 
           <div>
-            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">
               Phone Number (Optional)
             </label>
             <input
@@ -150,7 +150,7 @@ export default function ContactFormSection({ siteId = "", content = {}, recaptch
           </div>
 
           <div>
-            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">
               Your Message
             </label>
             <textarea

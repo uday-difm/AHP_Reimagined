@@ -55,10 +55,10 @@ export default function CreateFirstSiteForm() {
       {success && createdSite && (
         <div className="p-4 bg-green-50 text-green-850 border border-green-200 rounded-2xl space-y-3 text-center text-xs">
           <p className="font-bold">✓ Site Workspace Created Successfully!</p>
-          <div className="bg-white p-3 rounded-xl border border-green-150 font-mono text-[11px] select-all select-text break-all">
+          <div className="bg-white p-3 rounded-xl border border-green-150 font-mono text-xs select-all select-text break-all">
             Site ID: <span className="font-bold text-indigo-650">{createdSite.id}</span>
           </div>
-          <p className="text-[10px] text-gray-500 leading-relaxed">
+          <p className="text-xs text-gray-500 leading-relaxed">
             Copy this ID and paste it in your frontend project&apos;s <code className="bg-gray-100 px-1 py-0.5 rounded font-bold">.env</code> file as <code className="bg-gray-100 px-1 py-0.5 rounded font-bold">NEXT_PUBLIC_SITE_ID</code>.
           </p>
           <button
@@ -73,7 +73,7 @@ export default function CreateFirstSiteForm() {
       {!success && (
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1">
-            <label className="text-[11px] font-bold uppercase tracking-wider text-gray-500">
+            <label className="text-xs font-bold uppercase tracking-wider text-gray-500">
               Site Name
             </label>
             <input
@@ -87,7 +87,7 @@ export default function CreateFirstSiteForm() {
           </div>
 
           <div className="space-y-1">
-            <label className="text-[11px] font-bold uppercase tracking-wider text-gray-500">
+            <label className="text-xs font-bold uppercase tracking-wider text-gray-500">
               Domain (Optional)
             </label>
             <input

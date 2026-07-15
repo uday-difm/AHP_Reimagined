@@ -59,12 +59,12 @@ export default function WellnessShowcase() {
         {/* Section Header */}
         <div className="section-header-grid grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-[60px] mb-16 items-end">
           <div className="reveal-slide">
-            <h2 className="section-title-large font-heading font-bold text-[32px] md:text-[54px] leading-[1.15] text-primary tracking-[-1px]">
+            <h2 className="section-title-large font-heading font-extrabold text-3xl md:text-5xl text-primary tracking-[-1px] leading-[1.15] mb-4">
               Know your body,<br />one quiz at a time.
             </h2>
           </div>
           <div className="reveal-fade">
-            <p className="section-subtitle-text text-[16px] text-secondary leading-[1.7]">
+            <p className="section-subtitle-text text-base md:text-lg text-secondary leading-relaxed">
               Our clinically informed quizzes help you understand your health from the inside out — covering sleep, stress, nutrition, and Ayurvedic wellness. Start free, go deeper with a{' '}
               <Link href="/login" className="text-accent font-semibold hover:underline transition-colors">
                 free account
@@ -89,11 +89,11 @@ export default function WellnessShowcase() {
                 style={{ background: 'radial-gradient(circle, #0f7c85 0%, transparent 70%)' }} />
 
               <div className="flex flex-col items-center max-w-md z-10">
-                <span className="text-[#0f7c85] font-extrabold text-[11px] uppercase tracking-[2.5px] mb-3 flex items-center gap-2">
+                <span className="text-[#0f7c85] font-extrabold text-xs uppercase tracking-[2.5px] mb-3 flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#0f7c85] animate-pulse inline-block" />
                   Daily Wellness Quiz
                 </span>
-                <h3 className="text-primary font-heading font-extrabold text-[26px] md:text-[34px] leading-tight tracking-tight mb-4">
+                <h3 className="text-primary font-heading font-extrabold text-2xl md:text-3xl leading-tight tracking-tight mb-4">
                   Test yourself today.
                 </h3>
                 <p className="text-[#4a4a5a] text-[13.5px] md:text-[14.5px] leading-relaxed mb-6">
@@ -131,8 +131,8 @@ export default function WellnessShowcase() {
                       <QuizIcon name={item.icon} className="w-5 h-5" />
                     </div>
                     <div className="flex flex-col gap-0.5">
-                      <span className="text-[#0f7c85] font-extrabold text-[10px] uppercase tracking-wider">{item.tag}</span>
-                      <p className="text-primary font-heading font-bold text-[13px] leading-snug">{item.desc}</p>
+                      <span className="text-[#0f7c85] font-extrabold text-xs uppercase tracking-wider">{item.tag}</span>
+                      <p className="text-primary font-heading font-bold text-sm leading-snug">{item.desc}</p>
                     </div>
                   </div>
                   <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shrink-0 border border-slate-100/50 group-hover:scale-105 transition-transform">
@@ -158,8 +158,8 @@ export default function WellnessShowcase() {
                     <QuizIcon name={item.icon} className="w-5.5 h-5.5 text-white" />
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-white/80 font-extrabold text-[10px] uppercase tracking-wider">{item.tag}</span>
-                    <p className="font-heading font-bold text-[14px] text-white leading-snug mt-1">{item.desc}</p>
+                    <span className="text-white/80 font-extrabold text-xs uppercase tracking-wider">{item.tag}</span>
+                    <p className="font-heading font-bold text-sm text-white leading-snug mt-1">{item.desc}</p>
                   </div>
                 </div>
                 <div className="mt-4 flex justify-end">
@@ -186,10 +186,10 @@ export default function WellnessShowcase() {
                 style={{ background: 'radial-gradient(circle, #27ae60 0%, transparent 70%)' }} />
 
               <div className="flex flex-col items-center max-w-xl z-10 text-white justify-center h-full">
-                <span className="text-white/80 font-extrabold text-[11px] uppercase tracking-[2.5px] mb-3">
+                <span className="text-white/80 font-extrabold text-xs uppercase tracking-[2.5px] mb-3">
                   Your Wellness Journey
                 </span>
-                <h3 className="font-heading font-extrabold text-[26px] md:text-[34px] leading-tight tracking-tight mb-4 text-white">
+                <h3 className="font-heading font-extrabold text-2xl md:text-3xl leading-tight tracking-tight mb-4 text-white">
                   Track your health over time.
                 </h3>
                 <p className="text-white/90 text-[13.5px] md:text-[14.5px] leading-relaxed mb-6">
@@ -200,8 +200,8 @@ export default function WellnessShowcase() {
                 <div className="flex gap-10 mb-6">
                   {[{ v: '4', l: 'Quizzes' }, { v: '3', l: 'Free Qs' }, { v: '∞', l: 'Insights' }].map((s, i) => (
                     <div key={i} className="text-center">
-                      <div className="font-heading font-extrabold text-[22px] text-white">{s.v}</div>
-                      <div className="text-[10px] text-white/60 uppercase tracking-wider">{s.l}</div>
+                      <div className="font-heading font-extrabold text-xl text-white">{s.v}</div>
+                      <div className="text-xs text-white/60 uppercase tracking-wider">{s.l}</div>
                     </div>
                   ))}
                 </div>
@@ -229,7 +229,7 @@ export default function WellnessShowcase() {
                     <path strokeLinecap="round" d="M7 11V7a5 5 0 0110 0v4" />
                   </svg>
                 </div>
-                <h3 className="font-heading font-extrabold text-[22px] text-primary mb-1">Login Required</h3>
+                <h3 className="font-heading font-extrabold text-xl text-primary mb-1">Login Required</h3>
                 <p className="text-secondary text-[13.5px] leading-relaxed mb-6">
                   Sign in to unlock full quiz access, save your results, and track your wellness journey over time.
                 </p>

@@ -107,7 +107,7 @@ export default async function PagesAdmin() {
       {/* Metrics Row */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-white border rounded-xl p-5 shadow-sm flex items-center gap-4">
-          <div className="p-3 rounded-lg bg-indigo-50 text-indigo-600">
+          <div className="p-3 rounded-lg  text-indigo-600 " style={{ backgroundColor: 'white' }}>
             <FileText size={20} />
           </div>
           <div>
@@ -121,7 +121,7 @@ export default async function PagesAdmin() {
         </div>
 
         <div className="bg-white border rounded-xl p-5 shadow-sm flex items-center gap-4">
-          <div className="p-3 rounded-lg bg-green-50 text-green-600">
+          <div className="p-3 rounded-lg text-green-600 " style={{ backgroundColor: 'white' }} >
             <CheckCircle size={20} />
           </div>
           <div>
@@ -135,7 +135,7 @@ export default async function PagesAdmin() {
         </div>
 
         <div className="bg-white border rounded-xl p-5 shadow-sm flex items-center gap-4">
-          <div className="p-3 rounded-lg bg-slate-50 text-slate-600">
+          <div className="p-3 rounded-lg  text-slate-600" style={{ backgroundColor: 'white' }}>
             <FilePlus2 size={20} />
           </div>
           <div>

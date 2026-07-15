@@ -117,13 +117,13 @@ export default function HomeQuizWidget() {
 
         {/* Header */}
         <div className="text-center mb-12">
-          <span className="text-accent text-[11px] font-extrabold uppercase tracking-[3px] mb-2 block">
+          <span className="text-accent text-xs font-extrabold uppercase tracking-[3px] mb-2 block">
             QUICK WELLNESS CHECK
           </span>
-          <h2 className="font-heading font-extrabold text-3xl md:text-4xl tracking-tight mb-3 text-primary">
+          <h2 className="font-heading font-extrabold text-3xl md:text-5xl text-primary tracking-[-1px] leading-[1.15] mb-4">
             Try a quiz, right here.
           </h2>
-          <p className="text-secondary text-[15px]">Test your knowledge and gain valuable insights</p>
+          <p className="text-secondary text-base md:text-lg leading-relaxed">Test your knowledge and gain valuable insights</p>
         </div>
 
         {/* ── CENTRAL SPLIT QUIZ CARD (Image 2 style) ────────────────────── */}
@@ -137,15 +137,15 @@ export default function HomeQuizWidget() {
               <div className="w-16 h-16 rounded-full bg-[#0f7c85]/10 text-[#0f7c85] flex items-center justify-center mx-auto mb-6">
                 <QuizIcon name={quiz.icon} className="w-8 h-8" />
               </div>
-              <h3 className="font-heading font-extrabold text-[22px] text-primary tracking-tight mb-3">
+              <h3 className="font-heading font-extrabold text-xl text-primary tracking-tight mb-3">
                 {quiz.title}
               </h3>
-              <p className="text-secondary text-[14px] leading-relaxed max-w-md mx-auto mb-8">
+              <p className="text-secondary text-sm leading-relaxed max-w-md mx-auto mb-8">
                 {quiz.description}
               </p>
               <button
                 onClick={() => setStarted(true)}
-                className="bg-[#0f7c85] hover:bg-[#0c6b73] text-white px-8 py-3.5 rounded-full font-bold text-[14px] transition-all hover:shadow-lg hover:-translate-y-0.5 cursor-pointer"
+                className="bg-[#0f7c85] hover:bg-[#0c6b73] text-white px-8 py-3.5 rounded-full font-bold text-sm transition-all hover:shadow-lg hover:-translate-y-0.5 cursor-pointer"
               >
                 Start Quiz
               </button>
@@ -165,17 +165,17 @@ export default function HomeQuizWidget() {
                 }}
               >
                 <div>
-                  <h4 className="text-[12px] font-extrabold text-slate-500 uppercase tracking-wider mb-8">
+                  <h4 className="text-xs font-extrabold text-slate-500 uppercase tracking-wider mb-8">
                     Question:
                   </h4>
                   <div className="bg-white rounded-[16px] p-6 border border-slate-200/40 shadow-sm">
-                    <p className="font-heading font-bold text-[16px] md:text-[18px] text-primary leading-relaxed">
+                    <p className="font-heading font-bold text-base md:text-lg text-primary leading-relaxed">
                       {currentQ.text}
                     </p>
                   </div>
                 </div>
 
-                <div className="mt-8 flex items-center justify-between text-[11px] text-slate-400 font-semibold">
+                <div className="mt-8 flex items-center justify-between text-xs text-slate-400 font-semibold">
                   <span>Question {currentIndex + 1} of {questions.length}</span>
                 </div>
               </div>
@@ -222,7 +222,7 @@ export default function HomeQuizWidget() {
                   <button
                     onClick={handleBack}
                     disabled={currentIndex === 0}
-                    className="text-[13px] font-bold text-slate-400 hover:text-slate-600 disabled:opacity-30 transition-colors cursor-pointer"
+                    className="text-sm font-bold text-slate-400 hover:text-slate-600 disabled:opacity-30 transition-colors cursor-pointer"
                   >
                     Back
                   </button>
@@ -253,23 +253,23 @@ export default function HomeQuizWidget() {
                   <path strokeLinecap="round" d="M7 11V7a5 5 0 0110 0v4" />
                 </svg>
               </div>
-              <span className="text-[10px] font-extrabold uppercase tracking-[2px] text-[#0f7c85] mb-2">
+              <span className="text-xs font-extrabold uppercase tracking-[2px] text-[#0f7c85] mb-2">
                 Question {currentIndex + 1} is locked
               </span>
-              <h3 className="font-heading font-extrabold text-[22px] text-primary mb-2">Sign in to continue</h3>
+              <h3 className="font-heading font-extrabold text-xl text-primary mb-2">Sign in to continue</h3>
               <p className="text-secondary text-[13.5px] max-w-sm mb-6">
                 Please log in to unlock all {quiz.questionCount} questions and save your score.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 w-full max-w-xs justify-center">
                 <button
                   onClick={handleLoginRedirect}
-                  className="bg-[#0f7c85] hover:bg-[#0c6b73] text-white px-8 py-3 rounded-full font-bold text-[14px] transition-colors cursor-pointer"
+                  className="bg-[#0f7c85] hover:bg-[#0c6b73] text-white px-8 py-3 rounded-full font-bold text-sm transition-colors cursor-pointer"
                 >
                   Sign In
                 </button>
                 <button
                   onClick={handleBack}
-                  className="border border-slate-200 hover:bg-slate-50 text-slate-600 px-6 py-3 rounded-full font-bold text-[13px] transition-colors cursor-pointer"
+                  className="border border-slate-200 hover:bg-slate-50 text-slate-600 px-6 py-3 rounded-full font-bold text-sm transition-colors cursor-pointer"
                 >
                   Go Back
                 </button>
@@ -285,16 +285,16 @@ export default function HomeQuizWidget() {
             <div className="relative border-t border-slate-200/80 pt-16 mt-14 max-w-4xl mx-auto">
               {/* Blurry scoreboard */}
               <div className="filter blur-md select-none pointer-events-none opacity-40">
-                <h2 className="text-center font-heading font-extrabold text-[24px] mb-8 text-primary">Track Your Score</h2>
-                <div className="grid grid-cols-3 gap-4 mb-8">
+                <h2 className="text-center font-heading font-extrabold text-2xl mb-8 text-primary">Track Your Score</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
                   {[
                     { l: 'Correct Answers', v: '0/0' },
                     { l: 'Daily Streak', v: '0 Days' },
                     { l: 'Completion Rate', v: '0%' },
                   ].map((stat, i) => (
                     <div key={i} className="bg-white rounded-[20px] p-6 border border-slate-200/60 text-center">
-                      <span className="text-[24px] font-extrabold block text-slate-400 mb-1">{stat.v}</span>
-                      <span className="text-[11px] text-slate-400 uppercase tracking-wider">{stat.l}</span>
+                      <span className="text-2xl font-extrabold block text-slate-400 mb-1">{stat.v}</span>
+                      <span className="text-xs text-slate-400 uppercase tracking-wider">{stat.l}</span>
                     </div>
                   ))}
                 </div>
@@ -310,8 +310,8 @@ export default function HomeQuizWidget() {
                       <path strokeLinecap="round" d="M7 11V7a5 5 0 0110 0v4" />
                     </svg>
                   </div>
-                  <h3 className="font-heading font-bold text-[18px] text-primary mb-1">Login Required</h3>
-                  <p className="text-secondary text-[13px] leading-relaxed mb-6">
+                  <h3 className="font-heading font-bold text-lg text-primary mb-1">Login Required</h3>
+                  <p className="text-secondary text-sm leading-relaxed mb-6">
                     You need to log in to view this content and track your quiz score.
                   </p>
                   <button
@@ -326,16 +326,16 @@ export default function HomeQuizWidget() {
           ) : (
             /* Unlocked Scoreboard Stats */
             <div className="mt-14 max-w-4xl mx-auto">
-              <h2 className="text-center font-heading font-extrabold text-[24px] mb-8 text-primary">Track Your Score</h2>
-              <div className="grid grid-cols-3 gap-4 mb-8">
+              <h2 className="text-center font-heading font-extrabold text-2xl mb-8 text-primary">Track Your Score</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
                 {[
                   { l: 'Correct Answers', v: answers.length > 0 ? `${answers.filter(a => a.score > 1).length}/${answers.length}` : '3/3' },
                   { l: 'Daily Streak', v: '3 Days' },
                   { l: 'Completion Rate', v: '100%' },
                 ].map((stat, i) => (
                   <div key={i} className="bg-white rounded-[20px] p-6 border border-slate-200/60 text-center shadow-sm">
-                    <span className="text-[24px] font-extrabold block text-[#0f7c85] mb-1">{stat.v}</span>
-                    <span className="text-[11px] text-slate-500 uppercase tracking-wider font-semibold">{stat.l}</span>
+                    <span className="text-2xl font-extrabold block text-[#0f7c85] mb-1">{stat.v}</span>
+                    <span className="text-xs text-slate-500 uppercase tracking-wider font-semibold">{stat.l}</span>
                   </div>
                 ))}
               </div>
@@ -343,13 +343,13 @@ export default function HomeQuizWidget() {
               {/* Dashboard shortcut card */}
               <div className="bg-white rounded-[24px] border border-slate-200/60 p-6 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
                 <div className="flex items-center gap-3">
-                  <span className="text-[24px]">📊</span>
+                  <span className="text-2xl">📊</span>
                   <div className="text-left">
-                    <h4 className="font-heading font-bold text-[14px] text-primary">Wellness Dashboard active</h4>
-                    <p className="text-secondary text-[12px]">Your scores and personalized profiles are stored in your dashboard.</p>
+                    <h4 className="font-heading font-bold text-sm text-primary">Wellness Dashboard active</h4>
+                    <p className="text-secondary text-xs">Your scores and personalized profiles are stored in your dashboard.</p>
                   </div>
                 </div>
-                <Link href="/quizzes/dashboard" className="bg-[#0f7c85] hover:bg-[#0c6b73] text-white px-5 py-2.5 rounded-full font-bold text-[13px] no-underline transition-all">
+                <Link href="/quizzes/dashboard" className="bg-[#0f7c85] hover:bg-[#0c6b73] text-white px-5 py-2.5 rounded-full font-bold text-sm no-underline transition-all">
                   Go to Dashboard
                 </Link>
               </div>

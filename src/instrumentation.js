@@ -12,7 +12,7 @@ export async function register() {
       const { syncRoutes } = await import("./lib/routeSync.js");
       await syncRoutes();
     } catch (err) {
-      console.error("[EBH Startup] Failed to load routeSync module:", err);
+      console.error("[Startup] Failed to load routeSync module:", err);
     }
   }
 }

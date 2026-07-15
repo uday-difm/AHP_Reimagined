@@ -12,10 +12,10 @@ export default function ProgressBar({ current, total, color = '#0f7c85' }) {
   return (
     <div className="w-full">
       <div className="flex justify-between items-center mb-2">
-        <span className="text-[11px] font-bold uppercase tracking-[1.5px] text-muted">
+        <span className="text-xs font-bold uppercase tracking-[1.5px] text-muted">
           Question {current} of {total}
         </span>
-        <span className="text-[11px] font-bold" style={{ color }}>
+        <span className="text-xs font-bold" style={{ color }}>
           {pct}% complete
         </span>
       </div>

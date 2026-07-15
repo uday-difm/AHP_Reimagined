@@ -282,6 +282,16 @@ export default function SettingsEditor({ siteId, initialSettings }) {
       setWebsiteSettings((prev) => ({ ...prev, favicon: media.url }));
     } else if (activePickerField === "ogImage") {
       setWebsiteSettings((prev) => ({ ...prev, ogImageUrl: media.url }));
+    } else if (activePickerField === "maintenanceImage") {
+      setWebsiteSettings((prev) => ({ ...prev, maintenanceImage: media.url }));
+    } else if (activePickerField === "custom404Image") {
+      setWebsiteSettings((prev) => ({
+        ...prev,
+        custom404: {
+          ...(prev.custom404 || {}),
+          image: media.url,
+        },
+      }));
     }
     setActivePickerField(null);
   };
@@ -374,11 +384,10 @@ export default function SettingsEditor({ siteId, initialSettings }) {
           <button
             type="button"
             onClick={() => setActiveTab("brand")}
-            className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${
-              activeTab === "brand"
+            className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${activeTab === "brand"
                 ? "border-blue-600 text-blue-600 bg-white"
-                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50/80"
-            }`}
+                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+              }`}
           >
             <Layout className="w-4 h-4" />
             Brand & Identity
@@ -387,11 +396,10 @@ export default function SettingsEditor({ siteId, initialSettings }) {
           <button
             type="button"
             onClick={() => setActiveTab("header")}
-            className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${
-              activeTab === "header"
+            className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${activeTab === "header"
                 ? "border-blue-600 text-blue-600 bg-white"
-                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50/80"
-            }`}
+                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+              }`}
           >
             <Menu className="w-4 h-4" />
             Header Settings
@@ -400,11 +408,10 @@ export default function SettingsEditor({ siteId, initialSettings }) {
           <button
             type="button"
             onClick={() => setActiveTab("footer")}
-            className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${
-              activeTab === "footer"
+            className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${activeTab === "footer"
                 ? "border-blue-600 text-blue-600 bg-white"
-                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50/80"
-            }`}
+                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+              }`}
           >
             <Grid className="w-4 h-4" />
             Footer Settings
@@ -413,11 +420,10 @@ export default function SettingsEditor({ siteId, initialSettings }) {
           <button
             type="button"
             onClick={() => setActiveTab("contact")}
-            className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${
-              activeTab === "contact"
+            className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${activeTab === "contact"
                 ? "border-blue-600 text-blue-600 bg-white"
-                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50/80"
-            }`}
+                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+              }`}
           >
             <PhoneCallIcon className="w-4 h-4" />
             Default Contact Info
@@ -426,11 +432,10 @@ export default function SettingsEditor({ siteId, initialSettings }) {
           <button
             type="button"
             onClick={() => setActiveTab("seo")}
-            className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${
-              activeTab === "seo"
+            className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${activeTab === "seo"
                 ? "border-blue-600 text-blue-600 bg-white"
-                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50/80"
-            }`}
+                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+              }`}
           >
             <Search className="w-4 h-4" />
             SEO Defaults
@@ -439,11 +444,10 @@ export default function SettingsEditor({ siteId, initialSettings }) {
           <button
             type="button"
             onClick={() => setActiveTab("analytics")}
-            className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${
-              activeTab === "analytics"
+            className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${activeTab === "analytics"
                 ? "border-blue-600 text-blue-600 bg-white"
-                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50/80"
-            }`}
+                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+              }`}
           >
             <Activity className="w-4 h-4" />
             Analytics & Tracking
@@ -452,11 +456,10 @@ export default function SettingsEditor({ siteId, initialSettings }) {
           <button
             type="button"
             onClick={() => setActiveTab("robots")}
-            className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${
-              activeTab === "robots"
+            className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${activeTab === "robots"
                 ? "border-blue-600 text-blue-600 bg-white"
-                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50/80"
-            }`}
+                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+              }`}
           >
             <Bot className="w-4 h-4" />
             Robots & AI
@@ -465,11 +468,10 @@ export default function SettingsEditor({ siteId, initialSettings }) {
           <button
             type="button"
             onClick={() => setActiveTab("scripts")}
-            className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${
-              activeTab === "scripts"
+            className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${activeTab === "scripts"
                 ? "border-blue-600 text-blue-600 bg-white"
-                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50/80"
-            }`}
+                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+              }`}
           >
             <Code className="w-4 h-4" />
             Custom Scripts
@@ -633,6 +635,44 @@ export default function SettingsEditor({ siteId, initialSettings }) {
                       placeholder="We are currently undergoing scheduled system updates. Please visit us back shortly."
                       className="w-full px-3 py-2 bg-white border border-amber-200 rounded-lg text-xs text-amber-900 focus:outline-none focus:ring-1 focus:ring-amber-400 placeholder-amber-400"
                     />
+                    <div className="mt-3">
+                      <label className="block text-[10px] font-bold text-amber-800 uppercase tracking-wider mb-1.5">
+                        Maintenance Page Image
+                      </label>
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          name="maintenanceImage"
+                          value={websiteSettings.maintenanceImage || ""}
+                          onChange={handleWebsiteChange}
+                          placeholder="Media URL or relative path"
+                          className="w-full px-3 py-2 bg-white border border-amber-200 rounded-lg text-xs text-amber-900 focus:outline-none focus:ring-1 focus:ring-amber-400"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setActivePickerField("maintenanceImage")}
+                          className="px-3 py-1 bg-amber-100 hover:bg-amber-200 text-amber-800 rounded-lg text-[10px] font-bold shrink-0 border border-amber-200 cursor-pointer"
+                        >
+                          Browse
+                        </button>
+                      </div>
+                      {websiteSettings.maintenanceImage && (
+                        <div className="mt-2 p-2 bg-white border border-amber-200 rounded-lg inline-flex items-center gap-2">
+                          <img
+                            src={websiteSettings.maintenanceImage}
+                            alt="Maintenance Preview"
+                            className="max-h-12 object-contain rounded"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setWebsiteSettings((prev) => ({ ...prev, maintenanceImage: "" }))}
+                            className="text-[10px] text-red-600 hover:underline cursor-pointer bg-transparent border-0"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
@@ -720,6 +760,51 @@ export default function SettingsEditor({ siteId, initialSettings }) {
                         placeholder="/"
                         className="w-full px-3 py-2 bg-white border border-purple-200 rounded-lg text-xs font-mono"
                       />
+                    </div>
+
+                    <div>
+                      <label className="block text-[10px] font-bold text-purple-800 uppercase tracking-wider mb-1">
+                        Custom 404 Image
+                      </label>
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          name="custom404.image"
+                          value={websiteSettings.custom404?.image || ""}
+                          onChange={handleWebsiteChange}
+                          placeholder="Media URL or relative path"
+                          className="w-full px-3 py-2 bg-white border border-purple-200 rounded-lg text-xs"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setActivePickerField("custom404Image")}
+                          className="px-3 py-1 bg-purple-100 hover:bg-purple-200 text-purple-800 rounded-lg text-[10px] font-bold shrink-0 border border-purple-200 cursor-pointer"
+                        >
+                          Browse
+                        </button>
+                      </div>
+                      {websiteSettings.custom404?.image && (
+                        <div className="mt-2 p-2 bg-white border border-purple-200 rounded-lg inline-flex items-center gap-2">
+                          <img
+                            src={websiteSettings.custom404.image}
+                            alt="404 Preview"
+                            className="max-h-12 object-contain rounded"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setWebsiteSettings((prev) => ({
+                              ...prev,
+                              custom404: {
+                                ...(prev.custom404 || {}),
+                                image: "",
+                              },
+                            }))}
+                            className="text-[10px] text-red-650 hover:underline cursor-pointer bg-transparent border-0"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      )}
                     </div>
 
                     {/* Auto-redirect section */}
@@ -2057,7 +2142,11 @@ export default function SettingsEditor({ siteId, initialSettings }) {
               ? "Select Brand Logo"
               : activePickerField === "favicon"
                 ? "Select Website Favicon"
-                : "Select Default OG Image"
+                : activePickerField === "ogImage"
+                  ? "Select Default OG Image"
+                  : activePickerField === "maintenanceImage"
+                    ? "Select Maintenance Page Image"
+                    : "Select Custom 404 Image"
           }
           filter="images"
           onSelect={handleMediaSelect}

@@ -10,7 +10,8 @@ export default function AnalyticsScripts({ analytics }) {
     if (!analytics) return;
 
     // Google Tag Manager
-    if (analytics.googleTagManagerId) {
+    const gtmIdValue = analytics.gtmId || analytics.googleTagManagerId;
+    if (gtmIdValue) {
       const gtmScript = document.createElement("script");
       gtmScript.id = "google-tag-manager";
       gtmScript.innerHTML = `
@@ -18,16 +19,17 @@ export default function AnalyticsScripts({ analytics }) {
         new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
         j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','${analytics.googleTagManagerId}');
+        })(window,document,'script','dataLayer','${gtmIdValue}');
       `;
       document.head.appendChild(gtmScript);
     }
 
     // Google Analytics
-    if (analytics.googleAnalyticsId) {
+    const gaIdValue = analytics.gaMeasurementId || analytics.googleAnalyticsId;
+    if (gaIdValue) {
       const gaScript = document.createElement("script");
       gaScript.async = true;
-      gaScript.src = `https://www.googletagmanager.com/gtag/js?id=${analytics.googleAnalyticsId}`;
+      gaScript.src = `https://www.googletagmanager.com/gtag/js?id=${gaIdValue}`;
       document.head.appendChild(gaScript);
 
       const gaInit = document.createElement("script");
@@ -36,7 +38,7 @@ export default function AnalyticsScripts({ analytics }) {
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', '${analytics.googleAnalyticsId}');
+        gtag('config', '${gaIdValue}');
       `;
       document.head.appendChild(gaInit);
     }

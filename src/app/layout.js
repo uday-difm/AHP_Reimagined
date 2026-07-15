@@ -11,6 +11,7 @@ import "./globals.css";
 import { getLayoutData } from "@/services/layout.service";
 import CookieBanner from "@/components/CookieBanner";
 import { GlobalAnalytics } from "@yourcompany/global-backend-next/components";
+import CustomScripts from "@/components/utils/CustomScripts";
 
 const inter = Inter({
   variable: "--font-body",
@@ -28,10 +29,22 @@ const playfair = Playfair_Display({
   style: ["normal", "italic"],
 });
 
-export const metadata = {
-  title: "A Health Place — Building Wellness into Your Life",
-  description: "A Health Place - Empathetic, medically accurate health guides covering physical wellness, mental health, insurance, and holistic lifestyle guidelines.",
-};
+export async function generateMetadata() {
+  const layout = await getLayoutData();
+  return {
+    title: {
+      default: layout.siteName || "A Health Place — Building Wellness into Your Life",
+      template: layout.titleTemplate || `%s | ${layout.siteName || "A Health Place"}`,
+    },
+    description: layout.description || layout.tagline || "A Health Place - Empathetic, medically accurate health guides covering physical wellness, mental health, insurance, and holistic lifestyle guidelines.",
+    icons: {
+      icon: layout.faviconUrl || "/favicon.ico",
+    },
+    openGraph: {
+      images: layout.ogImageUrl ? [{ url: layout.ogImageUrl }] : [],
+    },
+  };
+}
 
 function isDashboardPath(pathname) {
   return (
@@ -67,12 +80,14 @@ export default async function RootLayout({ children }) {
     );
   }
 
+  const compliance = layout?.rawSettings?.compliance || {};
   const complianceSettings = {
-    cookieConsentEnabled: true,
-    cookieText: "We use cookies to enhance your browsing experience, serve personalized content, and analyze our traffic.",
-    cookieButtonText: "Accept All",
-    cookieDeclineButtonText: "Reject All",
-    ...(layout?.rawSettings?.compliance || {})
+    cookieConsentEnabled: compliance.cookieConsentEnabled !== false,
+    cookieText: compliance.cookieConsentMessage || compliance.cookieText || "We use cookies to enhance your browsing experience, serve personalized content, and analyze our traffic.",
+    cookieButtonText: compliance.acceptButtonText || compliance.cookieButtonText || "Accept All",
+    cookieDeclineButtonText: compliance.declineButtonText || compliance.cookieDeclineButtonText || "Reject All",
+    settingsButtonText: compliance.settingsButtonText || compliance.cookieSettingsButtonText || "Preferences",
+    cookiePrivacyLink: compliance.cookiePrivacyLink || "/info?tab=legal&doc=privacy",
   };
 
   return (
@@ -85,6 +100,7 @@ export default async function RootLayout({ children }) {
           <AuthProvider>
             <SessionTimeoutHandler timeoutMinutes={30} />
             <GlobalAnalytics settings={layout?.rawSettings} />
+            <CustomScripts scripts={layout?.rawSettings?.scripts} />
             <ScrollProvider>
               {children}
             </ScrollProvider>

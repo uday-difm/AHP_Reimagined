@@ -39,10 +39,11 @@ export const authOptions = {
       async authorize(credentials, req) {
         const logFile = path.join(process.cwd(), "auth_debug.log");
         const writeLog = (msg) => {
+          console.log(msg); // Also output to Vercel/NextJS server console
           try {
             fs.appendFileSync(logFile, `[${new Date().toISOString()}] ${msg}\n`);
           } catch (e) {
-            console.error("Failed to write log to file:", e);
+            // Ephemeral file systems on Vercel will trigger this, which is fine
           }
         };
 
@@ -57,27 +58,22 @@ export const authOptions = {
         const host = req.headers?.host || "";
         writeLog(`[Auth] Request Host: ${host}`);
 
-        // Only enforce reCAPTCHA for users present in the admin database table
-        const adminUser = await prisma.user.findUnique({
-          where: { email: credentials?.email || "" }
-        });
-        const isDashboardUser = !!adminUser;
+        if (secretKey) {
+          const isTestKeyHost = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}/.test(host) ||
+            host.includes("localhost") ||
+            host.includes("127.0.0.1") ||
+            host.includes(".ngrok.io") ||
+            host.includes(".ngrok-free.dev") ||
+            host.includes(".vercel.app");
 
-        if (secretKey && isDashboardUser) {
-          const isIpOrNgrok = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}/.test(host) || 
-                              host.includes("localhost") ||
-                              host.includes("127.0.0.1") ||
-                              host.includes(".ngrok.io") || 
-                              host.includes(".ngrok-free.dev");
-          
-          if (isIpOrNgrok) {
-            writeLog("[Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.");
+          if (isTestKeyHost) {
+            writeLog("[Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.");
             secretKey = "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe";
           }
         }
 
         const isDev = process.env.NODE_ENV === "development";
-        if (secretKey && isDashboardUser && !isDev) {
+        if (secretKey && !isDev) {
           const recaptchaToken = credentials?.recaptchaToken;
           writeLog(`[Auth] Token received (length: ${recaptchaToken?.length}): ${recaptchaToken ? recaptchaToken.substring(0, 30) : "empty"}...`);
           if (!recaptchaToken) {
@@ -134,12 +130,12 @@ export const authOptions = {
           return user;
         } catch (err) {
           writeLog(`[Auth] Admin authentication failed, trying frontend auth table for: ${credentials.email}`);
-          
+
           try {
             const shasum = crypto.createHash("sha256");
             shasum.update(credentials.password);
             const hashedPassword = shasum.digest("hex");
-            
+
             const frontendUser = await prisma.auth.findFirst({
               where: {
                 OR: [
@@ -148,7 +144,7 @@ export const authOptions = {
                 ]
               }
             });
-            
+
             if (frontendUser && frontendUser.password === hashedPassword) {
               writeLog(`[Auth] Frontend user authenticated successfully: ${frontendUser.email}`);
               return {
@@ -161,7 +157,7 @@ export const authOptions = {
           } catch (frontendErr) {
             writeLog(`[Auth] Frontend authentication error: ${frontendErr.message}`);
           }
-          
+
           writeLog(`[Auth] All authentication methods failed for: ${credentials.email}`);
           throw new Error(err.message || "Invalid credentials");
         }

@@ -3,6 +3,7 @@
  * directly from the database for the infinium frontend, avoiding local HTTP requests.
  */
 import prisma from "@/lib/prisma";
+import { unstable_cache } from "next/cache";
 
 const FALLBACK = {
   siteName: "The Infinium",
@@ -17,9 +18,10 @@ const FALLBACK = {
 
 /**
  * Fetch all layout data from DB in parallel.
- * Returns { siteName, logoUrl, footerLogoUrl, tagline, faviconUrl, navigation, footerLinks, footerColumns, copyright, isActive, maintenanceMode, maintenanceMessage }.
+ * Wrapped with unstable_cache to run exactly once per build/revalidation period,
+ * drastically reducing database connections during static generation of hundreds of pages.
  */
-export async function getLayoutData() {
+const fetchLayoutData = async () => {
   const siteId = process.env.NEXT_PUBLIC_SITE_ID || "infinium";
   try {
     const [site, settings, legalPages] = await Promise.all([
@@ -38,7 +40,9 @@ export async function getLayoutData() {
           analytics: true,
           securityControls: true,
           emailSettings: true,
-          ctaConfig: true
+          ctaConfig: true,
+          scripts: true,
+          performanceConfig: true
         }
       }),
       prisma.legalPage.findMany({
@@ -95,6 +99,9 @@ export async function getLayoutData() {
       footerLogoUrl: dbFooterLogoUrl || FALLBACK.footerLogoUrl,
       tagline: ws.tagline || FALLBACK.tagline,
       faviconUrl: ws.favicon || FALLBACK.faviconUrl,
+      titleTemplate: ws.titleTemplate || null,
+      description: ws.description || null,
+      ogImageUrl: ws.ogImageUrl || null,
       navigation: navItems,
       footerLinks,
       footerColumns: footer.columns || [],
@@ -112,11 +119,13 @@ export async function getLayoutData() {
         compliance: settings?.compliance || null,
         analytics: settings?.analytics || null,
         securityControls: publicSecurityControls,
-        oneSignalAppId
+        oneSignalAppId,
+        scripts: settings?.scripts || null,
+        performanceConfig: settings?.performanceConfig || null
       },
     };
   } catch (err) {
-    console.error("getLayoutData failed, using fallback:", err);
+    console.error("fetchLayoutData failed, using fallback:", err);
     return {
       ...FALLBACK,
       isActive: true,
@@ -124,4 +133,10 @@ export async function getLayoutData() {
       maintenanceMessage: "",
     };
   }
-}
+};
+
+export const getLayoutData = unstable_cache(
+  fetchLayoutData,
+  ['global-layout-data'],
+  { revalidate: 3600, tags: ['layout'] }
+);
