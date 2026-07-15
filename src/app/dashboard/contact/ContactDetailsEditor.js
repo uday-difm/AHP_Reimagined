@@ -112,7 +112,7 @@ function FieldRow({ label, children, hint }) {
         {label}
       </label>
       {children}
-      {hint && <p className="mt-1 text-2xs text-slate-400">{hint}</p>}
+      {hint && <p className="mt-1 text-[10px] uppercase tracking-wider text-slate-400">{hint}</p>}
     </div>
   );
 }
@@ -307,7 +307,7 @@ export default function ContactDetailsEditor({ siteId, initialData }) {
             >
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 flex-1">
                 <div>
-                  <label className="block text-2xs font-semibold text-slate-500 mb-1">
+                  <label className="block text-[10px] uppercase tracking-wider font-semibold text-slate-500 mb-1">
                     Label
                   </label>
                   <input
@@ -319,7 +319,7 @@ export default function ContactDetailsEditor({ siteId, initialData }) {
                   />
                 </div>
                 <div className="sm:col-span-2">
-                  <label className="block text-2xs font-semibold text-slate-500 mb-1">
+                  <label className="block text-[10px] uppercase tracking-wider font-semibold text-slate-500 mb-1">
                     Phone Number
                   </label>
                   <input
@@ -332,7 +332,7 @@ export default function ContactDetailsEditor({ siteId, initialData }) {
                 </div>
               </div>
               <div className="flex flex-col items-center gap-2 pt-4">
-                <label className="flex items-center gap-1 cursor-pointer text-2xs text-slate-600 font-semibold whitespace-nowrap">
+                <label className="flex items-center gap-1 cursor-pointer text-[10px] uppercase tracking-wider text-slate-600 font-semibold whitespace-nowrap">
                   <input
                     type="checkbox"
                     checked={phone.isWhatsApp}
@@ -375,7 +375,7 @@ export default function ContactDetailsEditor({ siteId, initialData }) {
             >
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 flex-1">
                 <div>
-                  <label className="block text-2xs font-semibold text-slate-500 mb-1">
+                  <label className="block text-[10px] uppercase tracking-wider font-semibold text-slate-500 mb-1">
                     Label
                   </label>
                   <input
@@ -387,7 +387,7 @@ export default function ContactDetailsEditor({ siteId, initialData }) {
                   />
                 </div>
                 <div className="sm:col-span-2">
-                  <label className="block text-2xs font-semibold text-slate-500 mb-1">
+                  <label className="block text-[10px] uppercase tracking-wider font-semibold text-slate-500 mb-1">
                     Email Address
                   </label>
                   <input
@@ -448,7 +448,7 @@ export default function ContactDetailsEditor({ siteId, initialData }) {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 <div className="sm:col-span-2">
-                  <label className="block text-2xs font-semibold text-slate-500 mb-1">
+                  <label className="block text-[10px] uppercase tracking-wider font-semibold text-slate-500 mb-1">
                     Address Line 1
                   </label>
                   <input
@@ -460,7 +460,7 @@ export default function ContactDetailsEditor({ siteId, initialData }) {
                   />
                 </div>
                 <div className="sm:col-span-2">
-                  <label className="block text-2xs font-semibold text-slate-500 mb-1">
+                  <label className="block text-[10px] uppercase tracking-wider font-semibold text-slate-500 mb-1">
                     Address Line 2{" "}
                     <span className="text-slate-400 font-normal">
                       (optional)
@@ -475,7 +475,7 @@ export default function ContactDetailsEditor({ siteId, initialData }) {
                   />
                 </div>
                 <div>
-                  <label className="block text-2xs font-semibold text-slate-500 mb-1">
+                  <label className="block text-[10px] uppercase tracking-wider font-semibold text-slate-500 mb-1">
                     City
                   </label>
                   <input
@@ -487,7 +487,7 @@ export default function ContactDetailsEditor({ siteId, initialData }) {
                   />
                 </div>
                 <div>
-                  <label className="block text-2xs font-semibold text-slate-500 mb-1">
+                  <label className="block text-[10px] uppercase tracking-wider font-semibold text-slate-500 mb-1">
                     State / Province
                   </label>
                   <input
@@ -499,7 +499,7 @@ export default function ContactDetailsEditor({ siteId, initialData }) {
                   />
                 </div>
                 <div>
-                  <label className="block text-2xs font-semibold text-slate-500 mb-1">
+                  <label className="block text-[10px] uppercase tracking-wider font-semibold text-slate-500 mb-1">
                     Country
                   </label>
                   <input
@@ -513,7 +513,7 @@ export default function ContactDetailsEditor({ siteId, initialData }) {
                   />
                 </div>
                 <div>
-                  <label className="block text-2xs font-semibold text-slate-500 mb-1">
+                  <label className="block text-[10px] uppercase tracking-wider font-semibold text-slate-500 mb-1">
                     Postal Code
                   </label>
                   <input
@@ -669,39 +669,41 @@ export default function ContactDetailsEditor({ siteId, initialData }) {
           {hours.map((hour, i) => (
             <div
               key={i}
-              className="flex items-center gap-3 py-2 border-b border-slate-100 last:border-0"
+              className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 py-3 sm:py-2 border-b border-slate-100 last:border-0"
             >
-              <span className="text-xs font-semibold text-slate-700 w-24 shrink-0">
-                {hour.day}
-              </span>
-              <label className="flex items-center gap-1.5 cursor-pointer shrink-0">
-                <input
-                  type="checkbox"
-                  checked={hour.closed}
-                  onChange={(e) => updateHour(i, "closed", e.target.checked)}
-                  className="rounded border-slate-300 text-red-500 h-3.5 w-3.5"
-                />
-                <span className="text-2xs text-slate-500 font-semibold">
-                  Closed
+              <div className="flex items-center justify-between sm:justify-start w-full sm:w-auto">
+                <span className="text-xs font-semibold text-slate-700 w-24 shrink-0">
+                  {hour.day}
                 </span>
-              </label>
+                <label className="flex items-center gap-1.5 cursor-pointer shrink-0">
+                  <input
+                    type="checkbox"
+                    checked={hour.closed}
+                    onChange={(e) => updateHour(i, "closed", e.target.checked)}
+                    className="rounded border-slate-300 text-red-500 h-3.5 w-3.5"
+                  />
+                  <span className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold">
+                    Closed
+                  </span>
+                </label>
+              </div>
               <div
-                className={`flex items-center gap-2 flex-1 ${hour.closed ? "opacity-30 pointer-events-none" : ""}`}
+                className={`flex items-center gap-2 flex-1 w-full sm:w-auto ${hour.closed ? "opacity-30 pointer-events-none" : ""}`}
               >
                 <input
                   type="time"
                   value={hour.open}
                   onChange={(e) => updateHour(i, "open", e.target.value)}
-                  className="px-2 py-1 text-xs border border-slate-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="flex-1 sm:flex-none w-full sm:w-auto px-2 py-1 text-xs border border-slate-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                 />
-                <span className="text-2xs text-slate-400 font-semibold">
+                <span className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold shrink-0">
                   to
                 </span>
                 <input
                   type="time"
                   value={hour.close}
                   onChange={(e) => updateHour(i, "close", e.target.value)}
-                  className="px-2 py-1 text-xs border border-slate-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="flex-1 sm:flex-none w-full sm:w-auto px-2 py-1 text-xs border border-slate-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                 />
               </div>
             </div>
@@ -736,7 +738,7 @@ export default function ContactDetailsEditor({ siteId, initialData }) {
         {/* Custom socials */}
         {customSocials.length > 0 && (
           <div className="mt-4 space-y-2">
-            <p className="text-2xs font-bold text-slate-400 uppercase tracking-wider">
+            <p className="text-[10px] uppercase tracking-wider font-bold text-slate-400">
               Custom Links
             </p>
             {customSocials.map((cs, i) => (

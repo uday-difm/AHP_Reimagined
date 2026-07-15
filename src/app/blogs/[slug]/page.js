@@ -72,10 +72,10 @@ export default async function ArticlePage({ params }) {
   const authorName = post.author?.name || post.author?.email?.split('@')[0] || 'A Health Place Expert';
   const displayDate = post.publishedAt
     ? new Date(post.publishedAt).toLocaleDateString('en-US', {
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric',
-      })
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    })
     : '';
 
   const rawTextContent = (post.content || '').replace(/<[^>]+>/g, '').trim();
@@ -113,11 +113,11 @@ export default async function ArticlePage({ params }) {
             </h1>
 
             {/* Byline */}
-            <div className="flex flex-wrap items-center gap-6 border-y border-slate-200/60 py-4.5 text-[13px] text-secondary">
+            <div className="flex flex-col md:flex-row md:flex-wrap items-start md:items-center gap-3 md:gap-6 border-y border-slate-200/60 py-4 text-[13px] text-secondary">
               <div>
                 <span className="text-muted font-medium">Written by</span> <span className="font-bold text-primary">{authorName}</span>
               </div>
-              <div className="w-1.5 h-1.5 bg-slate-300 rounded-full" />
+              <div className="hidden md:block w-1.5 h-1.5 bg-slate-300 rounded-full shrink-0" />
               <div>
                 <span className="text-muted font-medium">Medically Reviewed by</span> <span className="font-bold text-primary">Editorial Team</span>
               </div>
@@ -162,7 +162,7 @@ export default async function ArticlePage({ params }) {
             <AdSlot zone="article-body-inline" layout="float" />
 
             {/* Main Content */}
-            <div 
+            <div
               className="prose prose-slate max-w-none text-[15px] md:text-[16px] leading-[1.8] text-secondary space-y-4"
               dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
             />
@@ -172,8 +172,8 @@ export default async function ArticlePage({ params }) {
               <div className="flex flex-wrap items-center gap-2 mt-8 pt-6 border-t border-slate-200/60">
                 <span className="text-sm font-bold text-slate-800 mr-2">Tags:</span>
                 {post.tags.map(t => (
-                  <Link 
-                    key={t.id} 
+                  <Link
+                    key={t.id}
                     href={`/blogs?tag=${t.slug || t.name}`}
                     className="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 px-3.5 py-2 rounded-md transition duration-200 no-underline"
                   >

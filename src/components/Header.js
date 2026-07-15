@@ -72,8 +72,8 @@ export default function Header() {
       <Marquee />
       {/* Header */}
       <header className="fixed top-[40px] left-0 w-full flex items-center h-20 bg-white/30 backdrop-blur-lg z-[9000]" style={{ WebkitBackdropFilter: 'blur(48px)' }}>
-        <div className="header-container flex justify-between items-center w-full  mx-auto px-6 md:px-10">
-          <a href="/" className="logo-link flex items-center">
+        <div className="header-container flex justify-between items-center w-full mx-auto px-4 sm:px-6 md:px-10 gap-2">
+          <a href="/" className="logo-link flex items-center shrink-0">
             <Image
               src="/images/Logo-web.png"
               alt="A Health Place Logo"

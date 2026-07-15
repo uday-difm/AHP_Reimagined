@@ -36,7 +36,7 @@ export default function DashboardLayout({ children, siteId, sites = [] }) {
   }
 
   return (
-    <div className="dashboard-layout flex min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+    <div className="dashboard-layout flex h-screen overflow-hidden bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
       <Sidebar
         siteId={siteId}
         isOpen={sidebarOpen}

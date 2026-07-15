@@ -159,7 +159,35 @@ export default function PublicationPage() {
       rootMargin: '0px 0px -50px 0px',
     });
     revealElements.forEach(el => observer.observe(el));
-    return () => observer.disconnect();
+
+    // Mobile scroll flip observer
+    const flipElements = document.querySelectorAll('.mobile-flip-card');
+    const flipCallback = (entries) => {
+      // Only trigger scroll flip on mobile screens
+      if (window.innerWidth >= 768) {
+        entries.forEach(entry => entry.target.classList.remove('mobile-flipped'));
+        return;
+      }
+
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('mobile-flipped');
+        } else {
+          entry.target.classList.remove('mobile-flipped');
+        }
+      });
+    };
+    const flipObserver = new IntersectionObserver(flipCallback, {
+      root: null,
+      threshold: 0.6, // Trigger when 60% of the card is visible
+      rootMargin: '0px 0px -50px 0px',
+    });
+    flipElements.forEach(el => flipObserver.observe(el));
+
+    return () => {
+      observer.disconnect();
+      flipObserver.disconnect();
+    };
   }, [currentPage, dbIssues]);
 
   // Ref & State for Terracotta CTA cursor tracking

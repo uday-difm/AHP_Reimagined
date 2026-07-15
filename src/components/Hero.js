@@ -32,19 +32,28 @@ const trendingArticles = [
 
 export default function Hero() {
   return (
-    <section className="hero-section min-h-screen w-full flex items-center py-5 relative overflow-hidden">
+    <section className="hero-section min-h-screen w-full flex items-start md:items-center py-5 relative overflow-hidden z-0">
       {/* Background Image */}
+      {/* Mobile Background Image */}
+      <Image
+        src="/images/MobileVIEWbackground.png"
+        alt="Hero Background Mobile"
+        fill
+        priority
+        className="block md:hidden object-cover object-center z-[-1] opacity-100"
+      />
+      {/* Desktop Background Image */}
       <Image
         src="/images/background.webp"
         alt="Hero Background"
         fill
         priority
-        className="object-cover object-center z-[-1] absolute inset-0 opacity-100"
+        className="hidden md:block object-cover object-center z-[-1] opacity-100"
       />
       {/* Decorative gradient circle flare blur */}
       <div className="absolute w-[450px] h-[450px] md:w-[800px] md:h-[800px] rounded-full bg-gradient-to-tr from-accent/20 to-purple-500/15 top-[-60px] md:top-[-120px] right-[-120px] md:right-[-250px] pointer-events-none z-0 blur-xl" />
 
-      <div className="container hero-container relative z-10 flex flex-col pt-32 md:pt-40">
+      <div className="container hero-container relative z-10 flex flex-col pt-36 md:pt-40 px-4 md:px-auto">
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 items-start">
 
@@ -64,7 +73,7 @@ export default function Hero() {
                 <span className="text-[#1e2a35] block">Your Daily Guide To</span>
                 <span className="text-[#0f7c85] block">Health &amp; Wellness</span>
               </h1>
-              <p className="text-secondary text-base md:text-xl leading-relaxed max-w-xl mb-8">
+              <p className="text-[#1e2a35] font-semibold text-base md:text-xl leading-relaxed max-w-xl mb-8">
                 Discover trusted health blogs, expert magazines, disease awareness,
                 nutrition tips, mental wellness, and practical lifestyle guidance
                 everything you need to make informed decisions for a healthier life.

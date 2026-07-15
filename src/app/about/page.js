@@ -134,9 +134,9 @@ export default function AboutPage() {
 
               {/* Right — Visual card */}
               <div className="flex-shrink-0 w-full lg:w-[440px] reveal-scale">
-                <div className="relative h-[360px] md:h-[420px]">
+                <div className="relative min-h-[360px] md:min-h-[420px] h-auto">
                   <div className="absolute top-6 right-6 w-full h-full bg-[#dceeed]/60 rounded-[32px] border border-slate-200/40 rotate-2" />
-                  <div className="relative z-10 w-full h-full bg-[#1c7b80] rounded-[32px] overflow-hidden flex flex-col justify-between p-8 md:p-10 shadow-[0_24px_60px_rgba(28,123,128,0.25)]">
+                  <div className="relative z-10 w-full h-full min-h-[360px] md:min-h-[420px] bg-[#1c7b80] rounded-[32px] overflow-hidden flex flex-col justify-between p-8 md:p-10 shadow-[0_24px_60px_rgba(28,123,128,0.25)]">
                     <div>
                       <span className="text-white/70 font-bold text-[10px] uppercase tracking-[2.5px]">Medically Verified</span>
                       <h3 className="font-heading font-extrabold text-[26px] md:text-[32px] text-white mt-3 leading-tight tracking-tight">

@@ -315,7 +315,7 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
         {activeTab === 'legal' && (
           <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-[1fr_2.5fr] gap-10">
             {/* Document Select Sidebar */}
-            <div className="flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-visible pb-4 md:pb-0 border-b md:border-b-0 md:border-r border-slate-200 pr-0 md:pr-6 shrink-0">
+            <div className="flex flex-row flex-wrap md:flex-col gap-2 pb-4 md:pb-0 border-b md:border-b-0 md:border-r border-slate-200 pr-0 md:pr-6 shrink-0">
               {[
                 { key: 'privacy', label: 'Privacy Policy' },
                 { key: 'terms', label: 'Terms of Service' },
@@ -327,7 +327,7 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
                   key={doc.key}
                   onClick={() => handleLegalDocToggle(doc.key)}
                   variant={activeLegalDoc === doc.key ? 'primary' : 'white'}
-                  className="flex items-center gap-2.5 px-4.5 py-3 rounded-xl justify-start text-[12.5px] text-left md:w-full whitespace-nowrap cursor-pointer !shadow-none border-none"
+                  className="flex items-center gap-2.5 px-4.5 py-3 rounded-xl justify-start text-[12.5px] text-left md:w-full whitespace-nowrap cursor-pointer !shadow-none border-none shrink-0"
                 >
                   <FileText size={15} />
                   {doc.label}

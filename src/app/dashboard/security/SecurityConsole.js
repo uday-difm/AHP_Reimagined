@@ -604,9 +604,9 @@ export default function SecurityConsole({ siteId, user }) {
                       <p className="text-xs text-gray-600">
                         Or enter the configuration key manually:
                       </p>
-                      <div className="p-3 bg-white border font-mono rounded text-xs select-all text-gray-800 flex justify-between items-center">
-                        <span>{twoFaSecret}</span>
-                        <span className="text-[10px] text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded font-sans uppercase font-semibold">
+                      <div className="p-3 bg-white border font-mono rounded text-xs select-all text-gray-800 flex justify-between items-start gap-2">
+                        <span className="break-all">{twoFaSecret}</span>
+                        <span className="text-[10px] text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded font-sans uppercase font-semibold shrink-0 mt-0.5">
                           Base32 Key
                         </span>
                       </div>

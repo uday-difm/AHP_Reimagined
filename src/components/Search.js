@@ -151,13 +151,13 @@ export default function Search() {
       {/* Search Trigger (Inline Bar style) */}
       <button
         onClick={() => setIsOpen(true)}
-        className="flex items-center gap-2 bg-[#F3F4F6] hover:bg-[#E5E7EB] text-slate-500 px-4 py-2.5 rounded-full transition-colors w-[220px] xl:w-[260px] border border-transparent hover:border-[#E6EEF0] group mr-2"
+        className="flex items-center gap-2 bg-[#F3F4F6] hover:bg-[#E5E7EB] text-slate-500 px-3 md:px-4 py-2 md:py-2.5 rounded-full transition-colors w-[130px] sm:w-[220px] xl:w-[260px] border border-transparent hover:border-[#E6EEF0] group mr-0 sm:mr-2"
         aria-label="Open Search"
       >
-        <span className="flex-1 text-left text-[13px] font-medium text-slate-400 group-hover:text-slate-500 transition-colors truncate">
-          Search articles, topics...
+        <span className="flex-1 text-left text-[12px] md:text-[13px] font-medium text-slate-400 group-hover:text-slate-500 transition-colors truncate">
+          Search...
         </span>
-        <SearchIcon className="w-4 h-4 text-slate-400 group-hover:text-primary transition-colors" />
+        <SearchIcon className="w-4 h-4 text-slate-400 group-hover:text-primary transition-colors shrink-0" />
       </button>
 
       {/* Glassmorphic Search Overlay Modal */}
@@ -165,7 +165,7 @@ export default function Search() {
         className={`fixed inset-0 w-full h-screen bg-white/85 backdrop-blur-2xl z-[99999] flex flex-col justify-start items-center p-6 md:p-16 transition-all duration-500 ${isOpen ? 'opacity-100 pointer-events-auto visible' : 'opacity-0 pointer-events-none invisible'
           }`}
       >
-        <div className={`w-full max-w-[800px] flex flex-col items-center flex-1 transition-transform duration-700 ${isOpen ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
+        <div className={`w-full max-w-[800px] flex flex-col items-stretch flex-1 min-h-0 transition-transform duration-700 ${isOpen ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
           }`}>
           {/* Top Row: Close button */}
           <div className="w-full flex justify-end mb-2">
@@ -207,7 +207,7 @@ export default function Search() {
           </div>
 
           {/* Results Area */}
-          <div className="w-full flex-1 overflow-y-auto pr-2 custom-scrollbar">
+          <div className="w-full flex-1 min-h-0 overflow-y-auto pr-2 custom-scrollbar pb-10">
             {query.trim() === '' ? (
               <div className="flex flex-col items-center mt-4">
                 {/* Trending Keywords */}
