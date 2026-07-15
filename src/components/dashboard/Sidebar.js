@@ -36,6 +36,7 @@ import {
   ChevronDown,
   ChevronRight,
   Globe,
+  Package,
 } from "lucide-react";
 
 const ROLE_LEVEL = {
@@ -72,6 +73,12 @@ const crmSections = [
         href: "/crm/leads",
         label: "Leads CRM",
         icon: Inbox,
+        minRole: "EDITOR",
+      },
+      {
+        href: "/crm/services",
+        label: "Service Bookings",
+        icon: Package,
         minRole: "EDITOR",
       },
       {

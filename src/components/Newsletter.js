@@ -5,11 +5,38 @@ import Button from '@/components/Button';
 
 export default function Newsletter() {
   const [newsEmail, setNewsEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState(null); // { type: 'success' | 'error', message: string }
 
-  const handleNewsSubmit = (e) => {
+  const handleNewsSubmit = async (e) => {
     e.preventDefault();
-    alert(`Thank you for subscribing with: ${newsEmail}`);
-    setNewsEmail('');
+    setLoading(true);
+    setStatus(null);
+
+    const siteId = process.env.NEXT_PUBLIC_SITE_ID || "AHP";
+
+    try {
+      const res = await fetch(`/api/newsletter/subscribe?siteId=${siteId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: newsEmail,
+          metadata: { source: "homepage-newsletter" }
+        })
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to subscribe.");
+      }
+
+      setStatus({ type: "success", message: "Thank you! You have successfully subscribed to our newsletter." });
+      setNewsEmail('');
+    } catch (err) {
+      setStatus({ type: "error", message: err.message || "Something went wrong. Please try again." });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -33,15 +60,26 @@ export default function Newsletter() {
             <input
               type="email"
               value={newsEmail}
+              disabled={loading}
               onChange={(e) => setNewsEmail(e.target.value)}
               placeholder="Enter your email"
               required
-              className="flex-grow bg-white border border-slate-200 rounded-full px-6 py-4 text-sm outline-none text-primary focus:border-accent focus:shadow-[0_0_0_4px_rgba(31,185,251,0.1)] transition-all shadow-sm"
+              className="flex-grow bg-white border border-slate-200 rounded-full px-6 py-4 text-sm outline-none text-primary focus:border-accent focus:shadow-[0_0_0_4px_rgba(31,185,251,0.1)] transition-all shadow-sm disabled:opacity-60"
             />
-            <Button type="submit" variant="primary" className="whitespace-nowrap !py-4 !px-8">
-              Subscribe
+            <Button type="submit" variant="primary" disabled={loading} className="whitespace-nowrap !py-4 !px-8">
+              {loading ? "Subscribing..." : "Subscribe"}
             </Button>
           </form>
+
+          {status && (
+            <div className={`mt-6 p-4 rounded-xl text-sm font-semibold max-w-[520px] mx-auto border transition-all ${
+              status.type === 'success' 
+                ? 'bg-emerald-50 border-emerald-200 text-emerald-800' 
+                : 'bg-rose-50 border-rose-200 text-rose-800'
+            }`}>
+              {status.message}
+            </div>
+          )}
 
           <p className="text-slate-400 text-xs mt-5 font-medium">
             No credit card required · Cancel anytime

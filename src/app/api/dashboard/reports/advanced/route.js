@@ -95,12 +95,28 @@ export async function GET(req) {
     let wonLeads = 0;
 
     leads.forEach((lead) => {
-      const interest = lead.serviceInterest ? lead.serviceInterest.toLowerCase() : "";
-      const price = servicePriceMap[interest] || 500;
-      totalPipelineValue += price;
-
-      if (lead.status === "won" || lead.status === "converted" || lead.status === "approved") {
+      if (lead.serviceInterest && ["won", "converted", "approved"].includes(lead.status)) {
+        const interest = lead.serviceInterest.toLowerCase();
+        const extractedMatch = interest.match(/\$(\d+)/);
+        let price = 500;
+        if (extractedMatch) {
+          price = parseFloat(extractedMatch[1]);
+        } else {
+          let matchedPrice = null;
+          for (const [title, pr] of Object.entries(servicePriceMap)) {
+            if (interest.includes(title) || title.includes(interest)) {
+              matchedPrice = pr;
+              break;
+            }
+          }
+          price = matchedPrice !== null ? matchedPrice : 500;
+        }
+        totalPipelineValue += price;
         convertedValue += price;
+        wonLeads++;
+      } else if (lead.status === "won" || lead.status === "converted" || lead.status === "approved") {
+        totalPipelineValue += 500;
+        convertedValue += 500;
         wonLeads++;
       }
     });

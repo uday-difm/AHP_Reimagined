@@ -1,5 +1,51 @@
 import { CMSClient } from "@yourcompany/global-backend-next";
 
+// Patch global fetch to automatically skip ngrok browser warnings
+// and provide more helpful error messages when HTML is returned instead of JSON.
+if (typeof globalThis.fetch !== "undefined") {
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async function (url, options) {
+    const urlStr = url.toString();
+    const isNgrok = urlStr.includes("ngrok-free.dev") || urlStr.includes("ngrok.io");
+    
+    let fetchOptions = options || {};
+    if (isNgrok) {
+      // Clone/initialize headers to inject ngrok skip browser warning
+      const headers = { ...fetchOptions.headers };
+      headers["ngrok-skip-browser-warning"] = "true";
+      fetchOptions = { ...fetchOptions, headers };
+    }
+
+    const res = await originalFetch(url, fetchOptions);
+    const contentType = res.headers.get("content-type") || "";
+
+    if (contentType.includes("text/html")) {
+      const originalJson = res.json.bind(res);
+      res.json = async () => {
+        const clonedRes = res.clone();
+        try {
+          return await originalJson();
+        } catch (err) {
+          const bodyText = await clonedRes.text().catch(() => "");
+          let details = "";
+          if (bodyText.includes("ERR_NGROK_3200")) {
+            details = " (ngrok tunnel is offline/not found)";
+          } else if (bodyText.includes("ERR_NGROK_3204")) {
+            details = " (ngrok tunnel is not forwarding to any local port)";
+          } else if (bodyText.includes("Tunnel") && bodyText.includes("not found")) {
+            details = " (ngrok tunnel not found)";
+          }
+          throw new Error(
+            `Expected JSON response but received HTML${details}. Status: ${res.status}. Please make sure your backend/tunnel is running.`
+          );
+        }
+      };
+    }
+
+    return res;
+  };
+}
+
 // Abort fetch after this many ms when the backend is unreachable
 const FETCH_TIMEOUT = 15_000;
 
@@ -26,21 +72,63 @@ CMSClient.prototype.getPosts = function (options = {}) {
   return this._request(`/api/posts${qs ? "?" + qs : ""}`);
 };
 
-CMSClient.prototype.getPostBySlug = function (slug) {
-  if (!slug) throw new Error("Post slug is required");
+CMSClient.prototype.getPostBySlug = async function (slug) {
+  if (!slug || slug === "undefined") return { post: null };
   return this._request(`/api/posts/${slug}`);
 };
 
-CMSClient.prototype.getMagazines = function (options = {}) {
+CMSClient.prototype.getMagazines = async function (options = {}) {
   const params = new URLSearchParams();
   if (options.siteId) params.set("siteId", options.siteId);
   const qs = params.toString();
-  return this._request(`/api/magazine${qs ? "?" + qs : ""}`);
+  const data = await this._request(`/api/magazine${qs ? "?" + qs : ""}`);
+  const list = Array.isArray(data) ? data : [];
+  
+  const magazines = list.map(item => ({
+    id: item.id,
+    magazineId: item.magazine_id,
+    title: item.magazine_title,
+    description: item.magazine_description,
+    introduction: item.magazine_introduction,
+    tags: item.magazine_tags,
+    coverImage: item.magazine_cover_image,
+    backImage: item.magazine_back_image,
+    spineImage: item.magazine_spine_image,
+    link: item.magazine_link,
+    date: item.magazine_date,
+    category: item.magazine_category,
+    magCloudLink: item.MagCloudLink,
+    slug: item.magazine_slug,
+    status: item.status,
+  }));
+  
+  return { magazines };
 };
 
-CMSClient.prototype.getMagazineBySlug = function (slug) {
-  if (!slug) throw new Error("Magazine slug is required");
-  return this._request(`/api/magazine/${slug}`);
+CMSClient.prototype.getMagazineBySlug = async function (slug) {
+  if (!slug || slug === "undefined") return { magazine: null };
+  const data = await this._request(`/api/magazine/${slug}`);
+  if (!data) return { magazine: null };
+
+  const magazine = {
+    id: data.id,
+    magazineId: data.magazine_id,
+    title: data.magazine_title,
+    description: data.magazine_description,
+    introduction: data.magazine_introduction,
+    tags: data.magazine_tags,
+    coverImage: data.magazine_cover_image,
+    backImage: data.magazine_back_image,
+    spineImage: data.magazine_spine_image,
+    link: data.magazine_link,
+    date: data.magazine_date,
+    category: data.magazine_category,
+    magCloudLink: data.MagCloudLink,
+    slug: data.magazine_slug,
+    status: data.status,
+  };
+
+  return { magazine };
 };
 
 export const cms = new CMSClient({

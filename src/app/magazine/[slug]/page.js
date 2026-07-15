@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import prisma from "@/lib/prisma";
 import { cms } from "@/lib/cms";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -173,8 +174,12 @@ export default async function MagazineIssuePage({ params }) {
 
 export async function generateStaticParams() {
   try {
-    const data = await cms.getMagazines({ limit: 10 });
-    const mags = data?.magazines || [];
+    const mags = await prisma.magazine.findMany({
+      where: { status: 1 },
+      select: { slug: true },
+      orderBy: { date: 'desc' },
+      take: 10,
+    });
     return mags.map((m) => ({ slug: m.slug }));
   } catch (e) {
     console.error("Error generating static params for magazines:", e);
