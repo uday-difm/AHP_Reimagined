@@ -36,6 +36,8 @@ const trustBadges = [
 export default function PublicationPage() {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
+  const [loadingSubscribe, setLoadingSubscribe] = useState(false);
+  const [errorSubscribe, setErrorSubscribe] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [dbIssues, setDbIssues] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -108,11 +110,35 @@ export default function PublicationPage() {
     }
   };
 
-  const handleSubscribe = (e) => {
+  const handleSubscribe = async (e) => {
     e.preventDefault();
-    if (email) {
+    if (!email) return;
+
+    setLoadingSubscribe(true);
+    setErrorSubscribe('');
+    const siteId = process.env.NEXT_PUBLIC_SITE_ID || "AHP";
+
+    try {
+      const res = await fetch(`/api/newsletter/subscribe?siteId=${siteId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          metadata: { source: "publication-page-newsletter" }
+        })
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to subscribe.");
+      }
+
       setSubscribed(true);
       setEmail('');
+    } catch (err) {
+      setErrorSubscribe(err.message || "Something went wrong. Please try again.");
+    } finally {
+      setLoadingSubscribe(false);
     }
   };
 
@@ -486,18 +512,26 @@ export default function PublicationPage() {
                     ✅ You&apos;re subscribed! Welcome to the A Health Place community.
                   </div>
                 ) : (
-                  <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3 max-w-md">
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={e => setEmail(e.target.value)}
-                      required
-                      placeholder="Your email address"
-                      className="flex-1 rounded-full px-6 py-3.5 text-sm text-[#1a1a2e] outline-none focus:ring-2 focus:ring-white/50 bg-white/90 placeholder:text-[#9a8680]"
-                    />
-                    <Button type="submit" variant="primary" className="!bg-primary hover:!bg-primary/90 !text-sm !py-3.5 !px-7 shadow-md whitespace-nowrap">
-                      Subscribe Now
-                    </Button>
+                  <form onSubmit={handleSubscribe} className="flex flex-col gap-3 max-w-md">
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <input
+                        type="email"
+                        value={email}
+                        disabled={loadingSubscribe}
+                        onChange={e => setEmail(e.target.value)}
+                        required
+                        placeholder="Your email address"
+                        className="flex-1 rounded-full px-6 py-3.5 text-sm text-[#1a1a2e] outline-none focus:ring-2 focus:ring-white/50 bg-white/90 placeholder:text-[#9a8680] disabled:opacity-60"
+                      />
+                      <Button type="submit" disabled={loadingSubscribe} variant="primary" className="!bg-primary hover:!bg-primary/90 !text-sm !py-3.5 !px-7 shadow-md whitespace-nowrap">
+                        {loadingSubscribe ? "Subscribing..." : "Subscribe Now"}
+                      </Button>
+                    </div>
+                    {errorSubscribe && (
+                      <div className="text-red-800 bg-red-100/90 border border-red-200/50 rounded-xl px-4 py-2 text-xs font-semibold">
+                        {errorSubscribe}
+                      </div>
+                    )}
                   </form>
                 )}
                 <p className="text-[#3a2520]/60 text-[11px] mt-3">

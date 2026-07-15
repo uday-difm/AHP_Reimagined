@@ -147,8 +147,24 @@ export default async function CrmDashboardPage() {
 
   let totalPipelineValue = 0;
   leads.forEach((l) => {
-    const interest = l.serviceInterest ? l.serviceInterest.toLowerCase() : "";
-    totalPipelineValue += priceMap[interest] || 500;
+    // Only calculate pipeline value after payment is confirmed (status is won, converted, or approved)
+    // and services form is completed (serviceInterest is not empty)
+    if (l.serviceInterest && ["won", "converted", "approved"].includes(l.status)) {
+      const interest = l.serviceInterest.toLowerCase();
+      const extractedMatch = interest.match(/\$(\d+)/);
+      if (extractedMatch) {
+        totalPipelineValue += parseFloat(extractedMatch[1]);
+      } else {
+        let matchedPrice = null;
+        for (const [title, price] of Object.entries(priceMap)) {
+          if (interest.includes(title) || title.includes(interest)) {
+            matchedPrice = price;
+            break;
+          }
+        }
+        totalPipelineValue += matchedPrice !== null ? matchedPrice : 500;
+      }
+    }
   });
 
   const statsPayload = {

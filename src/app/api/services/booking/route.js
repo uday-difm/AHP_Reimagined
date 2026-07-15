@@ -21,9 +21,8 @@ export async function POST(req) {
       return NextResponse.json({ success: false, error: 'Required fields are missing' }, { status: 400 });
     }
 
-    // Get active site dynamically
-    const site = await prisma.site.findFirst();
-    const siteId = site ? site.id : 'ebh';
+    // Use the configured site ID from environment
+    const siteId = process.env.NEXT_PUBLIC_SITE_ID || process.env.SITE_ID || 'AHP';
 
     const messageText = `
 Professional Title: ${professionalTitle || 'N/A'}
@@ -47,7 +46,7 @@ About Story / Brand Mission: ${story}
       }
     });
 
-    // 2. Create Lead for CRM tracking
+    // 2. Create Lead for CRM tracking — use consistent sourcePage for CRM filter
     const lead = await prisma.lead.create({
       data: {
         siteId,
@@ -55,7 +54,7 @@ About Story / Brand Mission: ${story}
         email,
         phone: phone || '',
         serviceInterest: mediaPackage,
-        sourcePage: 'Services Secret Portal',
+        sourcePage: 'Services Booking Form',
         status: 'new',
         notes: messageText
       }

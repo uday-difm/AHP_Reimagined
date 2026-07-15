@@ -14,6 +14,11 @@ const CreateAdSchema = z.object({
   isActive: z.boolean().default(true),
   startDate: z.string().nullable().optional(),
   endDate: z.string().nullable().optional(),
+  advertiserId: z.string().nullable().optional(),
+  campaignId: z.string().nullable().optional(),
+  priority: z.number().default(50),
+  targeting: z.string().nullable().optional(),
+  scheduling: z.string().nullable().optional(),
 });
 
 export async function GET(req) {
@@ -27,7 +32,9 @@ export async function GET(req) {
         zone: { siteId: auth.siteId }
       },
       include: {
-        zone: true
+        zone: true,
+        advertiser: true,
+        campaign: true,
       },
       orderBy: {
         createdAt: 'desc'
@@ -68,6 +75,16 @@ export async function POST(req) {
         isActive: data.isActive,
         startDate: data.startDate ? new Date(data.startDate) : null,
         endDate: data.endDate ? new Date(data.endDate) : null,
+        advertiserId: data.advertiserId || null,
+        campaignId: data.campaignId || null,
+        priority: data.priority,
+        targeting: data.targeting || null,
+        scheduling: data.scheduling || null,
+      },
+      include: {
+        zone: true,
+        advertiser: true,
+        campaign: true,
       }
     });
     return NextResponse.json(apiSuccess({ ad }), { status: 201 });

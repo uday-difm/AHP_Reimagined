@@ -15,6 +15,8 @@ export default function ContactPage() {
     message: ''
   });
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
   const [contactDetails, setContactDetails] = useState(null);
 
   useEffect(() => {
@@ -29,14 +31,37 @@ export default function ContactPage() {
       .catch((err) => console.error("Failed to fetch contact details:", err));
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submission data:', formData);
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
+    setLoading(true);
+    setErrorMsg('');
+    const siteId = process.env.NEXT_PUBLIC_SITE_ID || "AHP";
+
+    try {
+      const res = await fetch('/api/forms/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          siteId,
+          name: formData.name,
+          email: formData.email,
+          phone: '',
+          message: `${formData.subject}: ${formData.message}`
+        })
+      });
+
+      const json = await res.json();
+      if (!res.ok) {
+        throw new Error(json.error || 'Failed to submit message.');
+      }
+
+      setSubmitted(true);
       setFormData({ name: '', email: '', subject: 'General Support', message: '' });
-    }, 4000);
+    } catch (err) {
+      setErrorMsg(err.message || 'Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -236,8 +261,18 @@ export default function ContactPage() {
                       </p>
                     </div>
 
-                    <button type="submit" className="w-full bg-[#0f7c85] hover:bg-[#0c6b73] text-white py-4 rounded-xl font-bold text-[14px] transition-colors shadow-md mt-2 cursor-pointer">
-                      Submit Message
+                    {errorMsg && (
+                      <div className="bg-rose-50 border border-rose-200 text-rose-800 p-4 rounded-xl text-xs font-semibold">
+                        {errorMsg}
+                      </div>
+                    )}
+
+                    <button 
+                      type="submit" 
+                      disabled={loading}
+                      className="w-full bg-[#0f7c85] hover:bg-[#0c6b73] text-white py-4 rounded-xl font-bold text-[14px] transition-colors shadow-md mt-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                    >
+                      {loading ? "Submitting..." : "Submit Message"}
                     </button>
                   </form>
                 )}

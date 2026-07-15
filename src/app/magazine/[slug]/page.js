@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import prisma from "@/lib/prisma";
+import { cms } from "@/lib/cms";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import DynamicScene from "@/components/DynamicScene";
@@ -64,10 +65,10 @@ export default async function MagazineIssuePage({ params }) {
 
   const displayDate = mag.date
     ? new Date(mag.date).toLocaleDateString("en-US", {
-        month: "long",
-        day: "numeric",
-        year: "numeric",
-      })
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    })
     : "";
 
   return (
@@ -201,6 +202,7 @@ export async function generateStaticParams() {
     const mags = await prisma.magazine.findMany({
       where: { status: 1 },
       select: { slug: true },
+      orderBy: { date: 'desc' },
       take: 10,
     });
     return mags.map((m) => ({ slug: m.slug }));

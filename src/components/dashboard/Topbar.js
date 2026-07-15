@@ -144,6 +144,7 @@ export default function Topbar({ siteId, sites = [], onMenuClick }) {
     { name: "Services", href: "/dashboard/services" },
     { name: "Media Library", href: "/dashboard/media" },
     { name: "Leads CRM", href: "/crm/leads" },
+    { name: "Service Bookings", href: "/crm/services" },
     { name: "Visitor Analytics", href: "/crm/visitors" },
     { name: "Users", href: "/dashboard/users" },
     { name: "Settings", href: "/dashboard/settings" },

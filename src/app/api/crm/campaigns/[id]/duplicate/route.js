@@ -7,15 +7,8 @@ export async function POST(req, { params }) {
   try {
     const siteId = getSiteId(req);
     const { id } = await params;
-    const body = await req.json();
-    const { email } = body;
-
-    if (!email) {
-      return NextResponse.json({ error: "Email is required" }, { status: 400 });
-    }
-
-    const result = await campaignService.sendTestEmail(siteId, id, email);
-    return NextResponse.json(apiSuccess(result));
+    const campaign = await campaignService.duplicateCampaign(siteId, id);
+    return NextResponse.json(apiSuccess({ campaign }), { status: 201 });
   } catch (err) {
     return handleApiError(err);
   }
