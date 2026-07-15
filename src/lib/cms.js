@@ -48,5 +48,5 @@ export const cms = new CMSClient({
     (typeof window === "undefined"
       ? (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000")
       : window.location.origin),
-  siteId: process.env.NEXT_PUBLIC_SITE_ID || "infinium",
+  siteId: process.env.NEXT_PUBLIC_SITE_ID || "AHP",
 });

@@ -27,6 +27,9 @@ async function uploadToCloudinary(buffer, fileName, folder = "magazines") {
 
 // Helper to upload files to either S3 or Cloudinary
 async function handleImageUpload(file, folder = "magazines") {
+  if (typeof file === "string" && (file.startsWith("http") || file.startsWith("/"))) {
+    return file;
+  }
   if (!file || typeof file !== "object" || !("arrayBuffer" in file)) {
     return "";
   }
@@ -172,7 +175,9 @@ export async function PUT(request, context) {
       const coverUrl = await handleImageUpload(magazine_cover_image);
       if (coverUrl) {
         imageUrl = coverUrl;
-        await registerUploadedImageInMedia(siteId, imageUrl, magazine_cover_image.name);
+        if (typeof magazine_cover_image !== "string") {
+          await registerUploadedImageInMedia(siteId, imageUrl, magazine_cover_image.name);
+        }
       }
     }
 
@@ -181,7 +186,9 @@ export async function PUT(request, context) {
       const backUrl = await handleImageUpload(magazine_back_image);
       if (backUrl) {
         backImageUrl = backUrl;
-        await registerUploadedImageInMedia(siteId, backImageUrl, magazine_back_image.name);
+        if (typeof magazine_back_image !== "string") {
+          await registerUploadedImageInMedia(siteId, backImageUrl, magazine_back_image.name);
+        }
       }
     }
 
@@ -190,7 +197,9 @@ export async function PUT(request, context) {
       const spineUrl = await handleImageUpload(magazine_spine_image);
       if (spineUrl) {
         spineImageUrl = spineUrl;
-        await registerUploadedImageInMedia(siteId, spineImageUrl, magazine_spine_image.name);
+        if (typeof magazine_spine_image !== "string") {
+          await registerUploadedImageInMedia(siteId, spineImageUrl, magazine_spine_image.name);
+        }
       }
     }
 

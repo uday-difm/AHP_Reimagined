@@ -25,7 +25,7 @@ export default async function Layout({ children }) {
     redirect("/dashboard/login");
   }
 
-  const siteId = process.env.NEXT_PUBLIC_SITE_ID || process.env.SITE_ID || "infinium";
+  const siteId = process.env.NEXT_PUBLIC_SITE_ID || process.env.SITE_ID || "AHP";
   const connectedSiteId = siteId;
   let sites = [];
   const connectedSite = await prisma.site.findUnique({

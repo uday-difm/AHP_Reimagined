@@ -6,14 +6,14 @@ import prisma from "@/lib/prisma";
 import { unstable_cache } from "next/cache";
 
 const FALLBACK = {
-  siteName: "The Infinium",
-  logoUrl: "/Logo.png",
-  footerLogoUrl: "/FooterLogo.png",
+  siteName: "A Health Place",
+  logoUrl: "/images/Logo-web.png",
+  footerLogoUrl: "/images/Logo-web.png",
   faviconUrl: "/favicon.ico",
-  tagline: "Exposing Lending Lies. Empowering Business Truths.",
+  tagline: "Building Wellness into Your Life",
   navigation: [],
   footerLinks: [],
-  copyright: `© ${new Date().getFullYear()} The Infinium. All rights reserved.`,
+  copyright: `© ${new Date().getFullYear()} A Health Place. All rights reserved.`,
 };
 
 /**
@@ -22,7 +22,7 @@ const FALLBACK = {
  * drastically reducing database connections during static generation of hundreds of pages.
  */
 const fetchLayoutData = async () => {
-  const siteId = process.env.NEXT_PUBLIC_SITE_ID || "infinium";
+  const siteId = process.env.NEXT_PUBLIC_SITE_ID || "AHP";
   try {
     const [site, settings, legalPages] = await Promise.all([
       prisma.site.findUnique({

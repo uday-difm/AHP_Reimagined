@@ -2,7 +2,7 @@ import React, { Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { cms } from '@/lib/cms';
+import prisma from '@/lib/prisma';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AdSlot from '@/components/AdSlot';
@@ -16,10 +16,12 @@ export async function generateMetadata({ params }) {
 
   let post = null;
   try {
-    const data = await cms.getPostBySlug(slug);
-    post = data?.post || null;
+    post = await prisma.post.findFirst({
+      where: { siteId, slug, status: "PUBLISHED", deletedAt: null },
+      include: { featuredImage: true }
+    });
   } catch (e) {
-    console.error("Error fetching post metadata via SDK:", e);
+    console.error("Error fetching post metadata:", e);
   }
 
   if (!post || post.status !== "PUBLISHED" || post.deletedAt) {
@@ -41,15 +43,25 @@ export default async function ArticlePage({ params }) {
   let post = null;
   let fallbackRelated = [];
   try {
-    const [postData, relatedData] = await Promise.all([
-      cms.getPostBySlug(slug),
-      cms.getPosts({ limit: 3 })
-    ]);
-    post = postData?.post || null;
-    fallbackRelated = relatedData?.posts || [];
-    fallbackRelated = fallbackRelated.filter(p => p.slug !== slug).slice(0, 3);
+    post = await prisma.post.findFirst({
+      where: { siteId, slug, status: "PUBLISHED", deletedAt: null },
+      include: {
+        categories: true,
+        tags: true,
+        author: { select: { id: true, email: true, name: true, bio: true } },
+        featuredImage: true,
+      }
+    });
+
+    const related = await prisma.post.findMany({
+      where: { siteId, status: "PUBLISHED", deletedAt: null, slug: { not: slug } },
+      orderBy: { createdAt: "desc" },
+      take: 3,
+      include: { featuredImage: true, categories: true }
+    });
+    fallbackRelated = related;
   } catch (e) {
-    console.error("Error fetching post data via SDK:", e);
+    console.error("Error fetching post data:", e);
   }
 
   if (!post || post.status !== "PUBLISHED" || post.deletedAt) {
