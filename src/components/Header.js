@@ -7,7 +7,14 @@ import Link from 'next/link';
 import { ChevronDown, BookOpen, PenTool, Target, PlayCircle, Activity, Heart, Brain, Calendar, Mail, FileText, Info, HelpCircle, ArrowRight, Users } from 'lucide-react';
 import Search from '@/components/Search';
 import Marquee from '@/components/Marquee';
-import { quizzes } from '@/data/quizzes';
+
+function proxyUrl(url) {
+  if (!url) return url;
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return `/api/media/proxy?url=${encodeURIComponent(url)}`;
+  }
+  return url;
+}
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -15,13 +22,14 @@ export default function Header() {
   const isAuthenticated = status === 'authenticated';
   const [dynamicBlogs, setDynamicBlogs] = useState([]);
   const [dynamicPublications, setDynamicPublications] = useState([]);
+  const [dynamicQuizzes, setDynamicQuizzes] = useState([]);
 
   useEffect(() => {
     // Fetch recent blogs
     fetch('/api/posts?limit=4')
       .then(res => res.json())
       .then(data => {
-        if (data.posts) setDynamicBlogs(data.posts);
+        if (data?.data?.posts) setDynamicBlogs(data.data.posts);
       })
       .catch(err => console.error("Error fetching blogs for header:", err));
 
@@ -32,6 +40,14 @@ export default function Header() {
         if (Array.isArray(data)) setDynamicPublications(data);
       })
       .catch(err => console.error("Error fetching publications for header:", err));
+
+    // Fetch active quizzes
+    fetch('/api/quizzes/types')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) setDynamicQuizzes(data);
+      })
+      .catch(err => console.error("Error fetching quizzes for header:", err));
   }, []);
 
 
@@ -79,97 +95,92 @@ export default function Header() {
               <button className="flex items-center gap-1 text-[15px] font-semibold text-secondary hover:text-[#0F766E] group-hover:text-[#0F766E] py-2 px-3 transition-colors">
                 Resources <ChevronDown className="w-4 h-4 transition-transform duration-300 group-hover:rotate-180" />
               </button>
-              
+
               <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 opacity-0 translate-y-4 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300 z-50">
                 <div className="bg-white rounded-2xl border border-[#E6EEF0] p-8 w-[850px] shadow-[0_12px_35px_rgba(0,0,0,.08)] flex gap-8">
                   {/* Featured Publication */}
-                  <div className="w-[30%] bg-slate-50/50 rounded-xl p-4 border border-[#E6EEF0]/80 flex flex-col">
-                    <span className="text-[10px] font-bold text-[#0F766E] uppercase tracking-wider mb-3">Latest Publication</span>
-                    <div className="relative aspect-[3/4] w-full rounded-lg overflow-hidden mb-4 shadow-sm border border-slate-100">
-                      <Image src="/images/mag_nutrition.png" alt="Holistic Living" fill className="object-cover" />
+                  {/* Featured Publication */}
+                  {dynamicPublications.length > 0 && (
+                    <div className="w-[30%] bg-slate-50/50 rounded-xl p-4 border border-[#E6EEF0]/80 flex flex-col">
+                      <span className="text-[10px] font-bold text-[#0F766E] uppercase tracking-wider mb-3">Latest Publication</span>
+                      <div className="relative aspect-[3/4] w-full rounded-lg overflow-hidden mb-4 shadow-sm border border-slate-100">
+                        <img 
+                          src={dynamicPublications[0].magazine_cover_image ? proxyUrl(dynamicPublications[0].magazine_cover_image) : '/images/mag_sleep.png'} 
+                          alt={dynamicPublications[0].magazine_title} 
+                          className="object-cover w-full h-full" 
+                        />
+                      </div>
+                      <h4 className="font-bold text-[#0F766E] text-lg mb-1 leading-tight line-clamp-1" title={dynamicPublications[0].magazine_title}>
+                        {dynamicPublications[0].magazine_title}
+                      </h4>
+                      <p className="text-xs text-[#374151] mb-5 leading-relaxed line-clamp-2" title={dynamicPublications[0].magazine_description}>
+                        {dynamicPublications[0].magazine_description}
+                      </p>
+                      <Link href={`/magazine/${dynamicPublications[0].magazine_slug}`} className="mt-auto inline-block bg-[#0F766E] hover:bg-[#0a524c] text-white text-center py-2.5 rounded-lg font-medium text-sm transition-colors shadow-sm">
+                        Read Now &rarr;
+                      </Link>
                     </div>
-                    <h4 className="font-bold text-[#0F766E] text-lg mb-1 leading-tight">Holistic Living</h4>
-                    <p className="text-xs text-[#374151] mb-5 leading-relaxed">Summer 2026 Edition.<br/>Your guide to nutrition, mind, body and soul.</p>
-                    <Link href="/publication" className="mt-auto inline-block bg-[#0F766E] hover:bg-[#0a524c] text-white text-center py-2.5 rounded-lg font-medium text-sm transition-colors shadow-sm">
-                      Read Now &rarr;
-                    </Link>
-                  </div>
+                  )}
 
                   {/* Links Grid */}
-                  <div className="w-[70%] grid grid-cols-3 gap-6">
+                  <div className="w-[70%] flex gap-6">
                     {/* Publications */}
-                    <div className="flex flex-col">
-                      <div className="flex items-center gap-2 mb-3">
-                        <BookOpen className="w-5 h-5 text-[#0F766E]" />
-                        <h4 className="font-bold text-[#0F766E] text-base">Publications</h4>
-                      </div>
-                      <ul className="space-y-3 mb-4 flex-1">
-                        {dynamicPublications.length > 0 ? (
-                          dynamicPublications.slice(0, 4).map((pub) => (
-                            <li key={pub.id || pub.slug}>
-                              <Link href={`/magazine/${pub.slug}`} className="text-sm text-[#374151] hover:text-[#0F766E] hover:font-medium transition-colors block line-clamp-1" title={pub.title}>
-                                {pub.title}
+                    {dynamicPublications.length > 0 && (
+                      <div className="flex-1 flex flex-col">
+                        <div className="flex items-center gap-2 mb-3">
+                          <BookOpen className="w-5 h-5 text-[#0F766E]" />
+                          <h4 className="font-bold text-[#0F766E] text-base">Publications</h4>
+                        </div>
+                        <ul className="space-y-3 mb-4 flex-1">
+                          {dynamicPublications.slice(0, 4).map((pub) => (
+                            <li key={pub.id || pub.magazine_slug}>
+                              <Link href={`/magazine/${pub.magazine_slug}`} className="text-sm text-[#374151] hover:text-[#0F766E] hover:font-medium transition-colors block line-clamp-1" title={pub.magazine_title}>
+                                {pub.magazine_title}
                               </Link>
                             </li>
-                          ))
-                        ) : (
-                          <>
-                            <li><Link href="/magazine/the-sleep-revolution" className="text-sm text-[#374151] hover:text-[#0F766E] hover:font-medium transition-colors block">The Sleep Revolution</Link></li>
-                            <li><Link href="/magazine/holistic-nutrition" className="text-sm text-[#374151] hover:text-[#0F766E] hover:font-medium transition-colors block">Holistic Nutrition</Link></li>
-                            <li><Link href="/magazine/the-strength-within" className="text-sm text-[#374151] hover:text-[#0F766E] hover:font-medium transition-colors block">The Strength Within</Link></li>
-                            <li><Link href="/magazine/digital-detox" className="text-sm text-[#374151] hover:text-[#0F766E] hover:font-medium transition-colors block">Digital Detox</Link></li>
-                          </>
-                        )}
-                      </ul>
-                      <Link href="/publication" className="inline-block mt-auto text-[13px] font-bold text-[#0F766E] hover:text-[#0a524c]">View all Publications &rarr;</Link>
-                    </div>
-                    {/* Blogs */}
-                    <div className="flex flex-col">
-                      <div className="flex items-center gap-2 mb-3">
-                        <PenTool className="w-5 h-5 text-[#0F766E]" />
-                        <h4 className="font-bold text-[#0F766E] text-base">Blogs</h4>
+                          ))}
+                        </ul>
+                        <Link href="/publication" className="inline-block mt-auto text-[13px] font-bold text-[#0F766E] hover:text-[#0a524c]">View all Publications &rarr;</Link>
                       </div>
-                      <ul className="space-y-3 mb-4 flex-1">
-                        {dynamicBlogs.length > 0 ? (
-                          dynamicBlogs.slice(0, 4).map((blog) => (
+                    )}
+                    {/* Blogs */}
+                    {dynamicBlogs.length > 0 && (
+                      <div className="flex-1 flex flex-col">
+                        <div className="flex items-center gap-2 mb-3">
+                          <PenTool className="w-5 h-5 text-[#0F766E]" />
+                          <h4 className="font-bold text-[#0F766E] text-base">Blogs</h4>
+                        </div>
+                        <ul className="space-y-3 mb-4 flex-1">
+                          {dynamicBlogs.slice(0, 4).map((blog) => (
                             <li key={blog.id || blog.slug}>
                               <Link href={`/blogs/${blog.slug}`} className="text-sm text-[#374151] hover:text-[#0F766E] hover:font-medium transition-colors block line-clamp-1" title={blog.title}>
                                 {blog.title}
                               </Link>
                             </li>
-                          ))
-                        ) : (
-                          <>
-                            <li><Link href="/blogs/ayurvedic-secrets-for-better-digestion" className="text-sm text-[#374151] hover:text-[#0F766E] hover:font-medium transition-colors block line-clamp-1">Ayurvedic Secrets for Better Digestion</Link></li>
-                            <li><Link href="/blogs/breathwork-vs-meditation-for-anxiety" className="text-sm text-[#374151] hover:text-[#0F766E] hover:font-medium transition-colors block line-clamp-1">Breathwork vs. Meditation for Anxiety</Link></li>
-                            <li><Link href="/blogs/how-inactivity-impacts-physical-health" className="text-sm text-[#374151] hover:text-[#0F766E] hover:font-medium transition-colors block line-clamp-1">How Inactivity Impacts Physical Health</Link></li>
-                            <li><Link href="/blogs/exercise-for-better-mental-health" className="text-sm text-[#374151] hover:text-[#0F766E] hover:font-medium transition-colors block line-clamp-1">Exercise for Better Mental Health</Link></li>
-                          </>
-                        )}
-                      </ul>
-                      <Link href="/blogs" className="inline-block mt-auto text-[13px] font-bold text-[#0F766E] hover:text-[#0a524c]">View all Blogs &rarr;</Link>
-                    </div>
-                    {/* Quizzes */}
-                    <div className="flex flex-col">
-                      <div className="flex items-center gap-2 mb-3">
-                        <Target className="w-5 h-5 text-[#0F766E]" />
-                        <h4 className="font-bold text-[#0F766E] text-base">Quizzes</h4>
+                          ))}
+                        </ul>
+                        <Link href="/blogs" className="inline-block mt-auto text-[13px] font-bold text-[#0F766E] hover:text-[#0a524c]">View all Blogs &rarr;</Link>
                       </div>
-                      <ul className="space-y-3 mb-4 flex-1">
-                        {quizzes && quizzes.length > 0 ? (
-                          quizzes.slice(0, 4).map((quiz) => (
+                    )}
+                    {/* Quizzes */}
+                    {dynamicQuizzes && dynamicQuizzes.length > 0 && (
+                      <div className="flex-1 flex flex-col">
+                        <div className="flex items-center gap-2 mb-3">
+                          <Target className="w-5 h-5 text-[#0F766E]" />
+                          <h4 className="font-bold text-[#0F766E] text-base">Quizzes</h4>
+                        </div>
+                        <ul className="space-y-3 mb-4 flex-1">
+                          {dynamicQuizzes.slice(0, 4).map((quiz) => (
                             <li key={quiz.slug}>
                               <Link href={`/quizzes/${quiz.slug}`} className="text-sm text-[#374151] hover:text-[#0F766E] hover:font-medium transition-colors block line-clamp-1" title={quiz.title}>
                                 {quiz.title}
                               </Link>
                             </li>
-                          ))
-                        ) : (
-                          <li><Link href="/quizzes" className="text-sm text-[#374151] hover:text-[#0F766E] hover:font-medium transition-colors block line-clamp-1">General Wellness</Link></li>
-                        )}
-                      </ul>
-                      <Link href="/quizzes" className="inline-block mt-auto text-[13px] font-bold text-[#0F766E] hover:text-[#0a524c]">View all Quizzes &rarr;</Link>
-                    </div>
+                          ))}
+                        </ul>
+                        <Link href="/quizzes" className="inline-block mt-auto text-[13px] font-bold text-[#0F766E] hover:text-[#0a524c]">View all Quizzes &rarr;</Link>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -202,7 +213,7 @@ export default function Header() {
           {/* Actions wrapper */}
           <div className="flex items-center gap-2 lg:gap-3 z-[10000]">
             <Search />
-            
+
             <div className="hidden lg:flex items-center">
               {isAuthenticated ? (
                 <div className="flex items-center gap-3">
@@ -252,7 +263,7 @@ export default function Header() {
                   "Small Changes Big Impact"
                 </h1>
                 <p className="hb-sub-text text-2xl md:text-2xl lg:text-3xl tracking-[1px] mt-2 md:mt-3 font-normal pl-1 leading-[1.1] text-secondary">
-                  Start today—your future self will thank you.
+                  Start todayΓÇöyour future self will thank you.
                 </p>
               </div>
             </div>

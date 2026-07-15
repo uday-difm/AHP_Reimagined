@@ -8,6 +8,9 @@ import bcrypt from "bcryptjs";
 import prisma from "@/lib/prisma";
 import { recordLogin } from "./audit";
 
+let cachedTimeoutMs = null;
+let lastTimeoutFetch = 0;
+
 export const authOptions = {
   session: {
     strategy: "jwt",
@@ -175,22 +178,27 @@ export const authOptions = {
         token.lastActivity = now;
       }
 
-      // Dynamic session timeout verification from database
+      // Dynamic session timeout verification from database with caching
       try {
-        const activeSite = await prisma.site.findFirst({ where: { isActive: true } });
-        if (activeSite) {
-          const settings = await prisma.globalSettings.findUnique({
-            where: { siteId: activeSite.id },
-            select: { securityControls: true },
-          });
-          const timeoutMinutes = settings?.securityControls?.sessionTimeoutMinutes || 30;
-          const timeoutMs = timeoutMinutes * 60 * 1000;
-
-          if (token.lastActivity && now - token.lastActivity > timeoutMs) {
-            token.error = "SessionExpired";
-          } else {
-            token.lastActivity = now;
+        if (!cachedTimeoutMs || now - lastTimeoutFetch > 60000) {
+          const activeSite = await prisma.site.findFirst({ where: { isActive: true } });
+          if (activeSite) {
+            const settings = await prisma.globalSettings.findUnique({
+              where: { siteId: activeSite.id },
+              select: { securityControls: true },
+            });
+            const timeoutMinutes = settings?.securityControls?.sessionTimeoutMinutes || 30;
+            cachedTimeoutMs = timeoutMinutes * 60 * 1000;
+            lastTimeoutFetch = now;
           }
+        }
+        
+        const timeoutMs = cachedTimeoutMs || 30 * 60 * 1000;
+
+        if (token.lastActivity && now - token.lastActivity > timeoutMs) {
+          token.error = "SessionExpired";
+        } else {
+          token.lastActivity = now;
         }
       } catch (err) {
         console.error("JWT Session timeout verification error:", err);

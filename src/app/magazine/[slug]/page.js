@@ -7,14 +7,23 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import DynamicScene from "@/components/DynamicScene";
 
+function proxyUrl(url) {
+  if (!url) return url;
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return `/api/media/proxy?url=${encodeURIComponent(url)}`;
+  }
+  return url;
+}
+
 export const revalidate = 60; // ISR: Revalidate every 60 seconds
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   let mag = null;
   try {
-    const data = await cms.getMagazineBySlug(slug);
-    mag = data?.magazine || null;
+    mag = await prisma.magazine.findFirst({
+      where: { slug }
+    });
   } catch (e) {
     console.error("Error fetching magazine for metadata:", e);
   }
@@ -32,8 +41,9 @@ export default async function MagazineIssuePage({ params }) {
   const { slug } = await params;
   let mag = null;
   try {
-    const data = await cms.getMagazineBySlug(slug);
-    mag = data?.magazine || null;
+    mag = await prisma.magazine.findFirst({
+      where: { slug }
+    });
   } catch (e) {
     console.error("Error fetching magazine for page:", e);
   }
@@ -42,16 +52,23 @@ export default async function MagazineIssuePage({ params }) {
     notFound();
   }
 
+  const latestMag = await prisma.magazine.findFirst({
+    where: { status: 1 },
+    orderBy: { date: "desc" },
+  });
+
+  const isFeatured = latestMag && latestMag.id === mag.id;
+
   const tagsList = mag.tags
     ? mag.tags.split(",").map((t) => t.trim()).filter(Boolean)
     : [];
 
   const displayDate = mag.date
     ? new Date(mag.date).toLocaleDateString("en-US", {
-        month: "long",
-        day: "numeric",
-        year: "numeric",
-      })
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    })
     : "";
 
   return (
@@ -74,12 +91,20 @@ export default async function MagazineIssuePage({ params }) {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             {/* Left Column: 3D Book Viewer / Fallback Image */}
             <div className="lg:col-span-5 flex flex-col items-center gap-6">
-              <div className="w-full max-w-[320px] aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl bg-white/40 p-4 border border-white/60 relative">
-                <DynamicScene
-                  frontUrl={mag.coverImage ? `/api/media/proxy?url=${encodeURIComponent(mag.coverImage)}` : ""}
-                  backUrl={mag.backImage || mag.coverImage ? `/api/media/proxy?url=${encodeURIComponent(mag.backImage || mag.coverImage)}` : ""}
-                  spineUrl={mag.spineImage || mag.coverImage ? `/api/media/proxy?url=${encodeURIComponent(mag.spineImage || mag.coverImage)}` : ""}
-                />
+              <div className={`w-full max-w-[320px] aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl bg-white/40 p-4 border border-white/60 relative ${!isFeatured ? 'flex items-center justify-center p-0' : ''}`}>
+                {isFeatured ? (
+                  <DynamicScene
+                    frontUrl={mag.coverImage ? proxyUrl(mag.coverImage) : ""}
+                    backUrl={mag.backImage || mag.coverImage ? proxyUrl(mag.backImage || mag.coverImage) : ""}
+                    spineUrl={mag.spineImage || mag.coverImage ? proxyUrl(mag.spineImage || mag.coverImage) : ""}
+                  />
+                ) : (
+                  <img
+                    src={mag.coverImage ? proxyUrl(mag.coverImage) : "/images/mag_sleep.png"}
+                    alt={mag.title}
+                    className="w-full h-full object-cover rounded-xl"
+                  />
+                )}
               </div>
 
               {/* MagCloud/Link Purchase Buttons */}
