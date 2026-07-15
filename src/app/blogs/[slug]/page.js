@@ -414,14 +414,14 @@ In this edition, we explore the core principles of ${article.title.toLowerCase()
         <main className="pt-[140px] pb-20">
           <div className="container mx-auto  px-4">
             {/* Breadcrumb */}
-            <div className="breadcrumb flex items-center gap-2 text-[12px] text-muted font-semibold uppercase tracking-[1px] mb-8">
-              <Link href="/" className="hover:text-accent transition-colors">Home</Link>
-              <span>•</span>
-              <Link href="/publication" className="hover:text-accent transition-colors">
+            <div className="breadcrumb flex flex-wrap items-center gap-1.5 md:gap-2 text-[10px] md:text-[12px] text-muted font-semibold uppercase tracking-[1px] mb-8 leading-relaxed">
+              <Link href="/" className="hover:text-accent transition-colors shrink-0">Home</Link>
+              <span className="shrink-0">•</span>
+              <Link href="/publication" className="hover:text-accent transition-colors shrink-0">
                 {article.category}
               </Link>
-              <span>•</span>
-              <span className="text-secondary truncate">{article.title}</span>
+              <span className="shrink-0">•</span>
+              <span className="text-secondary break-words">{article.title}</span>
             </div>
 
             {/* Top Section: Sidebar + Letter */}
@@ -511,14 +511,14 @@ In this edition, we explore the core principles of ${article.title.toLowerCase()
       <main className="pt-[140px] pb-20">
         <div className="container  mx-auto">
           {/* Breadcrumb */}
-          <div className="breadcrumb flex items-center gap-2 text-[12px] text-muted font-semibold uppercase tracking-[1px] mb-6">
-            <Link href="/" className="hover:text-accent transition-colors">Home</Link>
-            <span>•</span>
-            <Link href={article.category.includes('Journal') ? '/publication' : '/#articles'} className="hover:text-accent transition-colors">
+          <div className="breadcrumb flex flex-wrap items-center gap-1.5 md:gap-2 text-[10px] md:text-[12px] text-muted font-semibold uppercase tracking-[1px] mb-6 leading-relaxed">
+            <Link href="/" className="hover:text-accent transition-colors shrink-0">Home</Link>
+            <span className="shrink-0">•</span>
+            <Link href={article.category.includes('Journal') ? '/publication' : '/#articles'} className="hover:text-accent transition-colors shrink-0">
               {article.category}
             </Link>
-            <span>•</span>
-            <span className="text-secondary truncate">{article.title}</span>
+            <span className="shrink-0">•</span>
+            <span className="text-secondary break-words">{article.title}</span>
           </div>
 
           {/* Heading */}
@@ -531,19 +531,19 @@ In this edition, we explore the core principles of ${article.title.toLowerCase()
             </h1>
 
             {/* Byline */}
-            <div className="flex flex-wrap items-center gap-6 border-y border-slate-200/60 py-4.5 text-[13px] text-secondary">
+            <div className="flex flex-col md:flex-row md:flex-wrap items-start md:items-center gap-3 md:gap-6 border-y border-slate-200/60 py-4 text-[13px] text-secondary">
               <div>
                 <span className="text-muted font-medium">Written by</span> <span className="font-bold text-primary">{article.author}</span>
               </div>
-              <div className="w-1.5 h-1.5 bg-slate-300 rounded-full" />
+              <div className="hidden md:block w-1.5 h-1.5 bg-slate-300 rounded-full shrink-0" />
               <div>
                 <span className="text-muted font-medium">Medically Reviewed by</span> <span className="font-bold text-primary">{article.reviewer}</span>
               </div>
-              <div className="w-1.5 h-1.5 bg-slate-300 rounded-full" />
+              <div className="hidden md:block w-1.5 h-1.5 bg-slate-300 rounded-full shrink-0" />
               <div>
                 <span className="font-semibold text-accent-green">{article.date}</span>
               </div>
-              <div className="w-1.5 h-1.5 bg-slate-300 rounded-full ml-auto hidden md:block" />
+              <div className="hidden md:block w-1.5 h-1.5 bg-slate-300 rounded-full ml-auto shrink-0" />
               <div className="text-muted font-semibold uppercase tracking-[0.5px] hidden md:block">
                 {article.readTime}
               </div>

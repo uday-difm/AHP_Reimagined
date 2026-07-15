@@ -166,7 +166,7 @@ export default function AdSlot({ zone, layout = 'strip', width, height, classNam
     }
 
     const wrapClass = layout === 'float'
-      ? 'float-right clear-right ml-6 mb-4'
+      ? 'w-full md:w-auto md:float-right md:clear-right md:ml-6 mb-8 md:mb-4 flex flex-col items-center md:items-end'
       : 'w-full flex flex-col items-center my-3';
 
     const containerStyle = w && h ? {
@@ -269,7 +269,7 @@ export default function AdSlot({ zone, layout = 'strip', width, height, classNam
   // If size mapping exists, display the clean mockup layout (gray box with attractive CTAs)
   if (w && h) {
     const wrapClass = layout === 'float'
-      ? 'float-right clear-right ml-6 mb-4'
+      ? 'w-full md:w-auto md:float-right md:clear-right md:ml-6 mb-8 md:mb-4 flex flex-col items-center md:items-end'
       : 'w-full flex flex-col items-center my-4';
 
     const containerStyle = {

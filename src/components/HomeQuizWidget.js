@@ -237,7 +237,7 @@ export default function HomeQuizWidget() {
               </div>
 
               {/* Right Column: Ad Card */}
-              <div className="hidden md:flex">
+              <div className="flex w-full">
                 <AdSlot zone="homepage-events-bottom" layout="blogCard" className="h-full w-full" />
               </div>
 

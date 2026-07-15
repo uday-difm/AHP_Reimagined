@@ -249,7 +249,35 @@ export default function PublicationPage() {
       rootMargin: '0px 0px -50px 0px',
     });
     revealElements.forEach(el => observer.observe(el));
-    return () => observer.disconnect();
+
+    // Mobile scroll flip observer
+    const flipElements = document.querySelectorAll('.mobile-flip-card');
+    const flipCallback = (entries) => {
+      // Only trigger scroll flip on mobile screens
+      if (window.innerWidth >= 768) {
+        entries.forEach(entry => entry.target.classList.remove('mobile-flipped'));
+        return;
+      }
+      
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('mobile-flipped');
+        } else {
+          entry.target.classList.remove('mobile-flipped');
+        }
+      });
+    };
+    const flipObserver = new IntersectionObserver(flipCallback, {
+      root: null,
+      threshold: 0.6, // Trigger when 60% of the card is visible
+      rootMargin: '0px 0px -50px 0px',
+    });
+    flipElements.forEach(el => flipObserver.observe(el));
+
+    return () => {
+      observer.disconnect();
+      flipObserver.disconnect();
+    };
   }, [currentPage, dbIssues]);
 
   // Ref & State for Terracotta CTA cursor tracking
@@ -444,10 +472,11 @@ export default function PublicationPage() {
                   onMouseMove={(e) => handleCardMouseMove(e, i)}
                   onMouseLeave={() => handleCardMouseLeave(i)}
                   style={{ transitionDelay: `${i * 0.1}s` }}
-                  className="project-card tilt-card bg-bg-light rounded-[24px] overflow-hidden border border-slate-200 transition-all duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer flex flex-col [transform-style:preserve-3d] [perspective:1000px] hover:border-[#0f7c85]/40 hover:shadow-[0_24px_48px_rgba(15,124,133,0.14)] hover:scale-[1.04] hover:-translate-y-2.5 active:scale-[0.98] reveal-slide p-5 min-h-[400px] md:min-h-[490px] group relative"
+                  tabIndex="0"
+                  className="project-card tilt-card bg-bg-light rounded-[24px] overflow-hidden border border-slate-200 transition-all duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer flex flex-col [transform-style:preserve-3d] [perspective:1000px] hover:border-[#0f7c85]/40 hover:shadow-[0_24px_48px_rgba(15,124,133,0.14)] hover:scale-[1.04] hover:-translate-y-2.5 focus:border-[#0f7c85]/40 focus:shadow-[0_24px_48px_rgba(15,124,133,0.14)] focus:scale-[1.04] focus:-translate-y-2.5 active:scale-[0.98] reveal-slide p-5 min-h-[400px] md:min-h-[490px] group relative focus:outline-none"
                 >
                   {/* The Flipping Card Wrapper */}
-                  <div className="w-full h-full relative transition-transform duration-[800ms] [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] flex flex-col flex-grow">
+                  <div className="mobile-flip-card w-full h-full relative transition-transform duration-[800ms] [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] group-focus:[transform:rotateY(180deg)] [&.mobile-flipped]:[transform:rotateY(180deg)] flex flex-col flex-grow">
 
                     {/* Front Face */}
                     <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] flex flex-col justify-between">
