@@ -28,7 +28,7 @@ function formatServiceFromDb(service) {
   };
 }
 
-function formatServiceToDb(data) {
+function formatServiceToDb(data, isCreate = false) {
   const { faqs = [], includes = [], featuredImageId, siteId, ...rest } = data;
   
   // Package both faqs and includes into the faqs JSON column
@@ -47,7 +47,9 @@ function formatServiceToDb(data) {
     if (featuredImageId) {
       payload.featuredImage = { connect: { id: featuredImageId } };
     } else {
-      payload.featuredImage = { disconnect: true };
+      if (!isCreate) {
+        payload.featuredImage = { disconnect: true };
+      }
     }
   }
 
@@ -73,13 +75,13 @@ export class ServiceService extends BaseService {
   }
 
   async create(siteId, data, userId = null, options = {}) {
-    const dbPayload = formatServiceToDb(data);
+    const dbPayload = formatServiceToDb(data, true);
     const created = await super.create(siteId, dbPayload, userId, options);
     return formatServiceFromDb(created);
   }
 
   async update(siteId, id, data, userId = null, options = {}) {
-    const dbPayload = formatServiceToDb(data);
+    const dbPayload = formatServiceToDb(data, false);
     const updated = await super.update(siteId, id, dbPayload, userId, options);
     return formatServiceFromDb(updated);
   }

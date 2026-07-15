@@ -315,3 +315,11 @@
 [2026-07-15T09:30:35.257Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
 [2026-07-15T09:30:35.270Z] [Auth] Authenticating against authService for: admin@example.com
 [2026-07-15T09:30:35.820Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh
+[2026-07-15T11:36:27.584Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-15T11:36:27.585Z] [Auth] Request Host: localhost:3000
+[2026-07-15T11:36:27.586Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-15T11:36:27.586Z] [Auth] Token received (length: 4): null...
+[2026-07-15T11:36:27.587Z] [Auth] Sending request to google siteverify (x-www-form-urlencoded POST body)...
+[2026-07-15T11:36:27.718Z] [Auth] reCAPTCHA verifyJson: {"success":true,"challenge_ts":"2026-07-15T11:36:29Z","hostname":"testkey.google.com"}
+[2026-07-15T11:36:27.719Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-15T11:36:28.366Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh

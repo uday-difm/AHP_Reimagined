@@ -650,9 +650,9 @@ model ContactFormSubmission {
   name      String
   email     String
   phone     String?
-  message   String
+  message   String    @db.Text
   status    String    @default("new") @db.VarChar(20)
-  notes     String?
+  notes     String?   @db.Text
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
@@ -671,7 +671,7 @@ model Lead {
   serviceInterest String?
   sourcePage      String?
   status          String    @default("new") @db.VarChar(20)
-  notes           String?
+  notes           String?   @db.Text
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
   deletedAt       DateTime?
@@ -709,8 +709,8 @@ model IpBlock {
 model SystemErrorLog {
   id        String   @id @default(cuid())
   siteId    String?
-  message   String
-  stack     String?
+  message   String   @db.Text
+  stack     String?  @db.Text
   context   Json?
   createdAt DateTime @default(now())
   site      Site?    @relation(fields: [siteId], references: [id], onDelete: Cascade)
