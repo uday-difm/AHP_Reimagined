@@ -68,6 +68,8 @@ model Site {
   cookieConsentLogs    CookieConsentLog[]
   comments             Comment[]
   adZones              AdZone[]
+  advertisers          Advertiser[]
+  adCampaigns          AdCampaign[]
 
   @@index([isActive])
 }
@@ -924,25 +926,69 @@ model AdZone {
   @@index([siteId])
 }
 
-model Ad {
-  id          String       @id @default(cuid())
-  zoneId      String
-  zone        AdZone       @relation(fields: [zoneId], references: [id], onDelete: Cascade)
+model Advertiser {
+  id          String   @id @default(cuid())
+  siteId      String
+  site        Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  companyName String
+  contactName String?
+  email       String?
+  phone       String?
+  website     String?
+  logo        String?
+  status      String   @default("active")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  ads         Ad[]
+
+  @@index([siteId])
+}
+
+model AdCampaign {
+  id          String   @id @default(cuid())
+  siteId      String
+  site        Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
   name        String
-  type        String       // "banner" or "adsense"
-  code        String?      @db.Text
-  imageUrl    String?
-  targetUrl   String?
-  isActive    Boolean      @default(true)
+  description String?  @db.Text
+  budget      Float?
   startDate   DateTime?
   endDate     DateTime?
-  impressions Int          @default(0)
-  clicks      Int          @default(0)
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  analytics   AdAnalytic[]
+  status      String   @default("active")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  ads         Ad[]
+
+  @@index([siteId])
+}
+
+model Ad {
+  id           String       @id @default(cuid())
+  zoneId       String
+  zone         AdZone       @relation(fields: [zoneId], references: [id], onDelete: Cascade)
+  advertiserId String?
+  advertiser   Advertiser?  @relation(fields: [advertiserId], references: [id], onDelete: SetNull)
+  campaignId   String?
+  campaign     AdCampaign?  @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+  name         String
+  type         String       // "banner" or "adsense"
+  code         String?      @db.Text
+  imageUrl     String?
+  targetUrl    String?
+  isActive     Boolean      @default(true)
+  startDate    DateTime?
+  endDate      DateTime?
+  priority     Int          @default(50)
+  targeting    String?      @db.Text    // JSON for devices, locations, routes
+  scheduling   String?      @db.Text    // JSON for time limits, days of week
+  impressions  Int          @default(0)
+  clicks       Int          @default(0)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  analytics    AdAnalytic[]
 
   @@index([zoneId])
+  @@index([advertiserId])
+  @@index([campaignId])
 }
 
 model AdAnalytic {

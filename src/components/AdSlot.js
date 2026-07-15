@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 /**
  * AdSlot — dynamic ad zone component.
@@ -59,6 +59,7 @@ export default function AdSlot({ zone, layout = 'strip', width, height, classNam
   const [ads, setAds] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
+  const trackedImpressions = useRef(new Set());
 
   useEffect(() => {
     setIsMobile(window.innerWidth < 768);
@@ -72,7 +73,8 @@ export default function AdSlot({ zone, layout = 'strip', width, height, classNam
   useEffect(() => {
     async function fetchAds() {
       try {
-        const res = await fetch(`/api/ads/serve?zone=${zone}`);
+        const currentRoute = typeof window !== 'undefined' ? window.location.pathname : '/';
+        const res = await fetch(`/api/ads/serve?zone=${zone}&route=${encodeURIComponent(currentRoute)}`);
         const data = await res.json();
         if (data.success && data.data?.ads) {
           setAds(data.data.ads);
@@ -86,6 +88,30 @@ export default function AdSlot({ zone, layout = 'strip', width, height, classNam
     fetchAds();
   }, [zone]);
 
+  // impression tracking
+  useEffect(() => {
+    if (ads.length > 0) {
+      ads.forEach(ad => {
+        if (!trackedImpressions.current.has(ad.id)) {
+          trackedImpressions.current.add(ad.id);
+          fetch('/api/ads/track', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ adId: ad.id, type: 'impression' })
+          }).catch(err => console.error('Failed to track impression:', err));
+        }
+      });
+    }
+  }, [ads]);
+
+  const handleAdClick = (adId) => {
+    fetch('/api/ads/track', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ adId, type: 'click' })
+    }).catch(err => console.error('Failed to track click:', err));
+  };
+
   if (loading) return null;
 
   const zoneConfig = ZONE_DIMENSIONS[zone];
@@ -93,6 +119,10 @@ export default function AdSlot({ zone, layout = 'strip', width, height, classNam
 
   const w = width || activeDimensions?.width;
   const h = height || activeDimensions?.height;
+
+  // Helper to normalize ad type checks
+  const isCodeType = (ad) => ad.type === 'CODE' || ad.type === 'adsense';
+  const isImageType = (ad) => ad.type === 'IMAGE' || ad.type === 'banner';
 
   // ── Active ads ──────────────────────────────────────────────
   if (ads.length > 0) {
@@ -108,14 +138,15 @@ export default function AdSlot({ zone, layout = 'strip', width, height, classNam
               </div>
               <div className="flex-1 flex items-center justify-center overflow-hidden rounded-xl border border-slate-100 bg-slate-50 min-h-[120px] my-3">
                 {ads.map((ad) => {
-                  if (ad.type === 'CODE') {
+                  if (isCodeType(ad)) {
                     return (
-                      <div key={ad.id} className="w-full h-full flex justify-center items-center" dangerouslySetInnerHTML={{ __html: ad.code }} />
+                      <div key={ad.id} onClick={() => handleAdClick(ad.id)} className="w-full h-full flex justify-center items-center" dangerouslySetInnerHTML={{ __html: ad.code }} />
                     );
                   }
-                  if (ad.type === 'IMAGE' && ad.imageUrl) {
+                  if (isImageType(ad) && ad.imageUrl) {
                     return (
                       <a key={ad.id} href={ad.targetUrl || '#'} target="_blank" rel="noopener noreferrer"
+                        onClick={() => handleAdClick(ad.id)}
                         className="block w-full h-full hover:opacity-90 transition-opacity">
                         <img src={ad.imageUrl} alt={ad.name || 'Ad'}
                           className="w-full h-full object-cover" />
@@ -144,14 +175,15 @@ export default function AdSlot({ zone, layout = 'strip', width, height, classNam
             className="flex justify-center items-center overflow-hidden rounded-[32px] bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800/80 shadow-[0_2px_12px_rgba(0,0,0,0.03)] w-full h-full min-h-[300px]"
           >
             {ads.map((ad) => {
-              if (ad.type === 'CODE') {
+              if (isCodeType(ad)) {
                 return (
-                  <div key={ad.id} className="w-full h-full flex justify-center items-center" dangerouslySetInnerHTML={{ __html: ad.code }} />
+                  <div key={ad.id} onClick={() => handleAdClick(ad.id)} className="w-full h-full flex justify-center items-center" dangerouslySetInnerHTML={{ __html: ad.code }} />
                 );
               }
-              if (ad.type === 'IMAGE' && ad.imageUrl) {
+              if (isImageType(ad) && ad.imageUrl) {
                 return (
                   <a key={ad.id} href={ad.targetUrl || '#'} target="_blank" rel="noopener noreferrer"
+                    onClick={() => handleAdClick(ad.id)}
                     className="block w-full h-full hover:opacity-90 transition-opacity">
                     <img src={ad.imageUrl} alt={ad.name || 'Ad'}
                       className="w-full h-full object-cover" />
@@ -184,14 +216,15 @@ export default function AdSlot({ zone, layout = 'strip', width, height, classNam
           style={containerStyle}
         >
           {ads.map((ad) => {
-            if (ad.type === 'CODE') {
+            if (isCodeType(ad)) {
               return (
-                <div key={ad.id} className="w-full h-full flex justify-center items-center" dangerouslySetInnerHTML={{ __html: ad.code }} />
+                <div key={ad.id} onClick={() => handleAdClick(ad.id)} className="w-full h-full flex justify-center items-center" dangerouslySetInnerHTML={{ __html: ad.code }} />
               );
             }
-            if (ad.type === 'IMAGE' && ad.imageUrl) {
+            if (isImageType(ad) && ad.imageUrl) {
               return (
                 <a key={ad.id} href={ad.targetUrl || '#'} target="_blank" rel="noopener noreferrer"
+                  onClick={() => handleAdClick(ad.id)}
                   className="block w-full h-full hover:opacity-90 transition-opacity">
                   <img src={ad.imageUrl} alt={ad.name || 'Ad'}
                     className="w-full h-full object-cover" />
@@ -373,4 +406,3 @@ export default function AdSlot({ zone, layout = 'strip', width, height, classNam
     </div>
   );
 }
-
