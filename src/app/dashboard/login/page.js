@@ -118,7 +118,7 @@ function LoginAndProjectLanding() {
       }
 
       // If 2FA is required and not yet submitted, request code from user
-      if (preData.twoFaRequired && !twoFaRequired) {
+      if (preData.data?.twoFARequired && !twoFaRequired) {
         setTwoFaRequired(true);
         setLoading(false);
         return;
@@ -128,7 +128,7 @@ function LoginAndProjectLanding() {
       const res = await signIn("credentials", {
         email,
         password,
-        twoFaCode: twoFaCode || undefined,
+        twoFACode: twoFaCode || undefined,
         recaptchaToken: token,
         redirect: false,
       });

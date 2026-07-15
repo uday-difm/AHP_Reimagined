@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import prisma from "@/lib/prisma";
 
 export async function logAction(siteId, userId, action, meta = {}) {
   return await prisma.auditLog.create({

@@ -23,6 +23,11 @@ export async function GET(req) {
       CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET
         ? "Configured"
         : "Not set",
+      S3_ENDPOINT: process.env.S3_ENDPOINT || "Not set",
+      S3_REGION: process.env.S3_REGION || "Not set",
+      S3_BUCKET: process.env.S3_BUCKET || "Not set",
+      S3_ACCESS_KEY: process.env.S3_ACCESS_KEY ? "Configured" : "Not set",
+      S3_SECRET_KEY: process.env.S3_SECRET_KEY ? "Configured" : "Not set",
       SMTP_HOST: process.env.SMTP_HOST || "Not set",
       SMTP_PORT: process.env.SMTP_PORT || "Not set",
     };
