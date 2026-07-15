@@ -174,3 +174,9 @@
 [2026-07-14T11:01:17.228Z] [Auth] reCAPTCHA verifyJson: {"success":true,"challenge_ts":"2026-07-14T11:01:19Z","hostname":"testkey.google.com"}
 [2026-07-14T11:01:17.229Z] [Auth] Authenticating against authService for: admin@example.com
 [2026-07-14T11:01:17.548Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrfzj7vj0001tosc2a7zo1hn
+[2026-07-15T03:24:40.254Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-15T03:24:40.258Z] [Auth] Request Host: localhost:3000
+[2026-07-15T03:24:40.263Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
+[2026-07-15T03:24:40.264Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-15T03:24:40.287Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-15T03:24:40.714Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrfzj7vj0001tosc2a7zo1hn
