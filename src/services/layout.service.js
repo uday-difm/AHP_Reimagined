@@ -3,24 +3,26 @@
  * directly from the database for the infinium frontend, avoiding local HTTP requests.
  */
 import prisma from "@/lib/prisma";
+import { unstable_cache } from "next/cache";
 
 const FALLBACK = {
-  siteName: "The Infinium",
-  logoUrl: "/Logo.png",
-  footerLogoUrl: "/FooterLogo.png",
+  siteName: "A Health Place",
+  logoUrl: "/images/Logo-web.png",
+  footerLogoUrl: "/images/Logo-web.png",
   faviconUrl: "/favicon.ico",
-  tagline: "Exposing Lending Lies. Empowering Business Truths.",
+  tagline: "Building Wellness into Your Life",
   navigation: [],
   footerLinks: [],
-  copyright: `© ${new Date().getFullYear()} The Infinium. All rights reserved.`,
+  copyright: `© ${new Date().getFullYear()} A Health Place. All rights reserved.`,
 };
 
 /**
  * Fetch all layout data from DB in parallel.
- * Returns { siteName, logoUrl, footerLogoUrl, tagline, faviconUrl, navigation, footerLinks, footerColumns, copyright, isActive, maintenanceMode, maintenanceMessage }.
+ * Wrapped with unstable_cache to run exactly once per build/revalidation period,
+ * drastically reducing database connections during static generation of hundreds of pages.
  */
-export async function getLayoutData() {
-  const siteId = process.env.NEXT_PUBLIC_SITE_ID || "infinium";
+const fetchLayoutData = async () => {
+  const siteId = process.env.NEXT_PUBLIC_SITE_ID || "AHP";
   try {
     const [site, settings, legalPages] = await Promise.all([
       prisma.site.findUnique({
@@ -123,7 +125,7 @@ export async function getLayoutData() {
       },
     };
   } catch (err) {
-    console.error("getLayoutData failed, using fallback:", err);
+    console.error("fetchLayoutData failed, using fallback:", err);
     return {
       ...FALLBACK,
       isActive: true,
@@ -131,4 +133,10 @@ export async function getLayoutData() {
       maintenanceMessage: "",
     };
   }
-}
+};
+
+export const getLayoutData = unstable_cache(
+  fetchLayoutData,
+  ['global-layout-data'],
+  { revalidate: 3600, tags: ['layout'] }
+);

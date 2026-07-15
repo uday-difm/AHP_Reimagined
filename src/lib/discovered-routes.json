@@ -1,0 +1,77 @@
+[
+  {
+    "slug": "/",
+    "title": "Home",
+    "isDynamic": false
+  },
+  {
+    "slug": "/about",
+    "title": "About",
+    "isDynamic": false
+  },
+  {
+    "slug": "/blogs",
+    "title": "Blogs",
+    "isDynamic": false
+  },
+  {
+    "slug": "/blogs/[slug]",
+    "title": "Blogs Detail",
+    "isDynamic": true
+  },
+  {
+    "slug": "/contact",
+    "title": "Contact",
+    "isDynamic": false
+  },
+  {
+    "slug": "/info",
+    "title": "Info",
+    "isDynamic": false
+  },
+  {
+    "slug": "/legal/[type]",
+    "title": "Legal Detail",
+    "isDynamic": true
+  },
+  {
+    "slug": "/magazine/[slug]",
+    "title": "Magazine Detail",
+    "isDynamic": true
+  },
+  {
+    "slug": "/pilot",
+    "title": "Pilot",
+    "isDynamic": false
+  },
+  {
+    "slug": "/publication",
+    "title": "Publication",
+    "isDynamic": false
+  },
+  {
+    "slug": "/quizzes",
+    "title": "Quizzes",
+    "isDynamic": false
+  },
+  {
+    "slug": "/quizzes/dashboard",
+    "title": "Dashboard",
+    "isDynamic": false
+  },
+  {
+    "slug": "/quizzes/results/[slug]",
+    "title": "Results Detail",
+    "isDynamic": true
+  },
+  {
+    "slug": "/quizzes/[slug]",
+    "title": "Quizzes Detail",
+    "isDynamic": true
+  },
+  {
+    "slug": "/services",
+    "title": "Services",
+    "isDynamic": false
+  }
+]

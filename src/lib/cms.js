@@ -26,6 +26,11 @@ CMSClient.prototype.getPosts = function (options = {}) {
   return this._request(`/api/posts${qs ? "?" + qs : ""}`);
 };
 
+CMSClient.prototype.getPostBySlug = function (slug) {
+  if (!slug) throw new Error("Post slug is required");
+  return this._request(`/api/posts/${slug}`);
+};
+
 CMSClient.prototype.getMagazines = function (options = {}) {
   const params = new URLSearchParams();
   if (options.siteId) params.set("siteId", options.siteId);
@@ -41,7 +46,7 @@ CMSClient.prototype.getMagazineBySlug = function (slug) {
 export const cms = new CMSClient({
   baseUrl: process.env.NEXT_PUBLIC_CMS_BASE_URL ||
     (typeof window === "undefined"
-      ? "http://localhost:3000"
+      ? (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000")
       : window.location.origin),
-  siteId: process.env.NEXT_PUBLIC_SITE_ID || "infinium",
+  siteId: process.env.NEXT_PUBLIC_SITE_ID || "AHP",
 });

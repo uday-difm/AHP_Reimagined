@@ -8,25 +8,25 @@ const trendingArticles = [
     slug: 'ayurvedic-secrets-for-better-digestion',
     category: 'Ayurveda',
     title: 'Ayurvedic Secrets for Better Digestion',
-    img: '/images/ayurveda.png',
+    img: '/images/ayurveda.webp',
   },
   {
     slug: 'how-ai-is-changing-healthcare',
     category: 'Modern Health',
     title: 'How AI is Changing Healthcare',
-    img: '/images/disease.png',
+    img: '/images/disease.webp',
   },
   {
     slug: 'breathwork-vs-meditation-for-anxiety',
     category: 'Holistic',
     title: 'Breathwork vs. Meditation for Anxiety',
-    img: '/images/holistic.png',
+    img: '/images/holistic.webp',
   },
   {
     slug: 'exercise-for-better-mental-health',
     category: 'Mental Health',
     title: 'Exercise for Better Mental Health',
-    img: '/images/hero_exercise.png',
+    img: '/images/hero_exercise.webp',
   },
 ];
 
@@ -44,8 +44,8 @@ export default function Hero() {
       />
       {/* Desktop Background Image */}
       <Image
-        src="/images/background.png"
-        alt="Hero Background Desktop"
+        src="/images/background.webp"
+        alt="Hero Background"
         fill
         priority
         className="hidden md:block object-cover object-center z-[-1] opacity-100"

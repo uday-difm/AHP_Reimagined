@@ -2,6 +2,8 @@ import React, { Suspense } from 'react';
 import prisma from '@/lib/prisma';
 import ServicesClient from './ServicesClient';
 
+export const revalidate = 60; // ISR: revalidate at most every 60 seconds
+
 export const metadata = {
   title: 'Specialized Wellness Services | A Health Place',
   description: 'Explore our medically vetted therapies, consultations, and personalized clinical guidance programs.',
@@ -17,7 +19,19 @@ export default async function ServicesPage() {
         deletedAt: null
       },
       orderBy: { sortOrder: 'asc' },
-      include: { featuredImage: true }
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        price: true,
+        ctaButtonText: true,
+        ctaButtonLink: true,
+        faqs: true,
+        visible: true,
+        featuredImage: {
+          select: { url: true, secureUrl: true, altText: true },
+        },
+      },
     });
   } catch (error) {
     console.error('Error fetching services from Prisma:', error);

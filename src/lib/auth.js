@@ -8,6 +8,9 @@ import bcrypt from "bcryptjs";
 import prisma from "@/lib/prisma";
 import { recordLogin } from "./audit";
 
+let cachedTimeoutMs = null;
+let lastTimeoutFetch = 0;
+
 export const authOptions = {
   session: {
     strategy: "jwt",
@@ -39,10 +42,11 @@ export const authOptions = {
       async authorize(credentials, req) {
         const logFile = path.join(process.cwd(), "auth_debug.log");
         const writeLog = (msg) => {
+          console.log(msg); // Also output to Vercel/NextJS server console
           try {
             fs.appendFileSync(logFile, `[${new Date().toISOString()}] ${msg}\n`);
           } catch (e) {
-            console.error("Failed to write log to file:", e);
+            // Ephemeral file systems on Vercel will trigger this, which is fine
           }
         };
 
@@ -58,14 +62,15 @@ export const authOptions = {
         writeLog(`[Auth] Request Host: ${host}`);
 
         if (secretKey) {
-          const isIpOrNgrok = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}/.test(host) || 
-                              host.includes("localhost") ||
-                              host.includes("127.0.0.1") ||
-                              host.includes(".ngrok.io") || 
-                              host.includes(".ngrok-free.dev");
-          
-          if (isIpOrNgrok) {
-            writeLog("[Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.");
+          const isTestKeyHost = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}/.test(host) ||
+            host.includes("localhost") ||
+            host.includes("127.0.0.1") ||
+            host.includes(".ngrok.io") ||
+            host.includes(".ngrok-free.dev") ||
+            host.includes(".vercel.app");
+
+          if (isTestKeyHost) {
+            writeLog("[Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.");
             secretKey = "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe";
           }
         }
@@ -128,12 +133,12 @@ export const authOptions = {
           return user;
         } catch (err) {
           writeLog(`[Auth] Admin authentication failed, trying frontend auth table for: ${credentials.email}`);
-          
+
           try {
             const shasum = crypto.createHash("sha256");
             shasum.update(credentials.password);
             const hashedPassword = shasum.digest("hex");
-            
+
             const frontendUser = await prisma.auth.findFirst({
               where: {
                 OR: [
@@ -142,7 +147,7 @@ export const authOptions = {
                 ]
               }
             });
-            
+
             if (frontendUser && frontendUser.password === hashedPassword) {
               writeLog(`[Auth] Frontend user authenticated successfully: ${frontendUser.email}`);
               return {
@@ -155,7 +160,7 @@ export const authOptions = {
           } catch (frontendErr) {
             writeLog(`[Auth] Frontend authentication error: ${frontendErr.message}`);
           }
-          
+
           writeLog(`[Auth] All authentication methods failed for: ${credentials.email}`);
           throw new Error(err.message || "Invalid credentials");
         }
@@ -173,22 +178,27 @@ export const authOptions = {
         token.lastActivity = now;
       }
 
-      // Dynamic session timeout verification from database
+      // Dynamic session timeout verification from database with caching
       try {
-        const activeSite = await prisma.site.findFirst({ where: { isActive: true } });
-        if (activeSite) {
-          const settings = await prisma.globalSettings.findUnique({
-            where: { siteId: activeSite.id },
-            select: { securityControls: true },
-          });
-          const timeoutMinutes = settings?.securityControls?.sessionTimeoutMinutes || 30;
-          const timeoutMs = timeoutMinutes * 60 * 1000;
-
-          if (token.lastActivity && now - token.lastActivity > timeoutMs) {
-            token.error = "SessionExpired";
-          } else {
-            token.lastActivity = now;
+        if (!cachedTimeoutMs || now - lastTimeoutFetch > 60000) {
+          const activeSite = await prisma.site.findFirst({ where: { isActive: true } });
+          if (activeSite) {
+            const settings = await prisma.globalSettings.findUnique({
+              where: { siteId: activeSite.id },
+              select: { securityControls: true },
+            });
+            const timeoutMinutes = settings?.securityControls?.sessionTimeoutMinutes || 30;
+            cachedTimeoutMs = timeoutMinutes * 60 * 1000;
+            lastTimeoutFetch = now;
           }
+        }
+        
+        const timeoutMs = cachedTimeoutMs || 30 * 60 * 1000;
+
+        if (token.lastActivity && now - token.lastActivity > timeoutMs) {
+          token.error = "SessionExpired";
+        } else {
+          token.lastActivity = now;
         }
       } catch (err) {
         console.error("JWT Session timeout verification error:", err);

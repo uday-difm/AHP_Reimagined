@@ -1,10 +1,7 @@
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth';
 import CustomCursor from '@/components/CustomCursor';
 import BackdropBlobs from '@/components/BackdropBlobs';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
-import WellnessShowcase from '@/components/WellnessShowcase';
 import HomeQuizWidget from '@/components/HomeQuizWidget';
 import ArticlesGrid from '@/components/ArticlesGrid';
 import BlogCategorySlider from '@/components/BlogCategorySlider';
@@ -13,11 +10,9 @@ import ServicesBanner from '@/components/ServicesBanner';
 import Newsletter from '@/components/Newsletter';
 import Footer from '@/components/Footer';
 import ScrollReveal from '@/components/ScrollReveal';
-import AdSlot from '@/components/AdSlot';
+import HomepageAuthenticatedSections from '@/components/HomepageAuthenticatedSections';
 
 export default async function Home() {
-  const session = await getServerSession(authOptions);
-  const isAuthenticated = !!session;
 
   return (
     <>
@@ -37,12 +32,7 @@ export default async function Home() {
         <ArticlesGrid />
         <BlogCategorySlider />
         <HomeQuizWidget />
-        {isAuthenticated && (
-          <>
-            <WellnessShowcase />
-            <AdSlot zone="homepage-about-bottom" />
-          </>
-        )}
+        <HomepageAuthenticatedSections />
         <CommunityEvents />
         <ServicesBanner />
         <Newsletter />

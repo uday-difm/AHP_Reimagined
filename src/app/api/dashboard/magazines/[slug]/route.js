@@ -27,6 +27,9 @@ async function uploadToCloudinary(buffer, fileName, folder = "magazines") {
 
 // Helper to upload files to either S3 or Cloudinary
 async function handleImageUpload(file, folder = "magazines") {
+  if (typeof file === "string" && (file.startsWith("http") || file.startsWith("/"))) {
+    return file;
+  }
   if (!file || typeof file !== "object" || !("arrayBuffer" in file)) {
     return "";
   }
@@ -58,6 +61,39 @@ async function handleImageUpload(file, folder = "magazines") {
     }
   }
   return imageUrl;
+}
+
+// Helper to register uploaded images in the global Media model
+async function registerUploadedImageInMedia(siteId, imageUrl, fileName) {
+  if (!imageUrl) return;
+  const fileExtension = fileName ? (fileName.split(".").pop() || "png") : "png";
+  let publicId = imageUrl;
+  
+  if (imageUrl.includes("key=")) {
+    publicId = imageUrl.split("key=")[1];
+  } else if (imageUrl.includes("cloudinary.com")) {
+    const parts = imageUrl.split("/");
+    publicId = parts.slice(parts.indexOf("upload") + 2).join("/");
+    publicId = publicId.split(".")[0];
+  }
+
+  try {
+    await prisma.media.create({
+      data: {
+        siteId,
+        fileName: fileName || "magazine_image",
+        originalName: fileName || "magazine_image",
+        publicId: publicId,
+        url: imageUrl,
+        secureUrl: imageUrl,
+        mimeType: "image/png", // generic fallback
+        extension: fileExtension,
+        isImage: true,
+      }
+    });
+  } catch (err) {
+    console.error("Failed to register image in Media system:", err);
+  }
 }
 
 export async function GET(request, context) {
@@ -129,23 +165,42 @@ export async function PUT(request, context) {
       }
     }
 
+    // Resolve siteId
+    const site = await getSiteForUser(user);
+    const siteId = site?.id || "infinium";
+
     // Handle uploads — retain existing if no new file provided
     let imageUrl = existing.coverImage;
     if (magazine_cover_image) {
       const coverUrl = await handleImageUpload(magazine_cover_image);
-      if (coverUrl) imageUrl = coverUrl;
+      if (coverUrl) {
+        imageUrl = coverUrl;
+        if (typeof magazine_cover_image !== "string") {
+          await registerUploadedImageInMedia(siteId, imageUrl, magazine_cover_image.name);
+        }
+      }
     }
 
     let backImageUrl = existing.backImage;
     if (magazine_back_image) {
       const backUrl = await handleImageUpload(magazine_back_image);
-      if (backUrl) backImageUrl = backUrl;
+      if (backUrl) {
+        backImageUrl = backUrl;
+        if (typeof magazine_back_image !== "string") {
+          await registerUploadedImageInMedia(siteId, backImageUrl, magazine_back_image.name);
+        }
+      }
     }
 
     let spineImageUrl = existing.spineImage;
     if (magazine_spine_image) {
       const spineUrl = await handleImageUpload(magazine_spine_image);
-      if (spineUrl) spineImageUrl = spineUrl;
+      if (spineUrl) {
+        spineImageUrl = spineUrl;
+        if (typeof magazine_spine_image !== "string") {
+          await registerUploadedImageInMedia(siteId, spineImageUrl, magazine_spine_image.name);
+        }
+      }
     }
 
     // Update in Prisma

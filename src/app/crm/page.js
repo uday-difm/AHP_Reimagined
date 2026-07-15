@@ -58,85 +58,97 @@ export default async function CrmDashboardPage() {
     }),
   ]);
 
-  // Pre-calculate traffic trends (daily page views)
-  const logs = await prisma.visitorLog.findMany({
-    where: { siteId: site.id, createdAt: { gte: dateLimit } },
-    select: { createdAt: true, visitorId: true },
-    orderBy: { createdAt: "asc" },
-  });
+  // Run traffic trends, campaign list, services, and leads all in parallel
+  const [rawTrends, emailCampaigns, services, leads, wonLeadsCount] = await Promise.all([
+    // (a) Traffic trends: grouped by day in MySQL — no raw log rows pulled to Node
+    prisma.$queryRaw`
+      SELECT DATE(createdAt) as day,
+             COUNT(*) as pageViews,
+             COUNT(DISTINCT visitorId) as uniqueVisitors
+      FROM VisitorLog
+      WHERE siteId = ${site.id} AND createdAt >= ${dateLimit}
+      GROUP BY DATE(createdAt)
+      ORDER BY day ASC
+    `,
+    // (b) Campaign list without logs — counts fetched per campaign below
+    prisma.emailCampaign.findMany({
+      where: { siteId: site.id, createdAt: { gte: dateLimit } },
+      orderBy: { createdAt: "desc" },
+      take: 5,
+    }),
+    // Services for pipeline priceMap
+    prisma.service.findMany({
+      where: { siteId: site.id, deletedAt: null },
+      select: { title: true, price: true },
+    }),
+    // All leads in range for pipeline value (need serviceInterest per lead)
+    prisma.lead.findMany({
+      where: { siteId: site.id, createdAt: { gte: dateLimit } },
+      select: { status: true, serviceInterest: true },
+    }),
+    // (c) Won leads count directly from DB instead of a JS loop
+    prisma.lead.count({
+      where: {
+        siteId: site.id,
+        createdAt: { gte: dateLimit },
+        status: { in: ["won", "converted", "approved"] },
+      },
+    }),
+  ]);
 
-  const trafficTrends = {};
+  // Build trendsList — fill in zero-value days for the full range so chart has no gaps
+  const trafficTrendsMap = {};
+  for (const row of rawTrends) {
+    // MySQL DATE() returns a Date object via $queryRaw — convert to ISO date string
+    const dayStr = new Date(row.day).toISOString().split("T")[0];
+    trafficTrendsMap[dayStr] = {
+      pageViews: Number(row.pageViews),
+      uniqueVisitors: Number(row.uniqueVisitors),
+    };
+  }
+
+  const trendsList = [];
   for (let i = range - 1; i >= 0; i--) {
     const d = new Date(Date.now() - i * 24 * 60 * 60 * 1000);
     const dayStr = d.toISOString().split("T")[0];
-    trafficTrends[dayStr] = { date: dayStr, pageViews: 0, uniqueVisitors: new Set() };
+    trendsList.push({
+      date: dayStr,
+      pageViews: trafficTrendsMap[dayStr]?.pageViews ?? 0,
+      uniqueVisitors: trafficTrendsMap[dayStr]?.uniqueVisitors ?? 0,
+    });
   }
 
-  logs.forEach((log) => {
-    const dayStr = log.createdAt.toISOString().split("T")[0];
-    if (trafficTrends[dayStr]) {
-      trafficTrends[dayStr].pageViews++;
-      trafficTrends[dayStr].uniqueVisitors.add(log.visitorId);
-    }
-  });
+  // (b) Campaign performance — count log statuses per campaign with parallel counts
+  const campaignsPerf = await Promise.all(
+    emailCampaigns.map(async (c) => {
+      const [totalSent, totalOpened, totalClicked] = await Promise.all([
+        prisma.campaignLog.count({ where: { campaignId: c.id, status: "sent" } }),
+        prisma.campaignLog.count({ where: { campaignId: c.id, status: "opened" } }),
+        prisma.campaignLog.count({ where: { campaignId: c.id, status: "clicked" } }),
+      ]);
+      return {
+        id: c.id,
+        name: c.name,
+        subject: c.subject,
+        status: c.status,
+        sentCount: totalSent,
+        openRate: totalSent > 0 ? Math.round((totalOpened / totalSent) * 100) : 0,
+        clickRate: totalSent > 0 ? Math.round((totalClicked / totalSent) * 100) : 0,
+      };
+    })
+  );
 
-  const trendsList = Object.values(trafficTrends).map((t) => ({
-    date: t.date,
-    pageViews: t.pageViews,
-    uniqueVisitors: t.uniqueVisitors.size,
-  }));
-
-  // Campaign performance metrics
-  const emailCampaigns = await prisma.emailCampaign.findMany({
-    where: { siteId: site.id, createdAt: { gte: dateLimit } },
-    include: { logs: true },
-    orderBy: { createdAt: "desc" },
-    take: 5,
-  });
-
-  const campaignsPerf = emailCampaigns.map((c) => {
-    const totalSent = c.logs.filter((l) => l.status === "sent").length;
-    const totalOpened = c.logs.filter((l) => l.status === "opened").length;
-    const totalClicked = c.logs.filter((l) => l.status === "clicked").length;
-
-    return {
-      id: c.id,
-      name: c.name,
-      subject: c.subject,
-      status: c.status,
-      sentCount: totalSent,
-      openRate: totalSent > 0 ? Math.round((totalOpened / totalSent) * 100) : 0,
-      clickRate: totalSent > 0 ? Math.round((totalClicked / totalSent) * 100) : 0,
-    };
-  });
-
-  // Revenue pipeline stats
-  const services = await prisma.service.findMany({
-    where: { siteId: site.id, deletedAt: null },
-    select: { title: true, price: true },
-  });
-
+  // (c) Pipeline value — still needs per-lead serviceInterest for the price map
   const priceMap = {};
   services.forEach((s) => {
     const priceNum = parseFloat(String(s.price || "").replace(/[^0-9.]/g, ""));
     priceMap[s.title.toLowerCase()] = isNaN(priceNum) ? 500 : priceNum;
   });
 
-  const leads = await prisma.lead.findMany({
-    where: { siteId: site.id, createdAt: { gte: dateLimit } },
-    select: { status: true, serviceInterest: true },
-  });
-
   let totalPipelineValue = 0;
-  let wonLeads = 0;
-
   leads.forEach((l) => {
     const interest = l.serviceInterest ? l.serviceInterest.toLowerCase() : "";
-    const val = priceMap[interest] || 500;
-    totalPipelineValue += val;
-    if (l.status === "won" || l.status === "converted" || l.status === "approved") {
-      wonLeads++;
-    }
+    totalPipelineValue += priceMap[interest] || 500;
   });
 
   const statsPayload = {
@@ -147,7 +159,7 @@ export default async function CrmDashboardPage() {
     crmLeads,
     totalPageViews,
     totalPipelineValue,
-    conversionRate: leads.length > 0 ? Math.round((wonLeads / leads.length) * 100) : 0,
+    conversionRate: leads.length > 0 ? Math.round((wonLeadsCount / leads.length) * 100) : 0,
   };
 
   return (

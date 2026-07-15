@@ -1,16 +1,13 @@
-// src/app/not-found.js — Custom 404 page driven by CMS settings with fallback
 import Link from "next/link";
-import { cms } from "../lib/cms";
 import ClientRedirect from "./ClientRedirect";
-
-export const dynamic = "force-dynamic";
+import { getLayoutData } from "@/services/layout.service";
 
 export default async function NotFoundPage() {
   let custom404 = null;
 
   try {
-    const data = await cms.getGlobalSettings();
-    custom404 = data?.settings?.websiteSettings?.custom404 || data?.websiteSettings?.custom404 || null;
+    const layout = await getLayoutData();
+    custom404 = layout?.rawSettings?.websiteSettings?.custom404 || null;
   } catch (e) {
     console.error("Failed to load custom 404 settings:", e);
   }

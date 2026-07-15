@@ -1,7 +1,116 @@
-import Image from 'next/image';
+'use client';
+
+import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 
 export default function Footer({ className = "" }) {
+  const [footerConfig, setFooterConfig] = useState(null);
+  const [navMenus, setNavMenus] = useState({});
+
+  // Fetch footer layout configurations from DB
+  useEffect(() => {
+    fetch('/api/footer')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.success && data.data?.footer) {
+          setFooterConfig(data.data.footer);
+        }
+      })
+      .catch(() => { });
+  }, []);
+
+  // Pre-load default navigation menus
+  useEffect(() => {
+    fetch('/api/navigation/footer')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.success && Array.isArray(data.data?.items)) {
+          setNavMenus((prev) => ({ ...prev, footer: data.data.items }));
+        }
+      })
+      .catch(() => { });
+
+    fetch('/api/navigation/main')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.success && Array.isArray(data.data?.items)) {
+          setNavMenus((prev) => ({ ...prev, main: data.data.items }));
+        }
+      })
+      .catch(() => { });
+  }, []);
+
+  // Dynamically fetch other custom menus if defined
+  useEffect(() => {
+    if (!footerConfig?.columns) return;
+    footerConfig.columns.forEach((col) => {
+      if (col.type === 'links' && col.sourceType === 'navigation' && col.menuType) {
+        const type = col.menuType;
+        setNavMenus((prev) => {
+          if (prev[type]) return prev;
+          fetch(`/api/navigation/${type}`)
+            .then((res) => (res.ok ? res.json() : null))
+            .then((data) => {
+              if (data?.success && Array.isArray(data.data?.items)) {
+                setNavMenus((p) => ({ ...p, [type]: data.data.items }));
+              }
+            })
+            .catch(() => { });
+          return { ...prev, [type]: [] };
+        });
+      }
+    });
+  }, [footerConfig]);
+
+  // Extract the first 'logo_desc' column for the Brand Card (with fallbacks)
+  const brandColumn = useMemo(() => {
+    return footerConfig?.columns?.find(c => c.type === 'logo_desc') || {
+      type: 'logo_desc',
+      title: 'About Us',
+      logoUrl: '/images/Logo-web.png',
+      description: 'Empowering individuals with reliable, medically verified guides to navigate daily physical and emotional health. Your trusted companion on the journey to holistic wellness.'
+    };
+  }, [footerConfig]);
+
+  // Remaining columns are displayed on the right link grid (up to 3 columns)
+  const remainingColumns = useMemo(() => {
+    if (!footerConfig?.columns) {
+      // Default fallback layout
+      return [
+        {
+          type: 'logo_desc',
+          title: 'ISSN',
+          logoUrl: '/images/ISSN_BARCODE.png'
+        },
+        {
+          type: 'links',
+          title: 'Company',
+          sourceType: 'navigation',
+          menuType: 'footer'
+        },
+        {
+          type: 'links',
+          title: 'Legal',
+          links: [
+            { label: 'Privacy Policy', url: '/info?tab=legal&doc=privacy' },
+            { label: 'Terms of Service', url: '/info?tab=legal&doc=terms' },
+            { label: 'Medical Disclaimer', url: '/info?tab=legal&doc=disclaimer' }
+          ]
+        }
+      ];
+    }
+
+    // Filter out the first logo_desc column (used for the left brand card)
+    let foundLogoDesc = false;
+    return footerConfig.columns.filter((c) => {
+      if (c.type === 'logo_desc' && !foundLogoDesc) {
+        foundLogoDesc = true;
+        return false;
+      }
+      return true;
+    });
+  }, [footerConfig]);
+
   return (
     <footer className="footer bg-cyan-900 text-white relative overflow-hidden rounded-t-[48px] border-t border-white/5 pt-24 pb-12 mt-[-48px] z-10">
       {/* Top Accent Gradient Line */}
@@ -16,18 +125,18 @@ export default function Footer({ className = "" }) {
 
           {/* Brand Presentation Card (Premium Glass & Shadow Gradient) */}
           <div className="footer-brand flex flex-col gap-6 bg-gradient-to-br from-white/[0.12] via-white/[0.03] to-transparent border border-white/10 backdrop-blur-2xl rounded-3xl p-8 hover:-translate-y-2 hover:scale-[1.02] transition-all duration-500 shadow-[0_10px_40px_rgba(100,100,200,0.05)] hover:shadow-[0_15px_50px_rgba(100,100,200,0.15)]">
-            <a href="#" className="logo-link-footer inline-block self-start transition-all duration-300">
-              <Image
-                src="/images/Logo-web.png"
-                alt="A Health Place Logo"
-                width={320}
-                height={90}
+            <Link href="/" className="logo-link-footer inline-block self-start transition-all duration-300">
+              <img
+                src={brandColumn.logoUrl || "/images/Logo-web.png"}
+                alt={brandColumn.title || "A Health Place Logo"}
                 className="logo-img h-20 w-auto object-contain"
               />
-            </a>
-            <p className="footer-tagline text-sm text-white/60 leading-relaxed font-body">
-              Empowering individuals with reliable, medically verified guides to navigate daily physical and emotional health. Your trusted companion on the journey to holistic wellness.
-            </p>
+            </Link>
+            {brandColumn.description && (
+              <p className="footer-tagline text-[14px] text-white/60 leading-relaxed font-body">
+                {brandColumn.description}
+              </p>
+            )}
 
             {/* Social Icons */}
             <div className="flex gap-4 mt-2">
@@ -56,77 +165,120 @@ export default function Footer({ className = "" }) {
 
           {/* Links Grid */}
           <div className="footer-links-group grid grid-cols-1 sm:grid-cols-3 gap-12 lg:gap-8 pt-4">
+            {remainingColumns.map((col, idx) => (
+              <div key={idx} className="footer-col">
+                <h4 className="footer-title font-heading text-[12px] font-extrabold uppercase tracking-[2.5px] text-teal-300 mb-6">
+                  {col.title || "Block"}
+                </h4>
 
-            {/* ISSN Barcode */}
-            <div className="footer-col flex flex-col gap-4">
-              <h4 className="footer-title font-heading text-xs font-extrabold uppercase tracking-[2.5px] text-teal-300 mb-6">
-                ISSN
-              </h4>
-              <div className="bg-white p-3 rounded-xl inline-block self-start shadow-sm border border-white/20">
-                <Image
-                  src="/images/ISSN_BARCODE.png"
-                  alt="ISSN Barcode"
-                  width={180}
-                  height={70}
-                  className="object-contain animate-[pulse_3s_infinite_ease-in-out]"
-                />
-              </div>
-            </div>
+                {col.type === "logo_desc" && (
+                  <div className="flex flex-col gap-4">
+                    {col.logoUrl && (
+                      <div className="bg-white p-3 rounded-xl inline-block self-start shadow-sm border border-white/20">
+                        <img
+                          src={col.logoUrl}
+                          alt={col.title || "Logo"}
+                          className="object-contain max-h-16 w-auto"
+                        />
+                      </div>
+                    )}
+                    {col.description && (
+                      <p className="text-[14px] text-white/60 leading-relaxed font-body">
+                        {col.description}
+                      </p>
+                    )}
+                  </div>
+                )}
 
-            {/* Company */}
-            <div className="footer-col">
-              <h4 className="footer-title font-heading text-xs font-extrabold uppercase tracking-[2.5px] text-teal-300 mb-6">
-                Company
-              </h4>
-              <ul className="footer-links list-none flex flex-col gap-4">
-                <li>
-                  <a
-                    href="mailto:support@ahealthplace.com"
-                    className="footer-link text-sm text-white/90 font-semibold no-underline transition-all duration-300 hover:text-teal-300 flex items-center font-body"
-                  >
-                    support@ahealthplace.com
-                  </a>
-                </li>
-                {[
-                  { label: 'Contact Support', link: '#' }
-                ].map((item, idx) => (
-                  <li key={idx}>
-                    <a
-                      href={item.link}
-                      className="footer-link text-sm text-white/80 no-underline transition-all duration-300 hover:text-teal-300 flex items-center font-body"
+                {col.type === "links" && (
+                  <ul className="footer-links list-none flex flex-col gap-3.5 pl-0">
+                    {(col.sourceType === "navigation"
+                      ? navMenus[col.menuType || "footer"] || []
+                      : col.links || []
+                    ).map((linkItem, linkIdx) => (
+                      <li key={linkIdx}>
+                        <Link
+                          href={linkItem.url || "#"}
+                          className="footer-link text-[14px] text-white/85 no-underline transition-all duration-300 hover:text-teal-300 hover:pl-2 flex items-center group font-body"
+                        >
+                          <span className="w-1.5 h-1.5 rounded-full bg-teal-300 mr-2 opacity-0 group-hover:opacity-100 transition-all duration-300"></span>
+                          {linkItem.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                {col.type === "contact" && (
+                  <div className="flex flex-col gap-3.5">
+                    {col.phone && (
+                      <a
+                        href={`tel:${col.phone}`}
+                        className="footer-link text-[14px] text-white/85 no-underline transition-all duration-300 hover:text-teal-300 flex items-center group font-body"
+                      >
+                        <span className="mr-2">📞</span>
+                        {col.phone}
+                      </a>
+                    )}
+                    {col.email && (
+                      <a
+                        href={`mailto:${col.email}`}
+                        className="footer-link text-[14px] text-white/85 no-underline transition-all duration-300 hover:text-teal-300 flex items-center group font-body"
+                      >
+                        <span className="mr-2">✉️</span>
+                        {col.email}
+                      </a>
+                    )}
+                    {col.address && (
+                      <div className="text-[14px] text-white/70 flex items-start font-body">
+                        <span className="mr-2">📍</span>
+                        <span>{col.address}</span>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {col.type === "newsletter" && (
+                  <div className="flex flex-col gap-4 font-body">
+                    <form
+                      onSubmit={(e) => e.preventDefault()}
+                      className="flex bg-white/10 rounded-xl p-1 border border-white/20 focus-within:border-teal-300/50 transition"
                     >
-                      {item.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Legal */}
-            <div className="footer-col">
-              <h4 className="footer-title font-heading text-xs font-extrabold uppercase tracking-[2.5px] text-teal-300 mb-6">Legal</h4>
-              <ul className="footer-links list-none flex flex-col gap-3">
-                <li><Link href="/info?tab=legal&doc=privacy" className="footer-link text-[13.5px] text-white/80 no-underline transition-all hover:text-teal-300 hover:pl-1">Privacy Policy</Link></li>
-                <li><Link href="/info?tab=legal&doc=terms" className="footer-link text-[13.5px] text-white/80 no-underline transition-all hover:text-teal-300 hover:pl-1">Terms of Service</Link></li>
-                <li><Link href="/info?tab=legal&doc=disclaimer" className="footer-link text-[13.5px] text-white/80 no-underline transition-all hover:text-teal-300 hover:pl-1">Medical Disclaimer</Link></li>
-              </ul>
-            </div>
-
+                      <input
+                        type="email"
+                        required
+                        placeholder={col.newsletterPlaceholder || "your@email.com"}
+                        className="bg-transparent border-none text-[13.5px] w-full px-3 text-white placeholder-white/40 outline-none"
+                      />
+                      <button
+                        type="submit"
+                        className="bg-teal-600 hover:bg-teal-500 text-white rounded-lg text-[13px] px-4.5 py-2 font-bold transition whitespace-nowrap"
+                      >
+                        {col.newsletterButtonText || "Join"}
+                      </button>
+                    </form>
+                    <p className="text-[12px] text-white/50 leading-relaxed">
+                      Subscribe to receive regular updates.
+                    </p>
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         </div>
 
         {/* Footer Bottom */}
         <div className="footer-bottom flex flex-col sm:flex-row justify-between items-center pt-10 mt-6 gap-6 text-center sm:text-left border-t border-white/5">
-          <p className="copyright text-xs text-white/40 leading-relaxed font-body">
-            © 2026 A Health Place. All rights reserved. Professional medical advice should be sought for any health concerns.
+          <p className="copyright text-[12px] text-white/40 leading-relaxed font-body">
+            {footerConfig?.copyright || "© 2026 A Health Place. All rights reserved. Professional medical advice should be sought for any health concerns."}
           </p>
           <div className="footer-bottom-links flex gap-6">
-            <a href="/legal/privacy" className="footer-bottom-link text-[12.5px] text-white/40 no-underline hover:text-accent transition-colors duration-300 font-body">
+            <Link href="/info?tab=legal&doc=privacy" className="footer-bottom-link text-[12.5px] text-white/40 no-underline hover:text-teal-300 transition-colors duration-300 font-body">
               Privacy Policy
-            </a>
-            <a href="/legal/terms" className="footer-bottom-link text-[12.5px] text-white/40 no-underline hover:text-accent transition-colors duration-300 font-body">
+            </Link>
+            <Link href="/info?tab=legal&doc=terms" className="footer-bottom-link text-[12.5px] text-white/40 no-underline hover:text-teal-300 transition-colors duration-300 font-body">
               Terms & Conditions
-            </a>
+            </Link>
           </div>
         </div>
       </div>

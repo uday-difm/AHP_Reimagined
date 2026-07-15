@@ -6,6 +6,8 @@ import { ArrowLeft, Loader2, Upload, Calendar, Link as LinkIcon, Tag, Layers, Fi
 import Link from "next/link";
 import { toast } from "sonner";
 import dynamic from "next/dynamic";
+import { compressImage } from "@/utils/clientImageCompression";
+import MediaPickerModal from "@/components/media/MediaPickerModal";
 
 // Dynamically import Jodit Editor to prevent server-side rendering issues
 const JoditEditor = dynamic(() => import("jodit-react"), { ssr: false });
@@ -17,9 +19,10 @@ export default function MagazineEditor({ initialData = null }) {
   const [backPreview, setBackPreview] = useState(initialData?.backImage || null);
   const [spinePreview, setSpinePreview] = useState(initialData?.spineImage || null);
   
-  const coverFileRef = useRef(null);
-  const backFileRef = useRef(null);
-  const spineFileRef = useRef(null);
+  const [pickerTarget, setPickerTarget] = useState(null);
+  const [coverUrl, setCoverUrl] = useState(initialData?.coverImage || null);
+  const [backUrl, setBackUrl] = useState(initialData?.backImage || null);
+  const [spineUrl, setSpineUrl] = useState(initialData?.spineImage || null);
 
   const [values, setValues] = useState({
     magazine_id: initialData?.magazineId || "",
@@ -41,17 +44,19 @@ export default function MagazineEditor({ initialData = null }) {
     minHeight: 300,
   };
 
-  const handleFileChange = (e, type) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        if (type === "cover") setCoverPreview(reader.result);
-        else if (type === "back") setBackPreview(reader.result);
-        else if (type === "spine") setSpinePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
+  const handleMediaSelect = (mediaObj) => {
+    const url = mediaObj.secureUrl || mediaObj.url;
+    if (pickerTarget === "cover") {
+      setCoverPreview(url);
+      setCoverUrl(url);
+    } else if (pickerTarget === "back") {
+      setBackPreview(url);
+      setBackUrl(url);
+    } else if (pickerTarget === "spine") {
+      setSpinePreview(url);
+      setSpineUrl(url);
     }
+    setPickerTarget(null);
   };
 
   const generateSlug = (title) => {
@@ -95,14 +100,14 @@ export default function MagazineEditor({ initialData = null }) {
     formData.append("magazine_slug", values.magazine_slug);
     formData.append("status", values.status.toString());
 
-    if (coverFileRef.current?.files[0]) {
-      formData.append("magazine_cover_image", coverFileRef.current.files[0]);
+    if (coverUrl) {
+      formData.append("magazine_cover_image", coverUrl);
     }
-    if (backFileRef.current?.files[0]) {
-      formData.append("magazine_back_image", backFileRef.current.files[0]);
+    if (backUrl) {
+      formData.append("magazine_back_image", backUrl);
     }
-    if (spineFileRef.current?.files[0]) {
-      formData.append("magazine_spine_image", spineFileRef.current.files[0]);
+    if (spineUrl) {
+      formData.append("magazine_spine_image", spineUrl);
     }
 
     try {
@@ -294,7 +299,7 @@ export default function MagazineEditor({ initialData = null }) {
                   type="button"
                   onClick={() => {
                     setCoverPreview(null);
-                    if (coverFileRef.current) coverFileRef.current.value = "";
+                    setCoverUrl(null);
                   }}
                   className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-[10px] font-bold transition-opacity cursor-pointer"
                 >
@@ -303,20 +308,13 @@ export default function MagazineEditor({ initialData = null }) {
               </div>
             ) : (
               <div
-                onClick={() => coverFileRef.current?.click()}
+                onClick={() => setPickerTarget("cover")}
                 className="aspect-[3/4] max-w-[200px] mx-auto bg-slate-50 dark:bg-slate-900/50 hover:bg-slate-100 dark:hover:bg-slate-800/50 rounded-lg border border-dashed border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-slate-400 gap-2 cursor-pointer transition"
               >
                 <Upload size={24} />
-                <span className="text-[10px] font-semibold">Upload Cover</span>
+                <span className="text-[10px] font-semibold text-center px-2">Select or Upload Cover</span>
               </div>
             )}
-            <input
-              type="file"
-              ref={coverFileRef}
-              onChange={(e) => handleFileChange(e, "cover")}
-              accept="image/*"
-              className="hidden"
-            />
           </div>
 
           {/* Back Cover image */}
@@ -331,7 +329,7 @@ export default function MagazineEditor({ initialData = null }) {
                   type="button"
                   onClick={() => {
                     setBackPreview(null);
-                    if (backFileRef.current) backFileRef.current.value = "";
+                    setBackUrl(null);
                   }}
                   className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-[10px] font-bold transition-opacity cursor-pointer"
                 >
@@ -340,20 +338,13 @@ export default function MagazineEditor({ initialData = null }) {
               </div>
             ) : (
               <div
-                onClick={() => backFileRef.current?.click()}
+                onClick={() => setPickerTarget("back")}
                 className="aspect-[3/4] max-w-[200px] mx-auto bg-slate-50 dark:bg-slate-900/50 hover:bg-slate-100 dark:hover:bg-slate-800/50 rounded-lg border border-dashed border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-slate-400 gap-2 cursor-pointer transition"
               >
                 <Upload size={24} />
-                <span className="text-[10px] font-semibold">Upload Back Cover</span>
+                <span className="text-[10px] font-semibold text-center px-2">Select or Upload Back Cover</span>
               </div>
             )}
-            <input
-              type="file"
-              ref={backFileRef}
-              onChange={(e) => handleFileChange(e, "back")}
-              accept="image/*"
-              className="hidden"
-            />
           </div>
 
           {/* Spine Image */}
@@ -368,7 +359,7 @@ export default function MagazineEditor({ initialData = null }) {
                   type="button"
                   onClick={() => {
                     setSpinePreview(null);
-                    if (spineFileRef.current) spineFileRef.current.value = "";
+                    setSpineUrl(null);
                   }}
                   className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-[10px] font-bold transition-opacity cursor-pointer text-center"
                 >
@@ -377,20 +368,13 @@ export default function MagazineEditor({ initialData = null }) {
               </div>
             ) : (
               <div
-                onClick={() => spineFileRef.current?.click()}
+                onClick={() => setPickerTarget("spine")}
                 className="aspect-[1/5] max-w-[80px] h-[150px] mx-auto bg-slate-50 dark:bg-slate-900/50 hover:bg-slate-100 dark:hover:bg-slate-800/50 rounded-lg border border-dashed border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-slate-400 gap-2 cursor-pointer transition"
               >
                 <Upload size={20} />
-                <span className="text-[9px] font-semibold text-center px-1">Upload Spine</span>
+                <span className="text-[9px] font-semibold text-center px-1">Select Media</span>
               </div>
             )}
-            <input
-              type="file"
-              ref={spineFileRef}
-              onChange={(e) => handleFileChange(e, "spine")}
-              accept="image/*"
-              className="hidden"
-            />
           </div>
 
           {/* Links and Metadata */}
@@ -461,6 +445,14 @@ export default function MagazineEditor({ initialData = null }) {
           </div>
         </div>
       </form>
+
+      {pickerTarget && (
+        <MediaPickerModal
+          onClose={() => setPickerTarget(null)}
+          onSelect={handleMediaSelect}
+          siteId="AHP"
+        />
+      )}
     </div>
   );
 }

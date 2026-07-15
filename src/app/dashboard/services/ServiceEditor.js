@@ -333,10 +333,9 @@ export default function ServiceEditor({ siteId, service }) {
               </div>
             </div>
           </div>
-        </div>
 
           {/* What's Included Card */}
-          <div className="lg:col-span-2 bg-white border border-slate-100 rounded-2xl p-6 shadow-xs space-y-5">
+          <div className="bg-white border border-slate-100 rounded-2xl p-6 shadow-xs space-y-5">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-4 border-b border-slate-100">
               <div>
                 <h2 className="text-sm font-bold text-slate-800 tracking-wide uppercase flex items-center gap-2">
@@ -421,6 +420,88 @@ export default function ServiceEditor({ siteId, service }) {
               </div>
             )}
           </div>
+
+          {/* FAQs Panel - inline JSON array editing */}
+          {isEditMode && (
+            <div className="bg-white border border-slate-100 rounded-2xl p-6 shadow-xs space-y-5">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-slate-100">
+                <div>
+                  <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2">
+                    <HelpCircle size={18} className="text-indigo-600" />
+                    FAQs
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-1">
+                    Frequently asked questions stored as JSON on this service.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={openAddFaq}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-bold transition duration-200 self-start sm:self-auto"
+                >
+                  <Plus size={14} />
+                  Add FAQ
+                </button>
+              </div>
+
+              {faqs.length === 0 ? (
+                <div className="text-center py-12 border-2 border-dashed border-slate-100 rounded-xl bg-slate-50/30">
+                  <HelpCircle className="mx-auto text-slate-300 mb-2" size={32} />
+                  <p className="text-xs font-bold text-slate-600">
+                    No FAQs for this service yet.
+                  </p>
+                  <p className="text-[10px] text-slate-400 mt-1">
+                    Click the Add FAQ button above to create one.
+                  </p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 gap-4">
+                  {faqs.map((faq, index) => (
+                    <div
+                      key={index}
+                      className="group border border-slate-100 hover:border-slate-200 rounded-2xl p-5 bg-slate-50/20 hover:bg-white hover:shadow-xs transition duration-200 flex flex-col md:flex-row md:items-start md:justify-between gap-4"
+                    >
+                      <div className="space-y-2 flex-1">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 text-[10px] font-bold">
+                            #{index + 1}
+                          </span>
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-slate-800 text-sm">
+                            {faq.question}
+                          </h4>
+                          <p className="text-xs text-slate-500 mt-1.5 leading-relaxed font-medium">
+                            {faq.answer}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex gap-2 shrink-0 self-end md:self-start opacity-90 md:opacity-0 group-hover:opacity-100 transition duration-200">
+                        <button
+                          type="button"
+                          onClick={() => openEditFaq(index)}
+                          className="inline-flex items-center gap-1 px-3 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 rounded-lg text-[10px] font-bold shadow-xs transition"
+                        >
+                          <Edit size={10} />
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteFaq(index)}
+                          className="inline-flex items-center gap-1 px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-lg text-[10px] font-bold shadow-xs transition"
+                        >
+                          <Trash2 size={10} />
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
 
         {/* Right Settings Sidebar */}
         <div className="space-y-6">
@@ -607,87 +688,6 @@ export default function ServiceEditor({ siteId, service }) {
           </button>
         </div>
       </form>
-
-      {/* FAQs Panel - inline JSON array editing */}
-      {isEditMode && (
-        <div className="bg-white border border-slate-100 rounded-2xl p-6 shadow-xs space-y-5">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-slate-100">
-            <div>
-              <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2">
-                <HelpCircle size={18} className="text-indigo-600" />
-                FAQs
-              </h3>
-              <p className="text-xs text-slate-400 mt-1">
-                Frequently asked questions stored as JSON on this service.
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={openAddFaq}
-              className="inline-flex items-center gap-1.5 px-4 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-bold transition duration-200 self-start sm:self-auto"
-            >
-              <Plus size={14} />
-              Add FAQ
-            </button>
-          </div>
-
-          {faqs.length === 0 ? (
-            <div className="text-center py-12 border-2 border-dashed border-slate-100 rounded-xl bg-slate-50/30">
-              <HelpCircle className="mx-auto text-slate-300 mb-2" size={32} />
-              <p className="text-xs font-bold text-slate-600">
-                No FAQs for this service yet.
-              </p>
-              <p className="text-[10px] text-slate-400 mt-1">
-                Click the Add FAQ button above to create one.
-              </p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 gap-4">
-              {faqs.map((faq, index) => (
-                <div
-                  key={index}
-                  className="group border border-slate-100 hover:border-slate-200 rounded-2xl p-5 bg-slate-50/20 hover:bg-white hover:shadow-xs transition duration-200 flex flex-col md:flex-row md:items-start md:justify-between gap-4"
-                >
-                  <div className="space-y-2 flex-1">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 text-[10px] font-bold">
-                        #{index + 1}
-                      </span>
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-slate-800 text-sm">
-                        {faq.question}
-                      </h4>
-                      <p className="text-xs text-slate-500 mt-1.5 leading-relaxed font-medium">
-                        {faq.answer}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-2 shrink-0 self-end md:self-start opacity-90 md:opacity-0 group-hover:opacity-100 transition duration-200">
-                    <button
-                      type="button"
-                      onClick={() => openEditFaq(index)}
-                      className="inline-flex items-center gap-1 px-3 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 rounded-lg text-[10px] font-bold shadow-xs transition"
-                    >
-                      <Edit size={10} />
-                      Edit
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleDeleteFaq(index)}
-                      className="inline-flex items-center gap-1 px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-lg text-[10px] font-bold shadow-xs transition"
-                    >
-                      <Trash2 size={10} />
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
 
       {/* Media Picker Modal */}
       {showMediaPicker && (

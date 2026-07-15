@@ -29,10 +29,11 @@ export default function QuizClient({ quiz }) {
   const [completed, setCompleted] = useState(false);
   const [showGate, setShowGate] = useState(status === 'unauthenticated');
 
-  const questions = quiz.questions;
-  const currentQ = questions[currentIndex];
-  const isLastQuestion = currentIndex === questions.length - 1;
+  const questions = quiz?.questions ?? [];
+  const currentQ = questions[currentIndex] ?? null;
+  const isLastQuestion = questions.length > 0 && currentIndex === questions.length - 1;
   const firstLockedIndex = FREE_QUESTION_LIMIT;
+
 
   // Restore progress from sessionStorage after returning from login
   useEffect(() => {
@@ -57,6 +58,17 @@ export default function QuizClient({ quiz }) {
       setShowGate(false);
     }
   }, [status]);
+
+  // Guard: no questions available (must be after all hooks)
+  if (questions.length === 0) {
+    return (
+      <div className="min-h-screen bg-bg-light flex items-center justify-center px-4">
+        <div className="text-center">
+          <p className="text-secondary text-[14px]">Loading quiz questions…</p>
+        </div>
+      </div>
+    );
+  }
 
   const handleSelect = (idx) => {
     if (animating || showGate) return;

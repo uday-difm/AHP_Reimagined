@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { apiSuccess } from "@/core/errors";
+import { getSiteId } from "@/lib/siteGuard";
 
 export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
-    const siteId = searchParams.get("siteId");
+    const siteId = searchParams.get("siteId") || getSiteId(req);
 
     if (!siteId) {
       return NextResponse.json({ error: "siteId is required" }, { status: 400 });

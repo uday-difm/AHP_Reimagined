@@ -15,56 +15,6 @@ import {
   ChevronRight
 } from 'lucide-react';
 
-const mockArticles = [
-  {
-    id: 'mock-1',
-    category: 'Holistic Ayurveda',
-    title: 'Ayurvedic Secrets for Better Digestion (Demo Data)',
-    desc: 'Discover ancient dietary guidelines for optimizing digestive health and maintaining balance.',
-    img: '/images/ayurveda.png',
-    slug: 'ayurvedic-secrets-for-better-digestion',
-  },
-  {
-    id: 'mock-2',
-    category: 'Physical Health',
-    title: 'How Inactivity Impacts Physical Health (Demo Data)',
-    desc: 'Research linking modern sedentary lifestyles to cardiovascular risks and joint stiffness.',
-    img: '/images/physical_health.png',
-    slug: 'how-inactivity-impacts-physical-health',
-  },
-  {
-    id: 'mock-3',
-    category: 'Mental Health',
-    title: 'Exercise for Better Mental Health (Demo Data)',
-    desc: 'Science-backed evidence showing how regular movement rewires the brain for resilience.',
-    img: '/images/hero_exercise.png',
-    slug: 'exercise-for-better-mental-health',
-  },
-  {
-    id: 'mock-4',
-    category: 'Holistic Ayurveda',
-    title: 'Breathwork vs. Meditation for Anxiety (Demo Data)',
-    desc: 'Find out which mindfulness practices work best for quieting your specific anxiety loops.',
-    img: '/images/holistic.png',
-    slug: 'breathwork-vs-meditation-for-anxiety',
-  },
-  {
-    id: 'mock-5',
-    category: 'Insurance Mappings',
-    title: 'Holistic Nutrition (Demo Data)',
-    desc: 'A comprehensive guide on gut health, natural digestion, and diet optimization.',
-    img: '/images/mag_nutrition.png',
-    slug: 'holistic-nutrition',
-  },
-  {
-    id: 'mock-6',
-    category: 'Physical Health',
-    title: 'The Sleep Revolution (Demo Data)',
-    desc: 'How aligning with your circadian rhythm improves physical recovery and endocrine balance.',
-    img: '/images/mag_sleep.png',
-    slug: 'the-sleep-revolution',
-  }
-];
 
 export default function BlogsClient({ initialCategories = [], initialPosts = [] }) {
   const searchParams = useSearchParams();
@@ -91,24 +41,21 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
     setCurrentPage(1);
   }, [categoryFilter, searchQuery, tagFilter]);
 
-  // Derive categories list from DB or fall back to standard defaults
-  const defaultCategories = ['Physical Health', 'Mental Health', 'Holistic Ayurveda', 'Insurance Mappings'];
-  const categoriesList = initialCategories.length > 0
-    ? ['All', ...initialCategories.map(c => c.name)]
-    : ['All', ...defaultCategories];
+  // Derive categories list strictly from DB
+  const categoriesList = ['All', ...initialCategories.map(c => c.name)];
+  const primaryCategories = categoriesList.slice(0, 3);
+  const dropdownCategories = categoriesList.slice(3);
 
-  // Derive articles list from DB or fall back to demo articles
-  const displayArticles = initialPosts.length > 0
-    ? initialPosts.map(p => ({
-      id: p.id,
-      category: p.categories?.[0]?.name || 'General',
-      title: p.title,
-      desc: p.excerpt || 'Read our medically vetted guide.',
-      img: p.featuredImage?.url || '/images/holistic.png',
-      slug: p.slug,
-      tags: p.tags || []
-    }))
-    : mockArticles;
+  // Derive articles list strictly from DB
+  const displayArticles = initialPosts.map(p => ({
+    id: p.id,
+    category: p.categories?.[0]?.name || 'Uncategorized',
+    title: p.title,
+    desc: p.excerpt,
+    img: p.featuredImage?.url || p.featuredImage?.secureUrl || '/images/default-blog.png',
+    slug: p.slug,
+    publishedAt: p.publishedAt
+  }));
 
   const handleCategoryFilter = (cat) => {
     setCategoryFilter(cat);
@@ -143,7 +90,7 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
 
   const filteredArticles = displayArticles.filter(art => {
     const matchesFilter = categoryFilter === 'All' || art.category === categoryFilter;
-    const matchesTag = !tagFilter || (art.tags && art.tags.some(t => 
+    const matchesTag = !tagFilter || (art.tags && art.tags.some(t =>
       t.slug === tagFilter || t.name.toLowerCase() === tagFilter.toLowerCase()
     ));
     const matchesSearch = art.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -154,14 +101,14 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
   // Inject advertisement card into the display sequence at the 3rd position (index 2)
   const finalArticlesList = [];
   filteredArticles.forEach((art, index) => {
-    if (index === 2 && categoryFilter === 'All') {
+    if (index === 2) {
       finalArticlesList.push({ id: 'ad-card-slot', isAd: true });
     }
     finalArticlesList.push(art);
   });
 
   // If list is small and has no ad card yet, append to ensure it shows
-  if (filteredArticles.length < 3 && categoryFilter === 'All' && !finalArticlesList.some(a => a.isAd)) {
+  if (filteredArticles.length < 3 && !finalArticlesList.some(a => a.isAd)) {
     finalArticlesList.push({ id: 'ad-card-slot', isAd: true });
   }
 
@@ -190,7 +137,7 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
           {/* Category Filter Box with Dropdown & "All" button */}
           <div className="flex flex-wrap items-center justify-center gap-3 bg-white/80 p-2.5 rounded-2xl shadow-sm border border-slate-200/50 max-w-2xl mx-auto reveal-scale">
             {/* Primary Buttons */}
-            {['All', 'Physical Health', 'Mental Health'].map((cat) => (
+            {primaryCategories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => handleCategoryFilter(cat)}
@@ -204,36 +151,36 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
             ))}
 
             {/* Overflow Dropdown */}
-            <div className="relative">
-              <select
-                value={!['All', 'Physical Health', 'Mental Health'].includes(categoryFilter) ? categoryFilter : ''}
-                onChange={(e) => {
-                  const selectedVal = e.target.value;
-                  if (selectedVal) {
-                    handleCategoryFilter(selectedVal);
-                  }
-                }}
-                className={`appearance-none bg-white text-secondary font-bold text-[13px] px-5 py-3.5 pr-10 rounded-xl border focus:outline-none focus:ring-2 focus:ring-accent/50 cursor-pointer shadow-sm hover:bg-slate-100/50 transition-all ${!['All', 'Physical Health', 'Mental Health'].includes(categoryFilter)
-                  ? 'border-[#0f7c85] bg-[#0f7c85]/5 text-[#0f7c85] font-extrabold'
-                  : 'border-slate-200/60'
-                  }`}
-              >
-                <option value="">More...</option>
-                {categoriesList
-                  .filter((cat) => !['All', 'Physical Health', 'Mental Health'].includes(cat))
-                  .map((cat) => (
+            {dropdownCategories.length > 0 && (
+              <div className="relative">
+                <select
+                  value={!primaryCategories.includes(categoryFilter) ? categoryFilter : ''}
+                  onChange={(e) => {
+                    const selectedVal = e.target.value;
+                    if (selectedVal) {
+                      handleCategoryFilter(selectedVal);
+                    }
+                  }}
+                  className={`appearance-none bg-white text-secondary font-bold text-[13px] px-5 py-3.5 pr-10 rounded-xl border focus:outline-none focus:ring-2 focus:ring-accent/50 cursor-pointer shadow-sm hover:bg-slate-100/50 transition-all ${!primaryCategories.includes(categoryFilter)
+                    ? 'border-[#0f7c85] bg-[#0f7c85]/5 text-[#0f7c85] font-extrabold'
+                    : 'border-slate-200/60'
+                    }`}
+                >
+                  <option value="">More...</option>
+                  {dropdownCategories.map((cat) => (
                     <option key={cat} value={cat} className="text-secondary bg-white">
                       {cat}
                     </option>
                   ))}
-              </select>
-              <div className={`absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none ${!['All', 'Physical Health', 'Mental Health'].includes(categoryFilter) ? 'text-[#0f7c85]' : 'text-slate-400'
-                }`}>
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
+                </select>
+                <div className={`absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none ${!primaryCategories.includes(categoryFilter) ? 'text-[#0f7c85]' : 'text-slate-400'
+                  }`}>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </section>
@@ -270,7 +217,7 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
           {tagFilter && (
             <div className="flex items-center gap-2 bg-[#e8f4ff] border border-blue-200/30 text-[#0f7c85] px-3.5 py-1.5 rounded-xl text-xs font-semibold w-fit mb-4">
               <span>Filtering by Tag: <strong>{tagFilter}</strong></span>
-              <button 
+              <button
                 type="button"
                 onClick={() => handleTagFilter(null)}
                 className="hover:text-rose-650 transition-colors ml-1 font-bold font-sans cursor-pointer bg-transparent border-0 text-xs text-[#0f7c85]"
