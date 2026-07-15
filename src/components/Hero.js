@@ -73,7 +73,7 @@ export default function Hero() {
                 <span className="text-[#1e2a35] block">Your Daily Guide To</span>
                 <span className="text-[#0f7c85] block">Health &amp; Wellness</span>
               </h1>
-              <p className="text-secondary text-base md:text-xl leading-relaxed max-w-xl mb-8">
+              <p className="text-[#1e2a35] font-semibold text-base md:text-xl leading-relaxed max-w-xl mb-8">
                 Discover trusted health blogs, expert magazines, disease awareness,
                 nutrition tips, mental wellness, and practical lifestyle guidance
                 everything you need to make informed decisions for a healthier life.

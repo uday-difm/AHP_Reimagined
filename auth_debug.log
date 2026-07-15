@@ -227,3 +227,33 @@
 [2026-07-15T04:39:10.498Z] [Auth] reCAPTCHA verifyJson: {"success":true,"challenge_ts":"2026-07-15T04:39:11Z","hostname":"testkey.google.com"}
 [2026-07-15T04:39:10.499Z] [Auth] Authenticating against authService for: admin@example.com
 [2026-07-15T04:39:10.939Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh
+[2026-07-15T06:32:02.309Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-15T06:32:02.311Z] [Auth] Request Host: localhost:3000
+[2026-07-15T06:32:02.312Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-15T06:32:02.313Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-15T06:32:02.323Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-15T06:32:02.633Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrj69kby0001w07smwaqn52c
+[2026-07-15T10:00:55.117Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-15T10:00:55.118Z] [Auth] Request Host: localhost:3000
+[2026-07-15T10:00:55.119Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-15T10:00:55.120Z] [Auth] Token received (length: undefined): empty...
+[2026-07-15T10:00:55.120Z] [Auth] Failed: reCAPTCHA token missing
+[2026-07-15T10:01:00.696Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-15T10:01:00.697Z] [Auth] Request Host: localhost:3000
+[2026-07-15T10:01:00.697Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-15T10:01:00.698Z] [Auth] Token received (length: undefined): empty...
+[2026-07-15T10:01:00.698Z] [Auth] Failed: reCAPTCHA token missing
+[2026-07-15T10:01:13.445Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-15T10:01:13.446Z] [Auth] Request Host: localhost:3000
+[2026-07-15T10:01:13.446Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-15T10:01:13.446Z] [Auth] Token received (length: 1678): 0cAFcWeA4xjidWDtw5OWCFWI8CMBDB...
+[2026-07-15T10:01:13.447Z] [Auth] Sending request to google siteverify (x-www-form-urlencoded POST body)...
+[2026-07-15T10:01:13.574Z] [Auth] reCAPTCHA verifyJson: {"success":true,"challenge_ts":"2026-07-15T10:01:12Z","hostname":"testkey.google.com"}
+[2026-07-15T10:01:13.574Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-15T10:01:13.873Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrj69kby0001w07smwaqn52c
+[2026-07-15T11:16:48.836Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-15T11:16:48.838Z] [Auth] Request Host: localhost:3000
+[2026-07-15T11:16:48.839Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-15T11:16:48.840Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-15T11:16:48.846Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-15T11:16:49.154Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrj69kby0001w07smwaqn52c

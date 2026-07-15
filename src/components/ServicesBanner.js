@@ -25,7 +25,7 @@ export default function ServicesBanner() {
 
           {/* Left: Info Copy */}
           <div className="flex flex-col gap-6 max-w-[560px] relative z-10 text-left">
-            <span className="inline-flex items-center gap-1.5 bg-accent/15 border border-accent/20 text-accent px-4 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-[2px] w-fit select-none">
+            <span className="inline-flex items-center gap-1.5 bg-accent/15 border border-accent/20 text-white px-4 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-[2px] w-fit select-none">
               <Sparkles size={11} className="shrink-0" /> PR & Editorial Placements
             </span>
 

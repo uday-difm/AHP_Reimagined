@@ -380,7 +380,7 @@ export default function SettingsEditor({ siteId, initialSettings }) {
       {/* Main Card */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         {/* Navigation Tabs */}
-        <div className="flex flex-wrap border-b border-gray-200 bg-gray-50/50">
+        <div className="flex flex-nowrap w-full overflow-x-auto whitespace-nowrap border-b border-gray-200 bg-gray-50/50">
           <button
             type="button"
             onClick={() => setActiveTab("brand")}
@@ -525,20 +525,20 @@ export default function SettingsEditor({ siteId, initialSettings }) {
                       <span className="text-[10px] text-gray-400 font-semibold uppercase tracking-wider block mb-1">
                         Primary
                       </span>
-                      <div className="flex items-center gap-1.5 border p-1 rounded-lg bg-gray-50/50">
+                      <div className="flex items-center gap-1 border p-1 rounded-lg bg-gray-50/50">
                         <input
                           type="color"
                           name="primaryColor"
                           value={websiteSettings.primaryColor || "#2563eb"}
                           onChange={handleWebsiteChange}
-                          className="w-8 h-8 p-0 bg-transparent border-0 rounded cursor-pointer shrink-0"
+                          className="w-5 h-5 p-0 bg-transparent border-0 rounded cursor-pointer shrink-0"
                         />
                         <input
                           type="text"
                           name="primaryColor"
                           value={websiteSettings.primaryColor || "#2563eb"}
                           onChange={handleWebsiteChange}
-                          className="w-full text-xs outline-none bg-transparent font-mono"
+                          className="w-full text-xs outline-none bg-transparent font-mono min-w-0"
                         />
                       </div>
                     </div>
@@ -548,20 +548,20 @@ export default function SettingsEditor({ siteId, initialSettings }) {
                       <span className="text-[10px] text-gray-400 font-semibold uppercase tracking-wider block mb-1">
                         Secondary
                       </span>
-                      <div className="flex items-center gap-1.5 border p-1 rounded-lg bg-gray-50/50">
+                      <div className="flex items-center gap-1 border p-1 rounded-lg bg-gray-50/50">
                         <input
                           type="color"
                           name="secondaryColor"
                           value={websiteSettings.secondaryColor || "#4f46e5"}
                           onChange={handleWebsiteChange}
-                          className="w-8 h-8 p-0 bg-transparent border-0 rounded cursor-pointer shrink-0"
+                          className="w-5 h-5 p-0 bg-transparent border-0 rounded cursor-pointer shrink-0"
                         />
                         <input
                           type="text"
                           name="secondaryColor"
                           value={websiteSettings.secondaryColor || "#4f46e5"}
                           onChange={handleWebsiteChange}
-                          className="w-full text-xs outline-none bg-transparent font-mono"
+                          className="w-full text-xs outline-none bg-transparent font-mono min-w-0"
                         />
                       </div>
                     </div>
@@ -571,20 +571,20 @@ export default function SettingsEditor({ siteId, initialSettings }) {
                       <span className="text-[10px] text-gray-400 font-semibold uppercase tracking-wider block mb-1">
                         Accent
                       </span>
-                      <div className="flex items-center gap-1.5 border p-1 rounded-lg bg-gray-50/50">
+                      <div className="flex items-center gap-1 border p-1 rounded-lg bg-gray-50/50">
                         <input
                           type="color"
                           name="accentColor"
                           value={websiteSettings.accentColor || "#f59e0b"}
                           onChange={handleWebsiteChange}
-                          className="w-8 h-8 p-0 bg-transparent border-0 rounded cursor-pointer shrink-0"
+                          className="w-5 h-5 p-0 bg-transparent border-0 rounded cursor-pointer shrink-0"
                         />
                         <input
                           type="text"
                           name="accentColor"
                           value={websiteSettings.accentColor || "#f59e0b"}
                           onChange={handleWebsiteChange}
-                          className="w-full text-xs outline-none bg-transparent font-mono"
+                          className="w-full text-xs outline-none bg-transparent font-mono min-w-0"
                         />
                       </div>
                     </div>
@@ -593,15 +593,15 @@ export default function SettingsEditor({ siteId, initialSettings }) {
               </div>
 
               {/* Maintenance Mode Sub-card */}
-              <div className="bg-amber-50/50 border border-amber-200/70 p-5 rounded-xl space-y-3">
+              <div className="bg-slate-50/50 dark:bg-slate-800 border border-slate-200/70 dark:border-slate-700 p-5 rounded-xl space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <AlertTriangle className="w-5 h-5 text-amber-600" />
+                    <AlertTriangle className="w-5 h-5 text-slate-600 dark:text-slate-400" />
                     <div>
-                      <h4 className="text-xs font-bold text-amber-900 uppercase tracking-wider">
+                      <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">
                         Maintenance Mode
                       </h4>
-                      <p className="text-[10px] text-amber-700">
+                      <p className="text-[10px] text-slate-700 dark:text-slate-300">
                         Block public access to website content with a custom
                         message.
                       </p>
@@ -615,14 +615,14 @@ export default function SettingsEditor({ siteId, initialSettings }) {
                       onChange={handleWebsiteChange}
                       className="sr-only peer"
                     />
-                    <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-600"></div>
+                    <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-slate-600"></div>
                   </label>
                 </div>
                 {websiteSettings.maintenanceMode && (
                   <div className="animate-in fade-in slide-in-from-top-1 duration-150">
                     <label
                       htmlFor="maintenanceMessage"
-                      className="block text-[10px] font-bold text-amber-800 uppercase tracking-wider mb-1.5"
+                      className="block text-[10px] font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider mb-1.5"
                     >
                       Custom Maintenance Message
                     </label>
@@ -633,10 +633,10 @@ export default function SettingsEditor({ siteId, initialSettings }) {
                       onChange={handleWebsiteChange}
                       rows={2}
                       placeholder="We are currently undergoing scheduled system updates. Please visit us back shortly."
-                      className="w-full px-3 py-2 bg-white border border-amber-200 rounded-lg text-xs text-amber-900 focus:outline-none focus:ring-1 focus:ring-amber-400 placeholder-amber-400"
+                      className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-400 placeholder-slate-400"
                     />
                     <div className="mt-3">
-                      <label className="block text-[10px] font-bold text-amber-800 uppercase tracking-wider mb-1.5">
+                      <label className="block text-[10px] font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider mb-1.5">
                         Maintenance Page Image
                       </label>
                       <div className="flex gap-2">
@@ -646,18 +646,18 @@ export default function SettingsEditor({ siteId, initialSettings }) {
                           value={websiteSettings.maintenanceImage || ""}
                           onChange={handleWebsiteChange}
                           placeholder="Media URL or relative path"
-                          className="w-full px-3 py-2 bg-white border border-amber-200 rounded-lg text-xs text-amber-900 focus:outline-none focus:ring-1 focus:ring-amber-400"
+                          className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs text-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-400"
                         />
                         <button
                           type="button"
                           onClick={() => setActivePickerField("maintenanceImage")}
-                          className="px-3 py-1 bg-amber-100 hover:bg-amber-200 text-amber-800 rounded-lg text-[10px] font-bold shrink-0 border border-amber-200 cursor-pointer"
+                          className="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg text-[10px] font-bold shrink-0 border border-slate-200 cursor-pointer"
                         >
                           Browse
                         </button>
                       </div>
                       {websiteSettings.maintenanceImage && (
-                        <div className="mt-2 p-2 bg-white border border-amber-200 rounded-lg inline-flex items-center gap-2">
+                        <div className="mt-2 p-2 bg-white border border-slate-200 rounded-lg inline-flex items-center gap-2">
                           <img
                             src={websiteSettings.maintenanceImage}
                             alt="Maintenance Preview"
@@ -678,15 +678,15 @@ export default function SettingsEditor({ siteId, initialSettings }) {
               </div>
 
               {/* Custom 404 Page Sub-card */}
-              <div className="bg-purple-50/50 border border-purple-200/70 p-5 rounded-xl space-y-3">
+              <div className="bg-slate-50/50 dark:bg-slate-800 border border-slate-200/70 dark:border-slate-700 p-5 rounded-xl space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Globe className="w-5 h-5 text-purple-600" />
+                    <Globe className="w-5 h-5 text-slate-600 dark:text-slate-400" />
                     <div>
-                      <h4 className="text-xs font-bold text-purple-900 uppercase tracking-wider">
+                      <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">
                         Custom 404 Page
                       </h4>
-                      <p className="text-[10px] text-purple-700">
+                      <p className="text-[10px] text-slate-700 dark:text-slate-300">
                         Customize the page visitors see when a URL is not found.
                       </p>
                     </div>
@@ -699,7 +699,7 @@ export default function SettingsEditor({ siteId, initialSettings }) {
                       onChange={handleWebsiteChange}
                       className="sr-only peer"
                     />
-                    <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-purple-600"></div>
+                    <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-slate-600"></div>
                   </label>
                 </div>
 
@@ -707,7 +707,7 @@ export default function SettingsEditor({ siteId, initialSettings }) {
                   <div className="animate-in fade-in duration-150 space-y-3 pt-2">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-[10px] font-bold text-purple-800 uppercase tracking-wider mb-1">
+                        <label className="block text-[10px] font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider mb-1">
                           Page Title
                         </label>
                         <input
@@ -716,11 +716,11 @@ export default function SettingsEditor({ siteId, initialSettings }) {
                           value={websiteSettings.custom404?.title || ""}
                           onChange={handleWebsiteChange}
                           placeholder="Page Not Found"
-                          className="w-full px-3 py-2 bg-white border border-purple-200 rounded-lg text-xs"
+                          className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs"
                         />
                       </div>
                       <div>
-                        <label className="block text-[10px] font-bold text-purple-800 uppercase tracking-wider mb-1">
+                        <label className="block text-[10px] font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider mb-1">
                           Button Text
                         </label>
                         <input
@@ -729,13 +729,13 @@ export default function SettingsEditor({ siteId, initialSettings }) {
                           value={websiteSettings.custom404?.buttonText || ""}
                           onChange={handleWebsiteChange}
                           placeholder="Go Home"
-                          className="w-full px-3 py-2 bg-white border border-purple-200 rounded-lg text-xs"
+                          className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-[10px] font-bold text-purple-800 uppercase tracking-wider mb-1">
+                      <label className="block text-[10px] font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider mb-1">
                         Description
                       </label>
                       <textarea
@@ -744,12 +744,12 @@ export default function SettingsEditor({ siteId, initialSettings }) {
                         onChange={handleWebsiteChange}
                         rows={2}
                         placeholder="Oops! The page you are looking for does not exist."
-                        className="w-full px-3 py-2 bg-white border border-purple-200 rounded-lg text-xs"
+                        className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-[10px] font-bold text-purple-800 uppercase tracking-wider mb-1">
+                      <label className="block text-[10px] font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider mb-1">
                         Button Link
                       </label>
                       <input
@@ -758,12 +758,12 @@ export default function SettingsEditor({ siteId, initialSettings }) {
                         value={websiteSettings.custom404?.buttonLink || ""}
                         onChange={handleWebsiteChange}
                         placeholder="/"
-                        className="w-full px-3 py-2 bg-white border border-purple-200 rounded-lg text-xs font-mono"
+                        className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs font-mono"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-[10px] font-bold text-purple-800 uppercase tracking-wider mb-1">
+                      <label className="block text-[10px] font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider mb-1">
                         Custom 404 Image
                       </label>
                       <div className="flex gap-2">
@@ -773,18 +773,18 @@ export default function SettingsEditor({ siteId, initialSettings }) {
                           value={websiteSettings.custom404?.image || ""}
                           onChange={handleWebsiteChange}
                           placeholder="Media URL or relative path"
-                          className="w-full px-3 py-2 bg-white border border-purple-200 rounded-lg text-xs"
+                          className="w-full px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs"
                         />
                         <button
                           type="button"
                           onClick={() => setActivePickerField("custom404Image")}
-                          className="px-3 py-1 bg-purple-100 hover:bg-purple-200 text-purple-800 rounded-lg text-[10px] font-bold shrink-0 border border-purple-200 cursor-pointer"
+                          className="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg text-[10px] font-bold shrink-0 border border-slate-200 cursor-pointer"
                         >
                           Browse
                         </button>
                       </div>
                       {websiteSettings.custom404?.image && (
-                        <div className="mt-2 p-2 bg-white border border-purple-200 rounded-lg inline-flex items-center gap-2">
+                        <div className="mt-2 p-2 bg-white border border-slate-200 rounded-lg inline-flex items-center gap-2">
                           <img
                             src={websiteSettings.custom404.image}
                             alt="404 Preview"
@@ -808,11 +808,11 @@ export default function SettingsEditor({ siteId, initialSettings }) {
                     </div>
 
                     {/* Auto-redirect section */}
-                    <div className="bg-white border border-purple-100 rounded-lg p-3 space-y-3">
+                    <div className="bg-white border border-slate-100 rounded-lg p-3 space-y-3">
                       <div className="flex items-center justify-between">
-                        <label className="text-[10px] font-bold text-purple-800 uppercase tracking-wider">
+                        <span className="text-[10px] font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider">
                           Auto-Redirect
-                        </label>
+                        </span>
                         <label className="relative inline-flex items-center cursor-pointer">
                           <input
                             type="checkbox"

@@ -283,7 +283,7 @@ export default function DevConsole({
       </div>
 
       {/* Navigation tabs */}
-      <div className="flex border-b border-gray-200">
+      <div className="flex flex-nowrap w-full overflow-x-auto whitespace-nowrap border-b border-gray-200">
         <button
           onClick={() => {
             setActiveTab("api-keys");

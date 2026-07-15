@@ -965,17 +965,17 @@ export default function QuizzesAdminPage() {
       </div>
 
       {/* Metrics */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
         {[
           { icon: <Layers size={18} />, label: "Quiz Types",      value: quizTypes.length,    color: "indigo" },
           { icon: <HelpCircle size={18} />, label: "Questions",   value: allQuestions.length, color: "green"  },
           { icon: <BarChart2 size={18} />, label: "Total Plays",  value: totalPlays,          color: "amber"  },
         ].map((m) => (
-          <div key={m.label} className="bg-white border border-slate-100 rounded-2xl p-5 shadow-xs flex items-center gap-3">
-            <div className={`p-2.5 rounded-xl bg-${m.color}-50 text-${m.color}-600`}>{m.icon}</div>
-            <div>
-              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{m.label}</div>
-              <div className="text-2xl font-bold text-slate-900">{m.value}</div>
+          <div key={m.label} className="bg-white border border-slate-100 rounded-2xl p-4 md:p-5 shadow-xs flex flex-col sm:flex-row items-start sm:items-center gap-3">
+            <div className={`p-2.5 rounded-xl bg-${m.color}-50 text-${m.color}-600 shrink-0`}>{m.icon}</div>
+            <div className="min-w-0">
+              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider truncate">{m.label}</div>
+              <div className="text-xl sm:text-2xl font-bold text-slate-900">{m.value}</div>
             </div>
           </div>
         ))}

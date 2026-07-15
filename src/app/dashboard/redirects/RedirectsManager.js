@@ -45,7 +45,7 @@ export default function RedirectsManager({
   );
   const [c404Description, setC404Description] = useState(
     initialCustom404?.description ||
-      "Oops! The page you are looking for does not exist.",
+    "Oops! The page you are looking for does not exist.",
   );
   const [c404ButtonText, setC404ButtonText] = useState(
     initialCustom404?.buttonText || "Go Home",
@@ -210,11 +210,10 @@ export default function RedirectsManager({
       <div className="flex border-b border-gray-200 bg-white p-1 rounded-lg shadow-sm w-fit gap-1">
         <button
           onClick={() => setActiveTab("redirects")}
-          className={`flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-md transition ${
-            activeTab === "redirects"
+          className={`flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-md transition ${activeTab === "redirects"
               ? "bg-blue-50 text-blue-600 shadow-sm"
               : "text-gray-500 hover:text-gray-800 hover:bg-gray-50"
-          }`}
+            }`}
         >
           <ArrowLeftRight size={14} />
           URL Redirects Map
@@ -222,11 +221,10 @@ export default function RedirectsManager({
 
         <button
           onClick={() => setActiveTab("custom404")}
-          className={`flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-md transition ${
-            activeTab === "custom404"
+          className={`flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-md transition ${activeTab === "custom404"
               ? "bg-blue-50 text-blue-600 shadow-sm"
               : "text-gray-500 hover:text-gray-800 hover:bg-gray-50"
-          }`}
+            }`}
         >
           <Settings size={14} />
           Custom 404 Settings
@@ -234,11 +232,10 @@ export default function RedirectsManager({
 
         <button
           onClick={() => setActiveTab("scanner")}
-          className={`flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-md transition ${
-            activeTab === "scanner"
+          className={`flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-md transition ${activeTab === "scanner"
               ? "bg-blue-50 text-blue-600 shadow-sm"
               : "text-gray-500 hover:text-gray-800 hover:bg-gray-50"
-          }`}
+            }`}
         >
           <ShieldAlert size={14} />
           Broken Links Scan
@@ -361,11 +358,10 @@ export default function RedirectsManager({
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <span
-                              className={`px-2 py-0.5 text-[10px] font-mono rounded border ${
-                                item.type === 301
+                              className={`px-2 py-0.5 text-[10px] font-mono rounded border ${item.type === 301
                                   ? "bg-green-50 text-green-700 border-green-150"
                                   : "bg-blue-50 text-blue-700 border-blue-150"
-                              }`}
+                                }`}
                             >
                               {item.type}
                             </span>
