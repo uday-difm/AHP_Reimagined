@@ -107,8 +107,14 @@ export class SettingsService extends BaseService {
       data: updated,
     });
 
-    // Ping frontend to revalidate cached settings (header / footer)
-    if (fieldName === "header" || fieldName === "footer") {
+    // Ping frontend to revalidate cached settings
+    if (["header", "footer", "websiteSettings"].includes(fieldName)) {
+      try {
+        const { revalidateTag } = await import("next/cache");
+        revalidateTag("layout");
+      } catch (e) {
+        // ignore if not running in next.js context
+      }
       triggerFrontendRevalidation(siteId);
     }
 
@@ -166,6 +172,12 @@ export class SettingsService extends BaseService {
     EventBus.emit("settings.global.updated", { siteId, userId, data: result });
 
     // Ping frontend to revalidate cached settings
+    try {
+      const { revalidateTag } = await import("next/cache");
+      revalidateTag("layout");
+    } catch (e) {
+      // ignore
+    }
     triggerFrontendRevalidation(siteId);
 
     return result;

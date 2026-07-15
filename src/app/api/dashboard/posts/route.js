@@ -5,7 +5,7 @@ import { handleApiError, apiSuccess } from "@/core/errors";
 
 export async function GET(req) {
   try {
-    const auth = await checkSitePermission(req, "EDITOR");
+    const auth = await checkSitePermission(req, "AUTHOR");
     if (auth.error) {
       return NextResponse.json({ error: auth.error }, { status: auth.status });
     }
@@ -27,7 +27,7 @@ export async function GET(req) {
 
 export async function POST(req) {
   try {
-    const auth = await checkSitePermission(req, "EDITOR");
+    const auth = await checkSitePermission(req, "AUTHOR");
     if (auth.error) {
       return NextResponse.json({ error: auth.error }, { status: auth.status });
     }

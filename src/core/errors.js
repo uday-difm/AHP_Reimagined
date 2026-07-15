@@ -62,8 +62,27 @@ export class ForbiddenError extends AppError {
   }
 }
 
+export async function logSystemError(message, stack = null, context = null, siteId = null) {
+  try {
+    const prisma = (await import("@/lib/prisma")).default;
+    await prisma.systemErrorLog.create({
+      data: {
+        siteId: siteId || process.env.NEXT_PUBLIC_SITE_ID || "AHP",
+        message: String(message).substring(0, 1000),
+        stack: stack ? String(stack).substring(0, 4000) : null,
+        context: context || {},
+      },
+    });
+  } catch (dbErr) {
+    console.error("Failed to write to SystemErrorLog:", dbErr);
+  }
+}
+
 export function handleApiError(err) {
   console.error("API Error encountered:", err);
+  
+  // Asynchronously log to the database so it appears in the dashboard
+  logSystemError(err.message || String(err), err.stack, { type: err.name || "UnknownError" }).catch(() => {});
 
   if (err instanceof AppError) {
     return Response.json(

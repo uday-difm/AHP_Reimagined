@@ -25,6 +25,10 @@ export default async function Layout({ children }) {
     redirect("/dashboard/login");
   }
 
+  if (user.globalRole === "VISITOR") {
+    redirect("/");
+  }
+
   const siteId = process.env.NEXT_PUBLIC_SITE_ID || process.env.SITE_ID || "AHP";
   const connectedSiteId = siteId;
   let sites = [];

@@ -12,6 +12,7 @@ import { getLayoutData } from "@/services/layout.service";
 import CookieBanner from "@/components/CookieBanner";
 import { GlobalAnalytics } from "@yourcompany/global-backend-next/components";
 import CustomScripts from "@/components/utils/CustomScripts";
+import PerformanceEffects from "@/components/utils/PerformanceEffects";
 
 const inter = Inter({
   variable: "--font-body",
@@ -100,7 +101,11 @@ export default async function RootLayout({ children }) {
           <AuthProvider>
             <SessionTimeoutHandler timeoutMinutes={30} />
             <GlobalAnalytics settings={layout?.rawSettings} />
-            <CustomScripts scripts={layout?.rawSettings?.scripts} />
+            <CustomScripts scripts={layout?.rawSettings?.scripts} deferScripts={layout?.rawSettings?.performanceConfig?.deferNonEssentialScripts ?? true} />
+            <PerformanceEffects 
+              lazyLoadImages={layout?.rawSettings?.performanceConfig?.lazyLoadImages ?? true}
+              lazyLoadVideos={layout?.rawSettings?.performanceConfig?.lazyLoadVideos ?? true}
+            />
             <ScrollProvider>
               {children}
             </ScrollProvider>

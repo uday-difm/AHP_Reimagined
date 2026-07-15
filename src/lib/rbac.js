@@ -10,11 +10,13 @@ export const ROLES = {
 
 // numeric hierarchy
 export const ROLE_LEVEL = {
-  SUPERADMIN: 5,
-  ADMIN: 4,
-  EDITOR: 3,
-  AUTHOR: 2,
+  SUPERADMIN: 6,
+  ADMIN: 5,
+  EDITOR: 4,
+  AUTHOR: 3,
+  MARKETING: 2,
   VIEWER: 1,
+  VISITOR: 0,
 };
 
 // Allow assigning roles up to and including the creator's role

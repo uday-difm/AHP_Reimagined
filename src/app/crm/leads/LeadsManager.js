@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   Download, Edit2, Trash2, X, Search, Filter, Mail,
   ShieldCheck, Eye, MessageSquare, Save, AlertCircle, CheckCircle,
@@ -12,13 +13,13 @@ const LEAD_STATUSES = ["new", "contacted", "qualified", "closed"];
 
 function StatusBadge({ status }) {
   const map = {
-    new:       "bg-blue-50 text-blue-700 border-blue-200",
-    read:      "bg-yellow-50 text-yellow-700 border-yellow-200",
+    new: "bg-blue-50 text-blue-700 border-blue-200",
+    read: "bg-yellow-50 text-yellow-700 border-yellow-200",
     contacted: "bg-yellow-50 text-yellow-700 border-yellow-200",
     qualified: "bg-green-50 text-green-700 border-green-200",
-    closed:    "bg-slate-100 text-slate-600 border-slate-200",
-    spam:      "bg-red-50 text-red-700 border-red-200",
-    archived:  "bg-gray-100 text-gray-500 border-gray-200",
+    closed: "bg-slate-100 text-slate-600 border-slate-200",
+    spam: "bg-red-50 text-red-700 border-red-200",
+    archived: "bg-gray-100 text-gray-500 border-gray-200",
   };
   return (
     <span className={`px-2.5 py-0.5 text-xs font-semibold rounded-full border capitalize ${map[status] || "bg-gray-50 text-gray-500 border-gray-200"}`}>
@@ -28,14 +29,34 @@ function StatusBadge({ status }) {
 }
 
 // ─── Submissions Tab ──────────────────────────────────────────────────────────
-function SubmissionsTab({ siteId, submissions, setSubmissions }) {
-  const [search, setSearch] = useState("");
+function SubmissionsTab({ siteId, submissions, setSubmissions, total }) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const currentQ = searchParams.get("q") || "";
+  const currentPage = parseInt(searchParams.get("subPage") || "1", 10);
+
+  const [searchInput, setSearchInput] = useState(currentQ);
+  const [search, setSearch] = useState(currentQ);
   const [filterStatus, setFilterStatus] = useState("all");
   const [selected, setSelected] = useState(null);
   const [notes, setNotes] = useState("");
   const [status, setStatus] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setSearch(searchInput);
+      if (searchInput !== currentQ) {
+        const params = new URLSearchParams(searchParams.toString());
+        if (searchInput) params.set("q", searchInput);
+        else params.delete("q");
+        params.set("subPage", "1"); // Reset to page 1 on new search
+        router.push(`?${params.toString()}`);
+      }
+    }, 250);
+    return () => clearTimeout(timeout);
+  }, [searchInput, currentQ, router, searchParams]);
 
   const filtered = useMemo(() => {
     return submissions.filter((s) => {
@@ -93,6 +114,14 @@ function SubmissionsTab({ siteId, submissions, setSubmissions }) {
     }
   };
 
+  const handlePageChange = (newPage) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("subPage", newPage.toString());
+    router.push(`?${params.toString()}`);
+  };
+
+  const totalPages = Math.ceil(total / 50);
+
   return (
     <div className="space-y-4">
       {/* Toolbar */}
@@ -102,8 +131,8 @@ function SubmissionsTab({ siteId, submissions, setSubmissions }) {
             <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
               placeholder="Search name, email, message..."
               className="pl-8 pr-3 py-1.5 text-xs border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 w-64"
             />
@@ -185,6 +214,31 @@ function SubmissionsTab({ siteId, submissions, setSubmissions }) {
         )}
       </div>
 
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between py-3">
+          <span className="text-xs text-slate-500">
+            Showing page {currentPage} of {totalPages} ({total} total)
+          </span>
+          <div className="flex items-center gap-1">
+            <button
+              disabled={currentPage <= 1}
+              onClick={() => handlePageChange(currentPage - 1)}
+              className="px-3 py-1 text-xs font-semibold border rounded hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Prev
+            </button>
+            <button
+              disabled={currentPage >= totalPages}
+              onClick={() => handlePageChange(currentPage + 1)}
+              className="px-3 py-1 text-xs font-semibold border rounded hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Edit Modal */}
       {selected && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
@@ -253,14 +307,34 @@ function SubmissionsTab({ siteId, submissions, setSubmissions }) {
 }
 
 // ─── Leads Tab ────────────────────────────────────────────────────────────────
-function LeadsTab({ siteId, leads, setLeads }) {
-  const [search, setSearch] = useState("");
+function LeadsTab({ siteId, leads, setLeads, total }) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const currentQ = searchParams.get("q") || "";
+  const currentPage = parseInt(searchParams.get("leadPage") || "1", 10);
+
+  const [searchInput, setSearchInput] = useState(currentQ);
+  const [search, setSearch] = useState(currentQ);
   const [filterStatus, setFilterStatus] = useState("all");
   const [selected, setSelected] = useState(null);
   const [notes, setNotes] = useState("");
   const [status, setStatus] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setSearch(searchInput);
+      if (searchInput !== currentQ) {
+        const params = new URLSearchParams(searchParams.toString());
+        if (searchInput) params.set("q", searchInput);
+        else params.delete("q");
+        params.set("leadPage", "1");
+        router.push(`?${params.toString()}`);
+      }
+    }, 250);
+    return () => clearTimeout(timeout);
+  }, [searchInput, currentQ, router, searchParams]);
 
   const filtered = useMemo(() => {
     return leads.filter((l) => {
@@ -319,6 +393,14 @@ function LeadsTab({ siteId, leads, setLeads }) {
     }
   };
 
+  const handlePageChange = (newPage) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("leadPage", newPage.toString());
+    router.push(`?${params.toString()}`);
+  };
+
+  const totalPages = Math.ceil(total / 50);
+
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap gap-3 items-center justify-between">
@@ -327,8 +409,8 @@ function LeadsTab({ siteId, leads, setLeads }) {
             <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
               placeholder="Search leads..."
               className="pl-8 pr-3 py-1.5 text-xs border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 w-64"
             />
@@ -404,6 +486,31 @@ function LeadsTab({ siteId, leads, setLeads }) {
           </div>
         )}
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between py-3">
+          <span className="text-xs text-slate-500">
+            Showing page {currentPage} of {totalPages} ({total} total)
+          </span>
+          <div className="flex items-center gap-1">
+            <button
+              disabled={currentPage <= 1}
+              onClick={() => handlePageChange(currentPage - 1)}
+              className="px-3 py-1 text-xs font-semibold border rounded hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Prev
+            </button>
+            <button
+              disabled={currentPage >= totalPages}
+              onClick={() => handlePageChange(currentPage + 1)}
+              className="px-3 py-1 text-xs font-semibold border rounded hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      )}
 
       {selected && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
@@ -576,12 +683,24 @@ function SpamTab({ siteId, initialConfig }) {
 // ─── Root Component ───────────────────────────────────────────────────────────
 const TABS = [
   { key: "submissions", label: "Contact Submissions", icon: MessageSquare },
-  { key: "leads",       label: "Leads CRM",           icon: Filter },
-  { key: "spam",        label: "Spam Protection",      icon: ShieldCheck },
+  { key: "leads", label: "Leads CRM", icon: Filter },
+  { key: "spam", label: "Spam Protection", icon: ShieldCheck },
 ];
 
-export default function LeadsManager({ siteId, initialSubmissions, initialLeads, initialConfig }) {
-  const [activeTab, setActiveTab] = useState("submissions");
+export default function LeadsManager({ siteId, initialSubmissions, initialLeads, initialConfig, submissionsTotal, leadsTotal }) {
+  const searchParams = useSearchParams();
+  const currentTab = searchParams.get("tab") || "submissions";
+  const [activeTab, setActiveTab] = useState(currentTab);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (activeTab !== currentTab) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("tab", activeTab);
+      router.push(`?${params.toString()}`);
+    }
+  }, [activeTab, currentTab, router, searchParams]);
+
   const [submissions, setSubmissions] = useState(initialSubmissions);
   const [leads, setLeads] = useState(initialLeads);
 
@@ -599,22 +718,21 @@ export default function LeadsManager({ siteId, initialSubmissions, initialLeads,
           <button
             key={key}
             onClick={() => setActiveTab(key)}
-            className={`flex items-center gap-1.5 px-4 py-2.5 text-xs font-semibold border-b-2 whitespace-nowrap transition-colors ${
-              activeTab === key
+            className={`flex items-center gap-1.5 px-4 py-2.5 text-xs font-semibold border-b-2 whitespace-nowrap transition-colors ${activeTab === key
                 ? "border-blue-600 text-blue-600"
                 : "border-transparent text-slate-500 hover:text-slate-900 hover:border-slate-300"
-            }`}
+              }`}
           >
             <Icon size={13} />
             {label}
             {key === "submissions" && (
               <span className="ml-1 bg-slate-100 text-slate-600 border border-slate-200 text-2xs font-bold px-1.5 py-0.5 rounded-full">
-                {submissions.length}
+                {submissionsTotal}
               </span>
             )}
             {key === "leads" && (
               <span className="ml-1 bg-slate-100 text-slate-600 border border-slate-200 text-2xs font-bold px-1.5 py-0.5 rounded-full">
-                {leads.length}
+                {leadsTotal}
               </span>
             )}
           </button>
@@ -623,10 +741,10 @@ export default function LeadsManager({ siteId, initialSubmissions, initialLeads,
 
       {/* Tab panels */}
       {activeTab === "submissions" && (
-        <SubmissionsTab siteId={siteId} submissions={submissions} setSubmissions={setSubmissions} />
+        <SubmissionsTab siteId={siteId} submissions={submissions} setSubmissions={setSubmissions} total={submissionsTotal} />
       )}
       {activeTab === "leads" && (
-        <LeadsTab siteId={siteId} leads={leads} setLeads={setLeads} />
+        <LeadsTab siteId={siteId} leads={leads} setLeads={setLeads} total={leadsTotal} />
       )}
       {activeTab === "spam" && (
         <SpamTab siteId={siteId} initialConfig={initialConfig} />

@@ -69,7 +69,7 @@ function LoginAndProjectLanding() {
 
   // If already authenticated, check if role is admin and route to dashboard
   useEffect(() => {
-    if (status === "authenticated" && session?.user?.globalRole !== "USER") {
+    if (status === "authenticated" && session?.user?.globalRole !== "VISITOR") {
       const callbackUrl = searchParams.get("callbackUrl") || "/dashboard/dashboard";
       router.replace(callbackUrl);
     }
@@ -148,7 +148,7 @@ function LoginAndProjectLanding() {
     }
   }
 
-  if (status === "loading" || (status === "authenticated" && session?.user?.globalRole !== "USER")) {
+  if (status === "loading" || (status === "authenticated" && session?.user?.globalRole !== "VISITOR")) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-950">
         <div className="text-center">

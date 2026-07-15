@@ -9,7 +9,7 @@ export const metadata = {
   description: "Manage contact form submissions, leads pipeline, email settings and spam protection",
 };
 
-export default async function LeadsPage() {
+export default async function LeadsPage({ searchParams: rawSearchParams }) {
   const user = await requireAuth();
   if (!user) return null;
   if (user.globalRole === "VIEWER") redirect("/dashboard/dashboard");
@@ -25,15 +25,43 @@ export default async function LeadsPage() {
     );
   }
 
-  const [submissions, leads, settings] = await Promise.all([
+  const searchParams = await rawSearchParams;
+  const subPage = parseInt(searchParams?.subPage || "1", 10);
+  const leadPage = parseInt(searchParams?.leadPage || "1", 10);
+  const PAGE_SIZE = 50;
+  
+  const query = searchParams?.q || "";
+  const subWhere = { siteId: site.id, deletedAt: null };
+  const leadWhere = { siteId: site.id, deletedAt: null };
+
+  if (query) {
+    subWhere.OR = [
+      { name: { contains: query } },
+      { email: { contains: query } },
+      { message: { contains: query } },
+    ];
+    leadWhere.OR = [
+      { name: { contains: query } },
+      { email: { contains: query } },
+      { notes: { contains: query } },
+    ];
+  }
+
+  const [submissions, submissionsTotal, leads, leadsTotal, settings] = await Promise.all([
     prisma.contactFormSubmission.findMany({
-      where: { siteId: site.id, deletedAt: null },
+      where: subWhere,
       orderBy: { createdAt: "desc" },
+      take: PAGE_SIZE,
+      skip: (subPage - 1) * PAGE_SIZE,
     }),
+    prisma.contactFormSubmission.count({ where: subWhere }),
     prisma.lead.findMany({
-      where: { siteId: site.id, deletedAt: null },
+      where: leadWhere,
       orderBy: { createdAt: "desc" },
+      take: PAGE_SIZE,
+      skip: (leadPage - 1) * PAGE_SIZE,
     }),
+    prisma.lead.count({ where: leadWhere }),
     prisma.globalSettings.findUnique({
       where: { siteId: site.id },
       select: { emailSettings: true, securityControls: true },
@@ -54,7 +82,9 @@ export default async function LeadsPage() {
     <LeadsManager
       siteId={site.id}
       initialSubmissions={JSON.parse(JSON.stringify(submissions))}
+      submissionsTotal={submissionsTotal}
       initialLeads={JSON.parse(JSON.stringify(leads))}
+      leadsTotal={leadsTotal}
       initialConfig={initialConfig}
     />
   );

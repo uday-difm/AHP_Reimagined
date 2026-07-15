@@ -5,7 +5,7 @@ const middlewareCache = {
   settings: {},   // key: siteId, value: { data: ws, expiresAt: number }
   redirects: {},  // key: siteId_source, value: { data: rule, expiresAt: number }
 };
-const CACHE_TTL_MS = 30000;
+const CACHE_TTL_MS = process.env.NODE_ENV === "development" ? 0 : 30000;
 
 /** Path prefixes that should never be blocked by maintenance mode */
 const SKIP_PREFIXES = [
@@ -118,8 +118,7 @@ export async function proxy(request) {
   const checkRedirect = !pathname.startsWith("/api/") &&
                         !pathname.startsWith("/_next") &&
                         !pathname.startsWith("/maintenance") &&
-                        !isDashboardPath &&
-                        process.env.NODE_ENV !== "development";
+                        !isDashboardPath;
 
   if (checkMaintenance || checkRedirect) {
     const now = Date.now();
@@ -195,11 +194,15 @@ export async function proxy(request) {
     // Handle Redirects
     if (checkRedirect && cachedRedirect?.data) {
       const rule = cachedRedirect.data;
+      console.log(`[Middleware] Evaluating redirect for ${pathname} -> target: ${rule.target}, type: ${rule.type}`);
       if (rule.target && rule.target !== pathname) {
         const redirectUrl = new URL(rule.target, url);
-        const status = rule.type === 302 ? 302 : 301;
-        return NextResponse.redirect(redirectUrl, { status });
+        const status = parseInt(rule.type) || 301;
+        console.log(`[Middleware] Executing redirect to ${redirectUrl.toString()} with status ${status}`);
+        return NextResponse.redirect(redirectUrl, status);
       }
+    } else if (checkRedirect) {
+       console.log(`[Middleware] No active redirect found for ${pathname}`);
     }
   }
 

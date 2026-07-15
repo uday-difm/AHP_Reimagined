@@ -1,7 +1,7 @@
 "use client";
 import { useEffect } from "react";
 
-export default function CustomScripts({ scripts }) {
+export default function CustomScripts({ scripts, deferScripts = true }) {
   useEffect(() => {
     if (!scripts) return;
 
@@ -16,6 +16,9 @@ export default function CustomScripts({ scripts }) {
             Array.from(node.attributes).forEach((attr) => {
               scriptEl.setAttribute(attr.name, attr.value);
             });
+            if (deferScripts && scriptEl.hasAttribute("src") && !scriptEl.hasAttribute("defer")) {
+              scriptEl.setAttribute("defer", "true");
+            }
             scriptEl.innerHTML = node.innerHTML;
             document.head.appendChild(scriptEl);
           } else {
@@ -36,6 +39,9 @@ export default function CustomScripts({ scripts }) {
             Array.from(node.attributes).forEach((attr) => {
               scriptEl.setAttribute(attr.name, attr.value);
             });
+            if (deferScripts && scriptEl.hasAttribute("src") && !scriptEl.hasAttribute("defer")) {
+              scriptEl.setAttribute("defer", "true");
+            }
             scriptEl.innerHTML = node.innerHTML;
             document.body.appendChild(scriptEl);
           } else {

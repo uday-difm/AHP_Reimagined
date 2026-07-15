@@ -43,7 +43,7 @@ const allActions = [
     desc: "Manage customer form inquiries",
     href: "/crm/leads",
     icon: Inbox,
-    roles: ["EDITOR"],
+    roles: ["EDITOR", "MARKETING"],
   },
   {
     label: "Manage Menus",

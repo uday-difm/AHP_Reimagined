@@ -19,6 +19,70 @@ export default function BackupConsole({ siteId, initialHistory }) {
   const [restoreText, setRestoreText] = useState("");
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [exportFormat, setExportFormat] = useState("json");
+
+  const jsonToSql = (data) => {
+    let sql = `-- Database Snapshot SQL Dump\n-- Generated for Site ID: ${siteId}\n-- Timestamp: ${new Date().toISOString()}\n\n`;
+    for (const [tableName, records] of Object.entries(data)) {
+      if (!Array.isArray(records) || records.length === 0) continue;
+      
+      sql += `-- Table: ${tableName}\n`;
+      records.forEach(record => {
+        const columns = Object.keys(record);
+        const values = columns.map(col => {
+          let val = record[col];
+          if (val === null) return "NULL";
+          if (typeof val === "boolean") return val ? "1" : "0";
+          if (typeof val === "object") return `'${JSON.stringify(val).replace(/'/g, "''")}'`;
+          if (typeof val === "string") return `'${val.replace(/'/g, "''")}'`;
+          return val;
+        });
+        sql += `INSERT INTO \`${tableName}\` (\`${columns.join("`, `")}\`) VALUES (${values.join(", ")});\n`;
+      });
+      sql += "\n";
+    }
+    return sql;
+  };
+
+  const jsonToCsvZip = async (data, filename) => {
+    const JSZip = (await import("jszip")).default;
+    const zip = new JSZip();
+
+    for (const [tableName, records] of Object.entries(data)) {
+      if (!Array.isArray(records) || records.length === 0) continue;
+
+      const columns = Object.keys(records[0]);
+      let csv = columns.join(",") + "\n";
+
+      records.forEach(record => {
+        const row = columns.map(col => {
+          let val = record[col];
+          if (val === null) return "";
+          if (typeof val === "object") val = JSON.stringify(val);
+          else val = String(val);
+          
+          val = val.replace(/"/g, '""');
+          if (val.includes(",") || val.includes("\n") || val.includes('"')) {
+            val = `"${val}"`;
+          }
+          return val;
+        });
+        csv += row.join(",") + "\n";
+      });
+
+      zip.file(`${tableName}.csv`, csv);
+    }
+
+    const content = await zip.generateAsync({ type: "blob" });
+    const url = URL.createObjectURL(content);
+    const downloadAnchor = document.createElement("a");
+    downloadAnchor.href = url;
+    downloadAnchor.download = filename;
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+    URL.revokeObjectURL(url);
+  };
 
   const triggerBackup = async () => {
     setIsBackingUp(true);
@@ -41,19 +105,26 @@ export default function BackupConsole({ siteId, initialHistory }) {
       const result = await res.json();
       const backup = result.data?.backup ?? result.backup;
 
-      // Trigger browser download of the backup payload
-      const dataStr =
-        "data:text/json;charset=utf-8," +
-        encodeURIComponent(JSON.stringify(backup, null, 2));
-      const downloadAnchor = document.createElement("a");
-      downloadAnchor.setAttribute("href", dataStr);
-      downloadAnchor.setAttribute(
-        "download",
-        `site_backup_${siteId}_${Date.now()}.json`,
-      );
-      document.body.appendChild(downloadAnchor);
-      downloadAnchor.click();
-      downloadAnchor.remove();
+      if (exportFormat === "sql") {
+        const sqlContent = jsonToSql(backup.data);
+        const dataStr = "data:text/sql;charset=utf-8," + encodeURIComponent(sqlContent);
+        const downloadAnchor = document.createElement("a");
+        downloadAnchor.setAttribute("href", dataStr);
+        downloadAnchor.setAttribute("download", `site_backup_${siteId}_${Date.now()}.sql`);
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+      } else if (exportFormat === "csv") {
+        await jsonToCsvZip(backup.data, `site_backup_${siteId}_${Date.now()}.zip`);
+      } else {
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backup, null, 2));
+        const downloadAnchor = document.createElement("a");
+        downloadAnchor.setAttribute("href", dataStr);
+        downloadAnchor.setAttribute("download", `site_backup_${siteId}_${Date.now()}.json`);
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+      }
 
       // Refetch backup logs
       const historyRes = await fetch(`/api/dashboard/backup/history`, {
@@ -65,7 +136,7 @@ export default function BackupConsole({ siteId, initialHistory }) {
       if (history) {
         setHistory(history);
       }
-      setSuccess("Database backup successfully compiled and downloaded!");
+      setSuccess(`Database backup successfully compiled and downloaded as ${exportFormat.toUpperCase()}!`);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -266,23 +337,35 @@ export default function BackupConsole({ siteId, initialHistory }) {
                 {siteId}
               </span>
             </div>
-            <button
-              onClick={triggerBackup}
-              disabled={isBackingUp || isBackingUpMedia || isRestoring}
-              className="flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 disabled:bg-blue-300 transition"
-            >
-              {isBackingUp ? (
-                <>
-                  <RefreshCw className="animate-spin" size={16} />
-                  Compiling...
-                </>
-              ) : (
-                <>
-                  <Download size={16} />
-                  Download Backup JSON
-                </>
-              )}
-            </button>
+            <div className="flex items-center gap-2">
+              <select
+                value={exportFormat}
+                onChange={(e) => setExportFormat(e.target.value)}
+                disabled={isBackingUp || isBackingUpMedia || isRestoring}
+                className="bg-white border rounded-lg px-3 py-2 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+              >
+                <option value="json">JSON Backup</option>
+                <option value="sql">SQL Dump</option>
+                <option value="csv">CSV Archive (ZIP)</option>
+              </select>
+              <button
+                onClick={triggerBackup}
+                disabled={isBackingUp || isBackingUpMedia || isRestoring}
+                className="flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 disabled:bg-blue-300 transition"
+              >
+                {isBackingUp ? (
+                  <>
+                    <RefreshCw className="animate-spin" size={16} />
+                    Compiling...
+                  </>
+                ) : (
+                  <>
+                    <Download size={16} />
+                    Download
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </div>
 
@@ -298,7 +381,7 @@ export default function BackupConsole({ siteId, initialHistory }) {
               </h3>
               <p className="text-sm text-gray-500 mt-0.5">
                 Generate an atomic snapshot of your website media asset folders
-                and file links stored inside Cloudinary.
+                and file links stored inside your remote bucket (S3/MinIO).
               </p>
             </div>
           </div>
