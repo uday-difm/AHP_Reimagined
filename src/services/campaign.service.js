@@ -133,23 +133,44 @@ export const campaignService = {
           html: campaign.body
         });
 
-        await prisma.campaignLog.create({
-          data: {
+        await prisma.campaignLog.upsert({
+          where: {
+            campaignId_subscriberId: {
+              campaignId,
+              subscriberId: sub.id,
+            },
+          },
+          update: {
+            status: "sent",
+            sentAt: new Date(),
+            errorMessage: null,
+          },
+          create: {
             campaignId,
             subscriberId: sub.id,
             status: "sent",
-            sentAt: new Date()
-          }
+            sentAt: new Date(),
+          },
         });
         sentCount++;
       } catch (err) {
-        await prisma.campaignLog.create({
-          data: {
+        await prisma.campaignLog.upsert({
+          where: {
+            campaignId_subscriberId: {
+              campaignId,
+              subscriberId: sub.id,
+            },
+          },
+          update: {
+            status: "failed",
+            errorMessage: err.message,
+          },
+          create: {
             campaignId,
             subscriberId: sub.id,
             status: "failed",
-            errorMessage: err.message
-          }
+            errorMessage: err.message,
+          },
         });
         failedCount++;
       }
@@ -164,5 +185,78 @@ export const campaignService = {
     });
 
     return { success: true, sentCount, failedCount };
-  }
+  },
+
+  async updateCampaign(siteId, id, data) {
+    const existing = await prisma.emailCampaign.findFirst({ where: { id, siteId } });
+    if (!existing) throw new Error("Campaign not found");
+
+    const allowedFields = ["name", "subject", "body", "listId", "scheduledAt", "status"];
+    const updateData = {};
+    for (const key of allowedFields) {
+      if (data[key] !== undefined) {
+        if (key === "scheduledAt") {
+          updateData[key] = data[key] ? new Date(data[key]) : null;
+        } else if (key === "listId") {
+          updateData[key] = data[key] || null;
+        } else {
+          updateData[key] = data[key];
+        }
+      }
+    }
+    return prisma.emailCampaign.update({ where: { id }, data: updateData, include: { list: { select: { name: true } } } });
+  },
+
+  async getCampaignAnalytics(siteId, id) {
+    const campaign = await prisma.emailCampaign.findFirst({
+      where: { id, siteId },
+      include: {
+        list: { select: { name: true, _count: { select: { subscribers: true } } } },
+        logs: {
+          include: { subscriber: { select: { email: true, name: true } } },
+          orderBy: { sentAt: "desc" },
+          take: 50,
+        },
+      },
+    });
+    if (!campaign) throw new Error("Campaign not found");
+
+    const logs = campaign.logs;
+    const totalLogs = logs.length;
+    const sent    = logs.filter(l => ["sent", "opened", "clicked"].includes(l.status)).length;
+    const failed  = logs.filter(l => l.status === "failed").length;
+    const opened  = logs.filter(l => l.openedAt  !== null).length;
+    const clicked = logs.filter(l => l.clickedAt !== null).length;
+
+    return {
+      campaign,
+      stats: {
+        totalLogs,
+        sent,
+        failed,
+        opened,
+        clicked,
+        deliveryRate: totalLogs > 0 ? Math.round((sent  / totalLogs) * 100) : 0,
+        openRate:     sent    > 0 ? Math.round((opened  / sent)     * 100) : 0,
+        clickRate:    sent    > 0 ? Math.round((clicked / sent)     * 100) : 0,
+      },
+      recentLogs: logs.slice(0, 20),
+    };
+  },
+
+  async duplicateCampaign(siteId, id) {
+    const existing = await prisma.emailCampaign.findFirst({ where: { id, siteId } });
+    if (!existing) throw new Error("Campaign not found");
+    return prisma.emailCampaign.create({
+      data: {
+        siteId,
+        name:    `Copy of ${existing.name}`,
+        subject: existing.subject,
+        body:    existing.body,
+        listId:  existing.listId,
+        status:  "draft",
+      },
+      include: { list: { select: { name: true } } },
+    });
+  },
 };

@@ -6,7 +6,7 @@ import { handleApiError, apiSuccess } from "@/core/errors";
 export async function POST(req, { params }) {
   try {
     const siteId = getSiteId(req);
-    const id = params.id;
+    const { id } = await params;
     const result = await campaignService.executeCampaign(siteId, id);
     return NextResponse.json(apiSuccess(result));
   } catch (err) {
