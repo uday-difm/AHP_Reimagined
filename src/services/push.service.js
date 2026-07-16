@@ -32,7 +32,9 @@ export const pushService = {
       scheduledAt,
       isRecurring = false,
       recurringRule,
-      emailCampaignId
+      emailCampaignId,
+      sendToWebsite = true,
+      sendToDevice = true
     } = data;
 
     let status = "draft";
@@ -53,6 +55,8 @@ export const pushService = {
         scheduledAt: scheduledAt ? new Date(scheduledAt) : null,
         isRecurring,
         recurringRule: recurringRule ? JSON.stringify(recurringRule) : null,
+        sendToWebsite,
+        sendToDevice,
         status,
         emailCampaignId: emailCampaignId || null
       },
@@ -80,7 +84,9 @@ export const pushService = {
       scheduledAt,
       isRecurring,
       recurringRule,
-      emailCampaignId
+      emailCampaignId,
+      sendToWebsite,
+      sendToDevice
     } = data;
 
     let status = existing.status;
@@ -103,6 +109,8 @@ export const pushService = {
         scheduledAt: scheduledAt !== undefined ? (scheduledAt ? new Date(scheduledAt) : null) : existing.scheduledAt,
         isRecurring: isRecurring !== undefined ? isRecurring : existing.isRecurring,
         recurringRule: recurringRule !== undefined ? (recurringRule ? JSON.stringify(recurringRule) : null) : existing.recurringRule,
+        sendToWebsite: sendToWebsite !== undefined ? sendToWebsite : existing.sendToWebsite,
+        sendToDevice: sendToDevice !== undefined ? sendToDevice : existing.sendToDevice,
         status,
         emailCampaignId: emailCampaignId !== undefined ? (emailCampaignId || null) : existing.emailCampaignId
       },
@@ -130,6 +138,8 @@ export const pushService = {
         filters: original.filters,
         isRecurring: original.isRecurring,
         recurringRule: original.recurringRule,
+        sendToWebsite: original.sendToWebsite,
+        sendToDevice: original.sendToDevice,
         status: "draft",
         emailCampaignId: original.emailCampaignId
       },
@@ -258,6 +268,23 @@ export const pushService = {
       where: { id: notificationId, siteId }
     });
     if (!notification) throw new Error("Notification not found");
+
+    // If sendToDevice is disabled, bypass OneSignal
+    if (!notification.sendToDevice) {
+      const isFuture = notification.scheduledAt && new Date(notification.scheduledAt) > new Date();
+      await prisma.pushNotification.update({
+        where: { id: notificationId },
+        data: {
+          status: isFuture ? "scheduled" : "sent",
+          sentAt: isFuture ? null : new Date()
+        }
+      });
+      return {
+        success: true,
+        message: isFuture ? "Scheduled for website notifications" : "Published to website notifications",
+        recipients: 0
+      };
+    }
 
     const settings = await prisma.globalSettings.findUnique({
       where: { siteId },

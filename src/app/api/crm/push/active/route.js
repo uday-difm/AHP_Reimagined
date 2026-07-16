@@ -12,6 +12,7 @@ export async function GET(req) {
       where: {
         siteId,
         status: "sent",
+        sendToWebsite: true,
         sentAt: {
           not: null
         }

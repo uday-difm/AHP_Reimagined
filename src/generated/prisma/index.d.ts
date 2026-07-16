@@ -48758,6 +48758,8 @@ export namespace Prisma {
     sentAt: Date | null
     isRecurring: boolean | null
     recurringRule: string | null
+    sendToWebsite: boolean | null
+    sendToDevice: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -48783,6 +48785,8 @@ export namespace Prisma {
     sentAt: Date | null
     isRecurring: boolean | null
     recurringRule: string | null
+    sendToWebsite: boolean | null
+    sendToDevice: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -48808,6 +48812,8 @@ export namespace Prisma {
     sentAt: number
     isRecurring: number
     recurringRule: number
+    sendToWebsite: number
+    sendToDevice: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -48849,6 +48855,8 @@ export namespace Prisma {
     sentAt?: true
     isRecurring?: true
     recurringRule?: true
+    sendToWebsite?: true
+    sendToDevice?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -48874,6 +48882,8 @@ export namespace Prisma {
     sentAt?: true
     isRecurring?: true
     recurringRule?: true
+    sendToWebsite?: true
+    sendToDevice?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -48899,6 +48909,8 @@ export namespace Prisma {
     sentAt?: true
     isRecurring?: true
     recurringRule?: true
+    sendToWebsite?: true
+    sendToDevice?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -49011,6 +49023,8 @@ export namespace Prisma {
     sentAt: Date | null
     isRecurring: boolean
     recurringRule: string | null
+    sendToWebsite: boolean
+    sendToDevice: boolean
     createdAt: Date
     updatedAt: Date
     _count: PushNotificationCountAggregateOutputType | null
@@ -49055,6 +49069,8 @@ export namespace Prisma {
     sentAt?: boolean
     isRecurring?: boolean
     recurringRule?: boolean
+    sendToWebsite?: boolean
+    sendToDevice?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     site?: boolean | SiteDefaultArgs<ExtArgs>
@@ -49084,11 +49100,13 @@ export namespace Prisma {
     sentAt?: boolean
     isRecurring?: boolean
     recurringRule?: boolean
+    sendToWebsite?: boolean
+    sendToDevice?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type PushNotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "emailCampaignId" | "title" | "message" | "url" | "iconUrl" | "imageUrl" | "segment" | "filters" | "status" | "oneSignalId" | "sentCount" | "deliveredCount" | "clickedCount" | "failedCount" | "scheduledAt" | "sentAt" | "isRecurring" | "recurringRule" | "createdAt" | "updatedAt", ExtArgs["result"]["pushNotification"]>
+  export type PushNotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "emailCampaignId" | "title" | "message" | "url" | "iconUrl" | "imageUrl" | "segment" | "filters" | "status" | "oneSignalId" | "sentCount" | "deliveredCount" | "clickedCount" | "failedCount" | "scheduledAt" | "sentAt" | "isRecurring" | "recurringRule" | "sendToWebsite" | "sendToDevice" | "createdAt" | "updatedAt", ExtArgs["result"]["pushNotification"]>
   export type PushNotificationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     site?: boolean | SiteDefaultArgs<ExtArgs>
     emailCampaign?: boolean | PushNotification$emailCampaignArgs<ExtArgs>
@@ -49121,6 +49139,8 @@ export namespace Prisma {
       sentAt: Date | null
       isRecurring: boolean
       recurringRule: string | null
+      sendToWebsite: boolean
+      sendToDevice: boolean
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["pushNotification"]>
@@ -49514,6 +49534,8 @@ export namespace Prisma {
     readonly sentAt: FieldRef<"PushNotification", 'DateTime'>
     readonly isRecurring: FieldRef<"PushNotification", 'Boolean'>
     readonly recurringRule: FieldRef<"PushNotification", 'String'>
+    readonly sendToWebsite: FieldRef<"PushNotification", 'Boolean'>
+    readonly sendToDevice: FieldRef<"PushNotification", 'Boolean'>
     readonly createdAt: FieldRef<"PushNotification", 'DateTime'>
     readonly updatedAt: FieldRef<"PushNotification", 'DateTime'>
   }
@@ -63595,6 +63617,8 @@ export namespace Prisma {
     sentAt: 'sentAt',
     isRecurring: 'isRecurring',
     recurringRule: 'recurringRule',
+    sendToWebsite: 'sendToWebsite',
+    sendToDevice: 'sendToDevice',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -68078,6 +68102,8 @@ export namespace Prisma {
     sentAt?: DateTimeNullableFilter<"PushNotification"> | Date | string | null
     isRecurring?: BoolFilter<"PushNotification"> | boolean
     recurringRule?: StringNullableFilter<"PushNotification"> | string | null
+    sendToWebsite?: BoolFilter<"PushNotification"> | boolean
+    sendToDevice?: BoolFilter<"PushNotification"> | boolean
     createdAt?: DateTimeFilter<"PushNotification"> | Date | string
     updatedAt?: DateTimeFilter<"PushNotification"> | Date | string
     site?: XOR<SiteScalarRelationFilter, SiteWhereInput>
@@ -68105,6 +68131,8 @@ export namespace Prisma {
     sentAt?: SortOrderInput | SortOrder
     isRecurring?: SortOrder
     recurringRule?: SortOrderInput | SortOrder
+    sendToWebsite?: SortOrder
+    sendToDevice?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     site?: SiteOrderByWithRelationInput
@@ -68136,6 +68164,8 @@ export namespace Prisma {
     sentAt?: DateTimeNullableFilter<"PushNotification"> | Date | string | null
     isRecurring?: BoolFilter<"PushNotification"> | boolean
     recurringRule?: StringNullableFilter<"PushNotification"> | string | null
+    sendToWebsite?: BoolFilter<"PushNotification"> | boolean
+    sendToDevice?: BoolFilter<"PushNotification"> | boolean
     createdAt?: DateTimeFilter<"PushNotification"> | Date | string
     updatedAt?: DateTimeFilter<"PushNotification"> | Date | string
     site?: XOR<SiteScalarRelationFilter, SiteWhereInput>
@@ -68163,6 +68193,8 @@ export namespace Prisma {
     sentAt?: SortOrderInput | SortOrder
     isRecurring?: SortOrder
     recurringRule?: SortOrderInput | SortOrder
+    sendToWebsite?: SortOrder
+    sendToDevice?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: PushNotificationCountOrderByAggregateInput
@@ -68196,6 +68228,8 @@ export namespace Prisma {
     sentAt?: DateTimeNullableWithAggregatesFilter<"PushNotification"> | Date | string | null
     isRecurring?: BoolWithAggregatesFilter<"PushNotification"> | boolean
     recurringRule?: StringNullableWithAggregatesFilter<"PushNotification"> | string | null
+    sendToWebsite?: BoolWithAggregatesFilter<"PushNotification"> | boolean
+    sendToDevice?: BoolWithAggregatesFilter<"PushNotification"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"PushNotification"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"PushNotification"> | Date | string
   }
@@ -73056,6 +73090,8 @@ export namespace Prisma {
     sentAt?: Date | string | null
     isRecurring?: boolean
     recurringRule?: string | null
+    sendToWebsite?: boolean
+    sendToDevice?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     site: SiteCreateNestedOneWithoutPushNotificationsInput
@@ -73083,6 +73119,8 @@ export namespace Prisma {
     sentAt?: Date | string | null
     isRecurring?: boolean
     recurringRule?: string | null
+    sendToWebsite?: boolean
+    sendToDevice?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -73106,6 +73144,8 @@ export namespace Prisma {
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isRecurring?: BoolFieldUpdateOperationsInput | boolean
     recurringRule?: NullableStringFieldUpdateOperationsInput | string | null
+    sendToWebsite?: BoolFieldUpdateOperationsInput | boolean
+    sendToDevice?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     site?: SiteUpdateOneRequiredWithoutPushNotificationsNestedInput
@@ -73133,6 +73173,8 @@ export namespace Prisma {
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isRecurring?: BoolFieldUpdateOperationsInput | boolean
     recurringRule?: NullableStringFieldUpdateOperationsInput | string | null
+    sendToWebsite?: BoolFieldUpdateOperationsInput | boolean
+    sendToDevice?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -73158,6 +73200,8 @@ export namespace Prisma {
     sentAt?: Date | string | null
     isRecurring?: boolean
     recurringRule?: string | null
+    sendToWebsite?: boolean
+    sendToDevice?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -73181,6 +73225,8 @@ export namespace Prisma {
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isRecurring?: BoolFieldUpdateOperationsInput | boolean
     recurringRule?: NullableStringFieldUpdateOperationsInput | string | null
+    sendToWebsite?: BoolFieldUpdateOperationsInput | boolean
+    sendToDevice?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -73206,6 +73252,8 @@ export namespace Prisma {
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isRecurring?: BoolFieldUpdateOperationsInput | boolean
     recurringRule?: NullableStringFieldUpdateOperationsInput | string | null
+    sendToWebsite?: BoolFieldUpdateOperationsInput | boolean
+    sendToDevice?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -77208,6 +77256,8 @@ export namespace Prisma {
     sentAt?: SortOrder
     isRecurring?: SortOrder
     recurringRule?: SortOrder
+    sendToWebsite?: SortOrder
+    sendToDevice?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -77240,6 +77290,8 @@ export namespace Prisma {
     sentAt?: SortOrder
     isRecurring?: SortOrder
     recurringRule?: SortOrder
+    sendToWebsite?: SortOrder
+    sendToDevice?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -77265,6 +77317,8 @@ export namespace Prisma {
     sentAt?: SortOrder
     isRecurring?: SortOrder
     recurringRule?: SortOrder
+    sendToWebsite?: SortOrder
+    sendToDevice?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -83237,6 +83291,8 @@ export namespace Prisma {
     sentAt?: Date | string | null
     isRecurring?: boolean
     recurringRule?: string | null
+    sendToWebsite?: boolean
+    sendToDevice?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     emailCampaign?: EmailCampaignCreateNestedOneWithoutPushNotificationsInput
@@ -83262,6 +83318,8 @@ export namespace Prisma {
     sentAt?: Date | string | null
     isRecurring?: boolean
     recurringRule?: string | null
+    sendToWebsite?: boolean
+    sendToDevice?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -84481,6 +84539,8 @@ export namespace Prisma {
     sentAt?: DateTimeNullableFilter<"PushNotification"> | Date | string | null
     isRecurring?: BoolFilter<"PushNotification"> | boolean
     recurringRule?: StringNullableFilter<"PushNotification"> | string | null
+    sendToWebsite?: BoolFilter<"PushNotification"> | boolean
+    sendToDevice?: BoolFilter<"PushNotification"> | boolean
     createdAt?: DateTimeFilter<"PushNotification"> | Date | string
     updatedAt?: DateTimeFilter<"PushNotification"> | Date | string
   }
@@ -93811,6 +93871,8 @@ export namespace Prisma {
     sentAt?: Date | string | null
     isRecurring?: boolean
     recurringRule?: string | null
+    sendToWebsite?: boolean
+    sendToDevice?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     site: SiteCreateNestedOneWithoutPushNotificationsInput
@@ -93836,6 +93898,8 @@ export namespace Prisma {
     sentAt?: Date | string | null
     isRecurring?: boolean
     recurringRule?: string | null
+    sendToWebsite?: boolean
+    sendToDevice?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -96574,6 +96638,8 @@ export namespace Prisma {
     sentAt?: Date | string | null
     isRecurring?: boolean
     recurringRule?: string | null
+    sendToWebsite?: boolean
+    sendToDevice?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -97822,6 +97888,8 @@ export namespace Prisma {
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isRecurring?: BoolFieldUpdateOperationsInput | boolean
     recurringRule?: NullableStringFieldUpdateOperationsInput | string | null
+    sendToWebsite?: BoolFieldUpdateOperationsInput | boolean
+    sendToDevice?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     emailCampaign?: EmailCampaignUpdateOneWithoutPushNotificationsNestedInput
@@ -97847,6 +97915,8 @@ export namespace Prisma {
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isRecurring?: BoolFieldUpdateOperationsInput | boolean
     recurringRule?: NullableStringFieldUpdateOperationsInput | string | null
+    sendToWebsite?: BoolFieldUpdateOperationsInput | boolean
+    sendToDevice?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -97871,6 +97941,8 @@ export namespace Prisma {
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isRecurring?: BoolFieldUpdateOperationsInput | boolean
     recurringRule?: NullableStringFieldUpdateOperationsInput | string | null
+    sendToWebsite?: BoolFieldUpdateOperationsInput | boolean
+    sendToDevice?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -99181,6 +99253,8 @@ export namespace Prisma {
     sentAt?: Date | string | null
     isRecurring?: boolean
     recurringRule?: string | null
+    sendToWebsite?: boolean
+    sendToDevice?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -99234,6 +99308,8 @@ export namespace Prisma {
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isRecurring?: BoolFieldUpdateOperationsInput | boolean
     recurringRule?: NullableStringFieldUpdateOperationsInput | string | null
+    sendToWebsite?: BoolFieldUpdateOperationsInput | boolean
+    sendToDevice?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     site?: SiteUpdateOneRequiredWithoutPushNotificationsNestedInput
@@ -99259,6 +99335,8 @@ export namespace Prisma {
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isRecurring?: BoolFieldUpdateOperationsInput | boolean
     recurringRule?: NullableStringFieldUpdateOperationsInput | string | null
+    sendToWebsite?: BoolFieldUpdateOperationsInput | boolean
+    sendToDevice?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -99283,6 +99361,8 @@ export namespace Prisma {
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isRecurring?: BoolFieldUpdateOperationsInput | boolean
     recurringRule?: NullableStringFieldUpdateOperationsInput | string | null
+    sendToWebsite?: BoolFieldUpdateOperationsInput | boolean
+    sendToDevice?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

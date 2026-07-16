@@ -19,39 +19,40 @@ function proxyUrl(url) {
 function NotificationBell() {
   const [notifications, setNotifications] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-  const [unreadCount, setUnreadCount] = useState(0);
+  const [readIds, setReadIds] = useState([]);
 
+  // Load notifications + read state
   useEffect(() => {
+    const stored = JSON.parse(localStorage.getItem('viewed_notifications') || '[]');
+    setReadIds(stored);
     fetch('/api/crm/push/active')
       .then(res => res.json())
       .then(data => {
         if (data.success && Array.isArray(data.data?.notifications)) {
-          const list = data.data.notifications;
-          setNotifications(list);
-
-          // Count unread based on localStorage of viewed notification IDs
-          const viewedIds = JSON.parse(localStorage.getItem('viewed_notifications') || '[]');
-          const unread = list.filter(n => !viewedIds.includes(n.id)).length;
-          setUnreadCount(unread);
+          setNotifications(data.data.notifications);
         }
       })
       .catch(err => console.error('Error loading active website notifications:', err));
   }, []);
 
-  const handleOpen = () => {
-    setIsOpen(!isOpen);
-    if (!isOpen && notifications.length > 0) {
-      // Mark all as read/viewed
-      const viewedIds = notifications.map(n => n.id);
-      localStorage.setItem('viewed_notifications', JSON.stringify(viewedIds));
-      setUnreadCount(0);
-    }
+  const unreadCount = notifications.filter(n => !readIds.includes(n.id)).length;
+
+  const markAsRead = (id) => {
+    const updated = [...new Set([...readIds, id])];
+    setReadIds(updated);
+    localStorage.setItem('viewed_notifications', JSON.stringify(updated));
+  };
+
+  const markAllAsRead = () => {
+    const updated = notifications.map(n => n.id);
+    setReadIds(updated);
+    localStorage.setItem('viewed_notifications', JSON.stringify(updated));
   };
 
   return (
     <div className="relative">
       <button
-        onClick={handleOpen}
+        onClick={() => setIsOpen(o => !o)}
         className="relative p-2.5 rounded-full hover:bg-slate-100 transition-colors border-none bg-transparent cursor-pointer text-[#374151]"
       >
         <Bell className="w-5 h-5 text-[#374151]" />

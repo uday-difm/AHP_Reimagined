@@ -650,6 +650,8 @@ exports.Prisma.PushNotificationScalarFieldEnum = {
   sentAt: 'sentAt',
   isRecurring: 'isRecurring',
   recurringRule: 'recurringRule',
+  sendToWebsite: 'sendToWebsite',
+  sendToDevice: 'sendToDevice',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

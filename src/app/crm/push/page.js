@@ -133,6 +133,8 @@ function ComposePanel({ open, onClose, onSaved, editingId, siteId, emailCampaign
     emailCampaignId: "",
     filters: null,
     targetType: "segment",
+    sendToWebsite: true,
+    sendToDevice: true,
   });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
@@ -158,6 +160,8 @@ function ComposePanel({ open, onClose, onSaved, editingId, siteId, emailCampaign
               emailCampaignId: n.emailCampaignId || "",
               filters: n.filters || null,
               targetType: n.filters && n.filters.includes("subscriberListId") ? "list" : "segment",
+              sendToWebsite: n.sendToWebsite ?? true,
+              sendToDevice: n.sendToDevice ?? true,
             });
           }
         });
@@ -175,6 +179,8 @@ function ComposePanel({ open, onClose, onSaved, editingId, siteId, emailCampaign
         emailCampaignId: "",
         filters: null,
         targetType: "segment",
+        sendToWebsite: true,
+        sendToDevice: true,
       });
     }
     setError(null);
@@ -311,6 +317,39 @@ function ComposePanel({ open, onClose, onSaved, editingId, siteId, emailCampaign
                     className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 transition resize-none"
                   />
                   <p className="text-[9px] text-slate-400 mt-1 text-right">{form.message.length}/250</p>
+                </div>
+
+                {/* Delivery Channels */}
+                <div className="space-y-2 border-t border-slate-100 dark:border-slate-800 pt-3">
+                  <label className="block text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 mb-1">
+                    Delivery Channels
+                  </label>
+                  <div className="flex flex-col gap-2 bg-slate-50 dark:bg-slate-800/30 p-3 rounded-lg border dark:border-slate-800">
+                    <label className="flex items-center gap-2.5 text-xs text-slate-700 dark:text-slate-200 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={form.sendToWebsite}
+                        onChange={e => set("sendToWebsite", e.target.checked)}
+                        className="rounded text-indigo-650 h-4 w-4 border-slate-300 focus:ring-indigo-500"
+                      />
+                      <div>
+                        <span className="font-semibold block">Publish to Website</span>
+                        <span className="text-[10px] text-slate-400 block mt-0.5">Show in the notification bell on the frontend site</span>
+                      </div>
+                    </label>
+                    <label className="flex items-center gap-2.5 text-xs text-slate-700 dark:text-slate-200 cursor-pointer mt-1">
+                      <input
+                        type="checkbox"
+                        checked={form.sendToDevice}
+                        onChange={e => set("sendToDevice", e.target.checked)}
+                        className="rounded text-indigo-650 h-4 w-4 border-slate-300 focus:ring-indigo-500"
+                      />
+                      <div>
+                        <span className="font-semibold block">Send Device Push</span>
+                        <span className="text-[10px] text-slate-400 block mt-0.5">Broadcast push notification to user devices (OneSignal)</span>
+                      </div>
+                    </label>
+                  </div>
                 </div>
               </div>
 
@@ -976,8 +1015,16 @@ export default function PushPage() {
                               <div className="min-w-0">
                                 <p className="font-semibold text-slate-900 dark:text-white text-xs truncate max-w-[150px]">{item.title}</p>
                                 <p className="text-[10px] text-slate-400 truncate max-w-[150px]">{item.message}</p>
+                                <div className="flex gap-1.5 mt-1.5 flex-wrap">
+                                  {item.sendToWebsite !== false && (
+                                    <span className="text-[8px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:bg-emerald-950/20 dark:text-emerald-400">Website</span>
+                                  )}
+                                  {item.sendToDevice !== false && (
+                                    <span className="text-[8px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-600 dark:bg-indigo-950/20 dark:text-indigo-400">Device Push</span>
+                                  )}
+                                </div>
                                 {item.emailCampaign && (
-                                  <div className="flex items-center gap-1 mt-1 text-[9px] font-semibold text-indigo-600 dark:text-indigo-400">
+                                  <div className="flex items-center gap-1 mt-1.5 text-[9px] font-semibold text-indigo-600 dark:text-indigo-400">
                                     <Mail size={10} />
                                     <span>Campaign: {item.emailCampaign.name}</span>
                                   </div>

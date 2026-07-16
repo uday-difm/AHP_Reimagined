@@ -885,6 +885,8 @@ model PushNotification {
   sentAt          DateTime?
   isRecurring     Boolean        @default(false)
   recurringRule   String?        @db.Text // JSON recurrence config
+  sendToWebsite   Boolean        @default(true)
+  sendToDevice    Boolean        @default(true)
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
 

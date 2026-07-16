@@ -303,3 +303,11 @@
 [2026-07-16T10:52:46.497Z] [Auth] Authenticating against authService for: manish@gmail.com
 [2026-07-16T10:52:46.503Z] [Auth] Admin authentication failed, trying frontend auth table for: manish@gmail.com
 [2026-07-16T10:52:46.515Z] [Auth] Frontend user authenticated successfully: manish@gmail.com
+[2026-07-16T10:59:08.963Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-16T10:59:08.965Z] [Auth] Request Host: localhost:3000
+[2026-07-16T10:59:08.966Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-16T10:59:08.967Z] [Auth] Token received (length: 1721): 0cAFcWeA7Xgms6NmCd-rScCX8MMmbq...
+[2026-07-16T10:59:08.968Z] [Auth] Sending request to google siteverify (x-www-form-urlencoded POST body)...
+[2026-07-16T10:59:09.119Z] [Auth] reCAPTCHA verifyJson: {"success":true,"challenge_ts":"2026-07-16T10:59:09Z","hostname":"testkey.google.com"}
+[2026-07-16T10:59:09.120Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-16T10:59:09.481Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrfzj7vj0001tosc2a7zo1hn
