@@ -42,6 +42,10 @@ export default function MagazineEditor({ initialData = null }) {
     readonly: false,
     placeholder: "Write magazine introduction...",
     minHeight: 300,
+    width: "100%",
+    showCharsCounter: false,
+    showWordsCounter: false,
+    showXPathInStatusbar: false,
   };
 
   const handleMediaSelect = (mediaObj) => {
@@ -238,18 +242,20 @@ export default function MagazineEditor({ initialData = null }) {
           </div>
 
           {/* Introduction */}
-          <div>
+          <div className="w-full">
             <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
               Introduction (Letter to Readers shown inside the reader)
             </label>
-            <JoditEditor
-              value={values.magazine_introduction}
-              config={{
-                ...editorConfig,
-                placeholder: "Write the introduction / letter to readers...",
-              }}
-              onBlur={(val) => setValues((prev) => ({ ...prev, magazine_introduction: val }))}
-            />
+            <div className="w-full text-slate-900 overflow-hidden rounded-lg border border-slate-200">
+              <JoditEditor
+                value={values.magazine_introduction}
+                config={{
+                  ...editorConfig,
+                  placeholder: "Write the introduction / letter to readers...",
+                }}
+                onBlur={(val) => setValues((prev) => ({ ...prev, magazine_introduction: val }))}
+              />
+            </div>
           </div>
         </div>
 

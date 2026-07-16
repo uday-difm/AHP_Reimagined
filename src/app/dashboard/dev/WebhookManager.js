@@ -141,9 +141,9 @@ export default function WebhookManager({ siteId, initialWebhooks = [] }) {
   return (
     <div className="space-y-4">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Webhook size={18} className="text-violet-600" />
+      <div className="flex flex-wrap gap-3 items-center justify-between">
+        <div className="flex flex-wrap items-center gap-2">
+          <Webhook size={18} className="text-violet-600 shrink-0" />
           <h3 className="text-sm font-bold text-gray-900">Webhook Subscriptions</h3>
           <span className="text-[10px] bg-gray-100 text-gray-500 rounded-full px-2 py-0.5 font-mono">
             {webhooks.length} registered
@@ -151,7 +151,7 @@ export default function WebhookManager({ siteId, initialWebhooks = [] }) {
         </div>
         <button
           onClick={() => { setShowForm(!showForm); setNewSecret(null); }}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-violet-600 hover:bg-violet-700 text-white text-xs font-semibold rounded-lg transition"
+          className="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 bg-violet-600 hover:bg-violet-700 text-white text-xs font-semibold rounded-lg transition"
         >
           <Plus size={14} />
           Add Webhook

@@ -207,7 +207,7 @@ export default function RedirectsManager({
   return (
     <div className="space-y-6">
       {/* Navigation Tabs */}
-      <div className="flex border-b border-gray-200 bg-white p-1 rounded-lg shadow-sm w-fit gap-1">
+      <div className="flex border-b border-gray-200 bg-white p-1 rounded-lg shadow-sm w-full overflow-x-auto gap-1">
         <button
           onClick={() => setActiveTab("redirects")}
           className={`flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-md transition ${activeTab === "redirects"

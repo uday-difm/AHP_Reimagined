@@ -688,13 +688,13 @@ export default function ContactDetailsEditor({ siteId, initialData }) {
                 </label>
               </div>
               <div
-                className={`flex items-center gap-2 flex-1 w-full sm:w-auto ${hour.closed ? "opacity-30 pointer-events-none" : ""}`}
+                className={`flex items-center gap-2 flex-1 min-w-0 w-full sm:w-auto ${hour.closed ? "opacity-30 pointer-events-none" : ""}`}
               >
                 <input
                   type="time"
                   value={hour.open}
                   onChange={(e) => updateHour(i, "open", e.target.value)}
-                  className="flex-1 sm:flex-none w-full sm:w-auto px-2 py-1 text-xs border border-slate-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="flex-1 min-w-0 sm:flex-none w-full sm:w-auto px-2 py-1 text-xs border border-slate-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                 />
                 <span className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold shrink-0">
                   to
@@ -703,7 +703,7 @@ export default function ContactDetailsEditor({ siteId, initialData }) {
                   type="time"
                   value={hour.close}
                   onChange={(e) => updateHour(i, "close", e.target.value)}
-                  className="flex-1 sm:flex-none w-full sm:w-auto px-2 py-1 text-xs border border-slate-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="flex-1 min-w-0 sm:flex-none w-full sm:w-auto px-2 py-1 text-xs border border-slate-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                 />
               </div>
             </div>

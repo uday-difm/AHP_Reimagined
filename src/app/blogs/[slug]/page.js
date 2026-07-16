@@ -142,6 +142,7 @@ export default async function ArticlePage({ params }) {
               src={featuredImgUrl}
               alt={post.featuredImage?.altText || post.title}
               fill
+              unoptimized
               priority
               className="object-cover"
               sizes="100vw"

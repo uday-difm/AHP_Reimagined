@@ -191,7 +191,7 @@ export default function SeoDashboardClient({ siteId, initialPages, initialPosts 
       {/* Top bar */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         {/* Tabs */}
-        <div className="flex gap-1 bg-gray-150 dark:bg-slate-800 rounded-xl p-1 border border-gray-200/50 dark:border-slate-700">
+        <div className="flex gap-1 bg-gray-150 dark:bg-slate-800 rounded-xl p-1 border border-gray-200/50 dark:border-slate-700 overflow-x-auto">
           <button
             onClick={() => setActiveTab("pages")}
             className={`flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg transition ${
@@ -389,7 +389,7 @@ export default function SeoDashboardClient({ siteId, initialPages, initialPosts 
                 </div>
 
                 {/* SEO field icons */}
-                <div className="flex items-center gap-3 text-xs text-gray-400 dark:text-slate-400 shrink-0">
+                <div className="flex flex-wrap items-center gap-3 text-xs text-gray-400 dark:text-slate-400 shrink-0">
                   <span className={`flex items-center gap-1 ${item.seoTitle ? "text-green-500 dark:text-green-400" : ""}`} title="SEO Title">
                     <Globe size={12} /> Title
                   </span>

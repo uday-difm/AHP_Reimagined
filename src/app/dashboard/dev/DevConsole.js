@@ -425,23 +425,23 @@ export default function DevConsole({
 
             {/* Display newly created key */}
             {justGeneratedKey && (
-              <div className="p-4 border border-amber-200 bg-amber-50 rounded-xl space-y-3">
-                <h4 className="text-xs font-bold text-amber-900 flex items-center gap-1">
+              <div className="p-4 border border-amber-200 dark:border-amber-900/50 bg-amber-50 dark:bg-amber-950/30 rounded-xl space-y-3">
+                <h4 className="text-xs font-bold text-amber-900 dark:text-white flex items-center gap-1">
                   <AlertCircle size={15} /> Copy your API Key
                 </h4>
-                <p className="text-[10px] text-amber-700 leading-normal">
+                <p className="text-[10px] text-amber-700 dark:text-white leading-normal">
                   Make sure to copy your API key now. You will not be able to
                   see it again for security reasons.
                 </p>
-                <div className="flex gap-1.5 items-center bg-white border rounded-lg p-2 font-mono text-[11px] text-gray-800 break-all select-all">
+                <div className="flex gap-1.5 items-center bg-white dark:bg-slate-900 border dark:border-slate-700 rounded-lg p-2 font-mono text-[11px] text-gray-800 dark:text-white break-all select-all">
                   <span className="flex-1">{justGeneratedKey}</span>
                   <button
                     onClick={() => copyToClipboard(justGeneratedKey)}
-                    className="p-1 hover:bg-gray-100 rounded text-gray-500 shrink-0"
+                    className="p-1 hover:bg-gray-100 dark:hover:bg-slate-800 rounded text-gray-500 dark:text-slate-400 shrink-0"
                     title="Copy API Key"
                   >
                     {copiedKey ? (
-                      <Check size={14} className="text-green-600" />
+                      <Check size={14} className="text-green-600 dark:text-green-400" />
                     ) : (
                       <Copy size={14} />
                     )}

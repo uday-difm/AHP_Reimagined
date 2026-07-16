@@ -385,8 +385,8 @@ export default function SettingsEditor({ siteId, initialSettings }) {
             type="button"
             onClick={() => setActiveTab("brand")}
             className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${activeTab === "brand"
-                ? "border-blue-600 text-blue-600 bg-white"
-                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+              ? "border-blue-600 text-blue-600 bg-white"
+              : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
               }`}
           >
             <Layout className="w-4 h-4" />
@@ -397,8 +397,8 @@ export default function SettingsEditor({ siteId, initialSettings }) {
             type="button"
             onClick={() => setActiveTab("header")}
             className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${activeTab === "header"
-                ? "border-blue-600 text-blue-600 bg-white"
-                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+              ? "border-blue-600 text-blue-600 bg-white"
+              : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
               }`}
           >
             <Menu className="w-4 h-4" />
@@ -409,8 +409,8 @@ export default function SettingsEditor({ siteId, initialSettings }) {
             type="button"
             onClick={() => setActiveTab("footer")}
             className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${activeTab === "footer"
-                ? "border-blue-600 text-blue-600 bg-white"
-                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+              ? "border-blue-600 text-blue-600 bg-white"
+              : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
               }`}
           >
             <Grid className="w-4 h-4" />
@@ -421,8 +421,8 @@ export default function SettingsEditor({ siteId, initialSettings }) {
             type="button"
             onClick={() => setActiveTab("contact")}
             className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${activeTab === "contact"
-                ? "border-blue-600 text-blue-600 bg-white"
-                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+              ? "border-blue-600 text-blue-600 bg-white"
+              : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
               }`}
           >
             <PhoneCallIcon className="w-4 h-4" />
@@ -433,8 +433,8 @@ export default function SettingsEditor({ siteId, initialSettings }) {
             type="button"
             onClick={() => setActiveTab("seo")}
             className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${activeTab === "seo"
-                ? "border-blue-600 text-blue-600 bg-white"
-                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+              ? "border-blue-600 text-blue-600 bg-white"
+              : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
               }`}
           >
             <Search className="w-4 h-4" />
@@ -445,8 +445,8 @@ export default function SettingsEditor({ siteId, initialSettings }) {
             type="button"
             onClick={() => setActiveTab("analytics")}
             className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${activeTab === "analytics"
-                ? "border-blue-600 text-blue-600 bg-white"
-                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+              ? "border-blue-600 text-blue-600 bg-white"
+              : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
               }`}
           >
             <Activity className="w-4 h-4" />
@@ -457,8 +457,8 @@ export default function SettingsEditor({ siteId, initialSettings }) {
             type="button"
             onClick={() => setActiveTab("robots")}
             className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${activeTab === "robots"
-                ? "border-blue-600 text-blue-600 bg-white"
-                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+              ? "border-blue-600 text-blue-600 bg-white"
+              : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
               }`}
           >
             <Bot className="w-4 h-4" />
@@ -469,8 +469,8 @@ export default function SettingsEditor({ siteId, initialSettings }) {
             type="button"
             onClick={() => setActiveTab("scripts")}
             className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${activeTab === "scripts"
-                ? "border-blue-600 text-blue-600 bg-white"
-                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+              ? "border-blue-600 text-blue-600 bg-white"
+              : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
               }`}
           >
             <Code className="w-4 h-4" />
@@ -519,7 +519,7 @@ export default function SettingsEditor({ siteId, initialSettings }) {
                   </label>
 
                   {/* Colors Row */}
-                  <div className="grid grid-cols-3 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     {/* Primary */}
                     <div>
                       <span className="text-[10px] text-gray-400 font-semibold uppercase tracking-wider block mb-1">
@@ -531,14 +531,14 @@ export default function SettingsEditor({ siteId, initialSettings }) {
                           name="primaryColor"
                           value={websiteSettings.primaryColor || "#2563eb"}
                           onChange={handleWebsiteChange}
-                          className="w-5 h-5 p-0 bg-transparent border-0 rounded cursor-pointer shrink-0"
+                          className="w-4 h-4 p-0 bg-transparent border-0 rounded cursor-pointer shrink-0"
                         />
                         <input
                           type="text"
                           name="primaryColor"
                           value={websiteSettings.primaryColor || "#2563eb"}
                           onChange={handleWebsiteChange}
-                          className="w-full text-xs outline-none bg-transparent font-mono min-w-0"
+                          className="w-full text-[11px] sm:text-xs outline-none bg-transparent font-mono min-w-0 uppercase"
                         />
                       </div>
                     </div>
@@ -554,14 +554,14 @@ export default function SettingsEditor({ siteId, initialSettings }) {
                           name="secondaryColor"
                           value={websiteSettings.secondaryColor || "#4f46e5"}
                           onChange={handleWebsiteChange}
-                          className="w-5 h-5 p-0 bg-transparent border-0 rounded cursor-pointer shrink-0"
+                          className="w-4 h-4 p-0 bg-transparent border-0 rounded cursor-pointer shrink-0"
                         />
                         <input
                           type="text"
                           name="secondaryColor"
                           value={websiteSettings.secondaryColor || "#4f46e5"}
                           onChange={handleWebsiteChange}
-                          className="w-full text-xs outline-none bg-transparent font-mono min-w-0"
+                          className="w-full text-[11px] sm:text-xs outline-none bg-transparent font-mono min-w-0 uppercase"
                         />
                       </div>
                     </div>
@@ -577,14 +577,14 @@ export default function SettingsEditor({ siteId, initialSettings }) {
                           name="accentColor"
                           value={websiteSettings.accentColor || "#f59e0b"}
                           onChange={handleWebsiteChange}
-                          className="w-5 h-5 p-0 bg-transparent border-0 rounded cursor-pointer shrink-0"
+                          className="w-4 h-4 p-0 bg-transparent border-0 rounded cursor-pointer shrink-0"
                         />
                         <input
                           type="text"
                           name="accentColor"
                           value={websiteSettings.accentColor || "#f59e0b"}
                           onChange={handleWebsiteChange}
-                          className="w-full text-xs outline-none bg-transparent font-mono min-w-0"
+                          className="w-full text-[11px] sm:text-xs outline-none bg-transparent font-mono min-w-0 uppercase"
                         />
                       </div>
                     </div>
@@ -1741,7 +1741,7 @@ export default function SettingsEditor({ siteId, initialSettings }) {
                     value={websiteSettings.ogImageUrl || ""}
                     onChange={handleWebsiteChange}
                     placeholder="https://yourdomain.com/og-image.jpg"
-                    className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all font-mono"
+                    className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all font-mono text-ellipsis"
                   />
                   <button
                     type="button"
@@ -1998,7 +1998,7 @@ export default function SettingsEditor({ siteId, initialSettings }) {
                     context instructions.
                   </p>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                   <a
                     href={`/api/sitemap?siteId=${siteId}`}
                     target="_blank"
@@ -2118,7 +2118,7 @@ export default function SettingsEditor({ siteId, initialSettings }) {
         </div>
 
         {/* Submit Bar */}
-        <div className="px-6 py-4 bg-gray-50/50 border-t border-gray-200 flex justify-between items-center">
+        <div className="px-6 py-4 bg-gray-50/50 border-t border-gray-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-2">
           <span className="text-xs text-gray-400 font-medium">
             Be careful updating brand identities and layout scripts on
             production sites.
@@ -2126,7 +2126,7 @@ export default function SettingsEditor({ siteId, initialSettings }) {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="px-5 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all hover:-translate-y-0.5 active:translate-y-0 cursor-pointer border-0 outline-none"
+            className="shrink-0 px-4 py-1.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all hover:-translate-y-0.5 active:translate-y-0 cursor-pointer border-0 outline-none"
           >
             <Save className="w-4 h-4" />
             {isSubmitting ? "Saving..." : "Save Settings"}

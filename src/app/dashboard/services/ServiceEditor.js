@@ -349,7 +349,7 @@ export default function ServiceEditor({ siteId, service }) {
             </div>
 
             {/* Add new include */}
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <input
                 type="text"
                 value={newInclude}
@@ -370,7 +370,7 @@ export default function ServiceEditor({ siteId, service }) {
                   const val = newInclude.trim();
                   if (val) { setIncludes(prev => [...prev, val]); setNewInclude(''); }
                 }}
-                className="inline-flex items-center gap-1 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-sm transition"
+                className="inline-flex items-center justify-center gap-1 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-sm transition w-full sm:w-auto shrink-0"
               >
                 <Plus size={13} />
                 Add

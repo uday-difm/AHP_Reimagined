@@ -299,7 +299,7 @@ export default function PerformanceConsole({ siteId, user }) {
         {/* Tab 1: Diagnostics Health */}
         {activeTab === "health" && (
           <div className="space-y-6">
-            <div className="flex justify-between items-center border-b pb-3">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 border-b pb-3">
               <div>
                 <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
                   <Activity size={20} className="text-blue-600" />
@@ -681,7 +681,7 @@ export default function PerformanceConsole({ siteId, user }) {
         {/* Tab 3: System Error Logs */}
         {activeTab === "logs" && (
           <div className="space-y-4">
-            <div className="flex justify-between items-center border-b pb-3">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 border-b pb-3">
               <div>
                 <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
                   <ShieldAlert size={20} className="text-blue-600" />
@@ -829,7 +829,7 @@ export default function PerformanceConsole({ siteId, user }) {
         {/* Tab 4: Load Testing */}
         {activeTab === "loadtest" && (
           <div className="space-y-6">
-            <div className="flex justify-between items-center border-b pb-3">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 border-b pb-3">
               <div>
                 <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
                   <Cpu size={20} className="text-blue-600" />

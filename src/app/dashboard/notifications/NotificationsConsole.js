@@ -433,11 +433,11 @@ export default function NotificationsConsole({
                 />
               </div>
 
-              <div className="flex gap-2 items-center shrink-0">
+              <div className="flex gap-2 items-center w-full sm:w-auto mt-2 sm:mt-0">
                 <select
                   value={filterType}
                   onChange={(e) => setFilterType(e.target.value)}
-                  className="px-2.5 py-1.5 text-xs border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 outline-none"
+                  className="flex-1 sm:flex-none min-w-0 px-2.5 py-1.5 text-xs border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 outline-none"
                 >
                   <option value="all">All alert types</option>
                   <option value="NEW_LEAD">New Leads</option>
@@ -448,7 +448,7 @@ export default function NotificationsConsole({
                 <select
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value)}
-                  className="px-2.5 py-1.5 text-xs border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 outline-none"
+                  className="flex-1 sm:flex-none min-w-0 px-2.5 py-1.5 text-xs border border-gray-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 outline-none"
                 >
                   <option value="all">All read statuses</option>
                   <option value="unread">Unread alerts</option>

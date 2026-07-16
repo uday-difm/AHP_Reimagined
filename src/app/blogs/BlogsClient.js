@@ -274,6 +274,7 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
                         alt={art.title}
                         fill
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        unoptimized={true}
                       />
                       <span className="absolute top-4 left-4 bg-[#e8f4ff] text-[#0f7c85] px-3 py-1.5 rounded-full text-[9.5px] font-bold uppercase tracking-[0.5px]">
                         {art.category}

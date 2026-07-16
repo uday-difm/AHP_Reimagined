@@ -2,7 +2,7 @@ import React, { Suspense } from 'react';
 import prisma from '@/lib/prisma';
 import BlogsClient from './BlogsClient';
 
-export const revalidate = 60; // ISR: revalidate at most every 60 seconds
+export const dynamic = 'force-dynamic';
 
 export const metadata = {
   title: 'Blogs & Guides | A Health Place',
