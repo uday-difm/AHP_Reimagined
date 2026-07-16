@@ -1,8 +1,14 @@
 "use client";
 
 function getThumbnailUrl(url) {
-  if (!url || !url.includes("res.cloudinary.com")) return url;
-  return url.replace("/upload/", "/upload/c_fill,w_300,h_300,g_auto,q_auto,f_auto/");
+  if (!url) return url;
+  if (url.includes("res.cloudinary.com")) {
+    return url.replace("/upload/", "/upload/c_fill,w_300,h_300,g_auto,q_auto,f_auto/");
+  }
+  if (url.startsWith("/")) {
+    return url; // Already a local path, no need to proxy
+  }
+  return `/api/media/proxy?url=${encodeURIComponent(url)}`;
 }
 
 export default function MediaGrid({ media, onDelete, onCopyUrl, onSelectMedia }) {

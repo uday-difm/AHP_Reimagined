@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import prisma from "@/lib/prisma";
 
 // In-memory cache for middleware settings and redirects (30s TTL)
 const middlewareCache = {
@@ -129,22 +130,20 @@ export async function proxy(request) {
     let settingsPromise = null;
     let cachedSettings = middlewareCache.settings[settingsCacheKey];
     if (checkMaintenance && (!cachedSettings || cachedSettings.expiresAt < now)) {
-      settingsPromise = fetch(
-        `${url.origin}/api/settings?siteId=${encodeURIComponent(siteId)}`,
-        { headers: { "x-internal-check": "1" } }
-      ).then(res => res.ok && res.headers.get("content-type")?.includes("application/json") ? res.json() : null)
-       .catch(err => { console.error("Maintenance check fetch failed:", err.message); return null; });
+      settingsPromise = prisma.globalSettings.findUnique({
+        where: { siteId },
+        select: { websiteSettings: true }
+      }).catch(err => { console.error("Maintenance check failed:", err.message); return null; });
     }
 
     // Determine if we need to fetch redirect
     let redirectPromise = null;
     let cachedRedirect = middlewareCache.redirects[redirectCacheKey];
     if (checkRedirect && (!cachedRedirect || cachedRedirect.expiresAt < now)) {
-      redirectPromise = fetch(
-        `${url.origin}/api/redirects?siteId=${encodeURIComponent(siteId)}&source=${encodeURIComponent(pathname)}`,
-        { headers: { "x-internal-check": "1" } }
-      ).then(res => res.ok && res.headers.get("content-type")?.includes("application/json") ? res.json() : null)
-       .catch(err => { console.error("Redirect check fetch failed:", err.message); return null; });
+      const formattedSource = pathname.trim().startsWith("/") ? pathname.trim() : `/${pathname.trim()}`;
+      redirectPromise = prisma.redirect.findUnique({
+        where: { siteId_source: { siteId, source: formattedSource } }
+      }).catch(err => { console.error("Redirect check failed:", err.message); return null; });
     }
 
     if (settingsPromise || redirectPromise) {
@@ -153,7 +152,7 @@ export async function proxy(request) {
         const [settingsResult, redirectResult] = await Promise.all([settingsPromise, redirectPromise]);
 
         if (settingsPromise) {
-          const ws = settingsResult?.data?.websiteSettings ?? settingsResult?.websiteSettings;
+          const ws = settingsResult?.websiteSettings;
           middlewareCache.settings[settingsCacheKey] = {
             data: ws || null,
             expiresAt: now + CACHE_TTL_MS
@@ -162,7 +161,7 @@ export async function proxy(request) {
         }
 
         if (redirectPromise) {
-          const rule = redirectResult?.data?.redirect ?? redirectResult?.redirect;
+          const rule = redirectResult;
           middlewareCache.redirects[redirectCacheKey] = {
             data: rule || null,
             expiresAt: now + CACHE_TTL_MS

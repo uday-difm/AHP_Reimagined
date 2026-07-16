@@ -96,7 +96,7 @@ export async function POST(req) {
       const controls = await securityService.getSecurityControls(siteId);
       const limitRps = controls.rateLimitRps || 60;
       const { checkRateLimit } = await import("@/lib/rateLimiter");
-      const allowed = checkRateLimit(ip, limitRps);
+      const allowed = await checkRateLimit(ip, limitRps);
       if (!allowed) {
         try {
           EventBus.emit("form.failed", {

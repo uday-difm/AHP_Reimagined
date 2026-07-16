@@ -7,7 +7,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AdSlot from '@/components/AdSlot';
 import { Play } from 'lucide-react';
-
+import DOMPurify from "isomorphic-dompurify";
 export const revalidate = 60; // ISR: Revalidate every 60 seconds
 
 export async function generateMetadata({ params }) {
@@ -82,9 +82,19 @@ export default async function ArticlePage({ params }) {
   const wordCount = rawTextContent.split(/\s+/).filter(Boolean).length;
   const readTime = `${Math.max(1, Math.ceil(wordCount / 200))} min read`;
 
-  const sanitizedHtml = typeof post.content === "string" ? post.content : "";
+  const sanitizedHtml = DOMPurify.sanitize(
+    typeof post.content === "string" ? post.content : ""
+  );
 
-  const featuredImgUrl = post.featuredImage?.secureUrl || post.featuredImage?.url || '/images/holistic.png';
+  function proxyUrl(url) {
+    if (!url) return url;
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      return `/api/media/proxy?url=${encodeURIComponent(url)}`;
+    }
+    return url;
+  }
+
+  const featuredImgUrl = proxyUrl(post.featuredImage?.secureUrl || post.featuredImage?.url || '/images/holistic.png');
 
   return (
     <div className="min-h-screen bg-bg-light relative">
@@ -143,6 +153,7 @@ export default async function ArticlePage({ params }) {
               alt={post.featuredImage?.altText || post.title}
               fill
               priority
+              unoptimized
               className="object-cover"
               sizes="100vw"
             />
@@ -200,7 +211,7 @@ export default async function ArticlePage({ params }) {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {fallbackRelated.map((item) => {
-                const itemImg = item.featuredImage?.secureUrl || item.featuredImage?.url || '/images/holistic.png';
+                const itemImg = proxyUrl(item.featuredImage?.secureUrl || item.featuredImage?.url || '/images/holistic.png');
                 const itemCat = item.categories?.[0]?.name || 'General';
                 return (
                   <Link
@@ -213,6 +224,7 @@ export default async function ArticlePage({ params }) {
                         src={itemImg}
                         alt={item.title}
                         fill
+                        unoptimized
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                         sizes="(max-width: 768px) 100vw, 33vw"
                       />

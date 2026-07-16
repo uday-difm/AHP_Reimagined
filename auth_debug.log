@@ -323,3 +323,106 @@
 [2026-07-15T11:36:27.718Z] [Auth] reCAPTCHA verifyJson: {"success":true,"challenge_ts":"2026-07-15T11:36:29Z","hostname":"testkey.google.com"}
 [2026-07-15T11:36:27.719Z] [Auth] Authenticating against authService for: admin@example.com
 [2026-07-15T11:36:28.366Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh
+[2026-07-16T04:29:50.061Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-16T04:29:50.062Z] [Auth] Request Host: localhost:3000
+[2026-07-16T04:29:50.062Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-16T04:29:50.063Z] [Auth] Token received (length: 4): null...
+[2026-07-16T04:29:50.063Z] [Auth] Sending request to google siteverify (x-www-form-urlencoded POST body)...
+[2026-07-16T04:29:50.230Z] [Auth] reCAPTCHA verifyJson: {"success":true,"challenge_ts":"2026-07-16T04:29:52Z","hostname":"testkey.google.com"}
+[2026-07-16T04:29:50.231Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-16T04:29:50.861Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh
+[2026-07-16T05:09:09.277Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-16T05:09:09.281Z] [Auth] Request Host: dyslexia-recital-area.ngrok-free.dev
+[2026-07-16T05:09:09.283Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-16T05:09:09.284Z] [Auth] Token received (length: 1721): 0cAFcWeA4UuICW0fRv6en40Zrn2dW3...
+[2026-07-16T05:09:09.286Z] [Auth] Sending request to google siteverify (x-www-form-urlencoded POST body)...
+[2026-07-16T05:09:09.478Z] [Auth] reCAPTCHA verifyJson: {"success":true,"challenge_ts":"2026-07-16T05:09:11Z","hostname":"testkey.google.com"}
+[2026-07-16T05:09:09.479Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-16T05:09:09.981Z] [Auth] Admin authentication failed, trying frontend auth table for: admin@example.com
+[2026-07-16T05:09:10.090Z] [Auth] All authentication methods failed for: admin@example.com
+[2026-07-16T05:09:17.206Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-16T05:09:17.208Z] [Auth] Request Host: dyslexia-recital-area.ngrok-free.dev
+[2026-07-16T05:09:17.210Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-16T05:09:17.212Z] [Auth] Token received (length: 4): null...
+[2026-07-16T05:09:17.216Z] [Auth] Sending request to google siteverify (x-www-form-urlencoded POST body)...
+[2026-07-16T05:09:17.365Z] [Auth] reCAPTCHA verifyJson: {"success":true,"challenge_ts":"2026-07-16T05:09:19Z","hostname":"testkey.google.com"}
+[2026-07-16T05:09:17.369Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-16T05:09:17.725Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh
+[2026-07-16T05:17:55.295Z] [Auth] Attempt started. Email: uday.verma4@difm.tech
+[2026-07-16T05:17:55.296Z] [Auth] Request Host: localhost:3000
+[2026-07-16T05:17:55.297Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-16T05:17:55.297Z] [Auth] Token received (length: undefined): empty...
+[2026-07-16T05:17:55.298Z] [Auth] Failed: reCAPTCHA token missing
+[2026-07-16T05:18:16.244Z] [Auth] Attempt started. Email: a@b.com
+[2026-07-16T05:18:16.245Z] [Auth] Request Host: localhost:3000
+[2026-07-16T05:18:16.246Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-16T05:18:16.247Z] [Auth] Token received (length: undefined): empty...
+[2026-07-16T05:18:16.247Z] [Auth] Failed: reCAPTCHA token missing
+[2026-07-16T05:18:17.487Z] [Auth] Attempt started. Email: a@b.com
+[2026-07-16T05:18:17.489Z] [Auth] Request Host: localhost:3000
+[2026-07-16T05:18:17.489Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-16T05:18:17.490Z] [Auth] Token received (length: undefined): empty...
+[2026-07-16T05:18:17.490Z] [Auth] Failed: reCAPTCHA token missing
+[2026-07-16T05:18:25.719Z] [Auth] Attempt started. Email: abc@def.com
+[2026-07-16T05:18:25.720Z] [Auth] Request Host: localhost:3000
+[2026-07-16T05:18:25.720Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-16T05:18:25.721Z] [Auth] Token received (length: undefined): empty...
+[2026-07-16T05:18:25.721Z] [Auth] Failed: reCAPTCHA token missing
+[2026-07-16T05:18:26.220Z] [Auth] Attempt started. Email: abc@def.com
+[2026-07-16T05:18:26.221Z] [Auth] Request Host: localhost:3000
+[2026-07-16T05:18:26.222Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-16T05:18:26.222Z] [Auth] Token received (length: undefined): empty...
+[2026-07-16T05:18:26.223Z] [Auth] Failed: reCAPTCHA token missing
+[2026-07-16T05:18:26.442Z] [Auth] Attempt started. Email: abc@def.com
+[2026-07-16T05:18:26.443Z] [Auth] Request Host: localhost:3000
+[2026-07-16T05:18:26.443Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-16T05:18:26.444Z] [Auth] Token received (length: undefined): empty...
+[2026-07-16T05:18:26.444Z] [Auth] Failed: reCAPTCHA token missing
+[2026-07-16T05:18:50.655Z] [Auth] Attempt started. Email: m@gmail.com
+[2026-07-16T05:18:50.655Z] [Auth] Request Host: dyslexia-recital-area.ngrok-free.dev
+[2026-07-16T05:18:50.655Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-16T05:18:50.656Z] [Auth] Token received (length: undefined): empty...
+[2026-07-16T05:18:50.656Z] [Auth] Failed: reCAPTCHA token missing
+[2026-07-16T05:18:53.889Z] [Auth] Attempt started. Email: m@gmail.com
+[2026-07-16T05:18:53.891Z] [Auth] Request Host: dyslexia-recital-area.ngrok-free.dev
+[2026-07-16T05:18:53.893Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-16T05:18:53.894Z] [Auth] Token received (length: undefined): empty...
+[2026-07-16T05:18:53.896Z] [Auth] Failed: reCAPTCHA token missing
+[2026-07-16T05:19:07.981Z] [Auth] Attempt started. Email: m@gmail.com
+[2026-07-16T05:19:07.982Z] [Auth] Request Host: dyslexia-recital-area.ngrok-free.dev
+[2026-07-16T05:19:07.983Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-16T05:19:07.984Z] [Auth] Token received (length: undefined): empty...
+[2026-07-16T05:19:07.985Z] [Auth] Failed: reCAPTCHA token missing
+[2026-07-16T05:30:08.912Z] [Auth] Attempt started. Email: divya.joshi@difm.tech
+[2026-07-16T05:30:08.915Z] [Auth] Request Host: dyslexia-recital-area.ngrok-free.dev
+[2026-07-16T05:30:08.918Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
+[2026-07-16T05:30:08.918Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-16T05:30:08.919Z] [Auth] Authenticating against authService for: divya.joshi@difm.tech
+[2026-07-16T05:30:09.020Z] [Auth] Admin authentication failed, trying frontend auth table for: divya.joshi@difm.tech
+[2026-07-16T05:30:09.072Z] [Auth] Frontend user authenticated successfully: divya.joshi@difm.tech
+[2026-07-16T05:33:28.415Z] [Auth] Attempt started. Email: divya.joshi@difm.tech
+[2026-07-16T05:33:28.417Z] [Auth] Request Host: dyslexia-recital-area.ngrok-free.dev
+[2026-07-16T05:33:28.419Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
+[2026-07-16T05:33:28.420Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-16T05:33:28.421Z] [Auth] Authenticating against authService for: divya.joshi@difm.tech
+[2026-07-16T05:33:28.519Z] [Auth] Admin authentication failed, trying frontend auth table for: divya.joshi@difm.tech
+[2026-07-16T05:33:28.618Z] [Auth] Frontend user authenticated successfully: divya.joshi@difm.tech
+[2026-07-16T05:45:26.523Z] [Auth] Attempt started. Email: divya.joshi@difm.tech
+[2026-07-16T05:45:26.524Z] [Auth] Request Host: dyslexia-recital-area.ngrok-free.dev
+[2026-07-16T05:45:26.526Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
+[2026-07-16T05:45:26.527Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-16T05:45:26.528Z] [Auth] Authenticating against authService for: divya.joshi@difm.tech
+[2026-07-16T05:45:26.628Z] [Auth] Admin authentication failed, trying frontend auth table for: divya.joshi@difm.tech
+[2026-07-16T05:45:26.728Z] [Auth] Frontend user authenticated successfully: divya.joshi@difm.tech
+[2026-07-16T05:50:29.825Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-16T05:50:29.826Z] [Auth] Request Host: dyslexia-recital-area.ngrok-free.dev
+[2026-07-16T05:50:29.829Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
+[2026-07-16T05:50:29.830Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-16T05:50:29.832Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-16T05:50:30.307Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh
+[2026-07-16T05:51:38.324Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-16T05:51:38.325Z] [Auth] Request Host: dyslexia-recital-area.ngrok-free.dev
+[2026-07-16T05:51:38.326Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
+[2026-07-16T05:51:38.328Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-16T05:51:38.330Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-16T05:51:38.808Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh

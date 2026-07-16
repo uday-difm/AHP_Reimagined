@@ -92,6 +92,10 @@ const allActions = [
 export default async function DashboardPage() {
   // Fetch active site context
   const user = await requireAuth();
+  if (!user) {
+    const { redirect } = await import("next/navigation");
+    redirect("/dashboard/login");
+  }
   const site = await getSiteForUser(user);
 
   if (!site) {

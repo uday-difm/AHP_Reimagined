@@ -110,81 +110,23 @@ export const campaignService = {
     if (!campaign) throw new Error("Campaign not found");
     if (!campaign.list) throw new Error("Campaign list not selected or empty");
 
-    const { transporter, fromEmail } = await emailService.getTransporterForSite(siteId);
-
     await prisma.emailCampaign.update({
       where: { id: campaignId },
       data: { status: "sending" }
     });
 
-    const members = campaign.list.subscribers;
-    let sentCount = 0;
-    let failedCount = 0;
+    const activeMembers = campaign.list.subscribers.filter((m) => m.subscriber.status === "active");
 
-    for (const member of members) {
-      const sub = member.subscriber;
-      if (sub.status !== "active") continue;
+    const { emailQueue } = await import("../lib/queues/emailQueue.js");
+    await emailQueue.addBulk(
+      activeMembers.map((m) => ({
+        name: "send-campaign-email",
+        data: { campaignId, subscriberId: m.subscriber.id },
+        opts: { attempts: 3, backoff: { type: "exponential", delay: 5000 } },
+      }))
+    );
 
-      try {
-        await transporter.sendMail({
-          from: `"Global Backend" <${fromEmail}>`,
-          to: sub.email,
-          subject: campaign.subject,
-          html: campaign.body
-        });
-
-        await prisma.campaignLog.upsert({
-          where: {
-            campaignId_subscriberId: {
-              campaignId,
-              subscriberId: sub.id,
-            },
-          },
-          update: {
-            status: "sent",
-            sentAt: new Date(),
-            errorMessage: null,
-          },
-          create: {
-            campaignId,
-            subscriberId: sub.id,
-            status: "sent",
-            sentAt: new Date(),
-          },
-        });
-        sentCount++;
-      } catch (err) {
-        await prisma.campaignLog.upsert({
-          where: {
-            campaignId_subscriberId: {
-              campaignId,
-              subscriberId: sub.id,
-            },
-          },
-          update: {
-            status: "failed",
-            errorMessage: err.message,
-          },
-          create: {
-            campaignId,
-            subscriberId: sub.id,
-            status: "failed",
-            errorMessage: err.message,
-          },
-        });
-        failedCount++;
-      }
-    }
-
-    await prisma.emailCampaign.update({
-      where: { id: campaignId },
-      data: {
-        status: failedCount > 0 && sentCount === 0 ? "failed" : "sent",
-        sentAt: new Date()
-      }
-    });
-
-    return { success: true, sentCount, failedCount };
+    return { success: true, queued: activeMembers.length };
   },
 
   async updateCampaign(siteId, id, data) {

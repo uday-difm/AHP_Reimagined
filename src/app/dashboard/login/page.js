@@ -69,9 +69,15 @@ function LoginAndProjectLanding() {
 
   // If already authenticated, check if role is admin and route to dashboard
   useEffect(() => {
-    if (status === "authenticated" && session?.user?.globalRole !== "VISITOR") {
-      const callbackUrl = searchParams.get("callbackUrl") || "/dashboard/dashboard";
-      router.replace(callbackUrl);
+    if (status === "authenticated") {
+      const role = session?.user?.globalRole;
+      if (role && role !== "VISITOR" && role !== "USER") {
+        const callbackUrl = searchParams.get("callbackUrl") || "/dashboard/dashboard";
+        router.replace(callbackUrl);
+      } else {
+        // If they are a frontend user, redirect them to the frontend homepage instead of dashboard
+        router.replace("/");
+      }
     }
   }, [status, session, router, searchParams]);
 

@@ -4,8 +4,14 @@ import { useState, useEffect, useCallback } from "react";
 import { X, Upload, Folder, Home, ArrowLeft, Search, Image as ImageIcon, FileIcon, CheckCircle } from "lucide-react";
 
 function getThumbnailUrl(url) {
-  if (!url || !url.includes("res.cloudinary.com")) return url;
-  return url.replace("/upload/", "/upload/c_fill,w_200,h_200,g_auto,q_auto,f_auto/");
+  if (!url) return url;
+  if (url.includes("res.cloudinary.com")) {
+    return url.replace("/upload/", "/upload/c_fill,w_200,h_200,g_auto,q_auto,f_auto/");
+  }
+  if (url.startsWith("/")) {
+    return url;
+  }
+  return `/api/media/proxy?url=${encodeURIComponent(url)}`;
 }
 
 /**
@@ -30,45 +36,71 @@ export default function MediaPickerModal({ onSelect, onClose, title = "Select fr
   const [search, setSearch] = useState("");
   const [hoveredId, setHoveredId] = useState(null);
 
-  const loadContents = useCallback(async () => {
-    setLoading(true);
+  const [page, setPage] = useState(1);
+  const [totalMedia, setTotalMedia] = useState(0);
+
+  const loadContents = useCallback(async (pageNum = 1) => {
+    if (pageNum === 1) setLoading(true);
     try {
-      const [mediaRes, foldersRes] = await Promise.all([
-        fetch(`/api/media?folderId=${currentFolderId}`, {
+      const fetchPromises = [
+        fetch(`/api/media?folderId=${currentFolderId}&limit=50&page=${pageNum}`, {
           headers: {
             "x-site-id": siteId,
           },
         }),
-        fetch(`/api/media/folders?parentId=${currentFolderId}`, {
-          headers: {
-            "x-site-id": siteId,
-          },
-        }),
-      ]);
+      ];
+
+      if (pageNum === 1) {
+        fetchPromises.push(
+          fetch(`/api/media/folders?parentId=${currentFolderId}`, {
+            headers: {
+              "x-site-id": siteId,
+            },
+          })
+        );
+      }
+
+      const responses = await Promise.all(fetchPromises);
+      const mediaRes = responses[0];
+      const foldersRes = responses.length > 1 ? responses[1] : null;
 
       const mediaData = await mediaRes.json();
-      const foldersData = await foldersRes.json();
+      setTotalMedia(mediaData.total || 0);
 
-      let items = Array.isArray(mediaData) ? mediaData : [];
+      let items = mediaData.data ?? (Array.isArray(mediaData) ? mediaData : []);
 
       // Apply filter
       if (filter === "images") {
         items = items.filter((m) => m.mimeType?.startsWith("image/"));
       }
 
-      setMedia(items);
-      setFolders(foldersData.folders || []);
+      if (pageNum === 1) {
+        setMedia(items);
+        if (foldersRes) {
+          const foldersData = await foldersRes.json();
+          setFolders(foldersData.folders || []);
+        }
+      } else {
+        setMedia((prev) => [...prev, ...items]);
+      }
     } catch (err) {
       console.error("MediaPickerModal load error:", err);
     } finally {
-      setLoading(false);
+      if (pageNum === 1) setLoading(false);
     }
   }, [currentFolderId, filter]);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    loadContents();
+    setPage(1);
+    loadContents(1);
   }, [loadContents]);
+
+  const loadMore = () => {
+    const nextPage = page + 1;
+    setPage(nextPage);
+    loadContents(nextPage);
+  };
 
   // Folder navigation
   const navigateToFolder = (folder) => {
@@ -309,9 +341,20 @@ export default function MediaPickerModal({ onSelect, onClose, title = "Select fr
                     })}
                   </div>
                 )}
-              </div>
 
-            </div>
+                  {/* Load More Button */}
+                  {media.length < totalMedia && !loading && !search && (
+                    <div className="mt-6 flex justify-center pb-4">
+                      <button
+                        onClick={loadMore}
+                        className="rounded-full bg-slate-900 px-6 py-2.5 text-xs font-bold text-white shadow-md hover:bg-slate-800 transition-all hover:scale-105 active:scale-95"
+                      >
+                        Load More Items
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
           )}
         </div>
 

@@ -61,7 +61,9 @@ export async function GET(request) {
 
   // Plain fetch for Cloudinary or any other public URL
   try {
-    const response = await fetch(url);
+    // Fix Node 18+ IPv6 fetch issue with localhost
+    const fetchUrl = url.replace("localhost:", "127.0.0.1:");
+    const response = await fetch(fetchUrl);
 
     if (!response.ok) {
       return NextResponse.json(

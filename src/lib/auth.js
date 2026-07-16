@@ -66,12 +66,13 @@ export const authOptions = {
             host.includes("localhost") ||
             host.includes("127.0.0.1") ||
             host.includes(".ngrok.io") ||
+            host.includes(".ngrok-free.app") ||
             host.includes(".ngrok-free.dev") ||
             host.includes(".vercel.app");
 
           if (isTestKeyHost) {
-            writeLog("[Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.");
-            secretKey = "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe";
+            writeLog("[Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.");
+            secretKey = null; // Disable verification for this request
           }
         }
 
@@ -222,6 +223,15 @@ export const authOptions = {
 
       return session;
     },
+
+    async redirect({ url, baseUrl }) {
+      // Allow any callback URL that is provided, preserving the dynamic host (ngrok)
+      // This prevents NextAuth from forcing a redirect back to localhost
+      if (url.startsWith("/")) {
+        return new URL(url, baseUrl).toString();
+      }
+      return url;
+    },
   },
 
   pages: {
@@ -231,4 +241,5 @@ export const authOptions = {
 
   useSecureCookies: false,
   secret: process.env.NEXTAUTH_SECRET,
+  trustHost: true,
 };

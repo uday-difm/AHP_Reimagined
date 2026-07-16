@@ -3,15 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --webpack",
+    "dev": "node --dns-result-order=ipv4first node_modules/next/dist/bin/next dev --webpack",
     "build": "node scripts/generate-routes.js && next build --webpack",
-    "start": "next start",
+    "start": "node --dns-result-order=ipv4first node_modules/next/dist/bin/next start",
     "lint": "eslint",
     "db:generate": "npx prisma generate --schema=prisma/schema.prisma",
     "db:push": "npx prisma db push --schema=prisma/schema.prisma --accept-data-loss",
     "db:seed": "node prisma/seed.js",
     "db:migrate": "npx prisma migrate deploy --schema=prisma/schema.prisma",
-    "postinstall": "prisma generate --schema=prisma/schema.prisma"
+    "postinstall": "prisma generate --schema=prisma/schema.prisma",
+    "ngrok": "npx ngrok http 3000"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1085.0",
@@ -36,8 +37,10 @@
     "@tiptap/starter-kit": "^3.27.1",
     "@yourcompany/global-backend-next": "file:src/sdk/yourcompany-global-backend-next-1.0.6.tgz",
     "bcryptjs": "^3.0.3",
+    "bullmq": "^5.80.5",
     "cloudinary": "^2.10.0",
     "dns": "^0.2.2",
+    "ioredis": "^5.11.1",
     "isomorphic-dompurify": "^3.18.0",
     "jodit": "^4.12.32",
     "jodit-react": "^5.3.21",

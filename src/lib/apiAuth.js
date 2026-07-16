@@ -85,7 +85,7 @@ export async function checkSitePermission(req, requiredRole) {
 
     const limitRps = controls.rateLimitRps || 60;
     const { checkRateLimit } = await import("@/lib/rateLimiter");
-    const allowed = checkRateLimit(ip, limitRps);
+    const allowed = await checkRateLimit(ip, limitRps);
     if (!allowed) {
       return { error: "Too Many Requests: Rate limit exceeded", status: 429 };
     }
