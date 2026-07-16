@@ -188,47 +188,47 @@ function QuizTypeForm({ initial, isEdit, onSave, onCancel, saving, siteId }) {
           </label>
           <input type="text" value={form.title} onChange={(e) => setField("title", e.target.value)} required
             placeholder="e.g. Sleep Quality Assessment"
-            className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white transition" />
+            className="w-full min-w-0 px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white transition" />
         </div>
-        <div>
+        <div className="min-w-0">
           <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">
             Slug <span className="text-red-500">*</span>
           </label>
           <input type="text" value={form.slug} onChange={(e) => setField("slug", e.target.value)}
             disabled={isEdit} required placeholder="sleep-quality"
-            className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white transition disabled:opacity-50 disabled:cursor-not-allowed font-mono" />
+            className="w-full min-w-0 px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white transition disabled:opacity-50 disabled:cursor-not-allowed font-mono" />
           {!isEdit && <p className="text-[10px] text-slate-400 mt-1">Auto-generated from title. Must be unique.</p>}
         </div>
       </div>
 
-      <div>
+      <div className="min-w-0">
         <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">
           Subtitle
         </label>
         <input type="text" value={form.subtitle || ""} onChange={(e) => setField("subtitle", e.target.value)}
           placeholder="e.g. Discover how well you're truly sleeping"
-          className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white transition" />
+          className="w-full min-w-0 px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white transition" />
       </div>
 
-      <div>
+      <div className="min-w-0">
         <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">
           Description <span className="text-red-500">*</span>
         </label>
         <textarea value={form.description} onChange={(e) => setField("description", e.target.value)} rows={2} required
           placeholder="Brief description shown on the quiz card…"
-          className="w-full px-3 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white transition resize-none" />
+          className="w-full min-w-0 px-3 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white transition resize-none" />
       </div>
 
-      <div>
+      <div className="min-w-0">
         <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">
           Cover Image <span className="text-slate-300">(optional)</span>
         </label>
-        <div className="flex gap-2">
+        <div className="flex flex-col sm:flex-row gap-2">
           <input type="text" value={form.imageUrl || ""} onChange={(e) => setField("imageUrl", e.target.value)}
             placeholder="Paste image URL..."
-            className="flex-1 px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white transition" />
+            className="flex-1 min-w-0 px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white transition" />
           <button type="button" onClick={() => setShowMediaPicker(true)}
-            className="px-4 py-2 text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-xl transition flex items-center gap-1.5 shrink-0">
+            className="w-full sm:w-auto justify-center px-4 py-2 text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-xl transition flex items-center gap-1.5 shrink-0">
             <Plus size={14} /> Upload / Select
           </button>
         </div>
@@ -238,25 +238,25 @@ function QuizTypeForm({ initial, isEdit, onSave, onCancel, saving, siteId }) {
         )}
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        <div className="min-w-0">
           <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Category Label</label>
           <input type="text" value={form.category || ""} onChange={(e) => setField("category", e.target.value)}
             placeholder="e.g. Sleep"
-            className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white transition" />
+            className="w-full min-w-0 px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white transition" />
         </div>
-        <div>
+        <div className="min-w-0">
           <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Difficulty</label>
           <select value={form.difficulty} onChange={(e) => setField("difficulty", e.target.value)}
-            className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400 transition cursor-pointer">
+            className="w-full min-w-0 px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400 transition cursor-pointer">
             {DIFFICULTIES.map((d) => <option key={d}>{d}</option>)}
           </select>
         </div>
-        <div>
+        <div className="min-w-0">
           <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Est. Minutes</label>
           <input type="number" min={1} max={60} value={form.estimatedMinutes}
             onChange={(e) => setField("estimatedMinutes", e.target.value)}
-            className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white transition" />
+            className="w-full min-w-0 px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white transition" />
         </div>
         <div>
           <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Accent Color</label>
@@ -685,25 +685,27 @@ function HomePagePanel({ allQuestions, quizTypes }) {
   return (
     <div className="space-y-5">
       {/* Header strip */}
-      <div className="bg-gradient-to-r from-[#0f7c85]/10 to-transparent border border-[#0f7c85]/20 rounded-2xl p-5 flex items-start gap-4">
-        <div className="p-2.5 rounded-xl bg-[#0f7c85]/10 text-[#0f7c85] shrink-0 mt-0.5">
-          <MonitorSmartphone size={20} />
+      <div className="bg-gradient-to-r from-[#0f7c85]/10 to-transparent border border-[#0f7c85]/20 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start gap-4">
+        <div className="flex items-start gap-3 sm:gap-4 flex-1 min-w-0">
+          <div className="p-2 sm:p-2.5 rounded-xl bg-[#0f7c85]/10 text-[#0f7c85] shrink-0 mt-0.5">
+            <MonitorSmartphone size={18} className="sm:w-5 sm:h-5" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <h3 className="font-bold text-slate-800 text-[14px] sm:text-[15px]">Home Page Quiz Widget</h3>
+            <p className="text-[11px] sm:text-xs text-slate-500 mt-0.5 leading-relaxed break-words">
+              Select the questions below to appear in the quiz widget on the <strong>home page</strong>.
+              Questions are shown in the order listed. Recommended: 3–5 questions.
+            </p>
+          </div>
         </div>
-        <div className="flex-1">
-          <h3 className="font-bold text-slate-800 text-[15px]">Home Page Quiz Widget</h3>
-          <p className="text-xs text-slate-500 mt-0.5 leading-relaxed">
-            Select the questions below to appear in the quiz widget on the <strong>home page</strong>.
-            Questions are shown in the order listed. Recommended: 3–5 questions.
-          </p>
-        </div>
-        <div className="flex items-center gap-2 shrink-0">
-          <span className="text-xs font-bold px-3 py-1.5 rounded-full bg-[#0f7c85]/10 text-[#0f7c85]">
+        <div className="flex items-center justify-between sm:justify-start gap-2 w-full sm:w-auto shrink-0 pt-1 sm:pt-0">
+          <span className="text-[11px] sm:text-xs font-bold px-3 py-1.5 rounded-full bg-[#0f7c85]/10 text-[#0f7c85]">
             {selected.size} selected
           </span>
           <button
             onClick={handleSave}
             disabled={saving}
-            className={`inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-xl transition ${
+            className={`inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-xl transition w-full sm:w-auto justify-center ${
               saved
                 ? "bg-green-500 text-white"
                 : "bg-[#0f7c85] hover:bg-[#0c6b73] text-white disabled:opacity-60"
@@ -983,14 +985,14 @@ export default function QuizzesAdminPage() {
 
       {/* Quiz Type Modal */}
       {showTypeModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 backdrop-blur-sm overflow-y-auto">
-          <div className="w-full max-w-xl bg-white rounded-2xl shadow-xl p-6 relative my-4">
-            <div className="flex items-center justify-between mb-5">
-              <div>
-                <h2 className="text-base font-bold text-slate-800">
+        <div className="fixed inset-0 z-50 flex items-start justify-center p-3 sm:p-4 bg-black/30 backdrop-blur-sm overflow-y-auto">
+          <div className="w-full max-w-xl bg-white rounded-2xl shadow-xl p-4 sm:p-6 relative my-6 sm:my-8">
+            <div className="flex items-start sm:items-center justify-between mb-5 gap-3">
+              <div className="min-w-0 flex-1">
+                <h2 className="text-base font-bold text-slate-800 truncate">
                   {editTypeTarget ? "Edit Quiz Type" : "Create Quiz Type"}
                 </h2>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <p className="text-xs text-slate-500 mt-0.5 leading-relaxed break-words">
                   This controls what appears on the public quizzes page
                 </p>
               </div>

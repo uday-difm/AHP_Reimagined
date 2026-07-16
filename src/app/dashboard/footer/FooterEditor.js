@@ -215,7 +215,7 @@ export default function FooterEditor({
                   onChange={(e) =>
                     updateColumnField(idx, "logoUrl", e.target.value)
                   }
-                  className="flex-1 rounded-lg border border-gray-200 p-2.5 outline-none focus:border-blue-600 text-sm font-mono"
+                  className="flex-1 min-w-0 rounded-lg border border-gray-200 p-2.5 outline-none focus:border-blue-600 text-sm font-mono"
                 />
                 <button
                   type="button"
@@ -318,7 +318,7 @@ export default function FooterEditor({
                             e.target.value,
                           )
                         }
-                        className="w-1/2 rounded border border-gray-200 p-1.5 text-xs outline-none focus:border-blue-600"
+                        className="w-1/2 min-w-0 rounded border border-gray-200 p-1.5 text-xs outline-none focus:border-blue-600"
                         placeholder="Label"
                       />
                       <input
@@ -332,7 +332,7 @@ export default function FooterEditor({
                             e.target.value,
                           )
                         }
-                        className="w-1/2 rounded border border-gray-200 p-1.5 text-xs outline-none focus:border-blue-600 font-mono"
+                        className="w-1/2 min-w-0 rounded border border-gray-200 p-1.5 text-xs outline-none focus:border-blue-600 font-mono"
                         placeholder="URL Route"
                       />
                       <button
@@ -554,7 +554,7 @@ export default function FooterEditor({
       {/* Editor & Preview Grid */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 items-start">
         {/* Configurations Panel */}
-        <div className="xl:col-span-1 space-y-6 bg-white border p-6 rounded-xl shadow-sm">
+        <div className="xl:col-span-1 space-y-6 bg-white border p-6 rounded-xl shadow-sm min-w-0">
           <div className="flex justify-between items-center border-b pb-3">
             <h3 className="font-bold text-gray-900">Layout Configurations</h3>
             <button

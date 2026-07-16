@@ -1,10 +1,30 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Button from '@/components/Button';
 import AdSlot from '@/components/AdSlot';
+
+function proxyUrl(url) {
+  if (!url) return url;
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return `/api/media/proxy?url=${encodeURIComponent(url)}`;
+  }
+  return url;
+}
+
+function getSeasonFromDate(dateStr) {
+  if (!dateStr) return 'LATEST ISSUE';
+  const d = new Date(dateStr);
+  const month = d.getMonth();
+  const year = d.getFullYear();
+  let season = 'WINTER';
+  if (month >= 2 && month <= 4) season = 'SPRING';
+  else if (month >= 5 && month <= 7) season = 'SUMMER';
+  else if (month >= 8 && month <= 10) season = 'FALL';
+  return `${season} ${year}`;
+}
 
 const magazines = [
   {
@@ -43,6 +63,43 @@ const magazines = [
 
 export default function ArticlesGrid() {
   const cardRefs = useRef([]);
+  const [latestIssue, setLatestIssue] = useState(null);
+  const [recentIssues, setRecentIssues] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchMagazines = async () => {
+      try {
+        const res = await fetch("/api/magazine");
+        if (res.ok) {
+          const data = await res.json();
+          const mapped = data.map((mag) => ({
+            season: getSeasonFromDate(mag.magazine_date),
+            title: mag.magazine_title,
+            slug: mag.magazine_slug,
+            img: mag.magazine_cover_image || '/images/mag_sleep.png',
+            backImg: mag.magazine_back_image || '/back.jpg',
+            spineImg: mag.magazine_spine_image || '/spine.jpg',
+            contents: mag.magazine_tags ? mag.magazine_tags.split(',').map(t => t.trim()) : [],
+            description: mag.magazine_description,
+            introduction: mag.magazine_introduction || '',
+            magazineId: mag.magazine_id || '',
+            timestamp: new Date(mag.magazine_date).getTime()
+          }));
+          const allIssues = mapped.sort((a, b) => b.timestamp - a.timestamp);
+          if (allIssues.length > 0) {
+            setLatestIssue(allIssues[0]);
+            setRecentIssues(allIssues.slice(0, 3));
+          }
+        }
+      } catch (err) {
+        console.error("Failed to load magazines:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchMagazines();
+  }, []);
 
   const handleMouseMove = (e, index) => {
     const card = cardRefs.current[index];
@@ -89,7 +146,7 @@ export default function ArticlesGrid() {
             </p>
             
             {/* 3D Book Container */}
-            <Link href="/blogs/the-mindfulness-issue" className="book-3d-container block no-underline mb-8 hover:scale-105 transition-transform duration-300">
+            <Link href={latestIssue ? `/magazine/${latestIssue.slug}` : "/blogs/the-mindfulness-issue"} className="book-3d-container block no-underline mb-8 hover:scale-105 transition-transform duration-300">
               <div className="book-3d mx-auto lg:mx-0">
                 {/* Spine */}
                 <div className="book-3d-spine" />
@@ -101,12 +158,13 @@ export default function ArticlesGrid() {
                 {/* Front Cover */}
                 <div className="book-3d-cover">
                   <Image
-                    src="/images/mag_mindfulness.png"
-                    alt="The Mindfulness Issue – Spring 2024"
+                    src={latestIssue ? proxyUrl(latestIssue.img) : "/images/mag_mindfulness.png"}
+                    alt={latestIssue ? latestIssue.title : "The Mindfulness Issue – Spring 2024"}
                     fill
                     sizes="240px"
                     className="object-cover"
                     priority
+                    unoptimized={true}
                   />
                 </div>
                 
@@ -118,17 +176,31 @@ export default function ArticlesGrid() {
                   <div className="flex flex-col gap-3.5 text-left">
                     <div className="border-b border-white/20 pb-2.5">
                       <span className="text-xs font-bold text-white/70 uppercase tracking-[2px] block mb-0.5">EDITORIAL BOARD</span>
-                      <h4 className="font-heading font-extrabold text-sm md:text-base text-white tracking-[-0.5px]">Spring 2024 Issue</h4>
+                      <h4 className="font-heading font-extrabold text-sm md:text-base text-white tracking-[-0.5px]">{latestIssue ? (latestIssue.magazineId || latestIssue.season) : "Spring 2024 Issue"}</h4>
                     </div>
 
                     <div className="flex flex-col gap-2">
                       <span className="text-xs text-white/50 font-bold uppercase tracking-[1px] block">Inside This Issue:</span>
-                      <ul className="text-[11.5px] leading-relaxed text-white/90 list-disc pl-3.5 space-y-1 font-medium">
-                        <li>Neuroscience of Focus</li>
-                        <li>Anxiety Somatic Resets</li>
-                        <li>Circadian Rhythms & Sleep</li>
-                        <li>Dosha-Balanced Nutrition</li>
-                      </ul>
+                      {latestIssue ? (
+                        latestIssue.description ? (
+                          <p className="text-[11.5px] leading-relaxed text-white/90 font-medium line-clamp-4 overflow-hidden text-ellipsis">
+                            {latestIssue.description}
+                          </p>
+                        ) : (
+                          <ul className="text-[11.5px] leading-relaxed text-white/90 list-disc pl-3.5 space-y-1 font-medium">
+                            {latestIssue.contents.slice(0, 4).map((item, idx) => (
+                              <li key={idx}>{item}</li>
+                            ))}
+                          </ul>
+                        )
+                      ) : (
+                        <ul className="text-[11.5px] leading-relaxed text-white/90 list-disc pl-3.5 space-y-1 font-medium">
+                          <li>Neuroscience of Focus</li>
+                          <li>Anxiety Somatic Resets</li>
+                          <li>Circadian Rhythms & Sleep</li>
+                          <li>Dosha-Balanced Nutrition</li>
+                        </ul>
+                      )}
                     </div>
                   </div>
 
@@ -160,11 +232,11 @@ export default function ArticlesGrid() {
                   <div>
                     <span className="text-xs font-extrabold text-[#0f7c85] uppercase tracking-[1.5px] block mb-1">FEATURED EDITION</span>
                     <h3 className="font-heading font-extrabold text-2xl text-primary tracking-tight">
-                      Spring 2024 Issue
+                      {latestIssue ? (latestIssue.magazineId || latestIssue.season) : "Spring 2024 Issue"}
                     </h3>
                   </div>
                   <Button 
-                    href="/blogs/the-mindfulness-issue"
+                    href={latestIssue ? `/magazine/${latestIssue.slug}` : "/blogs/the-mindfulness-issue"}
                     variant="primary"
                     className="!text-xs !py-3 !px-6 !rounded-xl font-extrabold shadow-sm hover:shadow-[0_6px_20px_rgba(15,124,133,0.2)]"
                   >
@@ -175,7 +247,7 @@ export default function ArticlesGrid() {
                 <div className="flex flex-col gap-3">
                   <span className="text-secondary font-bold text-sm">Dear Readers,</span>
                   <p className="text-secondary text-sm leading-relaxed">
-                    Welcome to the Spring 2024 Edition of A Health Place Magazine. This issue explores the powerful somatic resets, circadian sleep guidelines, and neuroscience-backed habits designed to quiet stress loops and ground your mental clarity.
+                    {latestIssue ? (latestIssue.introduction || latestIssue.description || `Welcome to the ${latestIssue.season} Edition of A Health Place Magazine.`) : "Welcome to the Spring 2024 Edition of A Health Place Magazine. This issue explores the powerful somatic resets, circadian sleep guidelines, and neuroscience-backed habits designed to quiet stress loops and ground your mental clarity."}
                   </p>
                 </div>
               </div>
@@ -183,40 +255,43 @@ export default function ArticlesGrid() {
               {/* Fan-Out Spreads Preview Stack */}
               <div className="flex flex-col items-center gap-4 py-4">
                 <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-                  Hover to fan out preview sheets
+                  Hover to fan out recent editions
                 </span>
                 
                 <div className="spread-stack-container">
-                  {/* Left (Cover page preview) */}
+                  {/* Left */}
                   <div className="spread-card spread-card-left border border-slate-100">
                     <Image
-                      src="/images/mag_mindfulness.png"
-                      alt="Mindfulness Cover"
+                      src={recentIssues[1] ? proxyUrl(recentIssues[1].img) : (latestIssue ? proxyUrl(latestIssue.img) : "/images/mag_mindfulness.png")}
+                      alt={recentIssues[1] ? recentIssues[1].title : "Magazine Cover"}
                       fill
                       sizes="150px"
                       className="object-cover"
+                      unoptimized={true}
                     />
                   </div>
                   
-                  {/* Right (Ayurveda spread preview) */}
+                  {/* Right */}
                   <div className="spread-card spread-card-right border border-slate-100">
                     <Image
-                      src="/images/ayurveda.png"
-                      alt="Ayurveda Guide Preview"
+                      src={recentIssues[2] ? proxyUrl(recentIssues[2].img) : "/images/ayurveda.png"}
+                      alt={recentIssues[2] ? recentIssues[2].title : "Magazine Cover"}
                       fill
                       sizes="150px"
                       className="object-cover"
+                      unoptimized={true}
                     />
                   </div>
                   
-                  {/* Center (Physical health spread preview) */}
+                  {/* Center (Most Recent) */}
                   <div className="spread-card spread-card-center border-2 border-white shadow-lg">
                     <Image
-                      src="/images/physical_health.png"
-                      alt="Physical Health Guide Preview"
+                      src={recentIssues[0] ? proxyUrl(recentIssues[0].img) : "/images/physical_health.png"}
+                      alt={recentIssues[0] ? recentIssues[0].title : "Magazine Cover"}
                       fill
                       sizes="150px"
                       className="object-cover"
+                      unoptimized={true}
                     />
                   </div>
                 </div>

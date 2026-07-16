@@ -741,7 +741,7 @@ export default function PostEditor({
               >
                 OG Image URL
               </label>
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2">
                 <input
                   type="text"
                   id="ogImage"
@@ -756,7 +756,7 @@ export default function PostEditor({
                     setMediaPickerTarget("ogImage");
                     setShowMediaPicker(true);
                   }}
-                  className="px-3.5 py-2 border rounded-xl hover:bg-slate-50 text-xs font-bold text-slate-600 border-slate-200 transition flex items-center gap-1.5 shrink-0 cursor-pointer"
+                  className="px-3.5 py-2 border rounded-xl hover:bg-slate-50 text-xs font-bold text-slate-600 border-slate-200 transition flex items-center justify-center gap-1.5 shrink-0 cursor-pointer w-full sm:w-auto"
                 >
                   <ImageIcon size={12} />
                   Library

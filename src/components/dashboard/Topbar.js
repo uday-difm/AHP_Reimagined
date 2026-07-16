@@ -313,7 +313,7 @@ export default function Topbar({ siteId, sites = [], onMenuClick }) {
 
               {/* Notification Popover Dropdown */}
               {notificationsOpen && (
-                <div className="absolute right-0 mt-2 w-80 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-xl overflow-hidden z-50 text-xs text-left">
+                <div className="absolute -right-20 sm:right-0 mt-2 w-72 sm:w-80 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-xl overflow-hidden z-50 text-xs text-left">
                   {/* Popover Header */}
                   <div className="flex items-center justify-between border-b border-gray-100 dark:border-slate-700 bg-gray-50 dark:bg-slate-900 px-4 py-3">
                     <span className="font-bold text-gray-800 dark:text-slate-300 uppercase tracking-wider text-xs">
