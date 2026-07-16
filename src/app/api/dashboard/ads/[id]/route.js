@@ -11,6 +11,7 @@ const EditAdSchema = z.object({
   imageUrl: z.string().nullable().optional(),
   targetUrl: z.string().nullable().optional(),
   isActive: z.boolean().optional(),
+  status: z.enum(['draft', 'active', 'scheduled', 'expired']).optional(),
   startDate: z.string().nullable().optional(),
   endDate: z.string().nullable().optional(),
   advertiserId: z.string().nullable().optional(),
@@ -43,6 +44,7 @@ export async function PUT(req, { params }) {
     if (data.imageUrl !== undefined) updateData.imageUrl = data.imageUrl;
     if (data.targetUrl !== undefined) updateData.targetUrl = data.targetUrl;
     if (data.isActive !== undefined) updateData.isActive = data.isActive;
+    if (data.status !== undefined) updateData.status = data.status;
     if (data.startDate !== undefined) updateData.startDate = data.startDate ? new Date(data.startDate) : null;
     if (data.endDate !== undefined) updateData.endDate = data.endDate ? new Date(data.endDate) : null;
     

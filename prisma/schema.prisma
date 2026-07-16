@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -383,6 +384,7 @@ model GlobalSettings {
   devTools          Json?
   deploymentNotes   Json?
   navigation        Json?
+  adSettings        Json?
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
   deletedAt         DateTime?
@@ -837,6 +839,7 @@ model EmailCampaign {
   updatedAt   DateTime @updatedAt
 
   logs        CampaignLog[]
+  pushNotifications PushNotification[]
 
   @@index([siteId])
 }
@@ -863,17 +866,31 @@ model PushNotification {
   id          String   @id @default(cuid())
   siteId      String
   site        Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  emailCampaignId String?
+  emailCampaign   EmailCampaign? @relation(fields: [emailCampaignId], references: [id], onDelete: SetNull)
   title       String
   message     String   @db.Text
   url         String?
-  status      String   @default("draft") // draft, sending, sent, failed
+  iconUrl     String?  // Custom notification icon URL
+  imageUrl    String?  // Large hero image URL
+  segment     String   @default("Subscribed Users") // OneSignal segment name
+  filters     String?  @db.Text // JSON array of custom audience filters
+  status      String   @default("draft") // draft, scheduled, sending, sent, failed
   oneSignalId String?  // OneSignal push UUID
   sentCount   Int      @default(0)
+  deliveredCount Int   @default(0)
+  clickedCount   Int   @default(0)
+  failedCount    Int   @default(0)
   scheduledAt DateTime?
   sentAt      DateTime?
+  isRecurring Boolean  @default(false)
+  recurringRule String? @db.Text // JSON recurrence config
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@index([siteId])
+  @@index([status])
+  @@index([emailCampaignId])
 }
 
 // ========== GDPR & CONSENT ==========
@@ -975,6 +992,7 @@ model Ad {
   imageUrl     String?
   targetUrl    String?
   isActive     Boolean      @default(true)
+  status       String       @default("draft") // draft, active, scheduled, expired
   startDate    DateTime?
   endDate      DateTime?
   priority     Int          @default(50)

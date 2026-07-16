@@ -102,6 +102,14 @@ export default function EmailEditor({ siteId, initialEmailSettings }) {
     initialEmailSettings?.failedLogs || [],
   );
 
+  // OneSignal / Push Notifications
+  const [oneSignalAppId, setOneSignalAppId] = useState(
+    initialEmailSettings?.oneSignalAppId || "",
+  );
+  const [oneSignalRestKey, setOneSignalRestKey] = useState(
+    initialEmailSettings?.oneSignalRestKey || "",
+  );
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isTesting, setIsTesting] = useState(false);
   const [isClearing, setIsClearing] = useState(false);
@@ -130,6 +138,8 @@ export default function EmailEditor({ siteId, initialEmailSettings }) {
         enabled: adminAlertsEnabled,
         email: adminAlertsEmail,
       },
+      oneSignalAppId,
+      oneSignalRestKey,
     };
 
     try {
@@ -313,6 +323,24 @@ export default function EmailEditor({ siteId, initialEmailSettings }) {
             {failedLogs.length > 0 && (
               <span className="bg-red-100 text-red-600 font-bold px-1.8 py-0.2 rounded-full text-[9px] border border-red-200">
                 {failedLogs.length}
+              </span>
+            )}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab("push")}
+            className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${
+              activeTab === "push"
+                ? "border-blue-600 text-blue-600 bg-white"
+                : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50/80"
+            }`}
+          >
+            <BellRingIcon className="w-4 h-4" />
+            Push Notifications
+            {oneSignalAppId && (
+              <span className="bg-emerald-100 text-emerald-600 font-bold px-1.5 py-0.5 rounded-full text-[9px] border border-emerald-200">
+                ON
               </span>
             )}
           </button>
@@ -764,6 +792,103 @@ export default function EmailEditor({ siteId, initialEmailSettings }) {
               </div>
             </div>
           )}
+
+          {/* TAB 4: Push Notifications (OneSignal) */}
+          {activeTab === "push" && (
+            <div className="space-y-6">
+              <div className="border-b border-gray-100 pb-3">
+                <h3 className="text-sm font-bold text-gray-800 uppercase tracking-wider">
+                  OneSignal Push Notification Settings
+                </h3>
+                <p className="text-xs text-gray-500 mt-1">
+                  Configure your OneSignal credentials to enable browser and mobile push campaigns from the CRM.
+                </p>
+              </div>
+
+              {/* Connection Status */}
+              <div className={`flex items-center gap-3 p-4 rounded-xl border ${
+                oneSignalAppId
+                  ? "bg-emerald-50 border-emerald-200 text-emerald-700"
+                  : "bg-amber-50 border-amber-200 text-amber-700"
+              }`}>
+                <CheckCircle2 className={`w-5 h-5 shrink-0 ${oneSignalAppId ? "text-emerald-500" : "text-amber-400"}`} />
+                <div>
+                  <p className="text-xs font-bold">
+                    {oneSignalAppId ? "OneSignal Connected" : "OneSignal Not Configured"}
+                  </p>
+                  <p className="text-[10px] mt-0.5 opacity-80">
+                    {oneSignalAppId
+                      ? "Your App ID is saved. Push notifications are ready to send from the CRM."
+                      : "Enter your App ID and REST key below, then click Save Settings."}
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* App ID */}
+                <div>
+                  <label
+                    htmlFor="onesignal_app_id"
+                    className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2"
+                  >
+                    OneSignal App ID
+                  </label>
+                  <input
+                    type="text"
+                    id="onesignal_app_id"
+                    value={oneSignalAppId}
+                    onChange={(e) => setOneSignalAppId(e.target.value)}
+                    placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                    className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all font-mono"
+                  />
+                  <p className="text-[10px] text-gray-400 mt-1">Found in OneSignal Dashboard → Settings → Keys &amp; IDs</p>
+                </div>
+
+                {/* REST Key */}
+                <div>
+                  <label
+                    htmlFor="onesignal_rest_key"
+                    className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2"
+                  >
+                    REST API Key
+                  </label>
+                  <input
+                    type="password"
+                    id="onesignal_rest_key"
+                    value={oneSignalRestKey}
+                    onChange={(e) => setOneSignalRestKey(e.target.value)}
+                    placeholder={initialEmailSettings?.oneSignalRestKey ? "••••••••••••••••" : "Your OneSignal REST API Key"}
+                    className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all font-mono"
+                  />
+                  <p className="text-[10px] text-gray-400 mt-1">Stored securely. Leave blank to keep the existing key.</p>
+                </div>
+              </div>
+
+              {/* Setup Guide */}
+              <div className="bg-blue-50 border border-blue-100 rounded-xl p-5 space-y-3">
+                <h4 className="text-xs font-bold text-blue-700 uppercase tracking-wider">Quick Setup Guide</h4>
+                {[
+                  { n: 1, t: "Sign up at onesignal.com", d: "Create a free account and add a new Web Push app for your site domain." },
+                  { n: 2, t: "Get your credentials", d: "Go to Settings → Keys & IDs in your OneSignal dashboard and copy your App ID and REST API Key." },
+                  { n: 3, t: "Add the OneSignal SDK to your frontend", d: "Install the JS SDK on your website to collect subscriber opt-ins from visitors." },
+                  { n: 4, t: "Paste credentials above & save", d: "Enter the App ID and REST Key above, then click 'Save Settings' at the bottom." },
+                ].map(({ n, t, d }) => (
+                  <div key={n} className="flex gap-3">
+                    <div className="w-5 h-5 rounded-full bg-blue-600 text-white text-[9px] font-black flex items-center justify-center shrink-0 mt-0.5">{n}</div>
+                    <div>
+                      <p className="text-xs font-bold text-blue-800">{t}</p>
+                      <p className="text-[10px] text-blue-600 mt-0.5 leading-relaxed">{d}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="text-[10px] text-gray-400 flex items-center gap-1.5">
+                <AlertCircle className="w-3.5 h-3.5 shrink-0 text-amber-500" />
+                Changes to push credentials take effect after clicking <strong>Save Settings</strong> below. You can also configure and send push campaigns from <strong>CRM → Marketing → Push Notifications</strong>.
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Submit Actions Bar */}
@@ -771,8 +896,9 @@ export default function EmailEditor({ siteId, initialEmailSettings }) {
           <div className="px-6 py-4 bg-gray-50/50 border-t border-gray-200 flex justify-between items-center">
             <span className="text-[10px] text-gray-400 font-medium flex items-center gap-1">
               <HelpCircle className="w-3.5 h-3.5 shrink-0" />
-              Ensure credentials match outbound security policies (TLS 587 or
-              SSL 465).
+              {activeTab === "push"
+                ? "OneSignal credentials are saved securely alongside your email settings."
+                : "Ensure credentials match outbound security policies (TLS 587 or SSL 465)."}
             </span>
             <button
               type="submit"

@@ -51,24 +51,39 @@ export default function NavigationEditor({
     setMessage(null);
 
     try {
-      const res = await fetch(`/api/dashboard/navigation/${activeTab}`, {
+      // Save Main Header Menu
+      const mainRes = await fetch(`/api/dashboard/navigation/main`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           "x-site-id": siteId,
         },
-        body: JSON.stringify(items),
+        body: JSON.stringify(navigation.main || []),
       });
 
-      const data = await res.json();
+      if (!mainRes.ok) {
+        const data = await mainRes.json();
+        throw new Error(data.error || "Failed to save Main Menu");
+      }
 
-      if (!res.ok) {
-        throw new Error(data.error || "Failed to save navigation menus");
+      // Save Footer Menu
+      const footerRes = await fetch(`/api/dashboard/navigation/footer`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "x-site-id": siteId,
+        },
+        body: JSON.stringify(navigation.footer || []),
+      });
+
+      if (!footerRes.ok) {
+        const data = await footerRes.json();
+        throw new Error(data.error || "Failed to save Footer Menu");
       }
 
       setMessage({
         type: "success",
-        text: `${activeTab === "main" ? "Main Menu" : "Footer Menu"} configuration saved successfully!`,
+        text: "Navigation menus configuration saved successfully!",
       });
       setTimeout(() => setMessage(null), 3500);
     } catch (err) {
