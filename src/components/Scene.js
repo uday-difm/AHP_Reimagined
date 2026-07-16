@@ -10,7 +10,7 @@ export default function Scene({ frontUrl, backUrl, spineUrl }) {
         <Canvas
             shadows
             camera={{ position: [0, 0.2, 8.5], fov: 30 }}
-            style={{ width: '15vw', height: '40vh' }}
+            className="!w-[200px] !h-[300px] sm:!w-[240px] sm:!h-[360px] md:!w-[260px] md:!h-[400px] lg:!w-[15vw] lg:!h-[40vh]"
         >
             {/* Background */}
             <color attach="background" args={["#f3f7f8"]} />
