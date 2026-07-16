@@ -801,6 +801,7 @@ export default async function PreviewPage({ searchParams }) {
   const websiteSettings = settings?.websiteSettings || {};
   const headerMenuType = headerSettings.menuType || "main";
   const navigation = settings?.navigation?.[headerMenuType] || [];
+  const footerNavigation = settings?.navigation?.footer || [];
 
   const isSticky = headerSettings.sticky ?? true;
   const isTransparent = headerSettings.transparent ?? false;
@@ -1111,7 +1112,7 @@ export default async function PreviewPage({ searchParams }) {
           <div>
             <h5 className="text-[#d9b04f] font-bold text-xs mb-3">Links</h5>
             <div className="flex flex-col gap-2 text-xs">
-              {navigation.slice(0, 4).map((link, idx) => (
+              {footerNavigation.slice(0, 4).map((link, idx) => (
                 <a
                   key={idx}
                   href={link.url}

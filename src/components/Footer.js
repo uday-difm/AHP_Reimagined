@@ -40,25 +40,26 @@ export default function Footer({ className = "" }) {
       .catch(() => { });
   }, []);
 
-  // Dynamically fetch other custom menus if defined
+  // Dynamically fetch other custom menus if defined in columns
   useEffect(() => {
     if (!footerConfig?.columns) return;
+    
+    const menuTypesToFetch = [];
     footerConfig.columns.forEach((col) => {
       if (col.type === 'links' && col.sourceType === 'navigation' && col.menuType) {
-        const type = col.menuType;
-        setNavMenus((prev) => {
-          if (prev[type]) return prev;
-          fetch(`/api/navigation/${type}`)
-            .then((res) => (res.ok ? res.json() : null))
-            .then((data) => {
-              if (data?.success && Array.isArray(data.data?.items)) {
-                setNavMenus((p) => ({ ...p, [type]: data.data.items }));
-              }
-            })
-            .catch(() => { });
-          return { ...prev, [type]: [] };
-        });
+        menuTypesToFetch.push(col.menuType);
       }
+    });
+
+    menuTypesToFetch.forEach((type) => {
+      fetch(`/api/navigation/${type}`)
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (data?.success && Array.isArray(data.data?.items)) {
+            setNavMenus((prev) => ({ ...prev, [type]: data.data.items }));
+          }
+        })
+        .catch(() => { });
     });
   }, [footerConfig]);
 
@@ -112,7 +113,7 @@ export default function Footer({ className = "" }) {
   }, [footerConfig]);
 
   return (
-    <footer className="footer bg-cyan-900 text-white relative overflow-hidden rounded-t-[48px] border-t border-white/5 pt-24 pb-12 mt-[-48px] z-10">
+    <footer className="footer bg-cyan-900 text-white relative overflow-hidden rounded-t-[48px] border-t border-white/5 pt-24 pb-12 mt-[-48px] z-10 font-sans">
       {/* Top Accent Gradient Line */}
       <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-accent/30 to-transparent pointer-events-none" />
 
@@ -120,10 +121,10 @@ export default function Footer({ className = "" }) {
       <div className="absolute top-0 left-1/4 -translate-y-1/2 w-96 h-96 bg-accent/5 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-0 right-1/4 translate-y-1/2 w-80 h-80 bg-accent-green/5 rounded-full blur-[100px] pointer-events-none" />
 
-      <div className="container relative z-10">
+      <div className="container relative z-10 mx-auto px-6 md:px-10">
         <div className="footer-grid grid grid-cols-1 lg:grid-cols-[1.1fr_1.9fr] gap-16 lg:gap-24 pb-16">
 
-          {/* Brand Presentation Card (Premium Glass & Shadow Gradient) */}
+          {/* Brand Presentation Card */}
           <div className="footer-brand flex flex-col gap-6 bg-gradient-to-br from-white/[0.12] via-white/[0.03] to-transparent border border-white/10 backdrop-blur-2xl rounded-3xl p-8 hover:-translate-y-2 hover:scale-[1.02] transition-all duration-500 shadow-[0_10px_40px_rgba(100,100,200,0.05)] hover:shadow-[0_15px_50px_rgba(100,100,200,0.15)]">
             <Link href="/" className="logo-link-footer inline-block self-start transition-all duration-300">
               <img
@@ -272,13 +273,27 @@ export default function Footer({ className = "" }) {
           <p className="copyright text-[12px] text-white/40 leading-relaxed font-body">
             {footerConfig?.copyright || "© 2026 A Health Place. All rights reserved. Professional medical advice should be sought for any health concerns."}
           </p>
-          <div className="footer-bottom-links flex gap-6">
-            <Link href="/info?tab=legal&doc=privacy" className="footer-bottom-link text-[12.5px] text-white/40 no-underline hover:text-teal-300 transition-colors duration-300 font-body">
-              Privacy Policy
-            </Link>
-            <Link href="/info?tab=legal&doc=terms" className="footer-bottom-link text-[12.5px] text-white/40 no-underline hover:text-teal-300 transition-colors duration-300 font-body">
-              Terms & Conditions
-            </Link>
+          <div className="footer-bottom-links flex gap-6 flex-wrap justify-center sm:justify-end">
+            {Array.isArray(navMenus.footer) && navMenus.footer.length > 0 ? (
+              navMenus.footer.map((item, idx) => (
+                <Link
+                  key={idx}
+                  href={item.url || '#'}
+                  className="footer-bottom-link text-[12.5px] text-white/40 no-underline hover:text-teal-300 transition-colors duration-300 font-body"
+                >
+                  {item.label}
+                </Link>
+              ))
+            ) : (
+              <>
+                <Link href="/info?tab=legal&doc=privacy" className="footer-bottom-link text-[12.5px] text-white/40 no-underline hover:text-teal-300 transition-colors duration-300 font-body">
+                  Privacy Policy
+                </Link>
+                <Link href="/info?tab=legal&doc=terms" className="footer-bottom-link text-[12.5px] text-white/40 no-underline hover:text-teal-300 transition-colors duration-300 font-body">
+                  Terms & Conditions
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>
