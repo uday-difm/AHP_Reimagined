@@ -5,6 +5,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Button from '@/components/Button';
 import AdSlot from '@/components/AdSlot';
+import Book from './Book';
+import Scene from './Scene';
 
 function proxyUrl(url) {
   if (!url) return url;
@@ -86,7 +88,7 @@ export default function ArticlesGrid() {
             magazineId: mag.magazine_id || '',
             timestamp: new Date(mag.magazine_date).getTime()
           }));
-          const allIssues = mapped.sort((a, b) => b.timestamp - a.timestamp);
+          const allIssues = mapped;
           if (allIssues.length > 0) {
             setLatestIssue(allIssues[0]);
             setRecentIssues(allIssues.slice(0, 3));
@@ -130,9 +132,9 @@ export default function ArticlesGrid() {
   return (
     <section id="articles" className="projects-section pt-16 pb-[100px] bg-white rounded-t-[40px] shadow-[0_-20px_40px_rgba(0,0,0,0.01)] relative overflow-hidden">
       <div className="container mx-auto px-4">
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch">
-          
+
           {/* Left Column — 3D Book & Title (4 cols) */}
           <div className="lg:col-span-4 flex flex-col items-center text-center lg:items-start lg:text-left reveal-slide">
             <span className="section-tag text-xs font-extrabold tracking-[3px] text-accent uppercase mb-2 bg-[#0f7c85]/10 px-3.5 py-1.5 rounded-full w-max">
@@ -144,88 +146,40 @@ export default function ArticlesGrid() {
             <p className="text-secondary text-base md:text-lg leading-relaxed max-w-sm mb-8">
               Step into our latest featured edition containing clinically reviewed blueprints, expert columns, and mindfulness guides.
             </p>
-            
-            {/* 3D Book Container */}
-            <Link href={latestIssue ? `/magazine/${latestIssue.slug}` : "/blogs/the-mindfulness-issue"} className="book-3d-container block no-underline mb-8 hover:scale-105 transition-transform duration-300">
-              <div className="book-3d mx-auto lg:mx-0">
-                {/* Spine */}
-                <div className="book-3d-spine" />
-                
-                {/* Top & Bottom page stack edges */}
-                <div className="book-3d-pages-top" />
-                <div className="book-3d-pages-bottom" />
-                
-                {/* Front Cover */}
-                <div className="book-3d-cover">
-                  <Image
-                    src={latestIssue ? proxyUrl(latestIssue.img) : "/images/mag_mindfulness.png"}
-                    alt={latestIssue ? latestIssue.title : "The Mindfulness Issue – Spring 2024"}
-                    fill
-                    sizes="240px"
-                    className="object-cover"
-                    priority
-                    unoptimized={true}
-                  />
-                </div>
-                
-                {/* Pages Thickness */}
-                <div className="book-3d-pages" />
-                
-                {/* Back Cover */}
-                <div className="book-3d-back p-5 text-white flex flex-col justify-between select-none">
-                  <div className="flex flex-col gap-3.5 text-left">
-                    <div className="border-b border-white/20 pb-2.5">
-                      <span className="text-xs font-bold text-white/70 uppercase tracking-[2px] block mb-0.5">EDITORIAL BOARD</span>
-                      <h4 className="font-heading font-extrabold text-sm md:text-base text-white tracking-[-0.5px]">{latestIssue ? (latestIssue.magazineId || latestIssue.season) : "Spring 2024 Issue"}</h4>
-                    </div>
 
-                    <div className="flex flex-col gap-2">
-                      <span className="text-xs text-white/50 font-bold uppercase tracking-[1px] block">Inside This Issue:</span>
-                      {latestIssue ? (
-                        latestIssue.description ? (
-                          <p className="text-[11.5px] leading-relaxed text-white/90 font-medium line-clamp-4 overflow-hidden text-ellipsis">
-                            {latestIssue.description}
-                          </p>
-                        ) : (
-                          <ul className="text-[11.5px] leading-relaxed text-white/90 list-disc pl-3.5 space-y-1 font-medium">
-                            {latestIssue.contents.slice(0, 4).map((item, idx) => (
-                              <li key={idx}>{item}</li>
-                            ))}
-                          </ul>
-                        )
-                      ) : (
-                        <ul className="text-[11.5px] leading-relaxed text-white/90 list-disc pl-3.5 space-y-1 font-medium">
-                          <li>Neuroscience of Focus</li>
-                          <li>Anxiety Somatic Resets</li>
-                          <li>Circadian Rhythms & Sleep</li>
-                          <li>Dosha-Balanced Nutrition</li>
-                        </ul>
-                      )}
-                    </div>
-                  </div>
-
-                  <span
-                    className="w-full text-center bg-white text-[#0f7c85] font-bold text-xs py-2 rounded-full hover:bg-white/90 transition-all duration-300 shadow-md no-underline block"
-                  >
-                    Read Digital Issue →
-                  </span>
-                </div>
+            {/* 3D Book Container - Removed Link wrapper so it can be freely dragged */}
+            <div className="block mb-8">
+              <div className="flex justify-center lg:justify-start cursor-grab active:cursor-grabbing">
+                <Scene
+                  frontUrl={latestIssue && latestIssue.img ? proxyUrl(latestIssue.img) : ""}
+                  backUrl={latestIssue && latestIssue.backImg ? proxyUrl(latestIssue.backImg) : null}
+                  spineUrl={latestIssue && latestIssue.spineImg ? proxyUrl(latestIssue.spineImg) : null}
+                />
               </div>
-            </Link>
+            </div>
 
-            <Button
-              href="/publication"
-              variant="white"
-              className="!text-xs !py-3.5 !px-7 font-extrabold"
-            >
-              Explore Archive →
-            </Button>
+            <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
+              <Button
+                href={latestIssue ? `/magazine/${latestIssue.slug}` : "/blogs"}
+                variant="primary"
+                className="!text-xs !py-3.5 !px-7 font-extrabold bg-[#0F766E] text-white hover:bg-[#0a524c]"
+              >
+                Read Edition →
+              </Button>
+              <Button
+                href="/publication"
+                variant="white"
+                className="!text-xs !py-3.5 !px-7 font-extrabold"
+              >
+                Explore Archive
+              </Button>
+            </div>
           </div>
 
           {/* Middle Column — Editorial Greeting & Spread Stack (5 cols) */}
           <div className="lg:col-span-5 reveal-fade flex flex-col">
             <div className="bg-bg-light rounded-[32px] p-5 sm:p-8 border border-slate-200/60 shadow-[0_12px_40px_rgba(0,0,0,0.02)] flex flex-col gap-8 h-full justify-between hover:border-[#0f7c85]/20 transition-all duration-300">
-              
+
               {/* Header Details */}
               <div className="flex flex-col gap-4">
                 <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200/50 pb-5">
@@ -235,7 +189,7 @@ export default function ArticlesGrid() {
                       {latestIssue ? (latestIssue.magazineId || latestIssue.season) : "Spring 2024 Issue"}
                     </h3>
                   </div>
-                  <Button 
+                  <Button
                     href={latestIssue ? `/magazine/${latestIssue.slug}` : "/blogs/the-mindfulness-issue"}
                     variant="primary"
                     className="!text-xs !py-3 !px-6 !rounded-xl font-extrabold shadow-sm hover:shadow-[0_6px_20px_rgba(15,124,133,0.2)]"
@@ -257,7 +211,7 @@ export default function ArticlesGrid() {
                 <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">
                   Hover to fan out recent editions
                 </span>
-                
+
                 <div className="spread-stack-container">
                   {/* Left */}
                   <div className="spread-card spread-card-left border border-slate-100">
@@ -270,7 +224,7 @@ export default function ArticlesGrid() {
                       unoptimized={true}
                     />
                   </div>
-                  
+
                   {/* Right */}
                   <div className="spread-card spread-card-right border border-slate-100">
                     <Image
@@ -282,7 +236,7 @@ export default function ArticlesGrid() {
                       unoptimized={true}
                     />
                   </div>
-                  
+
                   {/* Center (Most Recent) */}
                   <div className="spread-card spread-card-center border-2 border-white shadow-lg">
                     <Image
