@@ -62,31 +62,75 @@ function NotificationBell() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-3 w-80 bg-white rounded-2xl border border-[#E6EEF0] p-4 shadow-[0_12px_35px_rgba(0,0,0,.08)] z-[10001]">
-          <h4 className="font-bold text-slate-900 text-sm border-b pb-2 mb-2 flex items-center justify-between">
-            <span>Website Announcements</span>
-            {unreadCount > 0 && <span className="text-[10px] bg-rose-500 text-white px-2 py-0.5 rounded-full">{unreadCount} new</span>}
-          </h4>
+        <div className="absolute right-0 mt-3 w-84 bg-white rounded-2xl border border-[#E6EEF0] shadow-[0_12px_35px_rgba(0,0,0,.08)] z-[10001] overflow-hidden" style={{ minWidth: '320px' }}>
+          {/* Header */}
+          <div className="px-4 py-3 border-b border-[#E6EEF0] flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <h4 className="font-bold text-slate-900 text-sm">Website Announcements</h4>
+              {unreadCount > 0 && (
+                <span className="text-[10px] bg-rose-500 text-white px-2 py-0.5 rounded-full">{unreadCount} new</span>
+              )}
+            </div>
+            {unreadCount > 0 && (
+              <button
+                onClick={markAllAsRead}
+                className="text-[10px] font-semibold text-[#0F766E] hover:underline border-none bg-transparent cursor-pointer"
+              >
+                Mark all as read
+              </button>
+            )}
+          </div>
+
+          {/* List */}
           {notifications.length === 0 ? (
-            <p className="text-xs text-slate-400 text-center py-4">No recent announcements</p>
+            <p className="text-xs text-slate-400 text-center py-6">No recent announcements</p>
           ) : (
-            <div className="space-y-3 max-h-60 overflow-y-auto pr-1">
-              {notifications.map(n => (
-                <div key={n.id} className="text-xs border-b pb-2.5 last:border-0 last:pb-0 text-left">
-                  <p className="font-bold text-slate-800 leading-tight">{n.title}</p>
-                  <p className="text-slate-500 mt-1 leading-relaxed">{n.message}</p>
-                  <div className="flex justify-between items-center mt-2">
-                    <span className="text-[9px] text-slate-400">
-                      {n.sentAt ? new Date(n.sentAt).toLocaleDateString() : ""}
-                    </span>
-                    {n.url && (
-                      <a href={n.url} target="_blank" rel="noopener noreferrer" className="text-[#0F766E] font-semibold hover:underline">
-                        Learn More →
-                      </a>
-                    )}
+            <div className="divide-y divide-[#E6EEF0] max-h-72 overflow-y-auto">
+              {notifications.map(n => {
+                const isRead = readIds.includes(n.id);
+                return (
+                  <div
+                    key={n.id}
+                    className={`px-4 py-3 text-left transition-colors ${isRead ? 'bg-white' : 'bg-[#f0faf9]'}`}
+                  >
+                    <div className="flex items-start gap-2.5">
+                      {/* Unread dot */}
+                      <div className="mt-1 shrink-0">
+                        {!isRead
+                          ? <span className="block w-2 h-2 rounded-full bg-[#0F766E]" />
+                          : <span className="block w-2 h-2 rounded-full bg-slate-200" />
+                        }
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className={`text-xs leading-tight ${isRead ? 'font-medium text-slate-600' : 'font-bold text-slate-900'}`}>
+                          {n.title}
+                        </p>
+                        <p className="text-[11px] text-slate-500 mt-1 leading-relaxed line-clamp-2">{n.message}</p>
+                        <div className="flex justify-between items-center mt-2 gap-2">
+                          <span className="text-[9px] text-slate-400">
+                            {n.sentAt ? new Date(n.sentAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : ''}
+                          </span>
+                          <div className="flex items-center gap-2 shrink-0">
+                            {n.url && (
+                              <a href={n.url} target="_blank" rel="noopener noreferrer" className="text-[10px] text-[#0F766E] font-semibold hover:underline">
+                                Read →
+                              </a>
+                            )}
+                            {!isRead && (
+                              <button
+                                onClick={() => markAsRead(n.id)}
+                                className="text-[10px] text-slate-400 hover:text-slate-700 font-medium border-none bg-transparent cursor-pointer"
+                              >
+                                Mark read
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
