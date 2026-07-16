@@ -154,7 +154,6 @@ export default async function ArticlePage({ params }) {
               fill
               unoptimized
               priority
-              unoptimized
               className="object-cover"
               sizes="100vw"
             />
