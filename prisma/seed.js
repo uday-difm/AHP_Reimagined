@@ -13,19 +13,6 @@ const prisma = new PrismaClient({
 async function main() {
   console.log("🌱 Seeding database...");
 
-  // Create Default Site
-  const site = await prisma.site.upsert({
-    where: {
-      domain: "default.local",
-    },
-    update: {},
-    create: {
-      name: "Default Website",
-      domain: "default.local",
-      isActive: true,
-    },
-  });
-
   // Create Super Admin
   const hashedPassword = await bcrypt.hash("Admin@123", 12);
 
@@ -42,23 +29,6 @@ async function main() {
     },
   });
 
-  // Site Mapping
-  await prisma.siteUser.upsert({
-    where: {
-      siteId_userId: {
-        siteId: site.id,
-        userId: user.id,
-      },
-    },
-    update: {},
-    create: {
-      siteId: site.id,
-      userId: user.id,
-      role: "ADMIN",
-    },
-  });
-
-  console.log("✅ Default site created");
   console.log("✅ Super admin created");
   console.log("📧 admin@example.com");
   console.log("🔑 Admin@123");

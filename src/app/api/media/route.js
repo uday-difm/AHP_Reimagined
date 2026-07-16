@@ -9,8 +9,13 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const folderId = searchParams.get("folderId") || "root";
     
-    const media = await mediaService.repository.findByFolder(siteId, folderId);
-    return NextResponse.json(media);
+    const page = parseInt(searchParams.get("page") || "1", 10);
+    const limit = parseInt(searchParams.get("limit") || "60", 10);
+    const [media, total] = await Promise.all([
+      mediaService.repository.findByFolder(siteId, folderId, { take: limit, skip: (page - 1) * limit }),
+      mediaService.repository.countByFolder(siteId, folderId),
+    ]);
+    return NextResponse.json({ data: media, total, page, limit });
   } catch (err) {
     return handleApiError(err);
   }

@@ -3,6 +3,7 @@ import { sectionRepository } from "@/repositories/section.repository";
 import { BaseService } from "@/core/service";
 import { NotFoundError, ValidationError } from "@/core/errors";
 import { versionService } from "@/services/version.service";
+import { logAction } from "@/lib/audit";
 
 const RESERVED_SLUGS = [
   // Next.js standard/special routes
@@ -77,13 +78,15 @@ export class PageService extends BaseService {
       sectionOrder = sections.length > 0 ? sections[0].order + 1 : 0;
     }
 
-    return sectionRepository.create(siteId, {
+    const section = await sectionRepository.create(siteId, {
       pageId,
       type,
       content,
       name: name || `${type} Section`,
       order: sectionOrder,
     });
+    try { await logAction(siteId, null, "PAGE_SECTION_ADD", { pageId, type }); } catch (e) { console.error("Audit log failed (section add):", e); }
+    return section;
   }
 
   async updateSection(siteId, sectionId, sectionData) {
@@ -99,7 +102,9 @@ export class PageService extends BaseService {
     if (sectionData.isVisible !== undefined)
       updateData.isVisible = sectionData.isVisible;
 
-    return sectionRepository.update(siteId, sectionId, updateData);
+    const updated = await sectionRepository.update(siteId, sectionId, updateData);
+    try { await logAction(siteId, null, "PAGE_SECTION_UPDATE", { sectionId }); } catch (e) { console.error("Audit log failed (section update):", e); }
+    return updated;
   }
 
   async reorderSections(siteId, pageId, orderedSectionIds) {
@@ -122,7 +127,9 @@ export class PageService extends BaseService {
       throw new NotFoundError("Section");
     }
 
-    return sectionRepository.update(siteId, sectionId, { isDeleted: true });
+    const deleted = await sectionRepository.update(siteId, sectionId, { isDeleted: true });
+    try { await logAction(siteId, null, "PAGE_SECTION_DELETE", { sectionId }); } catch (e) { console.error("Audit log failed (section delete):", e); }
+    return deleted;
   }
 
   async publishPage(siteId, pageId, isPublished) {
@@ -131,10 +138,12 @@ export class PageService extends BaseService {
       throw new NotFoundError("Page");
     }
 
-    return pageRepository.update(siteId, pageId, {
+    const updated = await pageRepository.update(siteId, pageId, {
       status: isPublished ? "PUBLISHED" : "DRAFT",
       publishedAt: isPublished ? new Date() : null,
     });
+    try { await logAction(siteId, null, "PAGE_PUBLISH", { pageId, isPublished }); } catch (e) { console.error("Audit log failed (page publish):", e); }
+    return updated;
   }
 
   async update(siteId, id, data, userId = null, options = {}) {

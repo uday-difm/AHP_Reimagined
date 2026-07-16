@@ -7,11 +7,14 @@ if (globalForPrisma.prisma && !globalForPrisma.prisma.notificationAlert) {
   globalForPrisma.prisma = undefined;
 }
 
-// Dynamically tune the DATABASE_URL connection limit for serverless environment if not set
 let databaseUrl = process.env.DATABASE_URL || "";
-if (process.env.NODE_ENV === "production" && databaseUrl && !databaseUrl.includes("connection_limit")) {
+// Default connection limit of 10 is a reasonable starting point for a single persistent app instance.
+// If running multiple replicas behind a load balancer, divide your DB's max_connections 
+// by the number of replicas and set DATABASE_CONNECTION_LIMIT accordingly.
+const connectionLimit = process.env.DATABASE_CONNECTION_LIMIT || 10;
+if (databaseUrl && !databaseUrl.includes("connection_limit")) {
   const separator = databaseUrl.includes("?") ? "&" : "?";
-  databaseUrl = `${databaseUrl}${separator}connection_limit=1&pool_timeout=10`;
+  databaseUrl = `${databaseUrl}${separator}connection_limit=${connectionLimit}`;
 }
 
 export const prisma =

@@ -1,19 +1,16 @@
-"use client";
-
-import { useSession } from "next-auth/react";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import WellnessShowcase from "./WellnessShowcase";
 import AdSlot from "./AdSlot";
 
-export default function HomepageAuthenticatedSections() {
-  const { status } = useSession();
-  const isAuthenticated = status === "authenticated";
-
-  if (!isAuthenticated) return null;
+export default async function HomepageAuthenticatedSections() {
+  // We can fetch the session here if needed for other props, 
+  // but WellnessShowcase handles its own authentication state.
 
   return (
-    <>
+    <div className="w-full">
       <WellnessShowcase />
       <AdSlot zone="homepage-about-bottom" />
-    </>
+    </div>
   );
 }

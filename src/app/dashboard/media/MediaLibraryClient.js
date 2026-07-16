@@ -24,40 +24,59 @@ export default function MediaLibraryClient({ siteId }) {
   // Details Modal States
   const [selectedMediaId, setSelectedMediaId] = useState(null);
 
-  async function loadContents() {
-    setLoading(true);
+  const [page, setPage] = useState(1);
+  const [totalMedia, setTotalMedia] = useState(0);
+
+  async function loadContents(pageNum = 1) {
+    if (pageNum === 1) setLoading(true);
     try {
       // 1. Fetch files in current directory
       const mediaRes = await fetch(
-        `/api/media?folderId=${currentFolderId}&siteId=${siteId}`,
+        `/api/media?folderId=${currentFolderId}&siteId=${siteId}&page=${pageNum}&limit=20`,
         {
           headers: { "x-site-id": siteId },
         },
       );
       const mediaData = await mediaRes.json();
-      const items = mediaData.data ?? mediaData;
-      setMedia(Array.isArray(items) ? items : []);
+      const items = mediaData.data ?? (Array.isArray(mediaData) ? mediaData : []);
+      
+      setTotalMedia(mediaData.total || 0);
+      
+      if (pageNum === 1) {
+        setMedia(items);
+      } else {
+        setMedia((prev) => [...prev, ...items]);
+      }
 
-      // 2. Fetch subfolders in current directory
-      const foldersRes = await fetch(
-        `/api/media/folders?parentId=${currentFolderId}&siteId=${siteId}`,
-        {
-          headers: { "x-site-id": siteId },
-        },
-      );
-      const foldersData = await foldersRes.json();
-      setFolders((foldersData.data?.folders ?? foldersData.folders) || []);
+      // 2. Fetch subfolders in current directory (only on page 1)
+      if (pageNum === 1) {
+        const foldersRes = await fetch(
+          `/api/media/folders?parentId=${currentFolderId}&siteId=${siteId}`,
+          {
+            headers: { "x-site-id": siteId },
+          },
+        );
+        const foldersData = await foldersRes.json();
+        setFolders((foldersData.data?.folders ?? foldersData.folders) || []);
+      }
     } catch (error) {
       console.error("Load media contents error:", error);
     } finally {
-      setLoading(false);
+      if (pageNum === 1) setLoading(false);
     }
   }
 
   // Reload when directory changes
   useEffect(() => {
-    loadContents();
+    setPage(1);
+    loadContents(1);
   }, [currentFolderId, siteId]);
+
+  const loadMore = () => {
+    const nextPage = page + 1;
+    setPage(nextPage);
+    loadContents(nextPage);
+  };
 
   // Navigate deep into a folder
   const navigateToFolder = (folder) => {
@@ -249,24 +268,24 @@ export default function MediaLibraryClient({ siteId }) {
               <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
                 Directories
               </h3>
-              <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+              <div className="grid gap-3 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
                 {folders.map((f) => (
                   <div
                     key={f.id}
-                    className="group border border-slate-200 hover:border-slate-300 hover:shadow-sm bg-white rounded-lg p-3.5 flex items-center justify-between transition-all"
+                    className="group border border-slate-200 hover:border-slate-300 hover:shadow-sm bg-white rounded-lg p-2.5 flex items-center justify-between transition-all"
                   >
                     <div
                       onDoubleClick={() => navigateToFolder(f)}
                       onClick={() => navigateToFolder(f)}
-                      className="flex items-center gap-3 cursor-pointer flex-1 min-w-0"
+                      className="flex items-center gap-2.5 cursor-pointer flex-1 min-w-0"
                       title="Double click to enter folder"
                     >
-                      <Folder className="h-9 w-9 text-amber-500 fill-amber-400 flex-shrink-0" />
+                      <Folder className="h-7 w-7 text-amber-500 fill-amber-400 flex-shrink-0" />
                       <div className="min-w-0">
-                        <span className="block text-xs font-semibold text-slate-800 truncate">
+                        <span className="block text-[11px] leading-tight font-semibold text-slate-800 truncate">
                           {f.name}
                         </span>
-                        <span className="block text-3xs text-slate-400">
+                        <span className="block text-[9px] text-slate-400 mt-0.5">
                           {f._count?.media || 0} files
                         </span>
                       </div>
@@ -295,6 +314,16 @@ export default function MediaLibraryClient({ siteId }) {
               onCopyUrl={copyUrl}
               onSelectMedia={setSelectedMediaId}
             />
+            {media.length < totalMedia && (
+              <div className="flex justify-center pt-4 pb-8">
+                <button
+                  onClick={loadMore}
+                  className="px-6 py-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 font-semibold rounded-lg text-sm transition-colors"
+                >
+                  Load More ({media.length} of {totalMedia})
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}

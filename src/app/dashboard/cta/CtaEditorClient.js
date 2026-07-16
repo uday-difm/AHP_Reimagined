@@ -276,7 +276,7 @@ export default function CtaEditorClient({ siteId, initialCtaConfig }) {
         <div className="lg:col-span-2 space-y-6">
           <div className="bg-white rounded-xl shadow-xs border border-gray-100 overflow-hidden">
             {/* Tabs Headers */}
-            <div className="flex border-b border-gray-100 bg-gray-50/50">
+            <div className="flex flex-nowrap w-full overflow-x-auto whitespace-nowrap border-b border-gray-100 bg-gray-50/50">
               <button
                 onClick={() => setActiveTab("main")}
                 className={`flex-1 py-4 text-center font-medium text-sm border-b-2 transition flex items-center justify-center gap-2 ${activeTab === "main"

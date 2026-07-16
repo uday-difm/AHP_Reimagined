@@ -283,7 +283,7 @@ export default function ComplianceConsole({
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-gray-200">
+      <div className="flex flex-nowrap w-full overflow-x-auto whitespace-nowrap border-b border-gray-200">
         <button
           onClick={() => {
             setActiveTab("banner");
@@ -569,7 +569,7 @@ export default function ComplianceConsole({
                   )}
                 </div>
 
-                <div className="flex gap-2 justify-end pt-1">
+                <div className="flex flex-wrap gap-2 justify-end pt-1">
                   <button
                     type="button"
                     className="px-2.5 py-1 rounded bg-transparent hover:bg-slate-800 border border-slate-800 font-bold text-slate-400 hover:text-slate-200"

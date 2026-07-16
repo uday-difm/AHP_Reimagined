@@ -94,220 +94,335 @@
 [2026-07-13T08:16:55.809Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
 [2026-07-13T08:16:55.827Z] [Auth] Authenticating against authService for: admin@example.com
 [2026-07-13T08:16:56.249Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrfzj7vj0001tosc2a7zo1hn
-[2026-07-13T09:58:03.852Z] [Auth] Attempt started. Email: admin@example.com
-[2026-07-13T09:58:03.853Z] [Auth] Request Host: localhost:3000
-[2026-07-13T09:58:03.854Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
-[2026-07-13T09:58:03.855Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
-[2026-07-13T09:58:03.875Z] [Auth] Authenticating against authService for: admin@example.com
-[2026-07-13T09:58:04.281Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrfzj7vj0001tosc2a7zo1hn
-[2026-07-14T03:10:22.477Z] [Auth] Attempt started. Email: admin@example.com
-[2026-07-14T03:10:22.478Z] [Auth] Request Host: localhost:3000
-[2026-07-14T03:10:22.479Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
-[2026-07-14T03:10:22.480Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
-[2026-07-14T03:10:22.501Z] [Auth] Authenticating against authService for: admin@example.com
-[2026-07-14T03:10:22.960Z] [Auth] Admin authentication failed, trying frontend auth table for: admin@example.com
-[2026-07-14T03:10:22.967Z] [Auth] All authentication methods failed for: admin@example.com
-[2026-07-14T03:10:28.659Z] [Auth] Attempt started. Email: admin@example.com
-[2026-07-14T03:10:28.660Z] [Auth] Request Host: localhost:3000
-[2026-07-14T03:10:28.661Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
-[2026-07-14T03:10:28.661Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
-[2026-07-14T03:10:28.662Z] [Auth] Authenticating against authService for: admin@example.com
-[2026-07-14T03:10:29.053Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrfzj7vj0001tosc2a7zo1hn
-[2026-07-14T08:46:59.792Z] [Auth] Attempt started. Email: admin@example.com
-[2026-07-14T08:46:59.793Z] [Auth] Request Host: localhost:3000
-[2026-07-14T08:46:59.794Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
-[2026-07-14T08:46:59.794Z] [Auth] Token received (length: undefined): empty...
-[2026-07-14T08:46:59.794Z] [Auth] Failed: reCAPTCHA token missing
-[2026-07-14T08:47:16.791Z] [Auth] Attempt started. Email: admin@example.com
-[2026-07-14T08:47:16.791Z] [Auth] Request Host: localhost:3000
-[2026-07-14T08:47:16.792Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
-[2026-07-14T08:47:16.792Z] [Auth] Token received (length: undefined): empty...
-[2026-07-14T08:47:16.793Z] [Auth] Failed: reCAPTCHA token missing
-[2026-07-14T08:47:17.485Z] [Auth] Attempt started. Email: admin@example.com
-[2026-07-14T08:47:17.486Z] [Auth] Request Host: localhost:3000
-[2026-07-14T08:47:17.488Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
-[2026-07-14T08:47:17.488Z] [Auth] Token received (length: undefined): empty...
-[2026-07-14T08:47:17.489Z] [Auth] Failed: reCAPTCHA token missing
-[2026-07-14T08:47:45.654Z] [Auth] Attempt started. Email: admin@example.com
-[2026-07-14T08:47:45.655Z] [Auth] Request Host: localhost:3000
-[2026-07-14T08:47:45.656Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
-[2026-07-14T08:47:45.656Z] [Auth] Token received (length: undefined): empty...
-[2026-07-14T08:47:45.657Z] [Auth] Failed: reCAPTCHA token missing
-[2026-07-14T08:51:55.809Z] [Auth] Attempt started. Email: admin@example.com
-[2026-07-14T08:51:55.809Z] [Auth] Request Host: localhost:3000
-[2026-07-14T08:51:55.810Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
-[2026-07-14T08:51:55.811Z] [Auth] Token received (length: undefined): empty...
-[2026-07-14T08:51:55.811Z] [Auth] Failed: reCAPTCHA token missing
-[2026-07-14T08:51:56.510Z] [Auth] Attempt started. Email: admin@example.com
-[2026-07-14T08:51:56.510Z] [Auth] Request Host: localhost:3000
-[2026-07-14T08:51:56.511Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
-[2026-07-14T08:51:56.511Z] [Auth] Token received (length: undefined): empty...
-[2026-07-14T08:51:56.512Z] [Auth] Failed: reCAPTCHA token missing
-[2026-07-14T08:52:57.423Z] [Auth] Attempt started. Email: admin@example.com
-[2026-07-14T08:52:57.424Z] [Auth] Request Host: localhost:3000
-[2026-07-14T08:52:57.424Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
-[2026-07-14T08:52:57.425Z] [Auth] Token received (length: undefined): empty...
-[2026-07-14T08:52:57.425Z] [Auth] Failed: reCAPTCHA token missing
-[2026-07-14T08:55:13.548Z] [Auth] Attempt started. Email: admin@example.com
-[2026-07-14T08:55:13.549Z] [Auth] Request Host: localhost:3000
-[2026-07-14T08:55:13.554Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
-[2026-07-14T08:55:13.554Z] [Auth] Token received (length: undefined): empty...
-[2026-07-14T08:55:13.555Z] [Auth] Failed: reCAPTCHA token missing
-[2026-07-14T08:55:14.356Z] [Auth] Attempt started. Email: admin@example.com
-[2026-07-14T08:55:14.357Z] [Auth] Request Host: localhost:3000
-[2026-07-14T08:55:14.359Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
-[2026-07-14T08:55:14.359Z] [Auth] Token received (length: undefined): empty...
-[2026-07-14T08:55:14.360Z] [Auth] Failed: reCAPTCHA token missing
-[2026-07-14T08:55:24.664Z] [Auth] Attempt started. Email: admin@example.com
-[2026-07-14T08:55:24.667Z] [Auth] Request Host: localhost:3000
-[2026-07-14T08:55:24.672Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
-[2026-07-14T08:55:24.672Z] [Auth] Token received (length: 1700): 0cAFcWeA7-VTv2p87EiIZZpsqYsN4h...
-[2026-07-14T08:55:24.673Z] [Auth] Sending request to google siteverify (x-www-form-urlencoded POST body)...
-[2026-07-14T08:55:24.873Z] [Auth] reCAPTCHA verifyJson: {"success":true,"challenge_ts":"2026-07-14T08:55:26Z","hostname":"testkey.google.com"}
-[2026-07-14T08:55:24.874Z] [Auth] Authenticating against authService for: admin@example.com
-[2026-07-14T08:55:25.230Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrfzj7vj0001tosc2a7zo1hn
-[2026-07-14T11:01:17.074Z] [Auth] Attempt started. Email: admin@example.com
-[2026-07-14T11:01:17.076Z] [Auth] Request Host: localhost:3000
-[2026-07-14T11:01:17.080Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
-[2026-07-14T11:01:17.080Z] [Auth] Token received (length: 1700): 0cAFcWeA65xFk2q4mCSvcNx1EHKY1M...
-[2026-07-14T11:01:17.081Z] [Auth] Sending request to google siteverify (x-www-form-urlencoded POST body)...
-[2026-07-14T11:01:17.228Z] [Auth] reCAPTCHA verifyJson: {"success":true,"challenge_ts":"2026-07-14T11:01:19Z","hostname":"testkey.google.com"}
-[2026-07-14T11:01:17.229Z] [Auth] Authenticating against authService for: admin@example.com
-[2026-07-14T11:01:17.548Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrfzj7vj0001tosc2a7zo1hn
-[2026-07-15T03:24:40.254Z] [Auth] Attempt started. Email: admin@example.com
-[2026-07-15T03:24:40.258Z] [Auth] Request Host: localhost:3000
-[2026-07-15T03:24:40.263Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
-[2026-07-15T03:24:40.264Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
-[2026-07-15T03:24:40.287Z] [Auth] Authenticating against authService for: admin@example.com
-[2026-07-15T03:24:40.714Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrfzj7vj0001tosc2a7zo1hn
-[2026-07-15T06:56:41.294Z] [Auth] Attempt started. Email: admin@example.com
-[2026-07-15T06:56:41.297Z] [Auth] Request Host: localhost:3000
-[2026-07-15T06:56:41.299Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
-[2026-07-15T06:56:41.300Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
-[2026-07-15T06:56:41.330Z] [Auth] Authenticating against authService for: admin@example.com
-[2026-07-15T06:56:41.835Z] [Auth] Admin authentication failed, trying frontend auth table for: admin@example.com
-[2026-07-15T06:56:41.859Z] [Auth] All authentication methods failed for: admin@example.com
-[2026-07-15T06:56:45.590Z] [Auth] Attempt started. Email: admin@example.com
-[2026-07-15T06:56:45.592Z] [Auth] Request Host: localhost:3000
-[2026-07-15T06:56:45.593Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
-[2026-07-15T06:56:45.595Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
-[2026-07-15T06:56:45.597Z] [Auth] Authenticating against authService for: admin@example.com
-[2026-07-15T06:56:45.988Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrfzj7vj0001tosc2a7zo1hn
-[2026-07-15T09:26:48.440Z] [Auth] Attempt started. Email: admin@example.com
-[2026-07-15T09:26:48.442Z] [Auth] Request Host: localhost:3000
-[2026-07-15T09:26:48.444Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
-[2026-07-15T09:26:48.445Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
-[2026-07-15T09:26:48.462Z] [Auth] Authenticating against authService for: admin@example.com
-[2026-07-15T09:26:48.849Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrfzj7vj0001tosc2a7zo1hn
-[2026-07-16T03:15:19.249Z] [Auth] Attempt started. Email: admin@example.com
-[2026-07-16T03:15:19.251Z] [Auth] Request Host: localhost:3000
-[2026-07-16T03:15:19.253Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
-[2026-07-16T03:15:19.256Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
-[2026-07-16T03:15:19.281Z] [Auth] Authenticating against authService for: admin@example.com
-[2026-07-16T03:15:19.695Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrfzj7vj0001tosc2a7zo1hn
-[2026-07-16T06:58:14.039Z] [Auth] Attempt started. Email: admin@example.com
-[2026-07-16T06:58:14.040Z] [Auth] Request Host: localhost:3000
-[2026-07-16T06:58:14.041Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
-[2026-07-16T06:58:14.042Z] [Auth] Token received (length: 1700): 0cAFcWeA5Jp9SH7ytqyNmPAbuZOtca...
-[2026-07-16T06:58:14.042Z] [Auth] Sending request to google siteverify (x-www-form-urlencoded POST body)...
-[2026-07-16T06:58:14.184Z] [Auth] reCAPTCHA verifyJson: {"success":true,"challenge_ts":"2026-07-16T06:58:14Z","hostname":"testkey.google.com"}
-[2026-07-16T06:58:14.187Z] [Auth] Authenticating against authService for: admin@example.com
-[2026-07-16T06:58:14.536Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrfzj7vj0001tosc2a7zo1hn
-[2026-07-16T09:09:18.516Z] [Auth] Attempt started. Email: admin@example.com
-[2026-07-16T09:09:18.517Z] [Auth] Request Host: localhost:3000
-[2026-07-16T09:09:18.522Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
-[2026-07-16T09:09:18.524Z] [Auth] Token received (length: 1678): 0cAFcWeA4WtxvWptW8qwT2taRNsarc...
-[2026-07-16T09:09:18.525Z] [Auth] Sending request to google siteverify (x-www-form-urlencoded POST body)...
-[2026-07-16T09:09:18.676Z] [Auth] reCAPTCHA verifyJson: {"success":true,"challenge_ts":"2026-07-16T09:09:18Z","hostname":"testkey.google.com"}
-[2026-07-16T09:09:18.678Z] [Auth] Authenticating against authService for: admin@example.com
-[2026-07-16T09:09:19.023Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrfzj7vj0001tosc2a7zo1hn
-[2026-07-16T10:48:39.571Z] [Auth] Attempt started. Email: aaa@g.com
-[2026-07-16T10:48:39.579Z] [Auth] Request Host: localhost:3000
-[2026-07-16T10:48:39.589Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
-[2026-07-16T10:48:39.590Z] [Auth] Token received (length: undefined): empty...
-[2026-07-16T10:48:39.596Z] [Auth] Failed: reCAPTCHA token missing
-[2026-07-16T10:48:46.770Z] [Auth] Attempt started. Email: aaa@g.com
-[2026-07-16T10:48:46.771Z] [Auth] Request Host: localhost:3000
-[2026-07-16T10:48:46.772Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
-[2026-07-16T10:48:46.773Z] [Auth] Token received (length: undefined): empty...
-[2026-07-16T10:48:46.774Z] [Auth] Failed: reCAPTCHA token missing
-[2026-07-16T10:48:49.280Z] [Auth] Attempt started. Email: aaa@g.com
-[2026-07-16T10:48:49.283Z] [Auth] Request Host: localhost:3000
-[2026-07-16T10:48:49.284Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
-[2026-07-16T10:48:49.285Z] [Auth] Token received (length: undefined): empty...
-[2026-07-16T10:48:49.286Z] [Auth] Failed: reCAPTCHA token missing
-[2026-07-16T10:48:51.719Z] [Auth] Attempt started. Email: aaa@g.com
-[2026-07-16T10:48:51.720Z] [Auth] Request Host: localhost:3000
-[2026-07-16T10:48:51.721Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
-[2026-07-16T10:48:51.722Z] [Auth] Token received (length: undefined): empty...
-[2026-07-16T10:48:51.723Z] [Auth] Failed: reCAPTCHA token missing
-[2026-07-16T10:49:07.365Z] [Auth] Attempt started. Email: aaa@b.com
-[2026-07-16T10:49:07.366Z] [Auth] Request Host: localhost:3000
-[2026-07-16T10:49:07.368Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
-[2026-07-16T10:49:07.369Z] [Auth] Token received (length: undefined): empty...
-[2026-07-16T10:49:07.370Z] [Auth] Failed: reCAPTCHA token missing
-[2026-07-16T10:49:22.345Z] [Auth] Attempt started. Email: aaa@b.com
-[2026-07-16T10:49:22.348Z] [Auth] Request Host: localhost:3000
-[2026-07-16T10:49:22.349Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
-[2026-07-16T10:49:22.352Z] [Auth] Token received (length: undefined): empty...
-[2026-07-16T10:49:22.354Z] [Auth] Failed: reCAPTCHA token missing
-[2026-07-16T10:49:28.094Z] [Auth] Attempt started. Email: aaa@b.com
-[2026-07-16T10:49:28.096Z] [Auth] Request Host: localhost:3000
-[2026-07-16T10:49:28.097Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
-[2026-07-16T10:49:28.097Z] [Auth] Token received (length: undefined): empty...
-[2026-07-16T10:49:28.098Z] [Auth] Failed: reCAPTCHA token missing
-[2026-07-16T10:49:28.315Z] [Auth] Attempt started. Email: aaa@b.com
-[2026-07-16T10:49:28.316Z] [Auth] Request Host: localhost:3000
-[2026-07-16T10:49:28.317Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
-[2026-07-16T10:49:28.318Z] [Auth] Token received (length: undefined): empty...
-[2026-07-16T10:49:28.319Z] [Auth] Failed: reCAPTCHA token missing
-[2026-07-16T10:49:28.546Z] [Auth] Attempt started. Email: aaa@b.com
-[2026-07-16T10:49:28.547Z] [Auth] Request Host: localhost:3000
-[2026-07-16T10:49:28.548Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
-[2026-07-16T10:49:28.548Z] [Auth] Token received (length: undefined): empty...
-[2026-07-16T10:49:28.549Z] [Auth] Failed: reCAPTCHA token missing
-[2026-07-16T10:49:28.743Z] [Auth] Attempt started. Email: aaa@b.com
-[2026-07-16T10:49:28.745Z] [Auth] Request Host: localhost:3000
-[2026-07-16T10:49:28.747Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
-[2026-07-16T10:49:28.748Z] [Auth] Token received (length: undefined): empty...
-[2026-07-16T10:49:28.749Z] [Auth] Failed: reCAPTCHA token missing
-[2026-07-16T10:49:29.802Z] [Auth] Attempt started. Email: aaa@b.com
-[2026-07-16T10:49:29.803Z] [Auth] Request Host: localhost:3000
-[2026-07-16T10:49:29.804Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
-[2026-07-16T10:49:29.805Z] [Auth] Token received (length: undefined): empty...
-[2026-07-16T10:49:29.806Z] [Auth] Failed: reCAPTCHA token missing
-[2026-07-16T10:49:29.981Z] [Auth] Attempt started. Email: aaa@b.com
-[2026-07-16T10:49:29.982Z] [Auth] Request Host: localhost:3000
-[2026-07-16T10:49:29.983Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
-[2026-07-16T10:49:29.984Z] [Auth] Token received (length: undefined): empty...
-[2026-07-16T10:49:29.985Z] [Auth] Failed: reCAPTCHA token missing
-[2026-07-16T10:49:30.167Z] [Auth] Attempt started. Email: aaa@b.com
-[2026-07-16T10:49:30.168Z] [Auth] Request Host: localhost:3000
-[2026-07-16T10:49:30.168Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
-[2026-07-16T10:49:30.169Z] [Auth] Token received (length: undefined): empty...
-[2026-07-16T10:49:30.170Z] [Auth] Failed: reCAPTCHA token missing
-[2026-07-16T10:49:30.479Z] [Auth] Attempt started. Email: aaa@b.com
-[2026-07-16T10:49:30.480Z] [Auth] Request Host: localhost:3000
-[2026-07-16T10:49:30.481Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
-[2026-07-16T10:49:30.482Z] [Auth] Token received (length: undefined): empty...
-[2026-07-16T10:49:30.483Z] [Auth] Failed: reCAPTCHA token missing
-[2026-07-16T10:49:52.275Z] [Auth] Attempt started. Email: aaa@b.com
-[2026-07-16T10:49:52.278Z] [Auth] Request Host: localhost:3000
-[2026-07-16T10:49:52.280Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
-[2026-07-16T10:49:52.281Z] [Auth] Token received (length: undefined): empty...
-[2026-07-16T10:49:52.282Z] [Auth] Failed: reCAPTCHA token missing
-[2026-07-16T10:52:46.465Z] [Auth] Attempt started. Email: manish@gmail.com
-[2026-07-16T10:52:46.467Z] [Auth] Request Host: localhost:3000
-[2026-07-16T10:52:46.469Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
-[2026-07-16T10:52:46.470Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
-[2026-07-16T10:52:46.497Z] [Auth] Authenticating against authService for: manish@gmail.com
-[2026-07-16T10:52:46.503Z] [Auth] Admin authentication failed, trying frontend auth table for: manish@gmail.com
-[2026-07-16T10:52:46.515Z] [Auth] Frontend user authenticated successfully: manish@gmail.com
-[2026-07-16T10:59:08.963Z] [Auth] Attempt started. Email: admin@example.com
-[2026-07-16T10:59:08.965Z] [Auth] Request Host: localhost:3000
-[2026-07-16T10:59:08.966Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
-[2026-07-16T10:59:08.967Z] [Auth] Token received (length: 1721): 0cAFcWeA7Xgms6NmCd-rScCX8MMmbq...
-[2026-07-16T10:59:08.968Z] [Auth] Sending request to google siteverify (x-www-form-urlencoded POST body)...
-[2026-07-16T10:59:09.119Z] [Auth] reCAPTCHA verifyJson: {"success":true,"challenge_ts":"2026-07-16T10:59:09Z","hostname":"testkey.google.com"}
-[2026-07-16T10:59:09.120Z] [Auth] Authenticating against authService for: admin@example.com
-[2026-07-16T10:59:09.481Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrfzj7vj0001tosc2a7zo1hn
+[2026-07-13T11:51:42.785Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-13T11:51:42.790Z] [Auth] Request Host: localhost:3000
+[2026-07-13T11:51:42.790Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
+[2026-07-13T11:51:42.796Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-13T11:51:42.811Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-13T11:51:43.256Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrczol170001uhusthekq9b5
+[2026-07-14T03:26:41.245Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-14T03:26:41.249Z] [Auth] Request Host: localhost:3000
+[2026-07-14T03:26:41.250Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
+[2026-07-14T03:26:41.250Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-14T03:26:41.272Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-14T03:26:41.631Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrczol170001uhusthekq9b5
+[2026-07-14T04:02:28.241Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-14T04:02:28.242Z] [Auth] Request Host: localhost:3000
+[2026-07-14T04:02:28.242Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
+[2026-07-14T04:02:28.242Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-14T04:02:28.252Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-14T04:02:28.567Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrczol170001uhusthekq9b5
+[2026-07-14T05:32:16.040Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-14T05:32:16.041Z] [Auth] Request Host: localhost:3000
+[2026-07-14T05:32:16.041Z] [Auth] Detected local, IP, or Ngrok host. Swapping secretKey to Google test key.
+[2026-07-14T05:32:16.041Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-14T05:32:16.050Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-14T05:32:16.752Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh
+[2026-07-14T09:45:09.546Z] [Auth] Attempt started. Email: uday.verma@difm.tech
+[2026-07-14T09:45:09.548Z] [Auth] Request Host: localhost:3000
+[2026-07-14T09:45:09.548Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-14T09:45:09.549Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-14T09:45:09.563Z] [Auth] Authenticating against authService for: uday.verma@difm.tech
+[2026-07-14T09:45:09.685Z] [Auth] Admin authentication failed, trying frontend auth table for: uday.verma@difm.tech
+[2026-07-14T09:45:09.811Z] [Auth] All authentication methods failed for: uday.verma@difm.tech
+[2026-07-14T09:45:23.797Z] [Auth] Attempt started. Email: uday.verma@difm.tech
+[2026-07-14T09:45:23.798Z] [Auth] Request Host: localhost:3000
+[2026-07-14T09:45:23.799Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-14T09:45:23.799Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-14T09:45:23.810Z] [Auth] Authenticating against authService for: uday.verma@difm.tech
+[2026-07-14T09:45:23.874Z] [Auth] Admin authentication failed, trying frontend auth table for: uday.verma@difm.tech
+[2026-07-14T09:45:23.938Z] [Auth] Frontend user authenticated successfully: uday.verma@difm.tech
+[2026-07-14T10:03:45.864Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-14T10:03:45.866Z] [Auth] Request Host: localhost:3000
+[2026-07-14T10:03:45.869Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-14T10:03:45.871Z] [Auth] Token received (length: 1657): 0cAFcWeA7Acnk2ztFjkznpqbbzJnlV...
+[2026-07-14T10:03:45.872Z] [Auth] Sending request to google siteverify (x-www-form-urlencoded POST body)...
+[2026-07-14T10:03:46.034Z] [Auth] reCAPTCHA verifyJson: {"success":true,"challenge_ts":"2026-07-14T10:03:47Z","hostname":"testkey.google.com"}
+[2026-07-14T10:03:46.035Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-14T10:03:46.779Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh
+[2026-07-15T03:19:29.727Z] [Auth] Attempt started. Email: uday
+[2026-07-15T03:19:29.728Z] [Auth] Request Host: localhost:3000
+[2026-07-15T03:19:29.729Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-15T03:19:29.729Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-15T03:19:29.740Z] [Auth] Authenticating against authService for: uday
+[2026-07-15T03:19:29.837Z] [Auth] Admin authentication failed, trying frontend auth table for: uday
+[2026-07-15T03:19:29.934Z] [Auth] Frontend user authenticated successfully: uday.verma@difm.tech
+[2026-07-15T03:19:50.586Z] [Auth] Attempt started. Email: uday
+[2026-07-15T03:19:50.587Z] [Auth] Request Host: localhost:3000
+[2026-07-15T03:19:50.588Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-15T03:19:50.589Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-15T03:19:50.595Z] [Auth] Authenticating against authService for: uday
+[2026-07-15T03:19:50.690Z] [Auth] Admin authentication failed, trying frontend auth table for: uday
+[2026-07-15T03:19:50.788Z] [Auth] Frontend user authenticated successfully: uday.verma@difm.tech
+[2026-07-15T03:20:07.907Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-15T03:20:07.908Z] [Auth] Request Host: localhost:3000
+[2026-07-15T03:20:07.909Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-15T03:20:07.909Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-15T03:20:07.910Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-15T03:20:08.318Z] [Auth] Admin authentication failed, trying frontend auth table for: admin@example.com
+[2026-07-15T03:20:08.367Z] [Auth] All authentication methods failed for: admin@example.com
+[2026-07-15T03:20:27.991Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-15T03:20:27.993Z] [Auth] Request Host: localhost:3000
+[2026-07-15T03:20:27.993Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-15T03:20:27.994Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-15T03:20:27.995Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-15T03:20:28.303Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh
+[2026-07-15T03:20:53.305Z] [Auth] Attempt started. Email: udaywdaw
+[2026-07-15T03:20:53.306Z] [Auth] Request Host: localhost:3000
+[2026-07-15T03:20:53.307Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-15T03:20:53.307Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-15T03:20:53.315Z] [Auth] Authenticating against authService for: udaywdaw
+[2026-07-15T03:20:53.363Z] [Auth] Admin authentication failed, trying frontend auth table for: udaywdaw
+[2026-07-15T03:20:53.414Z] [Auth] All authentication methods failed for: udaywdaw
+[2026-07-15T03:21:00.831Z] [Auth] Attempt started. Email: uda
+[2026-07-15T03:21:00.832Z] [Auth] Request Host: localhost:3000
+[2026-07-15T03:21:00.833Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-15T03:21:00.834Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-15T03:21:00.834Z] [Auth] Authenticating against authService for: uda
+[2026-07-15T03:21:00.884Z] [Auth] Admin authentication failed, trying frontend auth table for: uda
+[2026-07-15T03:21:00.933Z] [Auth] All authentication methods failed for: uda
+[2026-07-15T03:21:02.546Z] [Auth] Attempt started. Email: uday
+[2026-07-15T03:21:02.547Z] [Auth] Request Host: localhost:3000
+[2026-07-15T03:21:02.548Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-15T03:21:02.549Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-15T03:21:02.549Z] [Auth] Authenticating against authService for: uday
+[2026-07-15T03:21:02.602Z] [Auth] Admin authentication failed, trying frontend auth table for: uday
+[2026-07-15T03:21:02.655Z] [Auth] Frontend user authenticated successfully: uday.verma@difm.tech
+[2026-07-15T03:21:40.340Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-15T03:21:40.342Z] [Auth] Request Host: localhost:3000
+[2026-07-15T03:21:40.343Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-15T03:21:40.343Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-15T03:21:40.344Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-15T03:21:40.659Z] [Auth] Admin authentication failed, trying frontend auth table for: admin@example.com
+[2026-07-15T03:21:40.707Z] [Auth] All authentication methods failed for: admin@example.com
+[2026-07-15T03:21:44.035Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-15T03:21:44.036Z] [Auth] Request Host: localhost:3000
+[2026-07-15T03:21:44.036Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-15T03:21:44.037Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-15T03:21:44.038Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-15T03:21:44.356Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh
+[2026-07-15T04:38:09.617Z] [Auth] Attempt started. Email: uday
+[2026-07-15T04:38:09.618Z] [Auth] Request Host: localhost:3000
+[2026-07-15T04:38:09.619Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-15T04:38:09.621Z] [Auth] Token received (length: 1742): 0cAFcWeA435oaFQmNbW-wb-kPZq-wb...
+[2026-07-15T04:38:09.621Z] [Auth] Sending request to google siteverify (x-www-form-urlencoded POST body)...
+[2026-07-15T04:38:09.778Z] [Auth] reCAPTCHA verifyJson: {"success":true,"challenge_ts":"2026-07-15T04:38:11Z","hostname":"testkey.google.com"}
+[2026-07-15T04:38:09.781Z] [Auth] Authenticating against authService for: uday
+[2026-07-15T04:38:09.888Z] [Auth] Admin authentication failed, trying frontend auth table for: uday
+[2026-07-15T04:38:09.998Z] [Auth] Frontend user authenticated successfully: uday.verma@difm.tech
+[2026-07-15T04:38:54.553Z] [Auth] Attempt started. Email: uday
+[2026-07-15T04:38:54.554Z] [Auth] Request Host: localhost:3000
+[2026-07-15T04:38:54.554Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-15T04:38:54.555Z] [Auth] Token received (length: 1700): 0cAFcWeA4SupStKRNs8Qo0cZKsxKgX...
+[2026-07-15T04:38:54.556Z] [Auth] Sending request to google siteverify (x-www-form-urlencoded POST body)...
+[2026-07-15T04:38:54.687Z] [Auth] reCAPTCHA verifyJson: {"success":true,"challenge_ts":"2026-07-15T04:38:55Z","hostname":"testkey.google.com"}
+[2026-07-15T04:38:54.690Z] [Auth] Authenticating against authService for: uday
+[2026-07-15T04:38:54.788Z] [Auth] Admin authentication failed, trying frontend auth table for: uday
+[2026-07-15T04:38:54.888Z] [Auth] Frontend user authenticated successfully: uday.verma@difm.tech
+[2026-07-15T04:39:10.364Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-15T04:39:10.365Z] [Auth] Request Host: localhost:3000
+[2026-07-15T04:39:10.366Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-15T04:39:10.367Z] [Auth] Token received (length: 1721): 0cAFcWeA7GRzohILTyeUEwri4uJhP-...
+[2026-07-15T04:39:10.368Z] [Auth] Sending request to google siteverify (x-www-form-urlencoded POST body)...
+[2026-07-15T04:39:10.498Z] [Auth] reCAPTCHA verifyJson: {"success":true,"challenge_ts":"2026-07-15T04:39:11Z","hostname":"testkey.google.com"}
+[2026-07-15T04:39:10.499Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-15T04:39:10.939Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh
+[2026-07-15T06:12:22.229Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-15T06:12:22.230Z] [Auth] Request Host: localhost:3000
+[2026-07-15T06:12:22.231Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-15T06:12:22.232Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-15T06:12:22.244Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-15T06:12:22.423Z] [Auth] Admin authentication failed, trying frontend auth table for: admin@example.com
+[2026-07-15T06:12:22.529Z] [Auth] All authentication methods failed for: admin@example.com
+[2026-07-15T06:17:08.995Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-15T06:17:08.996Z] [Auth] Request Host: localhost:3000
+[2026-07-15T06:17:08.998Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-15T06:17:08.999Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-15T06:17:09.007Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-15T06:17:09.479Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh
+[2026-07-15T06:36:57.677Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-15T06:36:57.679Z] [Auth] Request Host: localhost:3000
+[2026-07-15T06:36:57.680Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-15T06:36:57.680Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-15T06:36:57.690Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-15T06:36:58.210Z] [Auth] Admin authentication failed, trying frontend auth table for: admin@example.com
+[2026-07-15T06:36:58.307Z] [Auth] All authentication methods failed for: admin@example.com
+[2026-07-15T06:42:16.150Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-15T06:42:16.151Z] [Auth] Request Host: localhost:3000
+[2026-07-15T06:42:16.152Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-15T06:42:16.153Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-15T06:42:16.162Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-15T06:42:16.720Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh
+[2026-07-15T07:12:01.695Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-15T07:12:01.696Z] [Auth] Request Host: localhost:3000
+[2026-07-15T07:12:01.697Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-15T07:12:01.698Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-15T07:12:01.705Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-15T07:12:02.177Z] [Auth] Admin authentication failed, trying frontend auth table for: admin@example.com
+[2026-07-15T07:12:02.276Z] [Auth] All authentication methods failed for: admin@example.com
+[2026-07-15T07:13:21.878Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-15T07:13:21.879Z] [Auth] Request Host: localhost:3000
+[2026-07-15T07:13:21.880Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-15T07:13:21.880Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-15T07:13:21.884Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-15T07:13:22.222Z] [Auth] Admin authentication failed, trying frontend auth table for: admin@example.com
+[2026-07-15T07:13:22.270Z] [Auth] All authentication methods failed for: admin@example.com
+[2026-07-15T07:29:36.589Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-15T07:29:36.590Z] [Auth] Request Host: localhost:3000
+[2026-07-15T07:29:36.591Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-15T07:29:36.591Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-15T07:29:36.596Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-15T07:29:37.059Z] [Auth] Admin authentication failed, trying frontend auth table for: admin@example.com
+[2026-07-15T07:29:37.165Z] [Auth] All authentication methods failed for: admin@example.com
+[2026-07-15T07:46:29.421Z] [Auth] Attempt started. Email: uday.verma2@difm.tech
+[2026-07-15T07:46:29.422Z] [Auth] Request Host: localhost:3000
+[2026-07-15T07:46:29.423Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-15T07:46:29.424Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-15T07:46:29.436Z] [Auth] Authenticating against authService for: uday.verma2@difm.tech
+[2026-07-15T07:46:29.588Z] [Auth] Admin authentication failed, trying frontend auth table for: uday.verma2@difm.tech
+[2026-07-15T07:46:29.689Z] [Auth] All authentication methods failed for: uday.verma2@difm.tech
+[2026-07-15T07:46:39.249Z] [Auth] Attempt started. Email: uday.verma2@difm.tech
+[2026-07-15T07:46:39.250Z] [Auth] Request Host: localhost:3000
+[2026-07-15T07:46:39.251Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-15T07:46:39.251Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-15T07:46:39.252Z] [Auth] Authenticating against authService for: uday.verma2@difm.tech
+[2026-07-15T07:46:39.302Z] [Auth] Admin authentication failed, trying frontend auth table for: uday.verma2@difm.tech
+[2026-07-15T07:46:39.353Z] [Auth] All authentication methods failed for: uday.verma2@difm.tech
+[2026-07-15T07:47:16.407Z] [Auth] Attempt started. Email: uday.verma3@difm.tech
+[2026-07-15T07:47:16.409Z] [Auth] Request Host: localhost:3000
+[2026-07-15T07:47:16.410Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-15T07:47:16.410Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-15T07:47:16.417Z] [Auth] Authenticating against authService for: uday.verma3@difm.tech
+[2026-07-15T07:47:16.475Z] [Auth] Admin authentication failed, trying frontend auth table for: uday.verma3@difm.tech
+[2026-07-15T07:47:16.527Z] [Auth] All authentication methods failed for: uday.verma3@difm.tech
+[2026-07-15T07:47:32.683Z] [Auth] Attempt started. Email: uday.verma4@difm.tech
+[2026-07-15T07:47:32.684Z] [Auth] Request Host: localhost:3000
+[2026-07-15T07:47:32.685Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-15T07:47:32.685Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-15T07:47:32.686Z] [Auth] Authenticating against authService for: uday.verma4@difm.tech
+[2026-07-15T07:47:32.737Z] [Auth] Admin authentication failed, trying frontend auth table for: uday.verma4@difm.tech
+[2026-07-15T07:47:32.789Z] [Auth] Frontend user authenticated successfully: uday.verma4@difm.tech
+[2026-07-15T08:39:20.547Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-15T08:39:20.548Z] [Auth] Request Host: localhost:3000
+[2026-07-15T08:39:20.549Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-15T08:39:20.549Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-15T08:39:20.561Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-15T08:39:21.034Z] [Auth] Admin authentication failed, trying frontend auth table for: admin@example.com
+[2026-07-15T08:39:21.138Z] [Auth] All authentication methods failed for: admin@example.com
+[2026-07-15T09:30:35.254Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-15T09:30:35.255Z] [Auth] Request Host: localhost:3000
+[2026-07-15T09:30:35.256Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-15T09:30:35.257Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-15T09:30:35.270Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-15T09:30:35.820Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh
+[2026-07-15T11:36:27.584Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-15T11:36:27.585Z] [Auth] Request Host: localhost:3000
+[2026-07-15T11:36:27.586Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-15T11:36:27.586Z] [Auth] Token received (length: 4): null...
+[2026-07-15T11:36:27.587Z] [Auth] Sending request to google siteverify (x-www-form-urlencoded POST body)...
+[2026-07-15T11:36:27.718Z] [Auth] reCAPTCHA verifyJson: {"success":true,"challenge_ts":"2026-07-15T11:36:29Z","hostname":"testkey.google.com"}
+[2026-07-15T11:36:27.719Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-15T11:36:28.366Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh
+[2026-07-16T04:29:50.061Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-16T04:29:50.062Z] [Auth] Request Host: localhost:3000
+[2026-07-16T04:29:50.062Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-16T04:29:50.063Z] [Auth] Token received (length: 4): null...
+[2026-07-16T04:29:50.063Z] [Auth] Sending request to google siteverify (x-www-form-urlencoded POST body)...
+[2026-07-16T04:29:50.230Z] [Auth] reCAPTCHA verifyJson: {"success":true,"challenge_ts":"2026-07-16T04:29:52Z","hostname":"testkey.google.com"}
+[2026-07-16T04:29:50.231Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-16T04:29:50.861Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh
+[2026-07-16T05:09:09.277Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-16T05:09:09.281Z] [Auth] Request Host: dyslexia-recital-area.ngrok-free.dev
+[2026-07-16T05:09:09.283Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-16T05:09:09.284Z] [Auth] Token received (length: 1721): 0cAFcWeA4UuICW0fRv6en40Zrn2dW3...
+[2026-07-16T05:09:09.286Z] [Auth] Sending request to google siteverify (x-www-form-urlencoded POST body)...
+[2026-07-16T05:09:09.478Z] [Auth] reCAPTCHA verifyJson: {"success":true,"challenge_ts":"2026-07-16T05:09:11Z","hostname":"testkey.google.com"}
+[2026-07-16T05:09:09.479Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-16T05:09:09.981Z] [Auth] Admin authentication failed, trying frontend auth table for: admin@example.com
+[2026-07-16T05:09:10.090Z] [Auth] All authentication methods failed for: admin@example.com
+[2026-07-16T05:09:17.206Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-16T05:09:17.208Z] [Auth] Request Host: dyslexia-recital-area.ngrok-free.dev
+[2026-07-16T05:09:17.210Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-16T05:09:17.212Z] [Auth] Token received (length: 4): null...
+[2026-07-16T05:09:17.216Z] [Auth] Sending request to google siteverify (x-www-form-urlencoded POST body)...
+[2026-07-16T05:09:17.365Z] [Auth] reCAPTCHA verifyJson: {"success":true,"challenge_ts":"2026-07-16T05:09:19Z","hostname":"testkey.google.com"}
+[2026-07-16T05:09:17.369Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-16T05:09:17.725Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh
+[2026-07-16T05:17:55.295Z] [Auth] Attempt started. Email: uday.verma4@difm.tech
+[2026-07-16T05:17:55.296Z] [Auth] Request Host: localhost:3000
+[2026-07-16T05:17:55.297Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-16T05:17:55.297Z] [Auth] Token received (length: undefined): empty...
+[2026-07-16T05:17:55.298Z] [Auth] Failed: reCAPTCHA token missing
+[2026-07-16T05:18:16.244Z] [Auth] Attempt started. Email: a@b.com
+[2026-07-16T05:18:16.245Z] [Auth] Request Host: localhost:3000
+[2026-07-16T05:18:16.246Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-16T05:18:16.247Z] [Auth] Token received (length: undefined): empty...
+[2026-07-16T05:18:16.247Z] [Auth] Failed: reCAPTCHA token missing
+[2026-07-16T05:18:17.487Z] [Auth] Attempt started. Email: a@b.com
+[2026-07-16T05:18:17.489Z] [Auth] Request Host: localhost:3000
+[2026-07-16T05:18:17.489Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-16T05:18:17.490Z] [Auth] Token received (length: undefined): empty...
+[2026-07-16T05:18:17.490Z] [Auth] Failed: reCAPTCHA token missing
+[2026-07-16T05:18:25.719Z] [Auth] Attempt started. Email: abc@def.com
+[2026-07-16T05:18:25.720Z] [Auth] Request Host: localhost:3000
+[2026-07-16T05:18:25.720Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-16T05:18:25.721Z] [Auth] Token received (length: undefined): empty...
+[2026-07-16T05:18:25.721Z] [Auth] Failed: reCAPTCHA token missing
+[2026-07-16T05:18:26.220Z] [Auth] Attempt started. Email: abc@def.com
+[2026-07-16T05:18:26.221Z] [Auth] Request Host: localhost:3000
+[2026-07-16T05:18:26.222Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-16T05:18:26.222Z] [Auth] Token received (length: undefined): empty...
+[2026-07-16T05:18:26.223Z] [Auth] Failed: reCAPTCHA token missing
+[2026-07-16T05:18:26.442Z] [Auth] Attempt started. Email: abc@def.com
+[2026-07-16T05:18:26.443Z] [Auth] Request Host: localhost:3000
+[2026-07-16T05:18:26.443Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-16T05:18:26.444Z] [Auth] Token received (length: undefined): empty...
+[2026-07-16T05:18:26.444Z] [Auth] Failed: reCAPTCHA token missing
+[2026-07-16T05:18:50.655Z] [Auth] Attempt started. Email: m@gmail.com
+[2026-07-16T05:18:50.655Z] [Auth] Request Host: dyslexia-recital-area.ngrok-free.dev
+[2026-07-16T05:18:50.655Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-16T05:18:50.656Z] [Auth] Token received (length: undefined): empty...
+[2026-07-16T05:18:50.656Z] [Auth] Failed: reCAPTCHA token missing
+[2026-07-16T05:18:53.889Z] [Auth] Attempt started. Email: m@gmail.com
+[2026-07-16T05:18:53.891Z] [Auth] Request Host: dyslexia-recital-area.ngrok-free.dev
+[2026-07-16T05:18:53.893Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-16T05:18:53.894Z] [Auth] Token received (length: undefined): empty...
+[2026-07-16T05:18:53.896Z] [Auth] Failed: reCAPTCHA token missing
+[2026-07-16T05:19:07.981Z] [Auth] Attempt started. Email: m@gmail.com
+[2026-07-16T05:19:07.982Z] [Auth] Request Host: dyslexia-recital-area.ngrok-free.dev
+[2026-07-16T05:19:07.983Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Swapping secretKey to Google test key.
+[2026-07-16T05:19:07.984Z] [Auth] Token received (length: undefined): empty...
+[2026-07-16T05:19:07.985Z] [Auth] Failed: reCAPTCHA token missing
+[2026-07-16T05:30:08.912Z] [Auth] Attempt started. Email: divya.joshi@difm.tech
+[2026-07-16T05:30:08.915Z] [Auth] Request Host: dyslexia-recital-area.ngrok-free.dev
+[2026-07-16T05:30:08.918Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
+[2026-07-16T05:30:08.918Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-16T05:30:08.919Z] [Auth] Authenticating against authService for: divya.joshi@difm.tech
+[2026-07-16T05:30:09.020Z] [Auth] Admin authentication failed, trying frontend auth table for: divya.joshi@difm.tech
+[2026-07-16T05:30:09.072Z] [Auth] Frontend user authenticated successfully: divya.joshi@difm.tech
+[2026-07-16T05:33:28.415Z] [Auth] Attempt started. Email: divya.joshi@difm.tech
+[2026-07-16T05:33:28.417Z] [Auth] Request Host: dyslexia-recital-area.ngrok-free.dev
+[2026-07-16T05:33:28.419Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
+[2026-07-16T05:33:28.420Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-16T05:33:28.421Z] [Auth] Authenticating against authService for: divya.joshi@difm.tech
+[2026-07-16T05:33:28.519Z] [Auth] Admin authentication failed, trying frontend auth table for: divya.joshi@difm.tech
+[2026-07-16T05:33:28.618Z] [Auth] Frontend user authenticated successfully: divya.joshi@difm.tech
+[2026-07-16T05:45:26.523Z] [Auth] Attempt started. Email: divya.joshi@difm.tech
+[2026-07-16T05:45:26.524Z] [Auth] Request Host: dyslexia-recital-area.ngrok-free.dev
+[2026-07-16T05:45:26.526Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
+[2026-07-16T05:45:26.527Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-16T05:45:26.528Z] [Auth] Authenticating against authService for: divya.joshi@difm.tech
+[2026-07-16T05:45:26.628Z] [Auth] Admin authentication failed, trying frontend auth table for: divya.joshi@difm.tech
+[2026-07-16T05:45:26.728Z] [Auth] Frontend user authenticated successfully: divya.joshi@difm.tech
+[2026-07-16T05:50:29.825Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-16T05:50:29.826Z] [Auth] Request Host: dyslexia-recital-area.ngrok-free.dev
+[2026-07-16T05:50:29.829Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
+[2026-07-16T05:50:29.830Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-16T05:50:29.832Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-16T05:50:30.307Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh
+[2026-07-16T05:51:38.324Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-16T05:51:38.325Z] [Auth] Request Host: dyslexia-recital-area.ngrok-free.dev
+[2026-07-16T05:51:38.326Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
+[2026-07-16T05:51:38.328Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-16T05:51:38.330Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-16T05:51:38.808Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh

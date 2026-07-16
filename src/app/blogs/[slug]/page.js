@@ -7,7 +7,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AdSlot from '@/components/AdSlot';
 import { Play } from 'lucide-react';
-
+import DOMPurify from "isomorphic-dompurify";
 export const revalidate = 60; // ISR: Revalidate every 60 seconds
 
 export async function generateMetadata({ params }) {
@@ -72,19 +72,29 @@ export default async function ArticlePage({ params }) {
   const authorName = post.author?.name || post.author?.email?.split('@')[0] || 'A Health Place Expert';
   const displayDate = post.publishedAt
     ? new Date(post.publishedAt).toLocaleDateString('en-US', {
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric',
-      })
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    })
     : '';
 
   const rawTextContent = (post.content || '').replace(/<[^>]+>/g, '').trim();
   const wordCount = rawTextContent.split(/\s+/).filter(Boolean).length;
   const readTime = `${Math.max(1, Math.ceil(wordCount / 200))} min read`;
 
-  const sanitizedHtml = typeof post.content === "string" ? post.content : "";
+  const sanitizedHtml = DOMPurify.sanitize(
+    typeof post.content === "string" ? post.content : ""
+  );
 
-  const featuredImgUrl = post.featuredImage?.secureUrl || post.featuredImage?.url || '/images/holistic.png';
+  function proxyUrl(url) {
+    if (!url) return url;
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      return `/api/media/proxy?url=${encodeURIComponent(url)}`;
+    }
+    return url;
+  }
+
+  const featuredImgUrl = proxyUrl(post.featuredImage?.secureUrl || post.featuredImage?.url || '/images/holistic.png');
 
   return (
     <div className="min-h-screen bg-bg-light relative">
@@ -113,11 +123,11 @@ export default async function ArticlePage({ params }) {
             </h1>
 
             {/* Byline */}
-            <div className="flex flex-wrap items-center gap-6 border-y border-slate-200/60 py-4.5 text-[13px] text-secondary">
+            <div className="flex flex-col md:flex-row md:flex-wrap items-start md:items-center gap-3 md:gap-6 border-y border-slate-200/60 py-4 text-[13px] text-secondary">
               <div>
                 <span className="text-muted font-medium">Written by</span> <span className="font-bold text-primary">{authorName}</span>
               </div>
-              <div className="w-1.5 h-1.5 bg-slate-300 rounded-full" />
+              <div className="hidden md:block w-1.5 h-1.5 bg-slate-300 rounded-full shrink-0" />
               <div>
                 <span className="text-muted font-medium">Medically Reviewed by</span> <span className="font-bold text-primary">Editorial Team</span>
               </div>
@@ -142,7 +152,9 @@ export default async function ArticlePage({ params }) {
               src={featuredImgUrl}
               alt={post.featuredImage?.altText || post.title}
               fill
+              unoptimized
               priority
+              unoptimized
               className="object-cover"
               sizes="100vw"
             />
@@ -162,7 +174,7 @@ export default async function ArticlePage({ params }) {
             <AdSlot zone="article-body-inline" layout="float" />
 
             {/* Main Content */}
-            <div 
+            <div
               className="prose prose-slate max-w-none text-[15px] md:text-[16px] leading-[1.8] text-secondary space-y-4"
               dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
             />
@@ -172,8 +184,8 @@ export default async function ArticlePage({ params }) {
               <div className="flex flex-wrap items-center gap-2 mt-8 pt-6 border-t border-slate-200/60">
                 <span className="text-sm font-bold text-slate-800 mr-2">Tags:</span>
                 {post.tags.map(t => (
-                  <Link 
-                    key={t.id} 
+                  <Link
+                    key={t.id}
                     href={`/blogs?tag=${t.slug || t.name}`}
                     className="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 px-3.5 py-2 rounded-md transition duration-200 no-underline"
                   >
@@ -200,7 +212,7 @@ export default async function ArticlePage({ params }) {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {fallbackRelated.map((item) => {
-                const itemImg = item.featuredImage?.secureUrl || item.featuredImage?.url || '/images/holistic.png';
+                const itemImg = proxyUrl(item.featuredImage?.secureUrl || item.featuredImage?.url || '/images/holistic.png');
                 const itemCat = item.categories?.[0]?.name || 'General';
                 return (
                   <Link
@@ -213,6 +225,7 @@ export default async function ArticlePage({ params }) {
                         src={itemImg}
                         alt={item.title}
                         fill
+                        unoptimized
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                         sizes="(max-width: 768px) 100vw, 33vw"
                       />

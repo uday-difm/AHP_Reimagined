@@ -13,7 +13,7 @@ const UserSchema = z.object({
   email: z.string().regex(emailRegex, { message: "Invalid email format" }),
   password: z.string().min(6),
   globalRole: z
-    .enum(["SUPERADMIN", "ADMIN", "EDITOR", "AUTHOR", "VIEWER"])
+    .enum(["SUPERADMIN", "ADMIN", "EDITOR", "AUTHOR", "MARKETING", "VIEWER", "VISITOR"])
     .optional()
     .default("VIEWER"),
   siteIds: z.array(z.string()).optional().default([]),

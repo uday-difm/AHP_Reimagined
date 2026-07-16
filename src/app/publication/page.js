@@ -56,9 +56,9 @@ export default function PublicationPage() {
             season: getSeasonFromDate(mag.magazine_date),
             title: mag.magazine_title,
             slug: mag.magazine_slug,
-            img: mag.magazine_cover_image || '/images/mag_sleep.png',
-            backImg: mag.magazine_back_image || '/back.jpg',
-            spineImg: mag.magazine_spine_image || '/spine.jpg',
+            img: proxyUrl(mag.magazine_cover_image) || '/images/mag_sleep.png',
+            backImg: proxyUrl(mag.magazine_back_image) || '/back.jpg',
+            spineImg: proxyUrl(mag.magazine_spine_image) || '/spine.jpg',
             contents: mag.magazine_tags ? mag.magazine_tags.split(',').map(t => t.trim()) : [],
             description: mag.magazine_description,
             introduction: mag.magazine_introduction || '',
@@ -159,7 +159,35 @@ export default function PublicationPage() {
       rootMargin: '0px 0px -50px 0px',
     });
     revealElements.forEach(el => observer.observe(el));
-    return () => observer.disconnect();
+
+    // Mobile scroll flip observer
+    const flipElements = document.querySelectorAll('.mobile-flip-card');
+    const flipCallback = (entries) => {
+      // Only trigger scroll flip on mobile screens
+      if (window.innerWidth >= 768) {
+        entries.forEach(entry => entry.target.classList.remove('mobile-flipped'));
+        return;
+      }
+
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('mobile-flipped');
+        } else {
+          entry.target.classList.remove('mobile-flipped');
+        }
+      });
+    };
+    const flipObserver = new IntersectionObserver(flipCallback, {
+      root: null,
+      threshold: 0.6, // Trigger when 60% of the card is visible
+      rootMargin: '0px 0px -50px 0px',
+    });
+    flipElements.forEach(el => flipObserver.observe(el));
+
+    return () => {
+      observer.disconnect();
+      flipObserver.disconnect();
+    };
   }, [currentPage, dbIssues]);
 
   // Ref & State for Terracotta CTA cursor tracking

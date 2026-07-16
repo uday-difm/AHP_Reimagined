@@ -465,8 +465,7 @@ export default function PostEditor({
       {/* Autosave indicator */}
       {isEditMode && (
         <div
-          className={`flex items-center gap-1.5 text-[10px] font-semibold px-3 py-1.5 rounded-lg border ${
-            autosaveStatus === "saving"
+          className={`flex items-center gap-1.5 text-[10px] font-semibold px-3 py-1.5 rounded-lg border ${autosaveStatus === "saving"
               ? "bg-blue-50 text-blue-600 border-blue-200"
               : autosaveStatus === "saved"
                 ? "bg-green-50 text-green-600 border-green-200"
@@ -475,7 +474,7 @@ export default function PostEditor({
                   : isDirty
                     ? "bg-amber-50 text-amber-700 border-amber-200"
                     : "bg-gray-50 text-gray-400 border-transparent"
-          }`}
+            }`}
         >
           {autosaveStatus === "saving" && (
             <>
@@ -742,7 +741,7 @@ export default function PostEditor({
               >
                 OG Image URL
               </label>
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2">
                 <input
                   type="text"
                   id="ogImage"
@@ -757,7 +756,7 @@ export default function PostEditor({
                     setMediaPickerTarget("ogImage");
                     setShowMediaPicker(true);
                   }}
-                  className="px-3.5 py-2 border rounded-xl hover:bg-slate-50 text-xs font-bold text-slate-600 border-slate-200 transition flex items-center gap-1.5 shrink-0 cursor-pointer"
+                  className="px-3.5 py-2 border rounded-xl hover:bg-slate-50 text-xs font-bold text-slate-600 border-slate-200 transition flex items-center justify-center gap-1.5 shrink-0 cursor-pointer w-full sm:w-auto"
                 >
                   <ImageIcon size={12} />
                   Library
@@ -934,7 +933,7 @@ export default function PostEditor({
                   type="button"
                   onClick={handleCreateCategory}
                   disabled={catCreating || !newCatName.trim()}
-                  className="inline-flex items-center gap-1 px-3 py-2 bg-slate-800 hover:bg-slate-900 text-white disabled:bg-slate-300 text-[10px] font-bold rounded-xl transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1 px-3 py-2 bg-teal-600 hover:bg-teal-700 text-white disabled:bg-slate-800/80 disabled:text-slate-400 disabled:cursor-not-allowed text-[10px] font-bold rounded-xl transition-colors cursor-pointer"
                 >
                   {catCreating ? (
                     <Loader2 size={10} className="animate-spin" />
@@ -1041,7 +1040,7 @@ export default function PostEditor({
                   type="button"
                   onClick={handleCreateTag}
                   disabled={tagCreating || !newTagName.trim()}
-                  className="inline-flex items-center gap-1 px-3 py-2 bg-slate-800 hover:bg-slate-900 text-white disabled:bg-slate-300 text-[10px] font-bold rounded-xl transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1 px-3 py-2 bg-teal-600 hover:bg-teal-700 text-white disabled:bg-slate-800/80 disabled:text-slate-400 disabled:cursor-not-allowed text-[10px] font-bold rounded-xl transition-colors cursor-pointer"
                 >
                   {tagCreating ? (
                     <Loader2 size={10} className="animate-spin" />

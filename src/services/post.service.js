@@ -2,6 +2,7 @@ import { postRepository } from "@/repositories/post.repository";
 import { BaseService } from "@/core/service";
 import { EventBus } from "@/core/events";
 import { NotFoundError } from "@/core/errors";
+import { logAction } from "@/lib/audit";
 import prisma from "@/lib/prisma";
 
 export class PostService extends BaseService {
@@ -100,6 +101,13 @@ export class PostService extends BaseService {
       contentJson: typeof data.content === "string" ? data.content : data.content ? JSON.stringify(data.content) : null,
     });
 
+    // Audit log
+    if (userId) {
+      try {
+        await logAction(siteId, userId, "POST_CREATE", { id: created.id, title: created.title, status: created.status });
+      } catch (e) { console.error("Audit log failed (post create):", e); }
+    }
+
     if (
       created.status === "PUBLISHED" &&
       (!created.publishedAt || new Date(created.publishedAt) <= new Date())
@@ -149,6 +157,13 @@ export class PostService extends BaseService {
       ...relations,
       contentJson: typeof data.content === "string" ? data.content : data.content ? JSON.stringify(data.content) : undefined,
     });
+
+    // Audit log
+    if (userId) {
+      try {
+        await logAction(siteId, userId, "POST_UPDATE", { id: postId, title: updated.title, status: updated.status });
+      } catch (e) { console.error("Audit log failed (post update):", e); }
+    }
 
     if (
       !wasPublished &&

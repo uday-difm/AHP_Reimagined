@@ -16,6 +16,15 @@ import {
 } from 'lucide-react';
 
 
+// Proxy external URLs through the Next.js server to avoid CORS / hostname issues
+function proxyUrl(url) {
+  if (!url) return url;
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return `/api/media/proxy?url=${encodeURIComponent(url)}`;
+  }
+  return url;
+}
+
 export default function BlogsClient({ initialCategories = [], initialPosts = [] }) {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -52,7 +61,7 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
     category: p.categories?.[0]?.name || 'Uncategorized',
     title: p.title,
     desc: p.excerpt,
-    img: p.featuredImage?.url || p.featuredImage?.secureUrl || '/images/default-blog.png',
+    img: proxyUrl(p.featuredImage?.secureUrl || p.featuredImage?.url || '/images/holistic.png'),
     slug: p.slug,
     publishedAt: p.publishedAt
   }));
@@ -273,7 +282,9 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
                         src={art.img}
                         alt={art.title}
                         fill
+                        unoptimized
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        unoptimized={true}
                       />
                       <span className="absolute top-4 left-4 bg-[#e8f4ff] text-[#0f7c85] px-3 py-1.5 rounded-full text-[9.5px] font-bold uppercase tracking-[0.5px]">
                         {art.category}

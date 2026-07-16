@@ -69,9 +69,15 @@ function LoginAndProjectLanding() {
 
   // If already authenticated, check if role is admin and route to dashboard
   useEffect(() => {
-    if (status === "authenticated" && session?.user?.globalRole !== "USER") {
-      const callbackUrl = searchParams.get("callbackUrl") || "/dashboard/dashboard";
-      router.replace(callbackUrl);
+    if (status === "authenticated") {
+      const role = session?.user?.globalRole;
+      if (role && role !== "VISITOR" && role !== "USER") {
+        const callbackUrl = searchParams.get("callbackUrl") || "/dashboard/dashboard";
+        router.replace(callbackUrl);
+      } else {
+        // If they are a frontend user, redirect them to the frontend homepage instead of dashboard
+        router.replace("/");
+      }
     }
   }, [status, session, router, searchParams]);
 
@@ -118,7 +124,7 @@ function LoginAndProjectLanding() {
       }
 
       // If 2FA is required and not yet submitted, request code from user
-      if (preData.twoFaRequired && !twoFaRequired) {
+      if (preData.data?.twoFARequired && !twoFaRequired) {
         setTwoFaRequired(true);
         setLoading(false);
         return;
@@ -128,7 +134,7 @@ function LoginAndProjectLanding() {
       const res = await signIn("credentials", {
         email,
         password,
-        twoFaCode: twoFaCode || undefined,
+        twoFACode: twoFaCode || undefined,
         recaptchaToken: token,
         redirect: false,
       });
@@ -148,7 +154,7 @@ function LoginAndProjectLanding() {
     }
   }
 
-  if (status === "loading" || (status === "authenticated" && session?.user?.globalRole !== "USER")) {
+  if (status === "loading" || (status === "authenticated" && session?.user?.globalRole !== "VISITOR")) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-950">
         <div className="text-center">

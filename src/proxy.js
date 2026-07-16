@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
+import prisma from "@/lib/prisma";
 
 // In-memory cache for middleware settings and redirects (30s TTL)
 const middlewareCache = {
   settings: {},   // key: siteId, value: { data: ws, expiresAt: number }
   redirects: {},  // key: siteId_source, value: { data: rule, expiresAt: number }
 };
-const CACHE_TTL_MS = 30000;
+const CACHE_TTL_MS = process.env.NODE_ENV === "development" ? 0 : 30000;
 
 /** Path prefixes that should never be blocked by maintenance mode */
 const SKIP_PREFIXES = [
@@ -118,8 +119,7 @@ export async function proxy(request) {
   const checkRedirect = !pathname.startsWith("/api/") &&
                         !pathname.startsWith("/_next") &&
                         !pathname.startsWith("/maintenance") &&
-                        !isDashboardPath &&
-                        process.env.NODE_ENV !== "development";
+                        !isDashboardPath;
 
   if (checkMaintenance || checkRedirect) {
     const now = Date.now();
@@ -130,22 +130,20 @@ export async function proxy(request) {
     let settingsPromise = null;
     let cachedSettings = middlewareCache.settings[settingsCacheKey];
     if (checkMaintenance && (!cachedSettings || cachedSettings.expiresAt < now)) {
-      settingsPromise = fetch(
-        `${url.origin}/api/settings?siteId=${encodeURIComponent(siteId)}`,
-        { headers: { "x-internal-check": "1" } }
-      ).then(res => res.ok && res.headers.get("content-type")?.includes("application/json") ? res.json() : null)
-       .catch(err => { console.error("Maintenance check fetch failed:", err.message); return null; });
+      settingsPromise = prisma.globalSettings.findUnique({
+        where: { siteId },
+        select: { websiteSettings: true }
+      }).catch(err => { console.error("Maintenance check failed:", err.message); return null; });
     }
 
     // Determine if we need to fetch redirect
     let redirectPromise = null;
     let cachedRedirect = middlewareCache.redirects[redirectCacheKey];
     if (checkRedirect && (!cachedRedirect || cachedRedirect.expiresAt < now)) {
-      redirectPromise = fetch(
-        `${url.origin}/api/redirects?siteId=${encodeURIComponent(siteId)}&source=${encodeURIComponent(pathname)}`,
-        { headers: { "x-internal-check": "1" } }
-      ).then(res => res.ok && res.headers.get("content-type")?.includes("application/json") ? res.json() : null)
-       .catch(err => { console.error("Redirect check fetch failed:", err.message); return null; });
+      const formattedSource = pathname.trim().startsWith("/") ? pathname.trim() : `/${pathname.trim()}`;
+      redirectPromise = prisma.redirect.findUnique({
+        where: { siteId_source: { siteId, source: formattedSource } }
+      }).catch(err => { console.error("Redirect check failed:", err.message); return null; });
     }
 
     if (settingsPromise || redirectPromise) {
@@ -154,7 +152,7 @@ export async function proxy(request) {
         const [settingsResult, redirectResult] = await Promise.all([settingsPromise, redirectPromise]);
 
         if (settingsPromise) {
-          const ws = settingsResult?.data?.websiteSettings ?? settingsResult?.websiteSettings;
+          const ws = settingsResult?.websiteSettings;
           middlewareCache.settings[settingsCacheKey] = {
             data: ws || null,
             expiresAt: now + CACHE_TTL_MS
@@ -163,7 +161,7 @@ export async function proxy(request) {
         }
 
         if (redirectPromise) {
-          const rule = redirectResult?.data?.redirect ?? redirectResult?.redirect;
+          const rule = redirectResult;
           middlewareCache.redirects[redirectCacheKey] = {
             data: rule || null,
             expiresAt: now + CACHE_TTL_MS
@@ -195,11 +193,15 @@ export async function proxy(request) {
     // Handle Redirects
     if (checkRedirect && cachedRedirect?.data) {
       const rule = cachedRedirect.data;
+      console.log(`[Middleware] Evaluating redirect for ${pathname} -> target: ${rule.target}, type: ${rule.type}`);
       if (rule.target && rule.target !== pathname) {
         const redirectUrl = new URL(rule.target, url);
-        const status = rule.type === 302 ? 302 : 301;
-        return NextResponse.redirect(redirectUrl, { status });
+        const status = parseInt(rule.type) || 301;
+        console.log(`[Middleware] Executing redirect to ${redirectUrl.toString()} with status ${status}`);
+        return NextResponse.redirect(redirectUrl, status);
       }
+    } else if (checkRedirect) {
+       console.log(`[Middleware] No active redirect found for ${pathname}`);
     }
   }
 

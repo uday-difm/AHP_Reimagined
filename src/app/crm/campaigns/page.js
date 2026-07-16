@@ -804,8 +804,25 @@ export default function CampaignsPage() {
       const res = await fetch(`/api/crm/campaigns/${id}/send`, { method: "POST", headers: { "x-site-id": siteId } });
       const d   = await res.json();
       if (d.success) {
-        alert(`✅ Sent ${d.data?.sentCount || 0} emails. ${d.data?.failedCount || 0} failed.`);
+        alert(`📤 Campaign queued — ${d.data?.queued || 0} emails being sent.`);
         await fetchCampaigns();
+        
+        let pollCount = 0;
+        const pollInterval = setInterval(async () => {
+          pollCount++;
+          try {
+            const checkRes = await fetch("/api/crm/campaigns", { headers: { "x-site-id": siteId } });
+            const checkData = await checkRes.json().catch(() => ({}));
+            if (checkData.success) {
+              setCampaigns(checkData.data?.campaigns || []);
+              const updatedCampaign = checkData.data?.campaigns?.find(c => c.id === id);
+              if (updatedCampaign && updatedCampaign.status !== "sending") {
+                clearInterval(pollInterval);
+              }
+            }
+          } catch (e) {}
+          if (pollCount >= 24) clearInterval(pollInterval);
+        }, 5000);
       } else {
         alert(`Error: ${d.error}`);
       }

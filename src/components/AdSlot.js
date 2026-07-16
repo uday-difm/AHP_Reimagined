@@ -198,7 +198,7 @@ export default function AdSlot({ zone, layout = 'strip', width, height, classNam
     }
 
     const wrapClass = layout === 'float'
-      ? 'float-right clear-right ml-6 mb-4'
+      ? 'w-full md:w-auto md:float-right md:clear-right md:ml-6 mb-8 md:mb-4 flex flex-col items-center md:items-end'
       : 'w-full flex flex-col items-center my-3';
 
     const containerStyle = w && h ? {
@@ -249,7 +249,7 @@ export default function AdSlot({ zone, layout = 'strip', width, height, classNam
         >
           <div className="flex flex-col gap-3">
             <div className="flex justify-between items-center border-b border-slate-100 pb-3">
-              <span className="text-[9.5px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider bg-teal-50 text-teal-700 dark:bg-teal-950/40 dark:text-teal-400">
+              <span className="text-[9.5px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider bg-[#0f7c85]/10 text-[#0f7c85]">
                 Partner Spot
               </span>
             </div>
@@ -302,7 +302,7 @@ export default function AdSlot({ zone, layout = 'strip', width, height, classNam
   // If size mapping exists, display the clean mockup layout (gray box with attractive CTAs)
   if (w && h) {
     const wrapClass = layout === 'float'
-      ? 'float-right clear-right ml-6 mb-4'
+      ? 'w-full md:w-auto md:float-right md:clear-right md:ml-6 mb-8 md:mb-4 flex flex-col items-center md:items-end'
       : 'w-full flex flex-col items-center my-4';
 
     const containerStyle = {

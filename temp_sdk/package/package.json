@@ -1,0 +1,29 @@
+{
+  "name": "@yourcompany/global-backend-next",
+  "version": "1.0.6",
+  "description": "Next.js integration SDK wrapper for the Global Backend headless CMS platform.",
+  "main": "index.js",
+  "types": "types.d.ts",
+  "dependencies": {
+    "isomorphic-dompurify": "^2.0.0"
+  },
+  "peerDependencies": {
+    "next": ">=13.0.0",
+    "react": ">=18.0.0"
+  },
+  "exports": {
+    ".": "./index.js",
+    "./components": "./components.jsx",
+    "./sync": "./sync.js",
+    "./instrumentation": "./instrumentation.js"
+  },
+  "keywords": [
+    "cms",
+    "headless",
+    "nextjs",
+    "global-backend",
+    "sdk"
+  ],
+  "author": "Your Company",
+  "license": "UNLICENSED"
+}

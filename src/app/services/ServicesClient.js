@@ -305,7 +305,7 @@ export default function ServicesClient({ initialServices = [], showConfidential 
       <Header />
 
       <main className="w-full flex-grow pt-[140px] pb-20">
-        
+
         {/* Header Banner */}
         <section className="container mb-10">
           <div className="bg-[#f0f6f3]/60 border border-slate-200/40 rounded-[32px] p-8 md:p-12 relative overflow-hidden flex flex-col gap-6 md:flex-row md:items-center justify-between">
@@ -318,7 +318,7 @@ export default function ServicesClient({ initialServices = [], showConfidential 
                 Unlock professional authority and reach our health-conscious audience. Explore our cover features, standalone articles, display ads, and custom partnerships.
               </p>
             </div>
-            
+
             {/* Search Input */}
             <div className="relative w-full md:max-w-[320px] shrink-0 z-10">
               <input
@@ -367,7 +367,7 @@ export default function ServicesClient({ initialServices = [], showConfidential 
                         <span className="absolute top-4 left-4 px-3 py-1.5 rounded-full text-[8.5px] font-bold uppercase tracking-[1px] bg-[#f0f6f3] text-[#0f4c4e]">
                           {service.category}
                         </span>
-                        
+
                         {/* Best Seller / Most Popular visual badge on the top right */}
                         {service.badge && (
                           <span className="absolute top-4 right-4 px-3.5 py-1.5 rounded-full text-[8.5px] font-extrabold uppercase tracking-[1px] bg-accent text-primary shadow-sm animate-pulse">
@@ -417,7 +417,7 @@ export default function ServicesClient({ initialServices = [], showConfidential 
               <HelpCircle className="text-accent w-5.5 h-5.5" />
               <h2 className="font-heading font-extrabold text-[18px] text-primary tracking-tight">Partnership Questions & FAQs</h2>
             </div>
-            
+
             <div className="flex flex-col gap-4">
               {faqs.map((faq, i) => {
                 const isOpen = activeFaq === i;
@@ -448,7 +448,7 @@ export default function ServicesClient({ initialServices = [], showConfidential 
       {isModalOpen && (
         <div className="fixed inset-0 bg-[#1a1a2e]/60 backdrop-blur-md flex items-center justify-center z-[99999] p-4 select-none animate-fade-in">
           <div className="bg-white rounded-[32px] shadow-[0_24px_60px_rgba(0,0,0,0.15)] w-full max-w-[720px] max-h-[90vh] overflow-y-auto flex flex-col p-6 md:p-8 relative border border-slate-100">
-            
+
             {/* Close Button */}
             <button
               onClick={() => setIsModalOpen(false)}
@@ -461,7 +461,7 @@ export default function ServicesClient({ initialServices = [], showConfidential 
             {/* STEP 1: Details View (shows package image, description, and list) */}
             {modalStep === 'details' && (
               <div className="flex flex-col gap-6 animate-slide-up">
-                
+
                 {/* Header Image */}
                 <div className="relative w-full h-[240px] md:h-[280px] rounded-2xl overflow-hidden shadow-sm border border-slate-100/50 mt-4">
                   <Image
@@ -513,10 +513,10 @@ export default function ServicesClient({ initialServices = [], showConfidential 
                 )}
 
                 {/* Next Step Action Button */}
-                 <Button
+                <Button
                   onClick={() => setModalStep('form')}
                   variant="primary"
-                  className="!bg-[#0f4c4e] hover:!bg-[#093031] !text-xs !py-3.5 mt-2 shadow-md select-none w-full"
+                  className="!bg-[#0f4c4e] hover:!bg-[#093031] !text-xs !py-3.5 mt-2 mb-8 shrink-0 shadow-md select-none w-full"
                 >
                   {selectedService.ctaButtonText}
                 </Button>
@@ -526,7 +526,7 @@ export default function ServicesClient({ initialServices = [], showConfidential 
             {/* STEP 2: Booking Form View */}
             {modalStep === 'form' && (
               <form onSubmit={handleFormSubmit} className="flex flex-col gap-6 animate-slide-up">
-                
+
                 {/* Back Button */}
                 <button
                   type="button"
@@ -684,11 +684,11 @@ export default function ServicesClient({ initialServices = [], showConfidential 
                 </div>
 
                 {/* Submit button */}
-                 <Button
+                <Button
                   type="submit"
                   disabled={isSubmitting}
                   variant="primary"
-                  className="!bg-[#0f4c4e] hover:!bg-[#093031] disabled:!bg-slate-400 !text-xs !py-3.5 mt-2 shadow-md select-none w-full"
+                  className="!bg-[#0f4c4e] hover:!bg-[#093031] !text-xs !py-4 mb-8 shrink-0 shadow-sm select-none w-full"
                 >
                   {isSubmitting ? 'Securing Submission Details...' : 'Submit Media Package Inquiry'}
                 </Button>
@@ -701,7 +701,7 @@ export default function ServicesClient({ initialServices = [], showConfidential 
                 <div className="w-16 h-16 bg-[#e8f8f0] text-accent-green rounded-full flex items-center justify-center mb-6 shadow-sm">
                   <CheckCircle size={32} />
                 </div>
-                
+
                 <h2 className="font-heading font-extrabold text-[24px] text-primary tracking-tight mb-2">
                   Submission Successful
                 </h2>
@@ -715,12 +715,12 @@ export default function ServicesClient({ initialServices = [], showConfidential 
                 {/* Steps */}
                 <div className="flex flex-col gap-5 w-full text-left max-w-md mb-8">
                   <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block">NEXT STEPS:</span>
-                  
+
                   <div className="flex gap-4 items-start">
                     <div className="w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center shrink-0 text-primary font-bold text-xs">1</div>
                     <p className="text-[12.5px] text-secondary leading-normal mt-1.5">Our editorial review panel will evaluate your digital assets and website credentials.</p>
                   </div>
-                  
+
                   <div className="flex gap-4 items-start">
                     <div className="w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center shrink-0 text-primary font-bold text-xs">2</div>
                     <p className="text-[12.5px] text-secondary leading-normal mt-1.5">We will check available slot counts for your requested issue timeline.</p>
@@ -741,16 +741,16 @@ export default function ServicesClient({ initialServices = [], showConfidential 
                 </div>
 
                 {/* Finish/Close button */}
-                 <Button
+                <Button
                   onClick={() => setIsModalOpen(false)}
                   variant="primary"
-                  className="!bg-[#0f4c4e] hover:!bg-[#093031] !text-xs !py-3 !px-8 mt-8 shadow-sm select-none"
+                  className="!bg-[#0f4c4e] hover:!bg-[#093031] !text-xs !py-3 !px-8 mt-8 mb-8 shrink-0 shadow-sm select-none"
                 >
                   Close Window
                 </Button>
               </div>
             )}
-            
+
           </div>
         </div>
       )}

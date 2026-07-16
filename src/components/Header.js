@@ -226,13 +226,13 @@ export default function Header() {
     { label: "Home", url: "/", children: [] },
     { label: "Resources", url: "#", children: [] },
     { label: "Services", url: "/services", children: [] },
-    { 
-      label: "About", 
-      url: "#", 
+    {
+      label: "About",
+      url: "#",
       children: [
         { label: "About Us", url: "/about" },
         { label: "Contact", url: "/contact" }
-      ] 
+      ]
     }
   ];
 
@@ -242,13 +242,13 @@ export default function Header() {
     if (!item?.label) return false;
     const labelLower = item.label.toLowerCase().trim();
     const url = item.url || '';
-    
+
     if (labelLower === 'home' && (url === '/' || url === '')) return true;
     if (labelLower === 'services' && url === '/services') return true;
     if (labelLower === 'resources' && url === '#') return true;
     if ((labelLower === 'about' || labelLower === 'about us') && (url === '#' || url === '/about')) return true;
     if (labelLower === 'contact' && url === '/contact') return true;
-    
+
     return false;
   };
 
@@ -258,16 +258,16 @@ export default function Header() {
   const announcementBarEnabled = headerConfig?.announcementBar?.enabled ?? true;
   const topOffset = announcementBarEnabled ? '40px' : '0px';
   const positionClass = headerConfig?.sticky !== false ? 'fixed' : 'absolute';
-  
+
   const isTransparent = headerConfig?.transparent ?? false;
   const bgClass = isTransparent ? 'bg-white/30 backdrop-blur-lg' : 'bg-white';
   const bgStyle = isTransparent ? { WebkitBackdropFilter: 'blur(48px)', top: topOffset } : { top: topOffset };
-  
+
   const borderClass = headerConfig?.borderBottom !== false ? 'border-b border-[#E6EEF0]' : '';
-  
+
   const shadowMap = { none: 'shadow-none', small: 'shadow-xs', medium: 'shadow-md', large: 'shadow-lg' };
   const shadowClass = shadowMap[headerConfig?.shadowSize || 'small'] || 'shadow-sm';
-  
+
   const heightMap = { small: 'h-16', medium: 'h-20', large: 'h-24' };
   const heightClass = heightMap[headerConfig?.paddingY || 'medium'] || 'h-20';
 
@@ -284,8 +284,8 @@ export default function Header() {
     <>
       <Marquee />
       {/* Header */}
-      <header 
-        className={`${positionClass} left-0 w-full flex items-center ${heightClass} ${bgClass} ${borderClass} ${shadowClass} z-[9000]`} 
+      <header
+        className={`${positionClass} left-0 w-full flex items-center ${heightClass} ${bgClass} ${borderClass} ${shadowClass} z-[9000]`}
         style={bgStyle}
       >
         <div className="header-container flex justify-between items-center w-full mx-auto px-6 md:px-10">
@@ -324,10 +324,10 @@ export default function Header() {
                           <div className="w-[30%] bg-slate-50/50 rounded-xl p-4 border border-[#E6EEF0]/80 flex flex-col">
                             <span className="text-[10px] font-bold text-[#0F766E] uppercase tracking-wider mb-3">Latest Publication</span>
                             <div className="relative aspect-[3/4] w-full rounded-lg overflow-hidden mb-4 shadow-sm border border-slate-100">
-                              <img 
-                                src={dynamicPublications[0].magazine_cover_image ? proxyUrl(dynamicPublications[0].magazine_cover_image) : '/images/mag_sleep.png'} 
-                                alt={dynamicPublications[0].magazine_title} 
-                                className="object-cover w-full h-full" 
+                              <img
+                                src={dynamicPublications[0].magazine_cover_image ? proxyUrl(dynamicPublications[0].magazine_cover_image) : '/images/mag_sleep.png'}
+                                alt={dynamicPublications[0].magazine_title}
+                                className="object-cover w-full h-full"
                               />
                             </div>
                             <h4 className="font-bold text-[#0F766E] text-lg mb-1 leading-tight line-clamp-1" title={dynamicPublications[0].magazine_title}>
@@ -363,7 +363,7 @@ export default function Header() {
                               <Link href="/publication" className="inline-block mt-auto text-[13px] font-bold text-[#0F766E] hover:text-[#0a524c]">View all Publications &rarr;</Link>
                             </div>
                           )}
-                          
+
                           {/* Blogs */}
                           {dynamicBlogs.length > 0 && (
                             <div className="flex-1 flex flex-col text-left">
@@ -413,9 +413,9 @@ export default function Header() {
               const hasChildren = Array.isArray(item.children) && item.children.length > 0;
               if (!hasChildren) {
                 return (
-                  <Link 
+                  <Link
                     key={index}
-                    href={item.url} 
+                    href={item.url}
                     className="text-[15px] font-semibold text-secondary hover:text-[#0F766E] py-2 px-3 transition-colors"
                   >
                     {item.label}
@@ -434,8 +434,8 @@ export default function Header() {
                       <ul className="space-y-1">
                         {item.children.map((child, cIdx) => (
                           <li key={cIdx}>
-                            <Link 
-                              href={child.url} 
+                            <Link
+                              href={child.url}
                               className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#374151] hover:text-[#0F766E] hover:bg-[#ECFEFF] transition-colors"
                             >
                               {child.label}
@@ -471,8 +471,8 @@ export default function Header() {
                 </Link>
               )}
               {headerConfig?.ctaText && (
-                <Link 
-                  href={headerConfig.ctaLink || "/contact"} 
+                <Link
+                  href={headerConfig.ctaLink || "/contact"}
                   className="bg-[#0F766E] hover:bg-[#0d655e] text-white px-5 py-2.5 rounded-full text-[13px] font-semibold transition-colors shadow-sm ml-2"
                 >
                   {headerConfig.ctaText}
@@ -602,21 +602,19 @@ export default function Header() {
               {/* Overlay Backdrop */}
               <div
                 onClick={() => setMenuOpen(false)}
-                className={`fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[8998] transition-opacity duration-300 ${
-                  menuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'
-                }`}
+                className={`fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[8998] transition-opacity duration-300 ${menuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'
+                  }`}
               />
               {/* Drawer Panel */}
               <div
-                className={`fixed top-0 right-0 h-full w-full max-w-xs bg-white z-[8999] shadow-2xl flex flex-col p-6 transition-transform duration-300 ease-in-out transform ${
-                  menuOpen ? 'translate-x-0' : 'translate-x-full'
-                }`}
+                className={`fixed top-0 right-0 h-full w-full max-w-xs bg-white z-[8999] shadow-2xl flex flex-col p-6 transition-transform duration-300 ease-in-out transform ${menuOpen ? 'translate-x-0' : 'translate-x-full'
+                  }`}
               >
                 {/* Header inside drawer */}
                 <div className="flex items-center justify-between pb-6 border-b border-[#E6EEF0] mb-6">
                   <span className="font-heading font-black text-lg text-primary">{logoText}</span>
-                  <button 
-                    onClick={() => setMenuOpen(false)} 
+                  <button
+                    onClick={() => setMenuOpen(false)}
                     className="p-1 rounded-full hover:bg-slate-100 border-none bg-transparent cursor-pointer"
                   >
                     <div className="w-5 h-5 relative flex items-center justify-center">
@@ -625,7 +623,7 @@ export default function Header() {
                     </div>
                   </button>
                 </div>
-                
+
                 {/* Scrollable menu links */}
                 <nav className="flex-1 overflow-y-auto flex flex-col gap-4 text-left">
                   {displayItems.map((item, idx) => {

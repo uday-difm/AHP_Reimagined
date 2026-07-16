@@ -11,8 +11,7 @@ import {
   Inbox,
   AlertTriangle,
   Newspaper,
-  Trash2,
-  CheckCircle2,
+
 } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
@@ -314,7 +313,7 @@ export default function Topbar({ siteId, sites = [], onMenuClick }) {
 
               {/* Notification Popover Dropdown */}
               {notificationsOpen && (
-                <div className="absolute right-0 mt-2 w-80 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-xl overflow-hidden z-50 text-xs text-left">
+                <div className="absolute -right-20 sm:right-0 mt-2 w-72 sm:w-80 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-xl overflow-hidden z-50 text-xs text-left">
                   {/* Popover Header */}
                   <div className="flex items-center justify-between border-b border-gray-100 dark:border-slate-700 bg-gray-50 dark:bg-slate-900 px-4 py-3">
                     <span className="font-bold text-gray-800 dark:text-slate-300 uppercase tracking-wider text-xs">
@@ -345,8 +344,8 @@ export default function Topbar({ siteId, sites = [], onMenuClick }) {
                       <div
                         key={alert.id}
                         className={`p-3 transition-colors ${alert.isRead
-                            ? "bg-white dark:bg-slate-800"
-                            : "bg-blue-50/30 hover:bg-blue-50/50 dark:bg-blue-900/10 dark:hover:bg-blue-900/20"
+                          ? "bg-white dark:bg-slate-800"
+                          : "bg-blue-50/30 hover:bg-blue-50/50 dark:bg-blue-900/10 dark:hover:bg-blue-900/20"
                           }`}
                       >
                         <div className="flex gap-2.5 items-start">
@@ -382,7 +381,7 @@ export default function Topbar({ siteId, sites = [], onMenuClick }) {
 
                   {/* Popover Footer */}
                   <Link
-                    href="/notifications"
+                    href="/dashboard/notifications"
                     onClick={() => setNotificationsOpen(false)}
                     className="block text-center border-t border-gray-100 dark:border-slate-700 py-2.5 bg-gray-50/50 dark:bg-slate-900/50 hover:bg-gray-50 dark:hover:bg-slate-700 font-semibold text-xs text-gray-600 dark:text-slate-300 transition"
                   >

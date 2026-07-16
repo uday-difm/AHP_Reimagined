@@ -170,7 +170,9 @@ export async function getObjectFromS3(key) {
       const url = `${protocol}://${cleanedEndpoint}/${bucket}/${key}`;
 
       try {
-        const fetchRes = await fetch(url);
+        // Fix Node 18+ IPv6 fetch issue with localhost
+        const fetchUrl = url.replace("localhost:", "127.0.0.1:");
+        const fetchRes = await fetch(fetchUrl);
         if (!fetchRes.ok) {
           throw new Error(`Anonymous fetch failed with status ${fetchRes.status}`);
         }

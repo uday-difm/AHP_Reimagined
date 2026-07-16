@@ -5,6 +5,7 @@ import { mediaFolderRepository } from "@/repositories/mediaFolder.repository";
 import { settingsService } from "@/services/settings.service";
 import { BaseService } from "@/core/service";
 import { NotFoundError, ValidationError } from "@/core/errors";
+import { logAction } from "@/lib/audit";
 import prisma from "@/lib/prisma";
 
 export class MediaService extends BaseService {
@@ -92,10 +93,13 @@ export class MediaService extends BaseService {
       isDocument: !finalMimeType.startsWith("image/") && !finalMimeType.startsWith("video/"),
     });
 
+    // Audit log (no userId available at service level for uploads)
+    try { await logAction(siteId, null, "MEDIA_UPLOAD", { fileName: media.fileName, mimeType: media.mimeType, size: media.size }); } catch (e) { console.error("Audit log failed (media upload):", e); }
+
     return media;
   }
 
-  async deleteMedia(siteId, mediaId) {
+  async deleteMedia(siteId, mediaId, userId = null) {
     const media = await mediaRepository.findUnique(siteId, mediaId);
     if (!media) {
       throw new NotFoundError("Media");
@@ -108,6 +112,7 @@ export class MediaService extends BaseService {
     }
 
     await mediaRepository.delete(siteId, mediaId);
+    try { await logAction(siteId, userId, "MEDIA_DELETE", { mediaId, fileName: media.fileName }); } catch (e) { console.error("Audit log failed (media delete):", e); }
     return { success: true };
   }
 
@@ -225,6 +230,7 @@ export class MediaService extends BaseService {
     });
 
     await this._cascadeMediaUrlUpdate(siteId, oldUrl, oldSecureUrl, updated.url, updated.secureUrl);
+    try { await logAction(siteId, null, "MEDIA_REPLACE", { mediaId, fileName: updated.fileName }); } catch (e) { console.error("Audit log failed (media replace):", e); }
 
     return updated;
   }
@@ -247,6 +253,7 @@ export class MediaService extends BaseService {
     const updated = await mediaRepository.update(siteId, mediaId, updateData);
 
     await this._cascadeMediaUrlUpdate(siteId, oldUrl, oldSecureUrl, updated.url, updated.secureUrl);
+    try { await logAction(siteId, null, "MEDIA_RENAME", { mediaId, newName }); } catch (e) { console.error("Audit log failed (media rename):", e); }
 
     return updated;
   }
@@ -334,10 +341,12 @@ export class MediaService extends BaseService {
         throw new ValidationError("Parent folder not found");
       }
     }
-    return mediaFolderRepository.create(siteId, {
+    const folder = await mediaFolderRepository.create(siteId, {
       name,
       parentId: parentIdVal,
     });
+    try { await logAction(siteId, null, "MEDIA_FOLDER_CREATE", { name, parentId: parentIdVal }); } catch (e) { console.error("Audit log failed (folder create):", e); }
+    return folder;
   }
 
   async renameFolder(siteId, folderId, newName) {
@@ -345,9 +354,9 @@ export class MediaService extends BaseService {
     if (!folder) {
       throw new NotFoundError("Folder");
     }
-    return mediaFolderRepository.update(siteId, folderId, {
-      name: newName,
-    });
+    const updated = await mediaFolderRepository.update(siteId, folderId, { name: newName });
+    try { await logAction(siteId, null, "MEDIA_FOLDER_RENAME", { folderId, newName }); } catch (e) { console.error("Audit log failed (folder rename):", e); }
+    return updated;
   }
 
   async _getAllSubfolderIds(siteId, folderId) {
@@ -403,6 +412,7 @@ export class MediaService extends BaseService {
         where: { id: folderId, siteId }
       })
     ]);
+    try { await logAction(siteId, null, "MEDIA_FOLDER_DELETE", { folderId, name: folder.name, filesDeleted: mediaItems.length }); } catch (e) { console.error("Audit log failed (folder delete):", e); }
 
     return { success: true };
   }

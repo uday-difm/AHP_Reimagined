@@ -5,7 +5,7 @@ import { handleApiError, apiSuccess } from "@/core/errors";
 
 export async function GET(req, { params }) {
   try {
-    const auth = await checkSitePermission(req, "EDITOR");
+    const auth = await checkSitePermission(req, "AUTHOR");
     if (auth.error) {
       return NextResponse.json({ error: auth.error }, { status: auth.status });
     }
@@ -28,12 +28,20 @@ export async function GET(req, { params }) {
 
 export async function PATCH(req, { params }) {
   try {
-    const auth = await checkSitePermission(req, "EDITOR");
+    const auth = await checkSitePermission(req, "AUTHOR");
     if (auth.error) {
       return NextResponse.json({ error: auth.error }, { status: auth.status });
     }
 
     const { postId } = await params;
+
+    if (auth.user?.globalRole === "AUTHOR") {
+      const existingPost = await postService.getById(auth.siteId, postId);
+      if (existingPost.authorId !== auth.user.id) {
+        return NextResponse.json({ error: "Forbidden: You can only modify your own posts" }, { status: 403 });
+      }
+    }
+
     const body = await req.json();
 
     let { canonicalUrl, ogImage } = body;
@@ -65,12 +73,19 @@ export async function PATCH(req, { params }) {
 
 export async function DELETE(req, { params }) {
   try {
-    const auth = await checkSitePermission(req, "EDITOR");
+    const auth = await checkSitePermission(req, "AUTHOR");
     if (auth.error) {
       return NextResponse.json({ error: auth.error }, { status: auth.status });
     }
 
     const { postId } = await params;
+
+    if (auth.user?.globalRole === "AUTHOR") {
+      const existingPost = await postService.getById(auth.siteId, postId);
+      if (existingPost.authorId !== auth.user.id) {
+        return NextResponse.json({ error: "Forbidden: You can only delete your own posts" }, { status: 403 });
+      }
+    }
     await postService.delete(auth.siteId, postId, auth.user.id);
 
     return NextResponse.json(apiSuccess({ message: "Post deleted successfully" }));

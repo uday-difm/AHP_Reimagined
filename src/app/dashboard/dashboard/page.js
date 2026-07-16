@@ -8,20 +8,18 @@ import {
   Inbox,
   FileText,
   Newspaper,
-  Quote,
-  AlertCircle,
+
   Play,
-  UserPlus,
+
   Database,
   ShieldCheck,
-  PanelTop,
-  Bell,
+
   PlusCircle,
-  Briefcase,
+
   Layers,
-  HelpCircle,
+
   FolderOpen,
-  BarChart2,
+
   Activity,
 } from "lucide-react";
 
@@ -45,7 +43,7 @@ const allActions = [
     desc: "Manage customer form inquiries",
     href: "/crm/leads",
     icon: Inbox,
-    roles: ["EDITOR"],
+    roles: ["EDITOR", "MARKETING"],
   },
   {
     label: "Manage Menus",
@@ -94,6 +92,10 @@ const allActions = [
 export default async function DashboardPage() {
   // Fetch active site context
   const user = await requireAuth();
+  if (!user) {
+    const { redirect } = await import("next/navigation");
+    redirect("/dashboard/login");
+  }
   const site = await getSiteForUser(user);
 
   if (!site) {
@@ -173,7 +175,7 @@ export default async function DashboardPage() {
             {globalRole}
           </span>
         </div>
-        
+
         {filteredActions.length === 0 ? (
           <p className="text-xs text-slate-400 italic">No actions available for your role.</p>
         ) : (
@@ -243,8 +245,8 @@ export default async function DashboardPage() {
                     </div>
                     <span
                       className={`px-2 py-0.5 rounded text-[10px] font-semibold border ${item.status === "new"
-                          ? "bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-900/40"
-                          : "bg-yellow-50 dark:bg-yellow-950/40 text-yellow-700 dark:text-yellow-300 border-yellow-250 dark:border-yellow-900/40"
+                        ? "bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-900/40"
+                        : "bg-yellow-50 dark:bg-yellow-950/40 text-yellow-700 dark:text-yellow-300 border-yellow-250 dark:border-yellow-900/40"
                         }`}
                     >
                       {item.status}
@@ -318,10 +320,18 @@ export default async function DashboardPage() {
                 <span className="h-2.5 w-2.5 rounded-full bg-green-500" />
                 <span>MySQL DB Connected</span>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="h-2.5 w-2.5 rounded-full bg-green-500" />
-                <span>Cloudinary Connected</span>
-              </div>
+              {process.env.CLOUDINARY_CLOUD_NAME && (
+                <div className="flex items-center gap-2">
+                  <span className="h-2.5 w-2.5 rounded-full bg-green-500" />
+                  <span>Cloudinary Connected</span>
+                </div>
+              )}
+              {process.env.S3_ENDPOINT && (
+                <div className="flex items-center gap-2">
+                  <span className="h-2.5 w-2.5 rounded-full bg-green-500" />
+                  <span>S3/MinIO Connected</span>
+                </div>
+              )}
               <div className="flex items-center gap-2">
                 <span className="h-2.5 w-2.5 rounded-full bg-blue-500 animate-pulse" />
                 <span>
