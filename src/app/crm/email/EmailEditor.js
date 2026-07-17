@@ -349,7 +349,7 @@ export default function EmailEditor({ siteId, initialEmailSettings }) {
                 <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-3">
                   Email Provider
                 </label>
-                <div className="flex gap-3">
+                <div className="flex flex-wrap gap-3">
                   <button
                     type="button"
                     onClick={() => setProvider("smtp")}
@@ -699,8 +699,8 @@ export default function EmailEditor({ siteId, initialEmailSettings }) {
               </div>
 
               {/* Logs Content list */}
-              <div className="border border-gray-200 rounded-xl overflow-hidden bg-gray-50/20 max-h-[360px] overflow-y-auto">
-                <table className="w-full text-left border-collapse text-xs">
+              <div className="border border-gray-200 rounded-xl bg-gray-50/20 max-h-[360px] overflow-auto">
+                <table className="w-full min-w-[500px] text-left border-collapse text-xs">
                   <thead className="bg-gray-100 text-gray-500 font-bold uppercase tracking-wider text-[9px] border-b">
                     <tr>
                       <th className="p-3">Timestamp</th>

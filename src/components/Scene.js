@@ -1,6 +1,23 @@
 'use client';
 
-import { Suspense } from 'react';
+import React, { Suspense, Component } from 'react';
+
+class ErrorBoundary extends Component {
+    constructor(props) {
+        super(props);
+        this.state = { hasError: false };
+    }
+    static getDerivedStateFromError(error) {
+        return { hasError: true };
+    }
+    componentDidCatch(error, errorInfo) {
+        console.error("Texture/Scene loading error:", error);
+    }
+    render() {
+        if (this.state.hasError) return <group />;
+        return this.props.children;
+    }
+}
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Environment } from "@react-three/drei";
 import Book from "./Book";
@@ -58,9 +75,11 @@ export default function Scene({ frontUrl, backUrl, spineUrl }) {
                 <shadowMaterial opacity={0.35} />
             </mesh>
 
-            <Suspense fallback={null}>
-                <Book frontUrl={frontUrl} backUrl={backUrl} spineUrl={spineUrl} />
-            </Suspense>
+            <ErrorBoundary>
+                <Suspense fallback={null}>
+                    <Book frontUrl={frontUrl} backUrl={backUrl} spineUrl={spineUrl} />
+                </Suspense>
+            </ErrorBoundary>
 
             {/* Y-axis only drag — lock polar angle to prevent camera tilt */}
             <OrbitControls

@@ -152,7 +152,7 @@ function Sparkline({ data, width = 200, height = 50 }) {
 function StatCard({ label, value, sub, icon: Icon, color, pulse }) {
   return (
     <div
-      className={`relative overflow-hidden rounded-2xl border bg-white p-5 shadow-sm flex items-start gap-4 transition hover:shadow-md`}
+      className={`relative overflow-hidden rounded-2xl border bg-white p-4 sm:p-5 shadow-sm flex flex-col sm:flex-row items-start gap-3 sm:gap-4 transition hover:shadow-md`}
     >
       <div
         className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${color}`}
@@ -605,17 +605,17 @@ export default function VisitorDashboardClient({
       </div>
 
       {/* ── Tabbed breakdown ──────────────────────────────────────────────── */}
-      <div className="rounded-2xl border bg-white shadow-sm overflow-hidden">
+      <div className="rounded-2xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-sm overflow-hidden">
         {/* Tabs */}
-        <div className="flex border-b overflow-x-auto">
+        <div className="flex border-b border-gray-200 dark:border-slate-700 overflow-x-auto">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               id={`tab-${tab.id}`}
               onClick={() => setActiveTab(tab.id)}
               className={`shrink-0 px-5 py-3 text-xs font-semibold transition border-b-2 ${activeTab === tab.id
-                  ? "border-indigo-600 text-indigo-700 bg-indigo-50/50"
-                  : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+                  ? "border-indigo-600 text-indigo-700 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-900/30"
+                  : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-800"
                 }`}
             >
               {tab.label}

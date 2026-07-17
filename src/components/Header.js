@@ -104,10 +104,10 @@ export default function Header() {
                     <div className="w-[30%] bg-slate-50/50 rounded-xl p-4 border border-[#E6EEF0]/80 flex flex-col">
                       <span className="text-[10px] font-bold text-[#0F766E] uppercase tracking-wider mb-3">Latest Publication</span>
                       <div className="relative aspect-[3/4] w-full rounded-lg overflow-hidden mb-4 shadow-sm border border-slate-100">
-                        <img 
-                          src={dynamicPublications[0].magazine_cover_image ? proxyUrl(dynamicPublications[0].magazine_cover_image) : '/images/mag_sleep.png'} 
-                          alt={dynamicPublications[0].magazine_title} 
-                          className="object-cover w-full h-full" 
+                        <img
+                          src={dynamicPublications[0].magazine_cover_image ? proxyUrl(dynamicPublications[0].magazine_cover_image) : '/images/mag_sleep.png'}
+                          alt={dynamicPublications[0].magazine_title}
+                          className="object-cover w-full h-full"
                         />
                       </div>
                       <h4 className="font-bold text-[#0F766E] text-lg mb-1 leading-tight line-clamp-1" title={dynamicPublications[0].magazine_title}>

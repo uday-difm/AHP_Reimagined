@@ -189,7 +189,7 @@ export default function TemplatesPage() {
       {showAddForm && (
         <form onSubmit={handleSave} className="p-5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl space-y-4">
           <h3 className="text-sm font-bold">{editingId ? "Edit Template" : "Compose Layout Template"}</h3>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <input type="text" placeholder="Template Name" required value={newTemplate.name}
               onChange={(e) => setNewTemplate({ ...newTemplate, name: e.target.value })}
               className="p-2 border rounded text-xs dark:bg-slate-900 w-full" />
@@ -197,10 +197,10 @@ export default function TemplatesPage() {
               onChange={(e) => setNewTemplate({ ...newTemplate, subject: e.target.value })}
               className="p-2 border rounded text-xs dark:bg-slate-900 w-full" />
           </div>
-          <div className="flex gap-2 items-center">
-            <span className="text-[10px] text-slate-400 font-bold uppercase">Presets:</span>
-            <button type="button" onClick={() => handleApplyPreset("newsletter")} className="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-[10px] hover:bg-slate-200">Weekly Newsletter</button>
-            <button type="button" onClick={() => handleApplyPreset("promotion")} className="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-[10px] hover:bg-slate-200">Promo Event Card</button>
+          <div className="flex flex-wrap gap-2 items-center">
+            <span className="text-[10px] text-slate-400 font-bold uppercase shrink-0">Presets:</span>
+            <button type="button" onClick={() => handleApplyPreset("newsletter")} className="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-[10px] hover:bg-slate-200 shrink-0">Weekly Newsletter</button>
+            <button type="button" onClick={() => handleApplyPreset("promotion")} className="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-[10px] hover:bg-slate-200 shrink-0">Promo Event Card</button>
           </div>
           <textarea placeholder="Template HTML Markup" rows={12} required value={newTemplate.htmlContent}
             onChange={(e) => setNewTemplate({ ...newTemplate, htmlContent: e.target.value })}

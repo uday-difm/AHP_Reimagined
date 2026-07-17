@@ -333,7 +333,7 @@ function CampaignWizard({ onClose, onSaved, lists, templates, siteId, editData }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-      <div className="w-full max-w-2xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl flex flex-col overflow-hidden" style={{ maxHeight: "90vh" }}>
+      <div className="w-full max-w-2xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl flex flex-col overflow-hidden h-[90vh] md:h-[700px]">
 
         {/* Wizard header */}
         <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between shrink-0">
@@ -354,9 +354,9 @@ function CampaignWizard({ onClose, onSaved, lists, templates, siteId, editData }
         </div>
 
         {/* Step pills */}
-        <div className="flex items-center justify-center gap-1 px-6 py-3 shrink-0 border-b border-slate-100 dark:border-slate-800">
+        <div className="flex items-center justify-start sm:justify-center gap-1 px-4 sm:px-6 py-3 shrink-0 border-b border-slate-100 dark:border-slate-800 overflow-x-auto">
           {WIZARD_STEPS.map((label, i) => (
-            <div key={i} className={`flex items-center gap-1 text-[10px] font-bold px-2.5 py-1 rounded-full transition-colors ${i + 1 === step ? "bg-indigo-600 text-white" : i + 1 < step ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400" : "text-slate-400"}`}>
+            <div key={i} className={`flex items-center gap-1 text-[10px] font-bold px-2.5 py-1 rounded-full transition-colors shrink-0 whitespace-nowrap ${i + 1 === step ? "bg-indigo-600 text-white" : i + 1 < step ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400" : "text-slate-400"}`}>
               {i + 1 < step ? <Check size={9} /> : null}
               {i + 1 < step ? null : <span className="opacity-70">{i + 1}.</span>}
               {label}
@@ -370,8 +370,8 @@ function CampaignWizard({ onClose, onSaved, lists, templates, siteId, editData }
           {/* ── STEP 1: Campaign Info ──────────────────────────── */}
           {step === 1 && (
             <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-3">
-                <div className="col-span-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="sm:col-span-2">
                   <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Campaign Name *</label>
                   <input
                     type="text"
@@ -381,7 +381,7 @@ function CampaignWizard({ onClose, onSaved, lists, templates, siteId, editData }
                     className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   />
                 </div>
-                <div className="col-span-2">
+                <div className="sm:col-span-2">
                   <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Subject Line *</label>
                   <input
                     type="text"
@@ -413,7 +413,7 @@ function CampaignWizard({ onClose, onSaved, lists, templates, siteId, editData }
               </div>
               <div>
                 <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-2">Campaign Type</label>
-                <div className="grid grid-cols-4 gap-2">
+                <div className="flex flex-wrap gap-2">
                   {CAMPAIGN_TYPES.map(t => (
                     <button
                       key={t.value}
@@ -496,9 +496,9 @@ function CampaignWizard({ onClose, onSaved, lists, templates, siteId, editData }
                 </div>
               )}
               <div>
-                <div className="flex items-center justify-between mb-1.5">
-                  <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400">Email Body (HTML) *</label>
-                  <div className="flex gap-1.5 text-[10px] text-slate-400">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-1.5">
+                  <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 shrink-0">Email Body (HTML) *</label>
+                  <div className="flex flex-wrap gap-1.5 text-[10px] text-slate-400">
                     <span className="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded font-mono">{"{{first_name}}"}</span>
                     <span className="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded font-mono">{"{{email}}"}</span>
                     <span className="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded font-mono">{"{{unsubscribe_link}}"}</span>
@@ -518,7 +518,7 @@ function CampaignWizard({ onClose, onSaved, lists, templates, siteId, editData }
           {/* ── STEP 4: Schedule ───────────────────────────────── */}
           {step === 4 && (
             <div className="space-y-4">
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {[
                   { key: "now",       label: "Send Now",       icon: Send, desc: "Dispatch immediately after launching" },
                   { key: "later",     label: "Schedule Later", icon: Calendar, desc: "Pick a date & time to send" },
@@ -615,7 +615,7 @@ function CampaignWizard({ onClose, onSaved, lists, templates, siteId, editData }
               {/* Test email */}
               <div className="rounded-xl border border-slate-200 dark:border-slate-700 p-4 space-y-2.5">
                 <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Send Test Email</h3>
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-2">
                   <input
                     type="email"
                     value={testEmail}
@@ -645,7 +645,7 @@ function CampaignWizard({ onClose, onSaved, lists, templates, siteId, editData }
                       }
                     }}
                     disabled={testSending || !testEmail}
-                    className="flex items-center gap-1.5 px-3 py-2 bg-slate-800 dark:bg-slate-700 text-white text-xs font-bold rounded-lg hover:bg-slate-900 transition-colors disabled:opacity-50"
+                    className="flex items-center justify-center gap-1.5 px-3 py-2 w-full sm:w-auto bg-slate-800 dark:bg-slate-700 text-white text-xs font-bold rounded-lg hover:bg-slate-900 transition-colors disabled:opacity-50 shrink-0"
                   >
                     {testSending ? <RefreshCw size={11} className="animate-spin" /> : <Mail size={11} />}
                     Test
@@ -934,7 +934,7 @@ export default function CampaignsPage() {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left">
+            <table className="w-full text-left min-w-[800px]">
               <thead className="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700">
                 <tr>
                   {["Campaign", "Subject", "Audience", "Status", "Date", "Analytics", ""].map(h => (
@@ -1040,7 +1040,7 @@ export default function CampaignsPage() {
       </div>
 
       {/* Quick Links */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {[
           { href: "/crm/templates",  label: "Email Templates",   icon: FileText,  desc: "Manage reusable HTML templates" },
           { href: "/crm/subscribers",label: "Subscribers",       icon: Users,     desc: "View and import subscriber contacts" },

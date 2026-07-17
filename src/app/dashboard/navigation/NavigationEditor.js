@@ -260,14 +260,14 @@ export default function NavigationEditor({
                 <div key={parentIdx} className="space-y-2">
                   {/* Parent Menu Item Block */}
                   <div
-                    className={`flex items-center justify-between p-3 border rounded-xl transition ${editingIndex === parentIdx && editingSubIndex === null
+                    className={`flex flex-wrap items-center justify-between p-3 border rounded-xl gap-2 transition ${editingIndex === parentIdx && editingSubIndex === null
                         ? "bg-blue-50/50 border-blue-400"
                         : "bg-gray-50/40 border-gray-200"
                       }`}
                   >
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-1 min-w-0">
                       {/* Reorder Buttons */}
-                      <div className="flex flex-col gap-0.5">
+                      <div className="flex flex-col gap-0.5 shrink-0">
                         <button
                           type="button"
                           disabled={parentIdx === 0}
@@ -287,13 +287,13 @@ export default function NavigationEditor({
                       </div>
 
                       {/* Details */}
-                      <div>
+                      <div className="min-w-0 flex-1 pr-2">
                         <div className="flex items-center gap-2">
-                          <span className="font-bold text-xs text-gray-800">
+                          <span className="font-bold text-xs text-gray-800 truncate">
                             {item.label}
                           </span>
                           <span
-                            className={`text-[8px] px-1.5 py-0.2 rounded-full border ${item.type === "external"
+                            className={`text-[8px] px-1.5 py-0.2 rounded-full border shrink-0 ${item.type === "external"
                                 ? "bg-amber-50 text-amber-600 border-amber-200"
                                 : "bg-blue-50 text-blue-600 border-blue-200"
                               }`}
@@ -301,14 +301,14 @@ export default function NavigationEditor({
                             {item.type === "external" ? "External" : "Internal"}
                           </span>
                         </div>
-                        <p className="text-[10px] text-gray-400 font-mono mt-0.5 truncate max-w-[200px]">
+                        <p className="text-[10px] text-gray-400 font-mono mt-0.5 truncate max-w-full">
                           {item.url || "/"}
                         </p>
                       </div>
                     </div>
 
                     {/* Actions */}
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex items-center gap-1.5 shrink-0">
                       <button
                         type="button"
                         onClick={() => handleAddSubItem(parentIdx)}
@@ -338,15 +338,15 @@ export default function NavigationEditor({
                   {(item.children || []).map((subItem, childIdx) => (
                     <div
                       key={childIdx}
-                      className={`flex items-center justify-between p-2.5 border rounded-xl ml-8 transition ${editingIndex === parentIdx &&
+                      className={`flex flex-wrap items-center justify-between p-2.5 border rounded-xl ml-8 gap-2 transition ${editingIndex === parentIdx &&
                           editingSubIndex === childIdx
                           ? "bg-blue-50/30 border-blue-300"
                           : "bg-white border-gray-150"
                         }`}
                     >
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 flex-1 min-w-0">
                         {/* Reorder Buttons */}
-                        <div className="flex flex-col gap-0.5">
+                        <div className="flex flex-col gap-0.5 shrink-0">
                           <button
                             type="button"
                             disabled={childIdx === 0}
@@ -370,23 +370,23 @@ export default function NavigationEditor({
                         </div>
 
                         {/* Details */}
-                        <div>
+                        <div className="min-w-0 flex-1 pr-2">
                           <div className="flex items-center gap-1.5">
-                            <span className="font-semibold text-xs text-gray-700">
+                            <span className="font-semibold text-xs text-gray-700 truncate">
                               {subItem.label}
                             </span>
-                            <span className="text-[7px] text-gray-400 uppercase tracking-wider font-semibold">
+                            <span className="text-[7px] text-gray-400 uppercase tracking-wider font-semibold shrink-0">
                               • Sub-item
                             </span>
                           </div>
-                          <p className="text-[9px] text-gray-400 font-mono truncate max-w-[180px]">
+                          <p className="text-[9px] text-gray-400 font-mono truncate max-w-full">
                             {subItem.url}
                           </p>
                         </div>
                       </div>
 
                       {/* Actions */}
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-1 shrink-0">
                         <button
                           type="button"
                           onClick={() =>
