@@ -238,6 +238,19 @@ function CampaignWizard({ onClose, onSaved, lists, templates, siteId, editData }
   const [testSending, setTestSending] = useState(false);
   const [testMsg, setTestMsg]        = useState(null);
   const [launching, setLaunching]    = useState(false);
+  
+  // Debounced campaign body preview state
+  const [debouncedBody, setDebouncedBody] = useState("");
+  const [isPreviewLoading, setIsPreviewLoading] = useState(false);
+
+  useEffect(() => {
+    setIsPreviewLoading(true);
+    const timer = setTimeout(() => {
+      setDebouncedBody(data.body);
+      setIsPreviewLoading(false);
+    }, 800);
+    return () => clearTimeout(timer);
+  }, [data.body]);
 
   const isEdit = !!editData?.id;
   const up = (field, val) => setData(d => ({ ...d, [field]: val }));
@@ -495,22 +508,43 @@ function CampaignWizard({ onClose, onSaved, lists, templates, siteId, editData }
                   </div>
                 </div>
               )}
-              <div>
-                <div className="flex items-center justify-between mb-1.5">
-                  <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400">Email Body (HTML) *</label>
+               <div>
+                <div className="flex justify-between items-center mb-2">
+                  <span className="block text-xs font-semibold text-slate-600 dark:text-slate-400">Compose Message Body</span>
                   <div className="flex gap-1.5 text-[10px] text-slate-400">
                     <span className="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded font-mono">{"{{first_name}}"}</span>
                     <span className="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded font-mono">{"{{email}}"}</span>
                     <span className="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded font-mono">{"{{unsubscribe_link}}"}</span>
                   </div>
                 </div>
-                <textarea
-                  value={data.body}
-                  onChange={e => { up("body", e.target.value); up("templateId", ""); }}
-                  rows={14}
-                  placeholder={"<h1>Hello {{first_name}},</h1>\n<p>Your email content here...</p>"}
-                  className="w-full px-3 py-2 text-xs border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
-                />
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Email Body (HTML) *</label>
+                    <textarea
+                      value={data.body}
+                      onChange={e => { up("body", e.target.value); up("templateId", ""); }}
+                      rows={16}
+                      placeholder={"<h1>Hello {{first_name}},</h1>\n<p>Your email content here...</p>"}
+                      className="w-full px-3 py-2 text-xs border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none h-[400px]"
+                    />
+                  </div>
+                  
+                  <div className="space-y-1">
+                    <div className="flex justify-between items-center">
+                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Live Visual Preview</label>
+                      {isPreviewLoading && <span className="text-[9px] text-indigo-500 font-bold animate-pulse">Syncing preview...</span>}
+                    </div>
+                    <div className="border border-slate-200 dark:border-slate-700 rounded-lg bg-white overflow-hidden shadow-xs h-[400px]">
+                      <iframe
+                        srcDoc={debouncedBody || "<div style='font-family: sans-serif; color: #94a3b8; padding: 20px; text-align: center; font-size: 12px;'>Write some HTML markup or select a template above to see the campaign body live.</div>"}
+                        title="Visual Preview"
+                        className={`w-full h-full transition-opacity duration-200 ${isPreviewLoading ? "opacity-60" : "opacity-100"}`}
+                        sandbox="allow-same-origin"
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           )}

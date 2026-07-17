@@ -160,12 +160,41 @@ function PhoneCallIcon({ className }) {
 }
 import MediaPickerModal from "@/components/media/MediaPickerModal";
 
+const DEFAULT_QUICK_CARDS = [
+  { tag: 'Daily Quiz', icon: '🌅', desc: 'A fresh 5-question wellness check, updated every day.', link: '/quizzes/sleep-quality' },
+  { tag: 'Stress Check', icon: '🧠', desc: 'Measure your mental load and unlock targeted breathing guides.', link: '/quizzes/stress-burnout' },
+  { tag: 'Nutrition IQ', icon: '🥗', desc: 'Rate your diet quality and get personalised food insights.', link: '/quizzes/nutrition-gut' },
+];
+const DEFAULT_DEEP_CARDS = [
+  { tag: 'Sleep Quality', icon: '🌙', desc: 'Assess your REM cycles, sleep hygiene, and overnight recovery.', link: '/quizzes/sleep-quality' },
+  { tag: 'Dosha Discovery', icon: '🌿', desc: 'Uncover your Ayurvedic mind-body constitution in 10 questions.', link: '/quizzes/dosha-body-type' },
+  { tag: 'My Dashboard', icon: '📊', desc: 'View all your past quiz scores, insights, and progress reports.', link: '/quizzes/dashboard' },
+];
+
 export default function SettingsEditor({ siteId, initialSettings }) {
   const [activeTab, setActiveTab] = useState("brand");
 
   // Settings States
   const [websiteSettings, setWebsiteSettings] = useState(
     initialSettings?.websiteSettings || {},
+  );
+
+  // Homepage wellness banner — lives inside websiteSettings.wellnessBanner
+  const [wellnessBanner, setWellnessBanner] = useState(
+    initialSettings?.websiteSettings?.wellnessBanner || {
+      enabled: true,
+      headline: 'Know your body,\none quiz at a time.',
+      subtext: 'Our clinically informed quizzes help you understand your health from the inside out — covering sleep, stress, nutrition, and Ayurvedic wellness. Start free, go deeper with a',
+      heroTag: 'Daily Wellness Quiz',
+      heroTitle: 'Test yourself today.',
+      heroBody: 'Take a quick 5-minute assessment and discover actionable insights about your sleep, stress, nutrition, or Ayurvedic body type — all backed by clinical research.',
+      heroPrimaryLabel: 'Browse All Quizzes',
+      heroPrimaryLink: '/quizzes',
+      heroSecondaryLabel: 'Start Now →',
+      heroSecondaryLink: '/quizzes/sleep-quality',
+      quickCards: DEFAULT_QUICK_CARDS,
+      deepCards: DEFAULT_DEEP_CARDS,
+    }
   );
   const [analytics, setAnalytics] = useState(initialSettings?.analytics || {});
   const [scripts, setScripts] = useState(initialSettings?.scripts || {});
@@ -312,6 +341,12 @@ export default function SettingsEditor({ siteId, initialSettings }) {
       contactDetails,
     };
 
+    // Merge wellnessBanner into websiteSettings before saving
+    const mergedWebsiteSettings = {
+      ...websiteSettings,
+      wellnessBanner,
+    };
+
     try {
       // Parallel Save Operations
       const [resGlobal, resWebsite] = await Promise.all([
@@ -329,7 +364,7 @@ export default function SettingsEditor({ siteId, initialSettings }) {
             "Content-Type": "application/json",
             "x-site-id": siteId,
           },
-          body: JSON.stringify(websiteSettings),
+          body: JSON.stringify(mergedWebsiteSettings),
         }),
       ]);
 
@@ -475,6 +510,18 @@ export default function SettingsEditor({ siteId, initialSettings }) {
           >
             <Code className="w-4 h-4" />
             Custom Scripts
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab("homepage")}
+            className={`px-5 py-4 text-center font-bold text-xs border-b-2 transition flex items-center gap-2 ${activeTab === "homepage"
+              ? "border-blue-600 text-blue-600 bg-white"
+              : "border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+              }`}
+          >
+            <ImageIcon className="w-4 h-4" />
+            Homepage Banner
           </button>
         </div>
 
@@ -2111,6 +2158,398 @@ export default function SettingsEditor({ siteId, initialSettings }) {
                     className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all font-mono"
                     placeholder={`<!-- body open snippet injection -->`}
                   />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ─── Tab: Homepage Banner ─────────────────────────────── */}
+          {activeTab === "homepage" && (
+            <div className="space-y-8">
+              <div className="border-b border-gray-100 pb-3">
+                <h3 className="text-sm font-bold text-gray-800 uppercase tracking-wider">Homepage Wellness Banner</h3>
+                <p className="text-xs text-gray-500 mt-1">Edit the "Know your body" wellness showcase section displayed at the top of the homepage.</p>
+              </div>
+
+              {/* Enable / Disable toggle */}
+              <div className="flex items-center gap-3">
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    className="sr-only peer"
+                    checked={wellnessBanner.enabled !== false}
+                    onChange={(e) => setWellnessBanner(prev => ({ ...prev, enabled: e.target.checked }))}
+                  />
+                  <div className="w-10 h-6 bg-gray-200 peer-focus:ring-2 peer-focus:ring-blue-400 rounded-full peer peer-checked:bg-blue-600 transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-4" />
+                </label>
+                <span className="text-sm font-semibold text-gray-700">Show this section on the homepage</span>
+              </div>
+
+              {/* Section Header Text */}
+              <div className="space-y-4">
+                <h4 className="text-xs font-bold text-gray-600 uppercase tracking-wider border-b border-gray-100 pb-2">Section Headline</h4>
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Headline (use \n for line break)</label>
+                  <input
+                    type="text"
+                    value={wellnessBanner.headline || ''}
+                    onChange={(e) => setWellnessBanner(prev => ({ ...prev, headline: e.target.value }))}
+                    className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+                    placeholder="Know your body,\none quiz at a time."
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Subtext</label>
+                  <textarea
+                    rows={3}
+                    value={wellnessBanner.subtext || ''}
+                    onChange={(e) => setWellnessBanner(prev => ({ ...prev, subtext: e.target.value }))}
+                    className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+                    placeholder="Our clinically informed quizzes help you..."
+                  />
+                </div>
+              </div>
+
+              {/* Hero Card Fields */}
+              <div className="space-y-4">
+                <h4 className="text-xs font-bold text-gray-600 uppercase tracking-wider border-b border-gray-100 pb-2">Hero Quiz Card</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Tag Line (above title)</label>
+                    <input type="text" value={wellnessBanner.heroTag || ''}
+                      onChange={(e) => setWellnessBanner(prev => ({ ...prev, heroTag: e.target.value }))}
+                      className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+                      placeholder="Daily Wellness Quiz"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Title</label>
+                    <input type="text" value={wellnessBanner.heroTitle || ''}
+                      onChange={(e) => setWellnessBanner(prev => ({ ...prev, heroTitle: e.target.value }))}
+                      className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+                      placeholder="Test yourself today."
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Body Text</label>
+                  <textarea rows={3} value={wellnessBanner.heroBody || ''}
+                    onChange={(e) => setWellnessBanner(prev => ({ ...prev, heroBody: e.target.value }))}
+                    className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+                    placeholder="Take a quick 5-minute assessment..."
+                  />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Primary Button Label</label>
+                    <input type="text" value={wellnessBanner.heroPrimaryLabel || ''}
+                      onChange={(e) => setWellnessBanner(prev => ({ ...prev, heroPrimaryLabel: e.target.value }))}
+                      className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+                      placeholder="Browse All Quizzes"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Primary Button Link</label>
+                    <input type="text" value={wellnessBanner.heroPrimaryLink || ''}
+                      onChange={(e) => setWellnessBanner(prev => ({ ...prev, heroPrimaryLink: e.target.value }))}
+                      className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all font-mono"
+                      placeholder="/quizzes"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Secondary Button Label</label>
+                    <input type="text" value={wellnessBanner.heroSecondaryLabel || ''}
+                      onChange={(e) => setWellnessBanner(prev => ({ ...prev, heroSecondaryLabel: e.target.value }))}
+                      className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+                      placeholder="Start Now →"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Secondary Button Link</label>
+                    <input type="text" value={wellnessBanner.heroSecondaryLink || ''}
+                      onChange={(e) => setWellnessBanner(prev => ({ ...prev, heroSecondaryLink: e.target.value }))}
+                      className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all font-mono"
+                      placeholder="/quizzes/sleep-quality"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Quick Cards (right column) */}
+              <div className="space-y-4">
+                <h4 className="text-xs font-bold text-gray-600 uppercase tracking-wider border-b border-gray-100 pb-2">Quick Quiz Cards (right column — 3 cards)</h4>
+                {(wellnessBanner.quickCards || DEFAULT_QUICK_CARDS).map((card, idx) => (
+                  <div key={idx} className="bg-gray-50 rounded-xl p-4 border border-gray-200 space-y-3">
+                    <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">Card {idx + 1}</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-semibold text-gray-600 mb-1">Tag</label>
+                        <input type="text" value={card.tag || ''}
+                          onChange={(e) => setWellnessBanner(prev => {
+                            const cards = [...(prev.quickCards || DEFAULT_QUICK_CARDS)];
+                            cards[idx] = { ...cards[idx], tag: e.target.value };
+                            return { ...prev, quickCards: cards };
+                          })}
+                          className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-gray-600 mb-1">Icon (emoji)</label>
+                        <input type="text" value={card.icon || ''}
+                          onChange={(e) => setWellnessBanner(prev => {
+                            const cards = [...(prev.quickCards || DEFAULT_QUICK_CARDS)];
+                            cards[idx] = { ...cards[idx], icon: e.target.value };
+                            return { ...prev, quickCards: cards };
+                          })}
+                          className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                        />
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block text-xs font-semibold text-gray-600 mb-1">Description</label>
+                        <input type="text" value={card.desc || ''}
+                          onChange={(e) => setWellnessBanner(prev => {
+                            const cards = [...(prev.quickCards || DEFAULT_QUICK_CARDS)];
+                            cards[idx] = { ...cards[idx], desc: e.target.value };
+                            return { ...prev, quickCards: cards };
+                          })}
+                          className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                        />
+                      </div>
+                      <div className="md:col-span-2">
+                        <label className="block text-xs font-semibold text-gray-600 mb-1">Link</label>
+                        <input type="text" value={card.link || ''}
+                          onChange={(e) => setWellnessBanner(prev => {
+                            const cards = [...(prev.quickCards || DEFAULT_QUICK_CARDS)];
+                            cards[idx] = { ...cards[idx], link: e.target.value };
+                            return { ...prev, quickCards: cards };
+                          })}
+                          className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-mono"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* ─── ROW 2: Snapshot, Recipe, Wellness Tip ─── */}
+              <div className="space-y-6">
+                <h4 className="text-xs font-bold text-gray-600 uppercase tracking-wider border-b border-gray-100 pb-2">Row 2: Snapshot, Recipe & Tip Widgets</h4>
+                
+                {/* 2.1: Wellness Snapshot */}
+                <div className="bg-gray-50 rounded-xl p-4 border border-gray-200 space-y-4">
+                  <p className="text-xs font-bold text-gray-700 uppercase tracking-wider">Wellness Snapshot Values (%)</p>
+                  <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                    <div>
+                      <label className="block text-[10px] font-semibold text-gray-600 mb-1">Sleep Quality</label>
+                      <input type="number" min="0" max="100" value={wellnessBanner.snapshot?.sleep ?? 78}
+                        onChange={(e) => setWellnessBanner(prev => ({ ...prev, snapshot: { ...(prev.snapshot || {}), sleep: parseInt(e.target.value, 10) || 0 } }))}
+                        className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-semibold text-gray-600 mb-1">Stress Level</label>
+                      <input type="number" min="0" max="100" value={wellnessBanner.snapshot?.stress ?? 62}
+                        onChange={(e) => setWellnessBanner(prev => ({ ...prev, snapshot: { ...(prev.snapshot || {}), stress: parseInt(e.target.value, 10) || 0 } }))}
+                        className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-semibold text-gray-600 mb-1">Nutrition Score</label>
+                      <input type="number" min="0" max="100" value={wellnessBanner.snapshot?.nutrition ?? 72}
+                        onChange={(e) => setWellnessBanner(prev => ({ ...prev, snapshot: { ...(prev.snapshot || {}), nutrition: parseInt(e.target.value, 10) || 0 } }))}
+                        className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-semibold text-gray-600 mb-1">Hydration</label>
+                      <input type="number" min="0" max="100" value={wellnessBanner.snapshot?.hydration ?? 48}
+                        onChange={(e) => setWellnessBanner(prev => ({ ...prev, snapshot: { ...(prev.snapshot || {}), hydration: parseInt(e.target.value, 10) || 0 } }))}
+                        className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-semibold text-gray-600 mb-1">Overall Score</label>
+                      <input type="number" min="0" max="100" value={wellnessBanner.snapshot?.score ?? 72}
+                        onChange={(e) => setWellnessBanner(prev => ({ ...prev, snapshot: { ...(prev.snapshot || {}), score: parseInt(e.target.value, 10) || 0 } }))}
+                        className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* 2.2: Healthy Bite of the Day */}
+                <div className="bg-gray-50 rounded-xl p-4 border border-gray-200 space-y-3">
+                  <p className="text-xs font-bold text-gray-700 uppercase tracking-wider">Healthy Bite of the Day</p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-600 mb-1">Widget Title</label>
+                      <input type="text" value={wellnessBanner.healthyBite?.title ?? 'Healthy Bite of the Day'}
+                        onChange={(e) => setWellnessBanner(prev => ({ ...prev, healthyBite: { ...(prev.healthyBite || {}), title: e.target.value } }))}
+                        className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-600 mb-1">Recipe Name</label>
+                      <input type="text" value={wellnessBanner.healthyBite?.recipeName ?? 'Quinoa & Avocado Power Bowl'}
+                        onChange={(e) => setWellnessBanner(prev => ({ ...prev, healthyBite: { ...(prev.healthyBite || {}), recipeName: e.target.value } }))}
+                        className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-600 mb-1">Prep Time</label>
+                      <input type="text" value={wellnessBanner.healthyBite?.time ?? '15 mins'}
+                        onChange={(e) => setWellnessBanner(prev => ({ ...prev, healthyBite: { ...(prev.healthyBite || {}), time: e.target.value } }))}
+                        className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-600 mb-1">Calories Info</label>
+                      <input type="text" value={wellnessBanner.healthyBite?.calories ?? '320 kcal'}
+                        onChange={(e) => setWellnessBanner(prev => ({ ...prev, healthyBite: { ...(prev.healthyBite || {}), calories: e.target.value } }))}
+                        className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm" />
+                    </div>
+                    <div className="md:col-span-2">
+                      <label className="block text-xs font-semibold text-gray-600 mb-1">Highlight tags (comma-separated)</label>
+                      <input type="text" value={(wellnessBanner.healthyBite?.points || ['High in Protein', 'Gut Friendly', 'Quick & Easy']).join(', ')}
+                        onChange={(e) => setWellnessBanner(prev => ({ ...prev, healthyBite: { ...(prev.healthyBite || {}), points: e.target.value.split(',').map(s => s.trim()) } }))}
+                        className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm" />
+                    </div>
+                    <div className="md:col-span-2">
+                      <label className="block text-xs font-semibold text-gray-600 mb-1">Recipe Blog Link</label>
+                      <input type="text" value={wellnessBanner.healthyBite?.recipeLink ?? '/blogs/quinoa-avocado-power-bowl'}
+                        onChange={(e) => setWellnessBanner(prev => ({ ...prev, healthyBite: { ...(prev.healthyBite || {}), recipeLink: e.target.value } }))}
+                        className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm font-mono" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* 2.3: Daily Wellness Tip */}
+                <div className="bg-gray-50 rounded-xl p-4 border border-gray-200 space-y-3">
+                  <p className="text-xs font-bold text-gray-700 uppercase tracking-wider">Daily Wellness Tip</p>
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-600 mb-1">Tip Heading</label>
+                      <input type="text" value={wellnessBanner.wellnessTip?.title ?? 'Daily Wellness Tip'}
+                        onChange={(e) => setWellnessBanner(prev => ({ ...prev, wellnessTip: { ...(prev.wellnessTip || {}), title: e.target.value } }))}
+                        className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-600 mb-1">Tip Quote</label>
+                      <textarea rows={2} value={wellnessBanner.wellnessTip?.quote ?? 'A 10-minute walk after meals can improve digestion and boost your energy.'}
+                        onChange={(e) => setWellnessBanner(prev => ({ ...prev, wellnessTip: { ...(prev.wellnessTip || {}), quote: e.target.value } }))}
+                        className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm" />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-semibold text-gray-600 mb-1">Action Link Text</label>
+                        <input type="text" value={wellnessBanner.wellnessTip?.linkText ?? 'Learn more →'}
+                          onChange={(e) => setWellnessBanner(prev => ({ ...prev, wellnessTip: { ...(prev.wellnessTip || {}), linkText: e.target.value } }))}
+                          className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm" />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-semibold text-gray-600 mb-1">Action Link URL</label>
+                        <input type="text" value={wellnessBanner.wellnessTip?.linkUrl ?? '/blogs/benefits-of-walking'}
+                          onChange={(e) => setWellnessBanner(prev => ({ ...prev, wellnessTip: { ...(prev.wellnessTip || {}), linkUrl: e.target.value } }))}
+                          className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm font-mono" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* ─── ROW 3: Popular Quizzes & Chart ─── */}
+              <div className="space-y-6">
+                <h4 className="text-xs font-bold text-gray-600 uppercase tracking-wider border-b border-gray-100 pb-2">Row 3: Explore Quizzes & Progress Chart</h4>
+                
+                {/* 3.1: Popular Quizzes list (4 items) */}
+                <div className="bg-gray-50 rounded-xl p-4 border border-gray-200 space-y-4">
+                  <p className="text-xs font-bold text-gray-700 uppercase tracking-wider">Popular Explore Quizzes (4 items)</p>
+                  {(wellnessBanner.popularQuizzes || [
+                    { title: 'Sleep Quality Assessment', duration: '5 min', link: '/quizzes/sleep-quality', image: '/images/physical_health.png' },
+                    { title: 'Stress & Mental Wellness Check', duration: '5 min', link: '/quizzes/stress-burnout', image: '/images/ayurveda.png' },
+                    { title: 'Nutrition & Diet Evaluation', duration: '5 min', link: '/quizzes/nutrition-gut', image: '/images/mag_mindfulness.png' },
+                    { title: 'Ayurvedic Body Type Quiz', duration: '5 min', link: '/quizzes/dosha-body-type', image: '/images/dosha-body-type.png' }
+                  ]).map((item, idx) => (
+                    <div key={idx} className="bg-white p-3 rounded-lg border border-gray-200 space-y-2">
+                      <p className="text-[10px] font-bold text-slate-400">Quiz {idx + 1}</p>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-[10px] font-semibold text-gray-600 mb-0.5">Quiz Title</label>
+                          <input type="text" value={item.title || ''}
+                            onChange={(e) => setWellnessBanner(prev => {
+                              const list = [...(prev.popularQuizzes || [])];
+                              if (!list[idx]) list[idx] = {};
+                              list[idx].title = e.target.value;
+                              return { ...prev, popularQuizzes: list };
+                            })}
+                            className="w-full px-2 py-1.5 border rounded text-xs" />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-semibold text-gray-600 mb-0.5">Duration</label>
+                          <input type="text" value={item.duration || '5 min'}
+                            onChange={(e) => setWellnessBanner(prev => {
+                              const list = [...(prev.popularQuizzes || [])];
+                              if (!list[idx]) list[idx] = {};
+                              list[idx].duration = e.target.value;
+                              return { ...prev, popularQuizzes: list };
+                            })}
+                            className="w-full px-2 py-1.5 border rounded text-xs" />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-semibold text-gray-600 mb-0.5">Link Path</label>
+                          <input type="text" value={item.link || ''}
+                            onChange={(e) => setWellnessBanner(prev => {
+                              const list = [...(prev.popularQuizzes || [])];
+                              if (!list[idx]) list[idx] = {};
+                              list[idx].link = e.target.value;
+                              return { ...prev, popularQuizzes: list };
+                            })}
+                            className="w-full px-2 py-1.5 border rounded text-xs font-mono" />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-semibold text-gray-600 mb-0.5">Image Path</label>
+                          <input type="text" value={item.image || ''}
+                            onChange={(e) => setWellnessBanner(prev => {
+                              const list = [...(prev.popularQuizzes || [])];
+                              if (!list[idx]) list[idx] = {};
+                              list[idx].image = e.target.value;
+                              return { ...prev, popularQuizzes: list };
+                            })}
+                            className="w-full px-2 py-1.5 border rounded text-xs font-mono" />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* 3.2: Progress Tracker Chart */}
+                <div className="bg-gray-50 rounded-xl p-4 border border-gray-200 space-y-3">
+                  <p className="text-xs font-bold text-gray-700 uppercase tracking-wider">Progress Sparkline Chart Settings</p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-600 mb-1">Widget Title</label>
+                      <input type="text" value={wellnessBanner.progressTracker?.title ?? 'Track Your Progress'}
+                        onChange={(e) => setWellnessBanner(prev => ({ ...prev, progressTracker: { ...(prev.progressTracker || {}), title: e.target.value } }))}
+                        className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-600 mb-1">Chart Values (comma-separated, 4 numbers)</label>
+                      <input type="text" value={(wellnessBanner.progressTracker?.chartValues || [30, 45, 58, 80]).join(', ')}
+                        onChange={(e) => setWellnessBanner(prev => ({
+                          ...prev,
+                          progressTracker: {
+                            ...(prev.progressTracker || {}),
+                            chartValues: e.target.value.split(',').map(v => parseInt(v.trim(), 10) || 0)
+                          }
+                        }))}
+                        className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm font-mono"
+                        placeholder="30, 45, 58, 80" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-600 mb-1">Button Label</label>
+                      <input type="text" value={wellnessBanner.progressTracker?.btnLabel ?? 'Go to Dashboard →'}
+                        onChange={(e) => setWellnessBanner(prev => ({ ...prev, progressTracker: { ...(prev.progressTracker || {}), btnLabel: e.target.value } }))}
+                        className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm" />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-600 mb-1">Button Link</label>
+                      <input type="text" value={wellnessBanner.progressTracker?.btnLink ?? '/quizzes/dashboard'}
+                        onChange={(e) => setWellnessBanner(prev => ({ ...prev, progressTracker: { ...(prev.progressTracker || {}), btnLink: e.target.value } }))}
+                        className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm font-mono" />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
