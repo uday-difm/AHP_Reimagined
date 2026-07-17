@@ -826,6 +826,34 @@ exports.Prisma.AuthScalarFieldEnum = {
   otpCreatedAt: 'otpCreatedAt'
 };
 
+exports.Prisma.LegacyAdScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  mediaUrl: 'mediaUrl',
+  mediaType: 'mediaType',
+  targetUrl: 'targetUrl',
+  placement: 'placement',
+  status: 'status',
+  priority: 'priority',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  targetDevice: 'targetDevice',
+  targetLocation: 'targetLocation',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LegacyAdEventScalarFieldEnum = {
+  id: 'id',
+  adId: 'adId',
+  eventType: 'eventType',
+  userIp: 'userIp',
+  userAgent: 'userAgent',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1342,6 +1370,24 @@ exports.Prisma.AuthOrderByRelevanceFieldEnum = {
   bio: 'bio',
   otp: 'otp'
 };
+
+exports.Prisma.LegacyAdOrderByRelevanceFieldEnum = {
+  title: 'title',
+  description: 'description',
+  mediaUrl: 'mediaUrl',
+  mediaType: 'mediaType',
+  targetUrl: 'targetUrl',
+  placement: 'placement',
+  status: 'status',
+  targetDevice: 'targetDevice',
+  targetLocation: 'targetLocation'
+};
+
+exports.Prisma.LegacyAdEventOrderByRelevanceFieldEnum = {
+  eventType: 'eventType',
+  userIp: 'userIp',
+  userAgent: 'userAgent'
+};
 exports.GlobalRole = exports.$Enums.GlobalRole = {
   SUPERADMIN: 'SUPERADMIN',
   ADMIN: 'ADMIN',
@@ -1432,7 +1478,9 @@ exports.Prisma.ModelName = {
   IpQuizAnalytic: 'IpQuizAnalytic',
   QuizAnalytics: 'QuizAnalytics',
   Magazine: 'Magazine',
-  Auth: 'Auth'
+  Auth: 'Auth',
+  LegacyAd: 'LegacyAd',
+  LegacyAdEvent: 'LegacyAdEvent'
 };
 
 /**

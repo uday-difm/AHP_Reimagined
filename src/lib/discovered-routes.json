@@ -10,6 +10,11 @@
     "isDynamic": false
   },
   {
+    "slug": "/admin/ads",
+    "title": "Ads",
+    "isDynamic": false
+  },
+  {
     "slug": "/blogs",
     "title": "Blogs",
     "isDynamic": false

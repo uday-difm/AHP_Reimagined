@@ -288,6 +288,16 @@ export type Magazine = $Result.DefaultSelection<Prisma.$MagazinePayload>
  * 
  */
 export type Auth = $Result.DefaultSelection<Prisma.$AuthPayload>
+/**
+ * Model LegacyAd
+ * 
+ */
+export type LegacyAd = $Result.DefaultSelection<Prisma.$LegacyAdPayload>
+/**
+ * Model LegacyAdEvent
+ * 
+ */
+export type LegacyAdEvent = $Result.DefaultSelection<Prisma.$LegacyAdEventPayload>
 
 /**
  * Enums
@@ -1031,6 +1041,26 @@ export class PrismaClient<
     * ```
     */
   get auth(): Prisma.AuthDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.legacyAd`: Exposes CRUD operations for the **LegacyAd** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more LegacyAds
+    * const legacyAds = await prisma.legacyAd.findMany()
+    * ```
+    */
+  get legacyAd(): Prisma.LegacyAdDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.legacyAdEvent`: Exposes CRUD operations for the **LegacyAdEvent** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more LegacyAdEvents
+    * const legacyAdEvents = await prisma.legacyAdEvent.findMany()
+    * ```
+    */
+  get legacyAdEvent(): Prisma.LegacyAdEventDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1526,7 +1556,9 @@ export namespace Prisma {
     IpQuizAnalytic: 'IpQuizAnalytic',
     QuizAnalytics: 'QuizAnalytics',
     Magazine: 'Magazine',
-    Auth: 'Auth'
+    Auth: 'Auth',
+    LegacyAd: 'LegacyAd',
+    LegacyAdEvent: 'LegacyAdEvent'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1545,7 +1577,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "site" | "user" | "siteUser" | "auditLog" | "loginHistory" | "twoFactor" | "passwordReset" | "media" | "mediaFolder" | "page" | "section" | "frontendProject" | "syncedRoute" | "integrationManifest" | "globalSettings" | "webhookEvent" | "webhookSubscription" | "category" | "tag" | "post" | "service" | "testimonial" | "faq" | "teamMember" | "legalPage" | "redirect" | "visitorLog" | "contactFormSubmission" | "lead" | "apiKey" | "ipBlock" | "systemErrorLog" | "notificationAlert" | "newsletter" | "contentVersion" | "subscriber" | "subscriberList" | "subscriberListMember" | "emailTemplate" | "emailCampaign" | "campaignLog" | "pushNotification" | "cookieConsentLog" | "comment" | "adZone" | "advertiser" | "adCampaign" | "ad" | "adAnalytic" | "quizType" | "quiz" | "ipQuizAnalytic" | "quizAnalytics" | "magazine" | "auth"
+      modelProps: "site" | "user" | "siteUser" | "auditLog" | "loginHistory" | "twoFactor" | "passwordReset" | "media" | "mediaFolder" | "page" | "section" | "frontendProject" | "syncedRoute" | "integrationManifest" | "globalSettings" | "webhookEvent" | "webhookSubscription" | "category" | "tag" | "post" | "service" | "testimonial" | "faq" | "teamMember" | "legalPage" | "redirect" | "visitorLog" | "contactFormSubmission" | "lead" | "apiKey" | "ipBlock" | "systemErrorLog" | "notificationAlert" | "newsletter" | "contentVersion" | "subscriber" | "subscriberList" | "subscriberListMember" | "emailTemplate" | "emailCampaign" | "campaignLog" | "pushNotification" | "cookieConsentLog" | "comment" | "adZone" | "advertiser" | "adCampaign" | "ad" | "adAnalytic" | "quizType" | "quiz" | "ipQuizAnalytic" | "quizAnalytics" | "magazine" | "auth" | "legacyAd" | "legacyAdEvent"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -5179,6 +5211,138 @@ export namespace Prisma {
           }
         }
       }
+      LegacyAd: {
+        payload: Prisma.$LegacyAdPayload<ExtArgs>
+        fields: Prisma.LegacyAdFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LegacyAdFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LegacyAdPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LegacyAdFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LegacyAdPayload>
+          }
+          findFirst: {
+            args: Prisma.LegacyAdFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LegacyAdPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LegacyAdFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LegacyAdPayload>
+          }
+          findMany: {
+            args: Prisma.LegacyAdFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LegacyAdPayload>[]
+          }
+          create: {
+            args: Prisma.LegacyAdCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LegacyAdPayload>
+          }
+          createMany: {
+            args: Prisma.LegacyAdCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.LegacyAdDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LegacyAdPayload>
+          }
+          update: {
+            args: Prisma.LegacyAdUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LegacyAdPayload>
+          }
+          deleteMany: {
+            args: Prisma.LegacyAdDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LegacyAdUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.LegacyAdUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LegacyAdPayload>
+          }
+          aggregate: {
+            args: Prisma.LegacyAdAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLegacyAd>
+          }
+          groupBy: {
+            args: Prisma.LegacyAdGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LegacyAdGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LegacyAdCountArgs<ExtArgs>
+            result: $Utils.Optional<LegacyAdCountAggregateOutputType> | number
+          }
+        }
+      }
+      LegacyAdEvent: {
+        payload: Prisma.$LegacyAdEventPayload<ExtArgs>
+        fields: Prisma.LegacyAdEventFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LegacyAdEventFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LegacyAdEventPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LegacyAdEventFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LegacyAdEventPayload>
+          }
+          findFirst: {
+            args: Prisma.LegacyAdEventFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LegacyAdEventPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LegacyAdEventFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LegacyAdEventPayload>
+          }
+          findMany: {
+            args: Prisma.LegacyAdEventFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LegacyAdEventPayload>[]
+          }
+          create: {
+            args: Prisma.LegacyAdEventCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LegacyAdEventPayload>
+          }
+          createMany: {
+            args: Prisma.LegacyAdEventCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.LegacyAdEventDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LegacyAdEventPayload>
+          }
+          update: {
+            args: Prisma.LegacyAdEventUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LegacyAdEventPayload>
+          }
+          deleteMany: {
+            args: Prisma.LegacyAdEventDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LegacyAdEventUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.LegacyAdEventUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LegacyAdEventPayload>
+          }
+          aggregate: {
+            args: Prisma.LegacyAdEventAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLegacyAdEvent>
+          }
+          groupBy: {
+            args: Prisma.LegacyAdEventGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LegacyAdEventGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LegacyAdEventCountArgs<ExtArgs>
+            result: $Utils.Optional<LegacyAdEventCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -5330,6 +5494,8 @@ export namespace Prisma {
     quizAnalytics?: QuizAnalyticsOmit
     magazine?: MagazineOmit
     auth?: AuthOmit
+    legacyAd?: LegacyAdOmit
+    legacyAdEvent?: LegacyAdEventOmit
   }
 
   /* Types for Logging */
@@ -6348,6 +6514,37 @@ export namespace Prisma {
    */
   export type AdCountOutputTypeCountAnalyticsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AdAnalyticWhereInput
+  }
+
+
+  /**
+   * Count Type LegacyAdCountOutputType
+   */
+
+  export type LegacyAdCountOutputType = {
+    events: number
+  }
+
+  export type LegacyAdCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    events?: boolean | LegacyAdCountOutputTypeCountEventsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * LegacyAdCountOutputType without action
+   */
+  export type LegacyAdCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LegacyAdCountOutputType
+     */
+    select?: LegacyAdCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * LegacyAdCountOutputType without action
+   */
+  export type LegacyAdCountOutputTypeCountEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LegacyAdEventWhereInput
   }
 
 
@@ -62975,6 +63172,2102 @@ export namespace Prisma {
 
 
   /**
+   * Model LegacyAd
+   */
+
+  export type AggregateLegacyAd = {
+    _count: LegacyAdCountAggregateOutputType | null
+    _avg: LegacyAdAvgAggregateOutputType | null
+    _sum: LegacyAdSumAggregateOutputType | null
+    _min: LegacyAdMinAggregateOutputType | null
+    _max: LegacyAdMaxAggregateOutputType | null
+  }
+
+  export type LegacyAdAvgAggregateOutputType = {
+    id: number | null
+    priority: number | null
+    createdBy: number | null
+  }
+
+  export type LegacyAdSumAggregateOutputType = {
+    id: number | null
+    priority: number | null
+    createdBy: number | null
+  }
+
+  export type LegacyAdMinAggregateOutputType = {
+    id: number | null
+    title: string | null
+    description: string | null
+    mediaUrl: string | null
+    mediaType: string | null
+    targetUrl: string | null
+    placement: string | null
+    status: string | null
+    priority: number | null
+    startDate: Date | null
+    endDate: Date | null
+    targetDevice: string | null
+    targetLocation: string | null
+    createdBy: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type LegacyAdMaxAggregateOutputType = {
+    id: number | null
+    title: string | null
+    description: string | null
+    mediaUrl: string | null
+    mediaType: string | null
+    targetUrl: string | null
+    placement: string | null
+    status: string | null
+    priority: number | null
+    startDate: Date | null
+    endDate: Date | null
+    targetDevice: string | null
+    targetLocation: string | null
+    createdBy: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type LegacyAdCountAggregateOutputType = {
+    id: number
+    title: number
+    description: number
+    mediaUrl: number
+    mediaType: number
+    targetUrl: number
+    placement: number
+    status: number
+    priority: number
+    startDate: number
+    endDate: number
+    targetDevice: number
+    targetLocation: number
+    createdBy: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type LegacyAdAvgAggregateInputType = {
+    id?: true
+    priority?: true
+    createdBy?: true
+  }
+
+  export type LegacyAdSumAggregateInputType = {
+    id?: true
+    priority?: true
+    createdBy?: true
+  }
+
+  export type LegacyAdMinAggregateInputType = {
+    id?: true
+    title?: true
+    description?: true
+    mediaUrl?: true
+    mediaType?: true
+    targetUrl?: true
+    placement?: true
+    status?: true
+    priority?: true
+    startDate?: true
+    endDate?: true
+    targetDevice?: true
+    targetLocation?: true
+    createdBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type LegacyAdMaxAggregateInputType = {
+    id?: true
+    title?: true
+    description?: true
+    mediaUrl?: true
+    mediaType?: true
+    targetUrl?: true
+    placement?: true
+    status?: true
+    priority?: true
+    startDate?: true
+    endDate?: true
+    targetDevice?: true
+    targetLocation?: true
+    createdBy?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type LegacyAdCountAggregateInputType = {
+    id?: true
+    title?: true
+    description?: true
+    mediaUrl?: true
+    mediaType?: true
+    targetUrl?: true
+    placement?: true
+    status?: true
+    priority?: true
+    startDate?: true
+    endDate?: true
+    targetDevice?: true
+    targetLocation?: true
+    createdBy?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type LegacyAdAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LegacyAd to aggregate.
+     */
+    where?: LegacyAdWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LegacyAds to fetch.
+     */
+    orderBy?: LegacyAdOrderByWithRelationInput | LegacyAdOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LegacyAdWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LegacyAds from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LegacyAds.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned LegacyAds
+    **/
+    _count?: true | LegacyAdCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: LegacyAdAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: LegacyAdSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LegacyAdMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LegacyAdMaxAggregateInputType
+  }
+
+  export type GetLegacyAdAggregateType<T extends LegacyAdAggregateArgs> = {
+        [P in keyof T & keyof AggregateLegacyAd]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLegacyAd[P]>
+      : GetScalarType<T[P], AggregateLegacyAd[P]>
+  }
+
+
+
+
+  export type LegacyAdGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LegacyAdWhereInput
+    orderBy?: LegacyAdOrderByWithAggregationInput | LegacyAdOrderByWithAggregationInput[]
+    by: LegacyAdScalarFieldEnum[] | LegacyAdScalarFieldEnum
+    having?: LegacyAdScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LegacyAdCountAggregateInputType | true
+    _avg?: LegacyAdAvgAggregateInputType
+    _sum?: LegacyAdSumAggregateInputType
+    _min?: LegacyAdMinAggregateInputType
+    _max?: LegacyAdMaxAggregateInputType
+  }
+
+  export type LegacyAdGroupByOutputType = {
+    id: number
+    title: string
+    description: string | null
+    mediaUrl: string
+    mediaType: string
+    targetUrl: string
+    placement: string
+    status: string
+    priority: number
+    startDate: Date | null
+    endDate: Date | null
+    targetDevice: string | null
+    targetLocation: string | null
+    createdBy: number | null
+    createdAt: Date
+    updatedAt: Date
+    _count: LegacyAdCountAggregateOutputType | null
+    _avg: LegacyAdAvgAggregateOutputType | null
+    _sum: LegacyAdSumAggregateOutputType | null
+    _min: LegacyAdMinAggregateOutputType | null
+    _max: LegacyAdMaxAggregateOutputType | null
+  }
+
+  type GetLegacyAdGroupByPayload<T extends LegacyAdGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LegacyAdGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LegacyAdGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LegacyAdGroupByOutputType[P]>
+            : GetScalarType<T[P], LegacyAdGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LegacyAdSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    description?: boolean
+    mediaUrl?: boolean
+    mediaType?: boolean
+    targetUrl?: boolean
+    placement?: boolean
+    status?: boolean
+    priority?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    targetDevice?: boolean
+    targetLocation?: boolean
+    createdBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    events?: boolean | LegacyAd$eventsArgs<ExtArgs>
+    _count?: boolean | LegacyAdCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["legacyAd"]>
+
+
+
+  export type LegacyAdSelectScalar = {
+    id?: boolean
+    title?: boolean
+    description?: boolean
+    mediaUrl?: boolean
+    mediaType?: boolean
+    targetUrl?: boolean
+    placement?: boolean
+    status?: boolean
+    priority?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    targetDevice?: boolean
+    targetLocation?: boolean
+    createdBy?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type LegacyAdOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "mediaUrl" | "mediaType" | "targetUrl" | "placement" | "status" | "priority" | "startDate" | "endDate" | "targetDevice" | "targetLocation" | "createdBy" | "createdAt" | "updatedAt", ExtArgs["result"]["legacyAd"]>
+  export type LegacyAdInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    events?: boolean | LegacyAd$eventsArgs<ExtArgs>
+    _count?: boolean | LegacyAdCountOutputTypeDefaultArgs<ExtArgs>
+  }
+
+  export type $LegacyAdPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "LegacyAd"
+    objects: {
+      events: Prisma.$LegacyAdEventPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      title: string
+      description: string | null
+      mediaUrl: string
+      mediaType: string
+      targetUrl: string
+      placement: string
+      status: string
+      priority: number
+      startDate: Date | null
+      endDate: Date | null
+      targetDevice: string | null
+      targetLocation: string | null
+      createdBy: number | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["legacyAd"]>
+    composites: {}
+  }
+
+  type LegacyAdGetPayload<S extends boolean | null | undefined | LegacyAdDefaultArgs> = $Result.GetResult<Prisma.$LegacyAdPayload, S>
+
+  type LegacyAdCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LegacyAdFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: LegacyAdCountAggregateInputType | true
+    }
+
+  export interface LegacyAdDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['LegacyAd'], meta: { name: 'LegacyAd' } }
+    /**
+     * Find zero or one LegacyAd that matches the filter.
+     * @param {LegacyAdFindUniqueArgs} args - Arguments to find a LegacyAd
+     * @example
+     * // Get one LegacyAd
+     * const legacyAd = await prisma.legacyAd.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LegacyAdFindUniqueArgs>(args: SelectSubset<T, LegacyAdFindUniqueArgs<ExtArgs>>): Prisma__LegacyAdClient<$Result.GetResult<Prisma.$LegacyAdPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one LegacyAd that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {LegacyAdFindUniqueOrThrowArgs} args - Arguments to find a LegacyAd
+     * @example
+     * // Get one LegacyAd
+     * const legacyAd = await prisma.legacyAd.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LegacyAdFindUniqueOrThrowArgs>(args: SelectSubset<T, LegacyAdFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LegacyAdClient<$Result.GetResult<Prisma.$LegacyAdPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LegacyAd that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LegacyAdFindFirstArgs} args - Arguments to find a LegacyAd
+     * @example
+     * // Get one LegacyAd
+     * const legacyAd = await prisma.legacyAd.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LegacyAdFindFirstArgs>(args?: SelectSubset<T, LegacyAdFindFirstArgs<ExtArgs>>): Prisma__LegacyAdClient<$Result.GetResult<Prisma.$LegacyAdPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LegacyAd that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LegacyAdFindFirstOrThrowArgs} args - Arguments to find a LegacyAd
+     * @example
+     * // Get one LegacyAd
+     * const legacyAd = await prisma.legacyAd.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LegacyAdFindFirstOrThrowArgs>(args?: SelectSubset<T, LegacyAdFindFirstOrThrowArgs<ExtArgs>>): Prisma__LegacyAdClient<$Result.GetResult<Prisma.$LegacyAdPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more LegacyAds that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LegacyAdFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all LegacyAds
+     * const legacyAds = await prisma.legacyAd.findMany()
+     * 
+     * // Get first 10 LegacyAds
+     * const legacyAds = await prisma.legacyAd.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const legacyAdWithIdOnly = await prisma.legacyAd.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LegacyAdFindManyArgs>(args?: SelectSubset<T, LegacyAdFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LegacyAdPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a LegacyAd.
+     * @param {LegacyAdCreateArgs} args - Arguments to create a LegacyAd.
+     * @example
+     * // Create one LegacyAd
+     * const LegacyAd = await prisma.legacyAd.create({
+     *   data: {
+     *     // ... data to create a LegacyAd
+     *   }
+     * })
+     * 
+     */
+    create<T extends LegacyAdCreateArgs>(args: SelectSubset<T, LegacyAdCreateArgs<ExtArgs>>): Prisma__LegacyAdClient<$Result.GetResult<Prisma.$LegacyAdPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many LegacyAds.
+     * @param {LegacyAdCreateManyArgs} args - Arguments to create many LegacyAds.
+     * @example
+     * // Create many LegacyAds
+     * const legacyAd = await prisma.legacyAd.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends LegacyAdCreateManyArgs>(args?: SelectSubset<T, LegacyAdCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a LegacyAd.
+     * @param {LegacyAdDeleteArgs} args - Arguments to delete one LegacyAd.
+     * @example
+     * // Delete one LegacyAd
+     * const LegacyAd = await prisma.legacyAd.delete({
+     *   where: {
+     *     // ... filter to delete one LegacyAd
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LegacyAdDeleteArgs>(args: SelectSubset<T, LegacyAdDeleteArgs<ExtArgs>>): Prisma__LegacyAdClient<$Result.GetResult<Prisma.$LegacyAdPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one LegacyAd.
+     * @param {LegacyAdUpdateArgs} args - Arguments to update one LegacyAd.
+     * @example
+     * // Update one LegacyAd
+     * const legacyAd = await prisma.legacyAd.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LegacyAdUpdateArgs>(args: SelectSubset<T, LegacyAdUpdateArgs<ExtArgs>>): Prisma__LegacyAdClient<$Result.GetResult<Prisma.$LegacyAdPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more LegacyAds.
+     * @param {LegacyAdDeleteManyArgs} args - Arguments to filter LegacyAds to delete.
+     * @example
+     * // Delete a few LegacyAds
+     * const { count } = await prisma.legacyAd.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LegacyAdDeleteManyArgs>(args?: SelectSubset<T, LegacyAdDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LegacyAds.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LegacyAdUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many LegacyAds
+     * const legacyAd = await prisma.legacyAd.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LegacyAdUpdateManyArgs>(args: SelectSubset<T, LegacyAdUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one LegacyAd.
+     * @param {LegacyAdUpsertArgs} args - Arguments to update or create a LegacyAd.
+     * @example
+     * // Update or create a LegacyAd
+     * const legacyAd = await prisma.legacyAd.upsert({
+     *   create: {
+     *     // ... data to create a LegacyAd
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the LegacyAd we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LegacyAdUpsertArgs>(args: SelectSubset<T, LegacyAdUpsertArgs<ExtArgs>>): Prisma__LegacyAdClient<$Result.GetResult<Prisma.$LegacyAdPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of LegacyAds.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LegacyAdCountArgs} args - Arguments to filter LegacyAds to count.
+     * @example
+     * // Count the number of LegacyAds
+     * const count = await prisma.legacyAd.count({
+     *   where: {
+     *     // ... the filter for the LegacyAds we want to count
+     *   }
+     * })
+    **/
+    count<T extends LegacyAdCountArgs>(
+      args?: Subset<T, LegacyAdCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LegacyAdCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a LegacyAd.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LegacyAdAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LegacyAdAggregateArgs>(args: Subset<T, LegacyAdAggregateArgs>): Prisma.PrismaPromise<GetLegacyAdAggregateType<T>>
+
+    /**
+     * Group by LegacyAd.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LegacyAdGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LegacyAdGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LegacyAdGroupByArgs['orderBy'] }
+        : { orderBy?: LegacyAdGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LegacyAdGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLegacyAdGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the LegacyAd model
+   */
+  readonly fields: LegacyAdFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for LegacyAd.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LegacyAdClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    events<T extends LegacyAd$eventsArgs<ExtArgs> = {}>(args?: Subset<T, LegacyAd$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LegacyAdEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the LegacyAd model
+   */
+  interface LegacyAdFieldRefs {
+    readonly id: FieldRef<"LegacyAd", 'Int'>
+    readonly title: FieldRef<"LegacyAd", 'String'>
+    readonly description: FieldRef<"LegacyAd", 'String'>
+    readonly mediaUrl: FieldRef<"LegacyAd", 'String'>
+    readonly mediaType: FieldRef<"LegacyAd", 'String'>
+    readonly targetUrl: FieldRef<"LegacyAd", 'String'>
+    readonly placement: FieldRef<"LegacyAd", 'String'>
+    readonly status: FieldRef<"LegacyAd", 'String'>
+    readonly priority: FieldRef<"LegacyAd", 'Int'>
+    readonly startDate: FieldRef<"LegacyAd", 'DateTime'>
+    readonly endDate: FieldRef<"LegacyAd", 'DateTime'>
+    readonly targetDevice: FieldRef<"LegacyAd", 'String'>
+    readonly targetLocation: FieldRef<"LegacyAd", 'String'>
+    readonly createdBy: FieldRef<"LegacyAd", 'Int'>
+    readonly createdAt: FieldRef<"LegacyAd", 'DateTime'>
+    readonly updatedAt: FieldRef<"LegacyAd", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * LegacyAd findUnique
+   */
+  export type LegacyAdFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LegacyAd
+     */
+    select?: LegacyAdSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LegacyAd
+     */
+    omit?: LegacyAdOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LegacyAdInclude<ExtArgs> | null
+    /**
+     * Filter, which LegacyAd to fetch.
+     */
+    where: LegacyAdWhereUniqueInput
+  }
+
+  /**
+   * LegacyAd findUniqueOrThrow
+   */
+  export type LegacyAdFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LegacyAd
+     */
+    select?: LegacyAdSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LegacyAd
+     */
+    omit?: LegacyAdOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LegacyAdInclude<ExtArgs> | null
+    /**
+     * Filter, which LegacyAd to fetch.
+     */
+    where: LegacyAdWhereUniqueInput
+  }
+
+  /**
+   * LegacyAd findFirst
+   */
+  export type LegacyAdFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LegacyAd
+     */
+    select?: LegacyAdSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LegacyAd
+     */
+    omit?: LegacyAdOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LegacyAdInclude<ExtArgs> | null
+    /**
+     * Filter, which LegacyAd to fetch.
+     */
+    where?: LegacyAdWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LegacyAds to fetch.
+     */
+    orderBy?: LegacyAdOrderByWithRelationInput | LegacyAdOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LegacyAds.
+     */
+    cursor?: LegacyAdWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LegacyAds from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LegacyAds.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LegacyAds.
+     */
+    distinct?: LegacyAdScalarFieldEnum | LegacyAdScalarFieldEnum[]
+  }
+
+  /**
+   * LegacyAd findFirstOrThrow
+   */
+  export type LegacyAdFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LegacyAd
+     */
+    select?: LegacyAdSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LegacyAd
+     */
+    omit?: LegacyAdOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LegacyAdInclude<ExtArgs> | null
+    /**
+     * Filter, which LegacyAd to fetch.
+     */
+    where?: LegacyAdWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LegacyAds to fetch.
+     */
+    orderBy?: LegacyAdOrderByWithRelationInput | LegacyAdOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LegacyAds.
+     */
+    cursor?: LegacyAdWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LegacyAds from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LegacyAds.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LegacyAds.
+     */
+    distinct?: LegacyAdScalarFieldEnum | LegacyAdScalarFieldEnum[]
+  }
+
+  /**
+   * LegacyAd findMany
+   */
+  export type LegacyAdFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LegacyAd
+     */
+    select?: LegacyAdSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LegacyAd
+     */
+    omit?: LegacyAdOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LegacyAdInclude<ExtArgs> | null
+    /**
+     * Filter, which LegacyAds to fetch.
+     */
+    where?: LegacyAdWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LegacyAds to fetch.
+     */
+    orderBy?: LegacyAdOrderByWithRelationInput | LegacyAdOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing LegacyAds.
+     */
+    cursor?: LegacyAdWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LegacyAds from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LegacyAds.
+     */
+    skip?: number
+    distinct?: LegacyAdScalarFieldEnum | LegacyAdScalarFieldEnum[]
+  }
+
+  /**
+   * LegacyAd create
+   */
+  export type LegacyAdCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LegacyAd
+     */
+    select?: LegacyAdSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LegacyAd
+     */
+    omit?: LegacyAdOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LegacyAdInclude<ExtArgs> | null
+    /**
+     * The data needed to create a LegacyAd.
+     */
+    data: XOR<LegacyAdCreateInput, LegacyAdUncheckedCreateInput>
+  }
+
+  /**
+   * LegacyAd createMany
+   */
+  export type LegacyAdCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many LegacyAds.
+     */
+    data: LegacyAdCreateManyInput | LegacyAdCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * LegacyAd update
+   */
+  export type LegacyAdUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LegacyAd
+     */
+    select?: LegacyAdSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LegacyAd
+     */
+    omit?: LegacyAdOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LegacyAdInclude<ExtArgs> | null
+    /**
+     * The data needed to update a LegacyAd.
+     */
+    data: XOR<LegacyAdUpdateInput, LegacyAdUncheckedUpdateInput>
+    /**
+     * Choose, which LegacyAd to update.
+     */
+    where: LegacyAdWhereUniqueInput
+  }
+
+  /**
+   * LegacyAd updateMany
+   */
+  export type LegacyAdUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update LegacyAds.
+     */
+    data: XOR<LegacyAdUpdateManyMutationInput, LegacyAdUncheckedUpdateManyInput>
+    /**
+     * Filter which LegacyAds to update
+     */
+    where?: LegacyAdWhereInput
+    /**
+     * Limit how many LegacyAds to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * LegacyAd upsert
+   */
+  export type LegacyAdUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LegacyAd
+     */
+    select?: LegacyAdSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LegacyAd
+     */
+    omit?: LegacyAdOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LegacyAdInclude<ExtArgs> | null
+    /**
+     * The filter to search for the LegacyAd to update in case it exists.
+     */
+    where: LegacyAdWhereUniqueInput
+    /**
+     * In case the LegacyAd found by the `where` argument doesn't exist, create a new LegacyAd with this data.
+     */
+    create: XOR<LegacyAdCreateInput, LegacyAdUncheckedCreateInput>
+    /**
+     * In case the LegacyAd was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LegacyAdUpdateInput, LegacyAdUncheckedUpdateInput>
+  }
+
+  /**
+   * LegacyAd delete
+   */
+  export type LegacyAdDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LegacyAd
+     */
+    select?: LegacyAdSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LegacyAd
+     */
+    omit?: LegacyAdOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LegacyAdInclude<ExtArgs> | null
+    /**
+     * Filter which LegacyAd to delete.
+     */
+    where: LegacyAdWhereUniqueInput
+  }
+
+  /**
+   * LegacyAd deleteMany
+   */
+  export type LegacyAdDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LegacyAds to delete
+     */
+    where?: LegacyAdWhereInput
+    /**
+     * Limit how many LegacyAds to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * LegacyAd.events
+   */
+  export type LegacyAd$eventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LegacyAdEvent
+     */
+    select?: LegacyAdEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LegacyAdEvent
+     */
+    omit?: LegacyAdEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LegacyAdEventInclude<ExtArgs> | null
+    where?: LegacyAdEventWhereInput
+    orderBy?: LegacyAdEventOrderByWithRelationInput | LegacyAdEventOrderByWithRelationInput[]
+    cursor?: LegacyAdEventWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LegacyAdEventScalarFieldEnum | LegacyAdEventScalarFieldEnum[]
+  }
+
+  /**
+   * LegacyAd without action
+   */
+  export type LegacyAdDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LegacyAd
+     */
+    select?: LegacyAdSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LegacyAd
+     */
+    omit?: LegacyAdOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LegacyAdInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model LegacyAdEvent
+   */
+
+  export type AggregateLegacyAdEvent = {
+    _count: LegacyAdEventCountAggregateOutputType | null
+    _avg: LegacyAdEventAvgAggregateOutputType | null
+    _sum: LegacyAdEventSumAggregateOutputType | null
+    _min: LegacyAdEventMinAggregateOutputType | null
+    _max: LegacyAdEventMaxAggregateOutputType | null
+  }
+
+  export type LegacyAdEventAvgAggregateOutputType = {
+    id: number | null
+    adId: number | null
+  }
+
+  export type LegacyAdEventSumAggregateOutputType = {
+    id: number | null
+    adId: number | null
+  }
+
+  export type LegacyAdEventMinAggregateOutputType = {
+    id: number | null
+    adId: number | null
+    eventType: string | null
+    userIp: string | null
+    userAgent: string | null
+    createdAt: Date | null
+  }
+
+  export type LegacyAdEventMaxAggregateOutputType = {
+    id: number | null
+    adId: number | null
+    eventType: string | null
+    userIp: string | null
+    userAgent: string | null
+    createdAt: Date | null
+  }
+
+  export type LegacyAdEventCountAggregateOutputType = {
+    id: number
+    adId: number
+    eventType: number
+    userIp: number
+    userAgent: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type LegacyAdEventAvgAggregateInputType = {
+    id?: true
+    adId?: true
+  }
+
+  export type LegacyAdEventSumAggregateInputType = {
+    id?: true
+    adId?: true
+  }
+
+  export type LegacyAdEventMinAggregateInputType = {
+    id?: true
+    adId?: true
+    eventType?: true
+    userIp?: true
+    userAgent?: true
+    createdAt?: true
+  }
+
+  export type LegacyAdEventMaxAggregateInputType = {
+    id?: true
+    adId?: true
+    eventType?: true
+    userIp?: true
+    userAgent?: true
+    createdAt?: true
+  }
+
+  export type LegacyAdEventCountAggregateInputType = {
+    id?: true
+    adId?: true
+    eventType?: true
+    userIp?: true
+    userAgent?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type LegacyAdEventAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LegacyAdEvent to aggregate.
+     */
+    where?: LegacyAdEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LegacyAdEvents to fetch.
+     */
+    orderBy?: LegacyAdEventOrderByWithRelationInput | LegacyAdEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LegacyAdEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LegacyAdEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LegacyAdEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned LegacyAdEvents
+    **/
+    _count?: true | LegacyAdEventCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: LegacyAdEventAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: LegacyAdEventSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LegacyAdEventMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LegacyAdEventMaxAggregateInputType
+  }
+
+  export type GetLegacyAdEventAggregateType<T extends LegacyAdEventAggregateArgs> = {
+        [P in keyof T & keyof AggregateLegacyAdEvent]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLegacyAdEvent[P]>
+      : GetScalarType<T[P], AggregateLegacyAdEvent[P]>
+  }
+
+
+
+
+  export type LegacyAdEventGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LegacyAdEventWhereInput
+    orderBy?: LegacyAdEventOrderByWithAggregationInput | LegacyAdEventOrderByWithAggregationInput[]
+    by: LegacyAdEventScalarFieldEnum[] | LegacyAdEventScalarFieldEnum
+    having?: LegacyAdEventScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LegacyAdEventCountAggregateInputType | true
+    _avg?: LegacyAdEventAvgAggregateInputType
+    _sum?: LegacyAdEventSumAggregateInputType
+    _min?: LegacyAdEventMinAggregateInputType
+    _max?: LegacyAdEventMaxAggregateInputType
+  }
+
+  export type LegacyAdEventGroupByOutputType = {
+    id: number
+    adId: number
+    eventType: string
+    userIp: string | null
+    userAgent: string | null
+    createdAt: Date
+    _count: LegacyAdEventCountAggregateOutputType | null
+    _avg: LegacyAdEventAvgAggregateOutputType | null
+    _sum: LegacyAdEventSumAggregateOutputType | null
+    _min: LegacyAdEventMinAggregateOutputType | null
+    _max: LegacyAdEventMaxAggregateOutputType | null
+  }
+
+  type GetLegacyAdEventGroupByPayload<T extends LegacyAdEventGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LegacyAdEventGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LegacyAdEventGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LegacyAdEventGroupByOutputType[P]>
+            : GetScalarType<T[P], LegacyAdEventGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LegacyAdEventSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    adId?: boolean
+    eventType?: boolean
+    userIp?: boolean
+    userAgent?: boolean
+    createdAt?: boolean
+    ad?: boolean | LegacyAdDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["legacyAdEvent"]>
+
+
+
+  export type LegacyAdEventSelectScalar = {
+    id?: boolean
+    adId?: boolean
+    eventType?: boolean
+    userIp?: boolean
+    userAgent?: boolean
+    createdAt?: boolean
+  }
+
+  export type LegacyAdEventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "adId" | "eventType" | "userIp" | "userAgent" | "createdAt", ExtArgs["result"]["legacyAdEvent"]>
+  export type LegacyAdEventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    ad?: boolean | LegacyAdDefaultArgs<ExtArgs>
+  }
+
+  export type $LegacyAdEventPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "LegacyAdEvent"
+    objects: {
+      ad: Prisma.$LegacyAdPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      adId: number
+      eventType: string
+      userIp: string | null
+      userAgent: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["legacyAdEvent"]>
+    composites: {}
+  }
+
+  type LegacyAdEventGetPayload<S extends boolean | null | undefined | LegacyAdEventDefaultArgs> = $Result.GetResult<Prisma.$LegacyAdEventPayload, S>
+
+  type LegacyAdEventCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LegacyAdEventFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: LegacyAdEventCountAggregateInputType | true
+    }
+
+  export interface LegacyAdEventDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['LegacyAdEvent'], meta: { name: 'LegacyAdEvent' } }
+    /**
+     * Find zero or one LegacyAdEvent that matches the filter.
+     * @param {LegacyAdEventFindUniqueArgs} args - Arguments to find a LegacyAdEvent
+     * @example
+     * // Get one LegacyAdEvent
+     * const legacyAdEvent = await prisma.legacyAdEvent.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LegacyAdEventFindUniqueArgs>(args: SelectSubset<T, LegacyAdEventFindUniqueArgs<ExtArgs>>): Prisma__LegacyAdEventClient<$Result.GetResult<Prisma.$LegacyAdEventPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one LegacyAdEvent that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {LegacyAdEventFindUniqueOrThrowArgs} args - Arguments to find a LegacyAdEvent
+     * @example
+     * // Get one LegacyAdEvent
+     * const legacyAdEvent = await prisma.legacyAdEvent.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LegacyAdEventFindUniqueOrThrowArgs>(args: SelectSubset<T, LegacyAdEventFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LegacyAdEventClient<$Result.GetResult<Prisma.$LegacyAdEventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LegacyAdEvent that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LegacyAdEventFindFirstArgs} args - Arguments to find a LegacyAdEvent
+     * @example
+     * // Get one LegacyAdEvent
+     * const legacyAdEvent = await prisma.legacyAdEvent.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LegacyAdEventFindFirstArgs>(args?: SelectSubset<T, LegacyAdEventFindFirstArgs<ExtArgs>>): Prisma__LegacyAdEventClient<$Result.GetResult<Prisma.$LegacyAdEventPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LegacyAdEvent that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LegacyAdEventFindFirstOrThrowArgs} args - Arguments to find a LegacyAdEvent
+     * @example
+     * // Get one LegacyAdEvent
+     * const legacyAdEvent = await prisma.legacyAdEvent.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LegacyAdEventFindFirstOrThrowArgs>(args?: SelectSubset<T, LegacyAdEventFindFirstOrThrowArgs<ExtArgs>>): Prisma__LegacyAdEventClient<$Result.GetResult<Prisma.$LegacyAdEventPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more LegacyAdEvents that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LegacyAdEventFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all LegacyAdEvents
+     * const legacyAdEvents = await prisma.legacyAdEvent.findMany()
+     * 
+     * // Get first 10 LegacyAdEvents
+     * const legacyAdEvents = await prisma.legacyAdEvent.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const legacyAdEventWithIdOnly = await prisma.legacyAdEvent.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LegacyAdEventFindManyArgs>(args?: SelectSubset<T, LegacyAdEventFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LegacyAdEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a LegacyAdEvent.
+     * @param {LegacyAdEventCreateArgs} args - Arguments to create a LegacyAdEvent.
+     * @example
+     * // Create one LegacyAdEvent
+     * const LegacyAdEvent = await prisma.legacyAdEvent.create({
+     *   data: {
+     *     // ... data to create a LegacyAdEvent
+     *   }
+     * })
+     * 
+     */
+    create<T extends LegacyAdEventCreateArgs>(args: SelectSubset<T, LegacyAdEventCreateArgs<ExtArgs>>): Prisma__LegacyAdEventClient<$Result.GetResult<Prisma.$LegacyAdEventPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many LegacyAdEvents.
+     * @param {LegacyAdEventCreateManyArgs} args - Arguments to create many LegacyAdEvents.
+     * @example
+     * // Create many LegacyAdEvents
+     * const legacyAdEvent = await prisma.legacyAdEvent.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends LegacyAdEventCreateManyArgs>(args?: SelectSubset<T, LegacyAdEventCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a LegacyAdEvent.
+     * @param {LegacyAdEventDeleteArgs} args - Arguments to delete one LegacyAdEvent.
+     * @example
+     * // Delete one LegacyAdEvent
+     * const LegacyAdEvent = await prisma.legacyAdEvent.delete({
+     *   where: {
+     *     // ... filter to delete one LegacyAdEvent
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LegacyAdEventDeleteArgs>(args: SelectSubset<T, LegacyAdEventDeleteArgs<ExtArgs>>): Prisma__LegacyAdEventClient<$Result.GetResult<Prisma.$LegacyAdEventPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one LegacyAdEvent.
+     * @param {LegacyAdEventUpdateArgs} args - Arguments to update one LegacyAdEvent.
+     * @example
+     * // Update one LegacyAdEvent
+     * const legacyAdEvent = await prisma.legacyAdEvent.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LegacyAdEventUpdateArgs>(args: SelectSubset<T, LegacyAdEventUpdateArgs<ExtArgs>>): Prisma__LegacyAdEventClient<$Result.GetResult<Prisma.$LegacyAdEventPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more LegacyAdEvents.
+     * @param {LegacyAdEventDeleteManyArgs} args - Arguments to filter LegacyAdEvents to delete.
+     * @example
+     * // Delete a few LegacyAdEvents
+     * const { count } = await prisma.legacyAdEvent.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LegacyAdEventDeleteManyArgs>(args?: SelectSubset<T, LegacyAdEventDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LegacyAdEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LegacyAdEventUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many LegacyAdEvents
+     * const legacyAdEvent = await prisma.legacyAdEvent.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LegacyAdEventUpdateManyArgs>(args: SelectSubset<T, LegacyAdEventUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one LegacyAdEvent.
+     * @param {LegacyAdEventUpsertArgs} args - Arguments to update or create a LegacyAdEvent.
+     * @example
+     * // Update or create a LegacyAdEvent
+     * const legacyAdEvent = await prisma.legacyAdEvent.upsert({
+     *   create: {
+     *     // ... data to create a LegacyAdEvent
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the LegacyAdEvent we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LegacyAdEventUpsertArgs>(args: SelectSubset<T, LegacyAdEventUpsertArgs<ExtArgs>>): Prisma__LegacyAdEventClient<$Result.GetResult<Prisma.$LegacyAdEventPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of LegacyAdEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LegacyAdEventCountArgs} args - Arguments to filter LegacyAdEvents to count.
+     * @example
+     * // Count the number of LegacyAdEvents
+     * const count = await prisma.legacyAdEvent.count({
+     *   where: {
+     *     // ... the filter for the LegacyAdEvents we want to count
+     *   }
+     * })
+    **/
+    count<T extends LegacyAdEventCountArgs>(
+      args?: Subset<T, LegacyAdEventCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LegacyAdEventCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a LegacyAdEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LegacyAdEventAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LegacyAdEventAggregateArgs>(args: Subset<T, LegacyAdEventAggregateArgs>): Prisma.PrismaPromise<GetLegacyAdEventAggregateType<T>>
+
+    /**
+     * Group by LegacyAdEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LegacyAdEventGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LegacyAdEventGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LegacyAdEventGroupByArgs['orderBy'] }
+        : { orderBy?: LegacyAdEventGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LegacyAdEventGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLegacyAdEventGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the LegacyAdEvent model
+   */
+  readonly fields: LegacyAdEventFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for LegacyAdEvent.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LegacyAdEventClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    ad<T extends LegacyAdDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LegacyAdDefaultArgs<ExtArgs>>): Prisma__LegacyAdClient<$Result.GetResult<Prisma.$LegacyAdPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the LegacyAdEvent model
+   */
+  interface LegacyAdEventFieldRefs {
+    readonly id: FieldRef<"LegacyAdEvent", 'Int'>
+    readonly adId: FieldRef<"LegacyAdEvent", 'Int'>
+    readonly eventType: FieldRef<"LegacyAdEvent", 'String'>
+    readonly userIp: FieldRef<"LegacyAdEvent", 'String'>
+    readonly userAgent: FieldRef<"LegacyAdEvent", 'String'>
+    readonly createdAt: FieldRef<"LegacyAdEvent", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * LegacyAdEvent findUnique
+   */
+  export type LegacyAdEventFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LegacyAdEvent
+     */
+    select?: LegacyAdEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LegacyAdEvent
+     */
+    omit?: LegacyAdEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LegacyAdEventInclude<ExtArgs> | null
+    /**
+     * Filter, which LegacyAdEvent to fetch.
+     */
+    where: LegacyAdEventWhereUniqueInput
+  }
+
+  /**
+   * LegacyAdEvent findUniqueOrThrow
+   */
+  export type LegacyAdEventFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LegacyAdEvent
+     */
+    select?: LegacyAdEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LegacyAdEvent
+     */
+    omit?: LegacyAdEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LegacyAdEventInclude<ExtArgs> | null
+    /**
+     * Filter, which LegacyAdEvent to fetch.
+     */
+    where: LegacyAdEventWhereUniqueInput
+  }
+
+  /**
+   * LegacyAdEvent findFirst
+   */
+  export type LegacyAdEventFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LegacyAdEvent
+     */
+    select?: LegacyAdEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LegacyAdEvent
+     */
+    omit?: LegacyAdEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LegacyAdEventInclude<ExtArgs> | null
+    /**
+     * Filter, which LegacyAdEvent to fetch.
+     */
+    where?: LegacyAdEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LegacyAdEvents to fetch.
+     */
+    orderBy?: LegacyAdEventOrderByWithRelationInput | LegacyAdEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LegacyAdEvents.
+     */
+    cursor?: LegacyAdEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LegacyAdEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LegacyAdEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LegacyAdEvents.
+     */
+    distinct?: LegacyAdEventScalarFieldEnum | LegacyAdEventScalarFieldEnum[]
+  }
+
+  /**
+   * LegacyAdEvent findFirstOrThrow
+   */
+  export type LegacyAdEventFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LegacyAdEvent
+     */
+    select?: LegacyAdEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LegacyAdEvent
+     */
+    omit?: LegacyAdEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LegacyAdEventInclude<ExtArgs> | null
+    /**
+     * Filter, which LegacyAdEvent to fetch.
+     */
+    where?: LegacyAdEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LegacyAdEvents to fetch.
+     */
+    orderBy?: LegacyAdEventOrderByWithRelationInput | LegacyAdEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LegacyAdEvents.
+     */
+    cursor?: LegacyAdEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LegacyAdEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LegacyAdEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LegacyAdEvents.
+     */
+    distinct?: LegacyAdEventScalarFieldEnum | LegacyAdEventScalarFieldEnum[]
+  }
+
+  /**
+   * LegacyAdEvent findMany
+   */
+  export type LegacyAdEventFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LegacyAdEvent
+     */
+    select?: LegacyAdEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LegacyAdEvent
+     */
+    omit?: LegacyAdEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LegacyAdEventInclude<ExtArgs> | null
+    /**
+     * Filter, which LegacyAdEvents to fetch.
+     */
+    where?: LegacyAdEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LegacyAdEvents to fetch.
+     */
+    orderBy?: LegacyAdEventOrderByWithRelationInput | LegacyAdEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing LegacyAdEvents.
+     */
+    cursor?: LegacyAdEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LegacyAdEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LegacyAdEvents.
+     */
+    skip?: number
+    distinct?: LegacyAdEventScalarFieldEnum | LegacyAdEventScalarFieldEnum[]
+  }
+
+  /**
+   * LegacyAdEvent create
+   */
+  export type LegacyAdEventCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LegacyAdEvent
+     */
+    select?: LegacyAdEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LegacyAdEvent
+     */
+    omit?: LegacyAdEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LegacyAdEventInclude<ExtArgs> | null
+    /**
+     * The data needed to create a LegacyAdEvent.
+     */
+    data: XOR<LegacyAdEventCreateInput, LegacyAdEventUncheckedCreateInput>
+  }
+
+  /**
+   * LegacyAdEvent createMany
+   */
+  export type LegacyAdEventCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many LegacyAdEvents.
+     */
+    data: LegacyAdEventCreateManyInput | LegacyAdEventCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * LegacyAdEvent update
+   */
+  export type LegacyAdEventUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LegacyAdEvent
+     */
+    select?: LegacyAdEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LegacyAdEvent
+     */
+    omit?: LegacyAdEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LegacyAdEventInclude<ExtArgs> | null
+    /**
+     * The data needed to update a LegacyAdEvent.
+     */
+    data: XOR<LegacyAdEventUpdateInput, LegacyAdEventUncheckedUpdateInput>
+    /**
+     * Choose, which LegacyAdEvent to update.
+     */
+    where: LegacyAdEventWhereUniqueInput
+  }
+
+  /**
+   * LegacyAdEvent updateMany
+   */
+  export type LegacyAdEventUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update LegacyAdEvents.
+     */
+    data: XOR<LegacyAdEventUpdateManyMutationInput, LegacyAdEventUncheckedUpdateManyInput>
+    /**
+     * Filter which LegacyAdEvents to update
+     */
+    where?: LegacyAdEventWhereInput
+    /**
+     * Limit how many LegacyAdEvents to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * LegacyAdEvent upsert
+   */
+  export type LegacyAdEventUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LegacyAdEvent
+     */
+    select?: LegacyAdEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LegacyAdEvent
+     */
+    omit?: LegacyAdEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LegacyAdEventInclude<ExtArgs> | null
+    /**
+     * The filter to search for the LegacyAdEvent to update in case it exists.
+     */
+    where: LegacyAdEventWhereUniqueInput
+    /**
+     * In case the LegacyAdEvent found by the `where` argument doesn't exist, create a new LegacyAdEvent with this data.
+     */
+    create: XOR<LegacyAdEventCreateInput, LegacyAdEventUncheckedCreateInput>
+    /**
+     * In case the LegacyAdEvent was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LegacyAdEventUpdateInput, LegacyAdEventUncheckedUpdateInput>
+  }
+
+  /**
+   * LegacyAdEvent delete
+   */
+  export type LegacyAdEventDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LegacyAdEvent
+     */
+    select?: LegacyAdEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LegacyAdEvent
+     */
+    omit?: LegacyAdEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LegacyAdEventInclude<ExtArgs> | null
+    /**
+     * Filter which LegacyAdEvent to delete.
+     */
+    where: LegacyAdEventWhereUniqueInput
+  }
+
+  /**
+   * LegacyAdEvent deleteMany
+   */
+  export type LegacyAdEventDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LegacyAdEvents to delete
+     */
+    where?: LegacyAdEventWhereInput
+    /**
+     * Limit how many LegacyAdEvents to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * LegacyAdEvent without action
+   */
+  export type LegacyAdEventDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LegacyAdEvent
+     */
+    select?: LegacyAdEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LegacyAdEvent
+     */
+    omit?: LegacyAdEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LegacyAdEventInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -63858,6 +66151,40 @@ export namespace Prisma {
   export type AuthScalarFieldEnum = (typeof AuthScalarFieldEnum)[keyof typeof AuthScalarFieldEnum]
 
 
+  export const LegacyAdScalarFieldEnum: {
+    id: 'id',
+    title: 'title',
+    description: 'description',
+    mediaUrl: 'mediaUrl',
+    mediaType: 'mediaType',
+    targetUrl: 'targetUrl',
+    placement: 'placement',
+    status: 'status',
+    priority: 'priority',
+    startDate: 'startDate',
+    endDate: 'endDate',
+    targetDevice: 'targetDevice',
+    targetLocation: 'targetLocation',
+    createdBy: 'createdBy',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type LegacyAdScalarFieldEnum = (typeof LegacyAdScalarFieldEnum)[keyof typeof LegacyAdScalarFieldEnum]
+
+
+  export const LegacyAdEventScalarFieldEnum: {
+    id: 'id',
+    adId: 'adId',
+    eventType: 'eventType',
+    userIp: 'userIp',
+    userAgent: 'userAgent',
+    createdAt: 'createdAt'
+  };
+
+  export type LegacyAdEventScalarFieldEnum = (typeof LegacyAdEventScalarFieldEnum)[keyof typeof LegacyAdEventScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -64556,6 +66883,30 @@ export namespace Prisma {
   };
 
   export type AuthOrderByRelevanceFieldEnum = (typeof AuthOrderByRelevanceFieldEnum)[keyof typeof AuthOrderByRelevanceFieldEnum]
+
+
+  export const LegacyAdOrderByRelevanceFieldEnum: {
+    title: 'title',
+    description: 'description',
+    mediaUrl: 'mediaUrl',
+    mediaType: 'mediaType',
+    targetUrl: 'targetUrl',
+    placement: 'placement',
+    status: 'status',
+    targetDevice: 'targetDevice',
+    targetLocation: 'targetLocation'
+  };
+
+  export type LegacyAdOrderByRelevanceFieldEnum = (typeof LegacyAdOrderByRelevanceFieldEnum)[keyof typeof LegacyAdOrderByRelevanceFieldEnum]
+
+
+  export const LegacyAdEventOrderByRelevanceFieldEnum: {
+    eventType: 'eventType',
+    userIp: 'userIp',
+    userAgent: 'userAgent'
+  };
+
+  export type LegacyAdEventOrderByRelevanceFieldEnum = (typeof LegacyAdEventOrderByRelevanceFieldEnum)[keyof typeof LegacyAdEventOrderByRelevanceFieldEnum]
 
 
   /**
@@ -69335,6 +71686,182 @@ export namespace Prisma {
     date?: DateTimeWithAggregatesFilter<"Auth"> | Date | string
     otp?: StringNullableWithAggregatesFilter<"Auth"> | string | null
     otpCreatedAt?: DateTimeNullableWithAggregatesFilter<"Auth"> | Date | string | null
+  }
+
+  export type LegacyAdWhereInput = {
+    AND?: LegacyAdWhereInput | LegacyAdWhereInput[]
+    OR?: LegacyAdWhereInput[]
+    NOT?: LegacyAdWhereInput | LegacyAdWhereInput[]
+    id?: IntFilter<"LegacyAd"> | number
+    title?: StringFilter<"LegacyAd"> | string
+    description?: StringNullableFilter<"LegacyAd"> | string | null
+    mediaUrl?: StringFilter<"LegacyAd"> | string
+    mediaType?: StringFilter<"LegacyAd"> | string
+    targetUrl?: StringFilter<"LegacyAd"> | string
+    placement?: StringFilter<"LegacyAd"> | string
+    status?: StringFilter<"LegacyAd"> | string
+    priority?: IntFilter<"LegacyAd"> | number
+    startDate?: DateTimeNullableFilter<"LegacyAd"> | Date | string | null
+    endDate?: DateTimeNullableFilter<"LegacyAd"> | Date | string | null
+    targetDevice?: StringNullableFilter<"LegacyAd"> | string | null
+    targetLocation?: StringNullableFilter<"LegacyAd"> | string | null
+    createdBy?: IntNullableFilter<"LegacyAd"> | number | null
+    createdAt?: DateTimeFilter<"LegacyAd"> | Date | string
+    updatedAt?: DateTimeFilter<"LegacyAd"> | Date | string
+    events?: LegacyAdEventListRelationFilter
+  }
+
+  export type LegacyAdOrderByWithRelationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    mediaUrl?: SortOrder
+    mediaType?: SortOrder
+    targetUrl?: SortOrder
+    placement?: SortOrder
+    status?: SortOrder
+    priority?: SortOrder
+    startDate?: SortOrderInput | SortOrder
+    endDate?: SortOrderInput | SortOrder
+    targetDevice?: SortOrderInput | SortOrder
+    targetLocation?: SortOrderInput | SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    events?: LegacyAdEventOrderByRelationAggregateInput
+    _relevance?: LegacyAdOrderByRelevanceInput
+  }
+
+  export type LegacyAdWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: LegacyAdWhereInput | LegacyAdWhereInput[]
+    OR?: LegacyAdWhereInput[]
+    NOT?: LegacyAdWhereInput | LegacyAdWhereInput[]
+    title?: StringFilter<"LegacyAd"> | string
+    description?: StringNullableFilter<"LegacyAd"> | string | null
+    mediaUrl?: StringFilter<"LegacyAd"> | string
+    mediaType?: StringFilter<"LegacyAd"> | string
+    targetUrl?: StringFilter<"LegacyAd"> | string
+    placement?: StringFilter<"LegacyAd"> | string
+    status?: StringFilter<"LegacyAd"> | string
+    priority?: IntFilter<"LegacyAd"> | number
+    startDate?: DateTimeNullableFilter<"LegacyAd"> | Date | string | null
+    endDate?: DateTimeNullableFilter<"LegacyAd"> | Date | string | null
+    targetDevice?: StringNullableFilter<"LegacyAd"> | string | null
+    targetLocation?: StringNullableFilter<"LegacyAd"> | string | null
+    createdBy?: IntNullableFilter<"LegacyAd"> | number | null
+    createdAt?: DateTimeFilter<"LegacyAd"> | Date | string
+    updatedAt?: DateTimeFilter<"LegacyAd"> | Date | string
+    events?: LegacyAdEventListRelationFilter
+  }, "id">
+
+  export type LegacyAdOrderByWithAggregationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    mediaUrl?: SortOrder
+    mediaType?: SortOrder
+    targetUrl?: SortOrder
+    placement?: SortOrder
+    status?: SortOrder
+    priority?: SortOrder
+    startDate?: SortOrderInput | SortOrder
+    endDate?: SortOrderInput | SortOrder
+    targetDevice?: SortOrderInput | SortOrder
+    targetLocation?: SortOrderInput | SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: LegacyAdCountOrderByAggregateInput
+    _avg?: LegacyAdAvgOrderByAggregateInput
+    _max?: LegacyAdMaxOrderByAggregateInput
+    _min?: LegacyAdMinOrderByAggregateInput
+    _sum?: LegacyAdSumOrderByAggregateInput
+  }
+
+  export type LegacyAdScalarWhereWithAggregatesInput = {
+    AND?: LegacyAdScalarWhereWithAggregatesInput | LegacyAdScalarWhereWithAggregatesInput[]
+    OR?: LegacyAdScalarWhereWithAggregatesInput[]
+    NOT?: LegacyAdScalarWhereWithAggregatesInput | LegacyAdScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"LegacyAd"> | number
+    title?: StringWithAggregatesFilter<"LegacyAd"> | string
+    description?: StringNullableWithAggregatesFilter<"LegacyAd"> | string | null
+    mediaUrl?: StringWithAggregatesFilter<"LegacyAd"> | string
+    mediaType?: StringWithAggregatesFilter<"LegacyAd"> | string
+    targetUrl?: StringWithAggregatesFilter<"LegacyAd"> | string
+    placement?: StringWithAggregatesFilter<"LegacyAd"> | string
+    status?: StringWithAggregatesFilter<"LegacyAd"> | string
+    priority?: IntWithAggregatesFilter<"LegacyAd"> | number
+    startDate?: DateTimeNullableWithAggregatesFilter<"LegacyAd"> | Date | string | null
+    endDate?: DateTimeNullableWithAggregatesFilter<"LegacyAd"> | Date | string | null
+    targetDevice?: StringNullableWithAggregatesFilter<"LegacyAd"> | string | null
+    targetLocation?: StringNullableWithAggregatesFilter<"LegacyAd"> | string | null
+    createdBy?: IntNullableWithAggregatesFilter<"LegacyAd"> | number | null
+    createdAt?: DateTimeWithAggregatesFilter<"LegacyAd"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"LegacyAd"> | Date | string
+  }
+
+  export type LegacyAdEventWhereInput = {
+    AND?: LegacyAdEventWhereInput | LegacyAdEventWhereInput[]
+    OR?: LegacyAdEventWhereInput[]
+    NOT?: LegacyAdEventWhereInput | LegacyAdEventWhereInput[]
+    id?: IntFilter<"LegacyAdEvent"> | number
+    adId?: IntFilter<"LegacyAdEvent"> | number
+    eventType?: StringFilter<"LegacyAdEvent"> | string
+    userIp?: StringNullableFilter<"LegacyAdEvent"> | string | null
+    userAgent?: StringNullableFilter<"LegacyAdEvent"> | string | null
+    createdAt?: DateTimeFilter<"LegacyAdEvent"> | Date | string
+    ad?: XOR<LegacyAdScalarRelationFilter, LegacyAdWhereInput>
+  }
+
+  export type LegacyAdEventOrderByWithRelationInput = {
+    id?: SortOrder
+    adId?: SortOrder
+    eventType?: SortOrder
+    userIp?: SortOrderInput | SortOrder
+    userAgent?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    ad?: LegacyAdOrderByWithRelationInput
+    _relevance?: LegacyAdEventOrderByRelevanceInput
+  }
+
+  export type LegacyAdEventWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: LegacyAdEventWhereInput | LegacyAdEventWhereInput[]
+    OR?: LegacyAdEventWhereInput[]
+    NOT?: LegacyAdEventWhereInput | LegacyAdEventWhereInput[]
+    adId?: IntFilter<"LegacyAdEvent"> | number
+    eventType?: StringFilter<"LegacyAdEvent"> | string
+    userIp?: StringNullableFilter<"LegacyAdEvent"> | string | null
+    userAgent?: StringNullableFilter<"LegacyAdEvent"> | string | null
+    createdAt?: DateTimeFilter<"LegacyAdEvent"> | Date | string
+    ad?: XOR<LegacyAdScalarRelationFilter, LegacyAdWhereInput>
+  }, "id">
+
+  export type LegacyAdEventOrderByWithAggregationInput = {
+    id?: SortOrder
+    adId?: SortOrder
+    eventType?: SortOrder
+    userIp?: SortOrderInput | SortOrder
+    userAgent?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: LegacyAdEventCountOrderByAggregateInput
+    _avg?: LegacyAdEventAvgOrderByAggregateInput
+    _max?: LegacyAdEventMaxOrderByAggregateInput
+    _min?: LegacyAdEventMinOrderByAggregateInput
+    _sum?: LegacyAdEventSumOrderByAggregateInput
+  }
+
+  export type LegacyAdEventScalarWhereWithAggregatesInput = {
+    AND?: LegacyAdEventScalarWhereWithAggregatesInput | LegacyAdEventScalarWhereWithAggregatesInput[]
+    OR?: LegacyAdEventScalarWhereWithAggregatesInput[]
+    NOT?: LegacyAdEventScalarWhereWithAggregatesInput | LegacyAdEventScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"LegacyAdEvent"> | number
+    adId?: IntWithAggregatesFilter<"LegacyAdEvent"> | number
+    eventType?: StringWithAggregatesFilter<"LegacyAdEvent"> | string
+    userIp?: StringNullableWithAggregatesFilter<"LegacyAdEvent"> | string | null
+    userAgent?: StringNullableWithAggregatesFilter<"LegacyAdEvent"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"LegacyAdEvent"> | Date | string
   }
 
   export type SiteCreateInput = {
@@ -74459,6 +76986,199 @@ export namespace Prisma {
     otpCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type LegacyAdCreateInput = {
+    title: string
+    description?: string | null
+    mediaUrl: string
+    mediaType?: string
+    targetUrl: string
+    placement: string
+    status?: string
+    priority?: number
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    targetDevice?: string | null
+    targetLocation?: string | null
+    createdBy?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    events?: LegacyAdEventCreateNestedManyWithoutAdInput
+  }
+
+  export type LegacyAdUncheckedCreateInput = {
+    id?: number
+    title: string
+    description?: string | null
+    mediaUrl: string
+    mediaType?: string
+    targetUrl: string
+    placement: string
+    status?: string
+    priority?: number
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    targetDevice?: string | null
+    targetLocation?: string | null
+    createdBy?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    events?: LegacyAdEventUncheckedCreateNestedManyWithoutAdInput
+  }
+
+  export type LegacyAdUpdateInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    mediaUrl?: StringFieldUpdateOperationsInput | string
+    mediaType?: StringFieldUpdateOperationsInput | string
+    targetUrl?: StringFieldUpdateOperationsInput | string
+    placement?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: IntFieldUpdateOperationsInput | number
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    targetDevice?: NullableStringFieldUpdateOperationsInput | string | null
+    targetLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    events?: LegacyAdEventUpdateManyWithoutAdNestedInput
+  }
+
+  export type LegacyAdUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    mediaUrl?: StringFieldUpdateOperationsInput | string
+    mediaType?: StringFieldUpdateOperationsInput | string
+    targetUrl?: StringFieldUpdateOperationsInput | string
+    placement?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: IntFieldUpdateOperationsInput | number
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    targetDevice?: NullableStringFieldUpdateOperationsInput | string | null
+    targetLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    events?: LegacyAdEventUncheckedUpdateManyWithoutAdNestedInput
+  }
+
+  export type LegacyAdCreateManyInput = {
+    id?: number
+    title: string
+    description?: string | null
+    mediaUrl: string
+    mediaType?: string
+    targetUrl: string
+    placement: string
+    status?: string
+    priority?: number
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    targetDevice?: string | null
+    targetLocation?: string | null
+    createdBy?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LegacyAdUpdateManyMutationInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    mediaUrl?: StringFieldUpdateOperationsInput | string
+    mediaType?: StringFieldUpdateOperationsInput | string
+    targetUrl?: StringFieldUpdateOperationsInput | string
+    placement?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: IntFieldUpdateOperationsInput | number
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    targetDevice?: NullableStringFieldUpdateOperationsInput | string | null
+    targetLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LegacyAdUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    mediaUrl?: StringFieldUpdateOperationsInput | string
+    mediaType?: StringFieldUpdateOperationsInput | string
+    targetUrl?: StringFieldUpdateOperationsInput | string
+    placement?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: IntFieldUpdateOperationsInput | number
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    targetDevice?: NullableStringFieldUpdateOperationsInput | string | null
+    targetLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LegacyAdEventCreateInput = {
+    eventType: string
+    userIp?: string | null
+    userAgent?: string | null
+    createdAt?: Date | string
+    ad: LegacyAdCreateNestedOneWithoutEventsInput
+  }
+
+  export type LegacyAdEventUncheckedCreateInput = {
+    id?: number
+    adId: number
+    eventType: string
+    userIp?: string | null
+    userAgent?: string | null
+    createdAt?: Date | string
+  }
+
+  export type LegacyAdEventUpdateInput = {
+    eventType?: StringFieldUpdateOperationsInput | string
+    userIp?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ad?: LegacyAdUpdateOneRequiredWithoutEventsNestedInput
+  }
+
+  export type LegacyAdEventUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    adId?: IntFieldUpdateOperationsInput | number
+    eventType?: StringFieldUpdateOperationsInput | string
+    userIp?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LegacyAdEventCreateManyInput = {
+    id?: number
+    adId: number
+    eventType: string
+    userIp?: string | null
+    userAgent?: string | null
+    createdAt?: Date | string
+  }
+
+  export type LegacyAdEventUpdateManyMutationInput = {
+    eventType?: StringFieldUpdateOperationsInput | string
+    userIp?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LegacyAdEventUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    adId?: IntFieldUpdateOperationsInput | number
+    eventType?: StringFieldUpdateOperationsInput | string
+    userIp?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[]
@@ -78079,6 +80799,139 @@ export namespace Prisma {
 
   export type AuthSumOrderByAggregateInput = {
     id?: SortOrder
+  }
+
+  export type LegacyAdEventListRelationFilter = {
+    every?: LegacyAdEventWhereInput
+    some?: LegacyAdEventWhereInput
+    none?: LegacyAdEventWhereInput
+  }
+
+  export type LegacyAdEventOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type LegacyAdOrderByRelevanceInput = {
+    fields: LegacyAdOrderByRelevanceFieldEnum | LegacyAdOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type LegacyAdCountOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    mediaUrl?: SortOrder
+    mediaType?: SortOrder
+    targetUrl?: SortOrder
+    placement?: SortOrder
+    status?: SortOrder
+    priority?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    targetDevice?: SortOrder
+    targetLocation?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LegacyAdAvgOrderByAggregateInput = {
+    id?: SortOrder
+    priority?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type LegacyAdMaxOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    mediaUrl?: SortOrder
+    mediaType?: SortOrder
+    targetUrl?: SortOrder
+    placement?: SortOrder
+    status?: SortOrder
+    priority?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    targetDevice?: SortOrder
+    targetLocation?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LegacyAdMinOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    mediaUrl?: SortOrder
+    mediaType?: SortOrder
+    targetUrl?: SortOrder
+    placement?: SortOrder
+    status?: SortOrder
+    priority?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    targetDevice?: SortOrder
+    targetLocation?: SortOrder
+    createdBy?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LegacyAdSumOrderByAggregateInput = {
+    id?: SortOrder
+    priority?: SortOrder
+    createdBy?: SortOrder
+  }
+
+  export type LegacyAdScalarRelationFilter = {
+    is?: LegacyAdWhereInput
+    isNot?: LegacyAdWhereInput
+  }
+
+  export type LegacyAdEventOrderByRelevanceInput = {
+    fields: LegacyAdEventOrderByRelevanceFieldEnum | LegacyAdEventOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type LegacyAdEventCountOrderByAggregateInput = {
+    id?: SortOrder
+    adId?: SortOrder
+    eventType?: SortOrder
+    userIp?: SortOrder
+    userAgent?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type LegacyAdEventAvgOrderByAggregateInput = {
+    id?: SortOrder
+    adId?: SortOrder
+  }
+
+  export type LegacyAdEventMaxOrderByAggregateInput = {
+    id?: SortOrder
+    adId?: SortOrder
+    eventType?: SortOrder
+    userIp?: SortOrder
+    userAgent?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type LegacyAdEventMinOrderByAggregateInput = {
+    id?: SortOrder
+    adId?: SortOrder
+    eventType?: SortOrder
+    userIp?: SortOrder
+    userAgent?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type LegacyAdEventSumOrderByAggregateInput = {
+    id?: SortOrder
+    adId?: SortOrder
   }
 
   export type SiteUserCreateNestedManyWithoutSiteInput = {
@@ -81841,6 +84694,62 @@ export namespace Prisma {
     upsert?: AdUpsertWithoutAnalyticsInput
     connect?: AdWhereUniqueInput
     update?: XOR<XOR<AdUpdateToOneWithWhereWithoutAnalyticsInput, AdUpdateWithoutAnalyticsInput>, AdUncheckedUpdateWithoutAnalyticsInput>
+  }
+
+  export type LegacyAdEventCreateNestedManyWithoutAdInput = {
+    create?: XOR<LegacyAdEventCreateWithoutAdInput, LegacyAdEventUncheckedCreateWithoutAdInput> | LegacyAdEventCreateWithoutAdInput[] | LegacyAdEventUncheckedCreateWithoutAdInput[]
+    connectOrCreate?: LegacyAdEventCreateOrConnectWithoutAdInput | LegacyAdEventCreateOrConnectWithoutAdInput[]
+    createMany?: LegacyAdEventCreateManyAdInputEnvelope
+    connect?: LegacyAdEventWhereUniqueInput | LegacyAdEventWhereUniqueInput[]
+  }
+
+  export type LegacyAdEventUncheckedCreateNestedManyWithoutAdInput = {
+    create?: XOR<LegacyAdEventCreateWithoutAdInput, LegacyAdEventUncheckedCreateWithoutAdInput> | LegacyAdEventCreateWithoutAdInput[] | LegacyAdEventUncheckedCreateWithoutAdInput[]
+    connectOrCreate?: LegacyAdEventCreateOrConnectWithoutAdInput | LegacyAdEventCreateOrConnectWithoutAdInput[]
+    createMany?: LegacyAdEventCreateManyAdInputEnvelope
+    connect?: LegacyAdEventWhereUniqueInput | LegacyAdEventWhereUniqueInput[]
+  }
+
+  export type LegacyAdEventUpdateManyWithoutAdNestedInput = {
+    create?: XOR<LegacyAdEventCreateWithoutAdInput, LegacyAdEventUncheckedCreateWithoutAdInput> | LegacyAdEventCreateWithoutAdInput[] | LegacyAdEventUncheckedCreateWithoutAdInput[]
+    connectOrCreate?: LegacyAdEventCreateOrConnectWithoutAdInput | LegacyAdEventCreateOrConnectWithoutAdInput[]
+    upsert?: LegacyAdEventUpsertWithWhereUniqueWithoutAdInput | LegacyAdEventUpsertWithWhereUniqueWithoutAdInput[]
+    createMany?: LegacyAdEventCreateManyAdInputEnvelope
+    set?: LegacyAdEventWhereUniqueInput | LegacyAdEventWhereUniqueInput[]
+    disconnect?: LegacyAdEventWhereUniqueInput | LegacyAdEventWhereUniqueInput[]
+    delete?: LegacyAdEventWhereUniqueInput | LegacyAdEventWhereUniqueInput[]
+    connect?: LegacyAdEventWhereUniqueInput | LegacyAdEventWhereUniqueInput[]
+    update?: LegacyAdEventUpdateWithWhereUniqueWithoutAdInput | LegacyAdEventUpdateWithWhereUniqueWithoutAdInput[]
+    updateMany?: LegacyAdEventUpdateManyWithWhereWithoutAdInput | LegacyAdEventUpdateManyWithWhereWithoutAdInput[]
+    deleteMany?: LegacyAdEventScalarWhereInput | LegacyAdEventScalarWhereInput[]
+  }
+
+  export type LegacyAdEventUncheckedUpdateManyWithoutAdNestedInput = {
+    create?: XOR<LegacyAdEventCreateWithoutAdInput, LegacyAdEventUncheckedCreateWithoutAdInput> | LegacyAdEventCreateWithoutAdInput[] | LegacyAdEventUncheckedCreateWithoutAdInput[]
+    connectOrCreate?: LegacyAdEventCreateOrConnectWithoutAdInput | LegacyAdEventCreateOrConnectWithoutAdInput[]
+    upsert?: LegacyAdEventUpsertWithWhereUniqueWithoutAdInput | LegacyAdEventUpsertWithWhereUniqueWithoutAdInput[]
+    createMany?: LegacyAdEventCreateManyAdInputEnvelope
+    set?: LegacyAdEventWhereUniqueInput | LegacyAdEventWhereUniqueInput[]
+    disconnect?: LegacyAdEventWhereUniqueInput | LegacyAdEventWhereUniqueInput[]
+    delete?: LegacyAdEventWhereUniqueInput | LegacyAdEventWhereUniqueInput[]
+    connect?: LegacyAdEventWhereUniqueInput | LegacyAdEventWhereUniqueInput[]
+    update?: LegacyAdEventUpdateWithWhereUniqueWithoutAdInput | LegacyAdEventUpdateWithWhereUniqueWithoutAdInput[]
+    updateMany?: LegacyAdEventUpdateManyWithWhereWithoutAdInput | LegacyAdEventUpdateManyWithWhereWithoutAdInput[]
+    deleteMany?: LegacyAdEventScalarWhereInput | LegacyAdEventScalarWhereInput[]
+  }
+
+  export type LegacyAdCreateNestedOneWithoutEventsInput = {
+    create?: XOR<LegacyAdCreateWithoutEventsInput, LegacyAdUncheckedCreateWithoutEventsInput>
+    connectOrCreate?: LegacyAdCreateOrConnectWithoutEventsInput
+    connect?: LegacyAdWhereUniqueInput
+  }
+
+  export type LegacyAdUpdateOneRequiredWithoutEventsNestedInput = {
+    create?: XOR<LegacyAdCreateWithoutEventsInput, LegacyAdUncheckedCreateWithoutEventsInput>
+    connectOrCreate?: LegacyAdCreateOrConnectWithoutEventsInput
+    upsert?: LegacyAdUpsertWithoutEventsInput
+    connect?: LegacyAdWhereUniqueInput
+    update?: XOR<XOR<LegacyAdUpdateToOneWithWhereWithoutEventsInput, LegacyAdUpdateWithoutEventsInput>, LegacyAdUncheckedUpdateWithoutEventsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -96266,6 +99175,149 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type LegacyAdEventCreateWithoutAdInput = {
+    eventType: string
+    userIp?: string | null
+    userAgent?: string | null
+    createdAt?: Date | string
+  }
+
+  export type LegacyAdEventUncheckedCreateWithoutAdInput = {
+    id?: number
+    eventType: string
+    userIp?: string | null
+    userAgent?: string | null
+    createdAt?: Date | string
+  }
+
+  export type LegacyAdEventCreateOrConnectWithoutAdInput = {
+    where: LegacyAdEventWhereUniqueInput
+    create: XOR<LegacyAdEventCreateWithoutAdInput, LegacyAdEventUncheckedCreateWithoutAdInput>
+  }
+
+  export type LegacyAdEventCreateManyAdInputEnvelope = {
+    data: LegacyAdEventCreateManyAdInput | LegacyAdEventCreateManyAdInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type LegacyAdEventUpsertWithWhereUniqueWithoutAdInput = {
+    where: LegacyAdEventWhereUniqueInput
+    update: XOR<LegacyAdEventUpdateWithoutAdInput, LegacyAdEventUncheckedUpdateWithoutAdInput>
+    create: XOR<LegacyAdEventCreateWithoutAdInput, LegacyAdEventUncheckedCreateWithoutAdInput>
+  }
+
+  export type LegacyAdEventUpdateWithWhereUniqueWithoutAdInput = {
+    where: LegacyAdEventWhereUniqueInput
+    data: XOR<LegacyAdEventUpdateWithoutAdInput, LegacyAdEventUncheckedUpdateWithoutAdInput>
+  }
+
+  export type LegacyAdEventUpdateManyWithWhereWithoutAdInput = {
+    where: LegacyAdEventScalarWhereInput
+    data: XOR<LegacyAdEventUpdateManyMutationInput, LegacyAdEventUncheckedUpdateManyWithoutAdInput>
+  }
+
+  export type LegacyAdEventScalarWhereInput = {
+    AND?: LegacyAdEventScalarWhereInput | LegacyAdEventScalarWhereInput[]
+    OR?: LegacyAdEventScalarWhereInput[]
+    NOT?: LegacyAdEventScalarWhereInput | LegacyAdEventScalarWhereInput[]
+    id?: IntFilter<"LegacyAdEvent"> | number
+    adId?: IntFilter<"LegacyAdEvent"> | number
+    eventType?: StringFilter<"LegacyAdEvent"> | string
+    userIp?: StringNullableFilter<"LegacyAdEvent"> | string | null
+    userAgent?: StringNullableFilter<"LegacyAdEvent"> | string | null
+    createdAt?: DateTimeFilter<"LegacyAdEvent"> | Date | string
+  }
+
+  export type LegacyAdCreateWithoutEventsInput = {
+    title: string
+    description?: string | null
+    mediaUrl: string
+    mediaType?: string
+    targetUrl: string
+    placement: string
+    status?: string
+    priority?: number
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    targetDevice?: string | null
+    targetLocation?: string | null
+    createdBy?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LegacyAdUncheckedCreateWithoutEventsInput = {
+    id?: number
+    title: string
+    description?: string | null
+    mediaUrl: string
+    mediaType?: string
+    targetUrl: string
+    placement: string
+    status?: string
+    priority?: number
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    targetDevice?: string | null
+    targetLocation?: string | null
+    createdBy?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LegacyAdCreateOrConnectWithoutEventsInput = {
+    where: LegacyAdWhereUniqueInput
+    create: XOR<LegacyAdCreateWithoutEventsInput, LegacyAdUncheckedCreateWithoutEventsInput>
+  }
+
+  export type LegacyAdUpsertWithoutEventsInput = {
+    update: XOR<LegacyAdUpdateWithoutEventsInput, LegacyAdUncheckedUpdateWithoutEventsInput>
+    create: XOR<LegacyAdCreateWithoutEventsInput, LegacyAdUncheckedCreateWithoutEventsInput>
+    where?: LegacyAdWhereInput
+  }
+
+  export type LegacyAdUpdateToOneWithWhereWithoutEventsInput = {
+    where?: LegacyAdWhereInput
+    data: XOR<LegacyAdUpdateWithoutEventsInput, LegacyAdUncheckedUpdateWithoutEventsInput>
+  }
+
+  export type LegacyAdUpdateWithoutEventsInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    mediaUrl?: StringFieldUpdateOperationsInput | string
+    mediaType?: StringFieldUpdateOperationsInput | string
+    targetUrl?: StringFieldUpdateOperationsInput | string
+    placement?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: IntFieldUpdateOperationsInput | number
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    targetDevice?: NullableStringFieldUpdateOperationsInput | string | null
+    targetLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LegacyAdUncheckedUpdateWithoutEventsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    mediaUrl?: StringFieldUpdateOperationsInput | string
+    mediaType?: StringFieldUpdateOperationsInput | string
+    targetUrl?: StringFieldUpdateOperationsInput | string
+    placement?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: IntFieldUpdateOperationsInput | number
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    targetDevice?: NullableStringFieldUpdateOperationsInput | string | null
+    targetLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    createdBy?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type SiteUserCreateManySiteInput = {
     id?: string
     userId: string
@@ -99694,6 +102746,37 @@ export namespace Prisma {
     type?: StringFieldUpdateOperationsInput | string
     visitorId?: NullableStringFieldUpdateOperationsInput | string | null
     ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LegacyAdEventCreateManyAdInput = {
+    id?: number
+    eventType: string
+    userIp?: string | null
+    userAgent?: string | null
+    createdAt?: Date | string
+  }
+
+  export type LegacyAdEventUpdateWithoutAdInput = {
+    eventType?: StringFieldUpdateOperationsInput | string
+    userIp?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LegacyAdEventUncheckedUpdateWithoutAdInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    eventType?: StringFieldUpdateOperationsInput | string
+    userIp?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LegacyAdEventUncheckedUpdateManyWithoutAdInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    eventType?: StringFieldUpdateOperationsInput | string
+    userIp?: NullableStringFieldUpdateOperationsInput | string | null
     userAgent?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
