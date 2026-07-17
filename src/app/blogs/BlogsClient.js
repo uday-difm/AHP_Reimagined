@@ -282,7 +282,6 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
                         src={art.img}
                         alt={art.title}
                         fill
-                        unoptimized
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                         unoptimized={true}
                       />
