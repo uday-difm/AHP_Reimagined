@@ -69,31 +69,36 @@ About Story / Brand Mission: ${story}
 
     // 3. Email to the team
     try {
-      await sendEmail({
-        siteId,
-        to: 'info@ahealthplace.com',
-        subject: `New Media Booking Request: ${fullName} - ${mediaPackage}`,
-        text: `You have received a new media package inquiry:\n\nClient: ${fullName}\nEmail: ${email}\n${messageText}`,
-        html: `
-          <div style="font-family: sans-serif; padding: 20px; color: #333;">
-            <h2 style="color: #0f4c4e; border-bottom: 2px solid #0f4c4e; padding-pb: 8px;">New Media Booking Request</h2>
-            <p><strong>Client Name:</strong> ${fullName}</p>
-            <p><strong>Email Address:</strong> ${email}</p>
-            <p><strong>Phone Number:</strong> ${phone || 'N/A'}</p>
-            <p><strong>Professional Title:</strong> ${professionalTitle || 'N/A'}</p>
-            <p><strong>Website:</strong> ${websiteUrl || 'N/A'}</p>
-            <p><strong>Location (State & Country):</strong> ${location || 'N/A'}</p>
-            <p><strong>Requested Media Package:</strong> ${mediaPackage}</p>
-            <p><strong>Timeline:</strong> ${timeline}</p>
-            <h3 style="color: #0f4c4e; margin-top: 20px;">Story / Brand Mission:</h3>
-            <p style="background: #f7f9f9; padding: 15px; border-radius: 8px; border-left: 4px solid #1c7b80;">
-              ${story.replace(/\n/g, '<br />')}
-            </p>
-          </div>
-        `
-      });
+      const { systemEmailQueue } = await import('@/lib/queues/systemEmailQueue');
+      await systemEmailQueue.add(
+        "media-booking-alert",
+        {
+          siteId,
+          to: 'info@ahealthplace.com',
+          subject: `New Media Booking Request: ${fullName} - ${mediaPackage}`,
+          text: `You have received a new media package inquiry:\n\nClient: ${fullName}\nEmail: ${email}\n${messageText}`,
+          html: `
+            <div style="font-family: sans-serif; padding: 20px; color: #333;">
+              <h2 style="color: #0f4c4e; border-bottom: 2px solid #0f4c4e; padding-pb: 8px;">New Media Booking Request</h2>
+              <p><strong>Client Name:</strong> ${fullName}</p>
+              <p><strong>Email Address:</strong> ${email}</p>
+              <p><strong>Phone Number:</strong> ${phone || 'N/A'}</p>
+              <p><strong>Professional Title:</strong> ${professionalTitle || 'N/A'}</p>
+              <p><strong>Website:</strong> ${websiteUrl || 'N/A'}</p>
+              <p><strong>Location (State & Country):</strong> ${location || 'N/A'}</p>
+              <p><strong>Requested Media Package:</strong> ${mediaPackage}</p>
+              <p><strong>Timeline:</strong> ${timeline}</p>
+              <h3 style="color: #0f4c4e; margin-top: 20px;">Story / Brand Mission:</h3>
+              <p style="background: #f7f9f9; padding: 15px; border-radius: 8px; border-left: 4px solid #1c7b80;">
+                ${story.replace(/\n/g, '<br />')}
+              </p>
+            </div>
+          `
+        },
+        { attempts: 3, backoff: { type: "exponential", delay: 5000 } }
+      );
     } catch (emailErr) {
-      console.error('Failed to send notification email to team:', emailErr);
+      console.error('Failed to queue notification email to team:', emailErr);
       // Do not fail request if email failed, as database save succeeded
     }
 

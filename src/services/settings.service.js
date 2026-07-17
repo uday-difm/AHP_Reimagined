@@ -5,6 +5,9 @@ import { CtaConfigSchema } from "@/lib/validators/cta";
 import { EventBus } from "@/core/events";
 import { logAction } from "@/lib/audit";
 import prisma from "@/lib/prisma";
+import { redis } from "@/lib/redis";
+
+const CACHE_TTL_SECONDS = 300; // 5 minutes
 
 async function triggerFrontendRevalidation(siteId) {
   try {
@@ -58,7 +61,29 @@ export class SettingsService extends BaseService {
   }
 
   async getSettingsField(siteId, fieldName) {
-    const settings = await settingsRepository.findBySiteId(siteId);
+    const cacheKey = `settings:${siteId}`;
+    let settings = null;
+    
+    try {
+      const cached = await redis.get(cacheKey);
+      if (cached) {
+        settings = JSON.parse(cached);
+      }
+    } catch (err) {
+      console.warn("Redis cache read error for settings:", err.message);
+    }
+
+    if (!settings) {
+      settings = await settingsRepository.findBySiteId(siteId);
+      if (settings) {
+        try {
+          await redis.set(cacheKey, JSON.stringify(settings), "EX", CACHE_TTL_SECONDS);
+        } catch (err) {
+          console.warn("Redis cache write error for settings:", err.message);
+        }
+      }
+    }
+    
     return settings?.[fieldName] || null;
   }
 
@@ -98,6 +123,13 @@ export class SettingsService extends BaseService {
       } catch (err) {
         console.error(`Audit log failed for setting ${fieldName} update:`, err);
       }
+    }
+
+    // Invalidate Redis cache
+    try {
+      await redis.del(`settings:${siteId}`);
+    } catch (err) {
+      console.warn("Redis cache delete error:", err.message);
     }
 
     EventBus.emit("settings.updated", {
@@ -167,6 +199,13 @@ export class SettingsService extends BaseService {
       } catch (err) {
         console.error("Audit log failed for global settings update:", err);
       }
+    }
+
+    // Invalidate Redis cache
+    try {
+      await redis.del(`settings:${siteId}`);
+    } catch (err) {
+      console.warn("Redis cache delete error:", err.message);
     }
 
     EventBus.emit("settings.global.updated", { siteId, userId, data: result });

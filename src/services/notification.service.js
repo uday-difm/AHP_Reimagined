@@ -42,15 +42,19 @@ export class NotificationService extends BaseService {
         const adminEmail = settings?.emailSettings?.recipientOverride || settings?.emailSettings?.adminAlerts?.email || settings?.emailSettings?.username;
         if (adminEmail && !adminEmail.includes("resend.dev") && !adminEmail.includes("example.com")) {
           try {
-            const { transporter, fromEmail } = await emailService.getTransporterForSite(siteId);
-            await transporter.sendMail({
-              from: fromEmail,
-              to: adminEmail,
-              subject: `[Lead Alert] New Lead Captured: ${lead.name}`,
-              text: `A new lead has been recorded on the system:\n\nName: ${lead.name}\nEmail: ${lead.email}\nPhone: ${lead.phone || "N/A"}\nInterest: ${lead.serviceInterest || "N/A"}\n\nView in Lead CRM dashboard.`
-            });
+            const { systemEmailQueue } = await import("../lib/queues/systemEmailQueue.js");
+            await systemEmailQueue.add(
+              "new-lead-alert",
+              {
+                siteId,
+                to: adminEmail,
+                subject: `[Lead Alert] New Lead Captured: ${lead.name}`,
+                text: `A new lead has been recorded on the system:\n\nName: ${lead.name}\nEmail: ${lead.email}\nPhone: ${lead.phone || "N/A"}\nInterest: ${lead.serviceInterest || "N/A"}\n\nView in Lead CRM dashboard.`
+              },
+              { attempts: 3, backoff: { type: "exponential", delay: 5000 } }
+            );
           } catch (e) {
-            console.error("Failed to send new lead email alert:", e);
+            console.error("Failed to queue new lead email alert:", e);
           }
         } else {
           console.log(`ℹ️ [NotificationService] Skipped new lead email to placeholder address: ${adminEmail}`);
@@ -90,15 +94,19 @@ export class NotificationService extends BaseService {
         const adminEmail = settings?.emailSettings?.recipientOverride || settings?.emailSettings?.adminAlerts?.email || settings?.emailSettings?.username;
         if (adminEmail && !adminEmail.includes("resend.dev") && !adminEmail.includes("example.com")) {
           try {
-            const { transporter, fromEmail } = await emailService.getTransporterForSite(siteId);
-            await transporter.sendMail({
-              from: fromEmail,
-              to: adminEmail,
-              subject: `[System Alert] Contact Form Submission Failure`,
-              text: `A contact form submission failed on your site.\n\nError: ${errorDetails.message}\nPayload: ${JSON.stringify(errorDetails.payload)}\n\nPlease check system logs.`
-            });
+            const { systemEmailQueue } = await import("../lib/queues/systemEmailQueue.js");
+            await systemEmailQueue.add(
+              "failed-form-alert",
+              {
+                siteId,
+                to: adminEmail,
+                subject: `[System Alert] Contact Form Submission Failure`,
+                text: `A contact form submission failed on your site.\n\nError: ${errorDetails.message}\nPayload: ${JSON.stringify(errorDetails.payload)}\n\nPlease check system logs.`
+              },
+              { attempts: 3, backoff: { type: "exponential", delay: 5000 } }
+            );
           } catch (e) {
-            console.error("Failed to send failed form email alert:", e);
+            console.error("Failed to queue failed form email alert:", e);
           }
         } else {
           console.log(`ℹ️ [NotificationService] Skipped failed form email to placeholder address: ${adminEmail}`);
@@ -138,15 +146,19 @@ export class NotificationService extends BaseService {
         const adminEmail = settings?.emailSettings?.recipientOverride || settings?.emailSettings?.adminAlerts?.email || settings?.emailSettings?.username;
         if (adminEmail && !adminEmail.includes("resend.dev") && !adminEmail.includes("example.com")) {
           try {
-            const { transporter, fromEmail } = await emailService.getTransporterForSite(siteId);
-            await transporter.sendMail({
-              from: fromEmail,
-              to: adminEmail,
-              subject: `[Blog Alert] New Post Published: ${post.title}`,
-              text: `A new blog post has been published:\n\nTitle: ${post.title}\nSlug: ${post.slug}\n\nCheck out the live post.`
-            });
+            const { systemEmailQueue } = await import("../lib/queues/systemEmailQueue.js");
+            await systemEmailQueue.add(
+              "new-blog-alert",
+              {
+                siteId,
+                to: adminEmail,
+                subject: `[Blog Alert] New Post Published: ${post.title}`,
+                text: `A new blog post has been published:\n\nTitle: ${post.title}\nSlug: ${post.slug}\n\nCheck out the live post.`
+              },
+              { attempts: 3, backoff: { type: "exponential", delay: 5000 } }
+            );
           } catch (e) {
-            console.error("Failed to send blog email alert:", e);
+            console.error("Failed to queue blog email alert:", e);
           }
         } else {
           console.log(`ℹ️ [NotificationService] Skipped blog email to placeholder address: ${adminEmail}`);
