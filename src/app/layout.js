@@ -1,18 +1,13 @@
-import { headers } from "next/headers";
 import AuthProvider from "@/components/providers/SessionProvider";
 import ThemeProvider from "@/components/providers/ThemeProvider";
 import SessionTimeoutHandler from "@/components/utils/SessionTimeoutHandler";
-import ScrollProvider from "@/components/providers/ScrollProvider";
 import { Toaster } from "sonner";
 import "@/core/listeners";
 
 import { Inter, Outfit, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { getLayoutData } from "@/services/layout.service";
-import CookieBanner from "@/components/CookieBanner";
-import { GlobalAnalytics } from "@yourcompany/global-backend-next/components";
-import CustomScripts from "@/components/utils/CustomScripts";
-import PerformanceEffects from "@/components/utils/PerformanceEffects";
+import ClientLayoutHelpers from "@/components/ClientLayoutHelpers";
 
 const inter = Inter({
   variable: "--font-body",
@@ -47,39 +42,8 @@ export async function generateMetadata() {
   };
 }
 
-function isDashboardPath(pathname) {
-  return (
-    pathname.startsWith("/dashboard") ||
-    pathname.startsWith("/crm") ||
-    pathname.startsWith("/login") ||
-    pathname.startsWith("/forgot-password") ||
-    pathname.startsWith("/reset-password") ||
-    pathname.startsWith("/maintenance") ||
-    pathname.startsWith("/preview")
-  );
-}
-
 export default async function RootLayout({ children }) {
-  const headersList = await headers();
-  const pathname = headersList.get("x-pathname") || "";
   const layout = await getLayoutData();
-
-  if (isDashboardPath(pathname)) {
-    return (
-      <html lang="en" suppressHydrationWarning>
-        <head />
-        <body className={`${inter.variable} ${outfit.variable} ${playfair.variable}`}>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <AuthProvider>
-              <SessionTimeoutHandler timeoutMinutes={30} />
-              {children}
-              <Toaster richColors position="top-right" closeButton />
-            </AuthProvider>
-          </ThemeProvider>
-        </body>
-      </html>
-    );
-  }
 
   const compliance = layout?.rawSettings?.compliance || {};
   const complianceSettings = {
@@ -96,20 +60,14 @@ export default async function RootLayout({ children }) {
       lang="en"
       className={`${inter.variable} ${outfit.variable} ${playfair.variable}`}
       suppressHydrationWarning>
+      <head />
       <body>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <AuthProvider>
             <SessionTimeoutHandler timeoutMinutes={30} />
-            <GlobalAnalytics settings={layout?.rawSettings} />
-            <CustomScripts scripts={layout?.rawSettings?.scripts} deferScripts={layout?.rawSettings?.performanceConfig?.deferNonEssentialScripts ?? true} />
-            <PerformanceEffects 
-              lazyLoadImages={layout?.rawSettings?.performanceConfig?.lazyLoadImages ?? true}
-              lazyLoadVideos={layout?.rawSettings?.performanceConfig?.lazyLoadVideos ?? true}
-            />
-            <ScrollProvider>
+            <ClientLayoutHelpers layout={layout} complianceSettings={complianceSettings}>
               {children}
-            </ScrollProvider>
-            <CookieBanner complianceSettings={complianceSettings} />
+            </ClientLayoutHelpers>
             <Toaster richColors position="top-right" closeButton />
           </AuthProvider>
         </ThemeProvider>

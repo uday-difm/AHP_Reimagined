@@ -21,6 +21,13 @@ export async function POST(req) {
       return NextResponse.json({ success: false, error: 'Required fields are missing' }, { status: 400 });
     }
 
+    const ip = req.headers.get("x-forwarded-for") || "unknown";
+    const { checkRateLimit } = await import("@/lib/rateLimiter");
+    const allowed = await checkRateLimit(ip, 10);
+    if (!allowed) {
+      return NextResponse.json({ success: false, error: 'Too Many Requests: Rate limit exceeded' }, { status: 429 });
+    }
+
     // Use the configured site ID from environment
     const siteId = process.env.NEXT_PUBLIC_SITE_ID || process.env.SITE_ID || 'AHP';
 

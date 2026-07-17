@@ -12,6 +12,13 @@ export async function POST(req) {
       return NextResponse.json({ error: "siteId parameter is required" }, { status: 400 });
     }
 
+    const ip = req.headers.get("x-forwarded-for") || "unknown";
+    const { checkRateLimit } = await import("@/lib/rateLimiter");
+    const allowed = await checkRateLimit(ip, 10);
+    if (!allowed) {
+      return NextResponse.json({ error: "Too Many Requests: Rate limit exceeded" }, { status: 429 });
+    }
+
     // Verify site exists
     const site = await prisma.site.findUnique({ where: { id: siteId } });
     if (!site) {

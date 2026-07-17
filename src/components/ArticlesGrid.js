@@ -28,41 +28,6 @@ function getSeasonFromDate(dateStr) {
   return `${season} ${year}`;
 }
 
-const magazines = [
-  {
-    id: 1,
-    category: 'Sleep',
-    badgeClass: 'bg-[var(--color-badge-blue-bg)] text-[var(--color-badge-blue-text)]',
-    title: 'The Sleep Revolution',
-    desc: 'Diving into physical sleep quality, REM cycles, and how daily brain recovery shapes cognitive health.',
-    img: '/images/mag_sleep.png',
-  },
-  {
-    id: 2,
-    category: 'Nutrition',
-    badgeClass: 'bg-[var(--color-badge-yellow-bg)] text-[var(--color-badge-yellow-text)]',
-    title: 'Holistic Nutrition',
-    desc: 'Understanding gut-brain axis pathways, balanced meal preparations, and clean biophilic diets.',
-    img: '/images/mag_nutrition.png',
-  },
-  {
-    id: 3,
-    category: 'Strength',
-    badgeClass: 'bg-[var(--color-badge-red-bg)] text-[var(--color-badge-red-text)]',
-    title: 'The Strength Within',
-    desc: 'Certified clinical routines, posture alignment standards, and functional energy maintenance guides.',
-    img: '/images/mag_strength.png',
-  },
-  {
-    id: 4,
-    category: 'Mental Health',
-    badgeClass: 'bg-[var(--color-badge-purple-bg)] text-[var(--color-badge-purple-text)]',
-    title: 'Digital Detox',
-    desc: 'Setting boundaries with tech to eliminate micro-anxiety loops and restore daily cognitive clarity.',
-    img: '/images/mag_detox.png',
-  },
-];
-
 export default function ArticlesGrid() {
   const cardRefs = useRef([]);
   const [latestIssue, setLatestIssue] = useState(null);
@@ -77,16 +42,16 @@ export default function ArticlesGrid() {
           const data = await res.json();
           const mapped = data.map((mag) => ({
             season: getSeasonFromDate(mag.magazine_date),
-            title: mag.magazine_title,
-            slug: mag.magazine_slug,
-            img: mag.magazine_cover_image || '/images/mag_sleep.png',
-            backImg: mag.magazine_back_image || '/back.jpg',
-            spineImg: mag.magazine_spine_image || '/spine.jpg',
-            contents: mag.magazine_tags ? mag.magazine_tags.split(',').map(t => t.trim()) : [],
-            description: mag.magazine_description,
-            introduction: mag.magazine_introduction || '',
-            magazineId: mag.magazine_id || '',
-            timestamp: new Date(mag.magazine_date).getTime()
+            title: mag?.magazine_title,
+            slug: mag?.magazine_slug,
+            img: mag?.magazine_cover_image,
+            backImg: mag?.magazine_back_image,
+            spineImg: mag?.magazine_spine_image,
+            contents: mag?.magazine_tags ? mag.magazine_tags.split(',').map(t => t.trim()) : [],
+            description: mag?.magazine_description,
+            introduction: mag?.magazine_introduction || '',
+            magazineId: mag?.magazine_id || '',
+            timestamp: new Date(mag?.magazine_date).getTime()
           }));
           const allIssues = mapped;
           if (allIssues.length > 0) {
@@ -128,6 +93,10 @@ export default function ArticlesGrid() {
     if (!card) return;
     card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)';
   };
+
+  if (loading || !latestIssue) {
+    return null;
+  }
 
   return (
     <section id="articles" className="projects-section pt-16 pb-[100px] bg-white rounded-t-[40px] shadow-[0_-20px_40px_rgba(0,0,0,0.01)] relative overflow-hidden">

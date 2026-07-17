@@ -5,6 +5,12 @@ export async function POST(req) {
   try {
     const ip = req.headers.get("x-forwarded-for") || "127.0.0.1";
 
+    const { checkRateLimit } = await import("@/lib/rateLimiter");
+    const allowed = await checkRateLimit(ip, 30);
+    if (!allowed) {
+      return NextResponse.json({ error: "Too Many Requests: Rate limit exceeded" }, { status: 429 });
+    }
+
     const record = await prisma.ipQuizAnalytic.findFirst({
       where: { user_ip: ip }
     });

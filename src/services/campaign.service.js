@@ -80,14 +80,12 @@ export const campaignService = {
     });
     if (!campaign) throw new Error("Campaign not found");
 
-    const { transporter, fromEmail } = await emailService.getTransporterForSite(siteId);
-
-    await transporter.sendMail({
-      from: `"Global Backend" <${fromEmail}>`,
-      to: targetEmail,
-      subject: `[TEST] ${campaign.subject}`,
-      html: campaign.body
-    });
+    const { emailQueue } = await import("../lib/queues/emailQueue.js");
+    await emailQueue.add(
+      "send-campaign-email",
+      { campaignId, isTest: true, targetEmail },
+      { attempts: 3, backoff: { type: "exponential", delay: 5000 } }
+    );
 
     return { success: true };
   },
