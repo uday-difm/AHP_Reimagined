@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { quizzes } from '@/data/quizzes';
+import { Hand, CheckCircle, ClipboardList, Hourglass, BarChart2, Beaker, Activity, Moon, Salad, Sparkles, ArrowRight } from 'lucide-react';
 
 /**
  * QuizDashboardClient
@@ -43,12 +44,20 @@ export default function QuizDashboardClient({ user }) {
     } catch { return '—'; }
   }
 
+  const renderQuizIcon = (quiz) => {
+    if (!quiz) return <ClipboardList size={22} />;
+    if (quiz.title.includes('Stress')) return <Activity size={22} style={{color: quiz.categoryColor}} />;
+    if (quiz.title.includes('Sleep')) return <Moon size={22} style={{color: quiz.categoryColor}} />;
+    if (quiz.title.includes('Nutrition')) return <Salad size={22} style={{color: quiz.categoryColor}} />;
+    return <Sparkles size={22} style={{color: quiz.categoryColor}} />;
+  };
+
   return (
     <div
-      className="min-h-screen pt-24 pb-20 px-4"
-      style={{ background: 'linear-gradient(180deg, #f0fdfd 0%, #f8fafc 100%)' }}
+      className="min-h-screen pt-24 pb-20 px-4 sm:px-8 bg-cover bg-center bg-no-repeat bg-fixed"
+      style={{ backgroundImage: 'url("/images/Quizzesdashboardbg.png")' }}
     >
-      <div className="max-w-4xl mx-auto">
+      <div className="w-full max-w-[1400px] mx-auto">
 
         {/* Header row */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
@@ -56,8 +65,8 @@ export default function QuizDashboardClient({ user }) {
             <p className="text-[11px] font-extrabold uppercase tracking-[2px] mb-1" style={{ color: '#0f7c85' }}>
               ✦ Your Wellness Dashboard
             </p>
-            <h1 className="font-heading font-extrabold text-[32px] md:text-[40px] text-primary tracking-tight leading-tight">
-              Hello, {user?.name?.split(' ')[0] || 'there'} 👋
+            <h1 className="font-heading font-extrabold text-[32px] md:text-[40px] text-primary tracking-tight leading-tight flex items-center">
+              Hello, {user?.name?.split(' ')[0] || 'there'} <Hand size={36} className="text-amber-500 animate-[wave_2s_ease-in-out_infinite] ml-3" />
             </h1>
             <p className="text-secondary text-[14px] mt-1">
               {results.length} quiz{results.length !== 1 ? 'zes' : ''} completed · {remaining.length} remaining
@@ -78,29 +87,41 @@ export default function QuizDashboardClient({ user }) {
         {/* Stats cards */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
           {[
-            { label: 'Completed', value: results.length, icon: '✅', bg: '#e8f8f0', color: '#27ae60' },
-            { label: 'Available', value: quizzes.length, icon: '📋', bg: '#e8f4ff', color: '#1fb9fb' },
-            { label: 'Remaining', value: remaining.length, icon: '⏳', bg: '#fff8e8', color: '#f39c12' },
+            { label: 'Completed', value: results.length, icon: <CheckCircle size={28} color="#27ae60" />, bg: '#e8f8f0', color: '#27ae60' },
+            { label: 'Available', value: quizzes.length, icon: <ClipboardList size={28} color="#1fb9fb" />, bg: '#e8f4ff', color: '#1fb9fb' },
+            { label: 'Remaining', value: remaining.length, icon: <Hourglass size={28} color="#f39c12" />, bg: '#fff8e8', color: '#f39c12' },
             {
               label: 'Avg Score',
               value: results.length
                 ? Math.round(results.reduce((s, r) => s + (r.score / getMaxScore(r.slug)) * 100, 0) / results.length) + '%'
                 : '—',
-              icon: '📊',
+              icon: <BarChart2 size={28} color="#8e44ad" />,
               bg: '#f3eeff',
               color: '#8e44ad',
+              isTrend: true
             },
           ].map((stat, i) => (
             <div
               key={i}
-              className="rounded-[20px] p-5 flex flex-col gap-1"
-              style={{ background: stat.bg, border: `1px solid ${stat.color}22` }}
+              className="backdrop-blur-md rounded-[20px] p-5 flex flex-col gap-1 transition-all duration-300 shadow-md shadow-black/5 hover:-translate-y-1 hover:shadow-lg hover:shadow-black/10 relative overflow-hidden"
+              style={{ background: stat.bg, border: `1px solid ${stat.color}33` }}
             >
-              <span className="text-[22px]">{stat.icon}</span>
+              <div className="mb-1">{stat.icon}</div>
               <span className="font-heading font-extrabold text-[26px]" style={{ color: stat.color }}>
                 {stat.value}
               </span>
-              <span className="text-[11px] text-muted uppercase tracking-wider">{stat.label}</span>
+              <span className="text-[11px] text-muted uppercase tracking-wider relative z-10">{stat.label}</span>
+              
+              {stat.isTrend && results.length > 1 && (
+                <div className="absolute bottom-0 left-0 right-0 h-16 opacity-20 pointer-events-none">
+                  <svg width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 100 40">
+                    <polyline 
+                      points={results.map((r, idx) => `${(idx / (results.length - 1)) * 100},${35 - ((r.score / getMaxScore(r.slug))) * 30}`).join(' ')} 
+                      fill="none" stroke={stat.color} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" 
+                    />
+                  </svg>
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -119,16 +140,15 @@ export default function QuizDashboardClient({ user }) {
                 return (
                   <div
                     key={i}
-                    className="bg-white rounded-[20px] p-5 flex flex-col sm:flex-row sm:items-center gap-4"
-                    style={{ border: '1px solid #e2e8f0', boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}
+                    className="backdrop-blur-md rounded-[20px] p-5 flex flex-col sm:flex-row sm:items-center gap-4 transition-all duration-300 shadow-md shadow-black/10 hover:shadow-xl hover:shadow-black/20 hover:-translate-y-1 cursor-pointer"
+                    style={{ background: (quiz?.categoryBg || '#f0fdfd') + 'e6', border: `1px solid ${scoreResult?.color || '#0f7c85'}44` }}
                   >
                     {/* Icon + info */}
                     <div className="flex items-center gap-4 flex-1">
                       <div
-                        className="w-12 h-12 rounded-full flex items-center justify-center text-[22px] shrink-0"
-                        style={{ background: quiz?.categoryBg || '#f0fdfd' }}
+                        className="w-12 h-12 bg-white rounded-full flex items-center justify-center shrink-0 shadow-sm"
                       >
-                        {quiz?.icon || '📋'}
+                        {renderQuizIcon(quiz)}
                       </div>
                       <div>
                         <p className="font-heading font-bold text-[15px] text-primary">
@@ -179,10 +199,10 @@ export default function QuizDashboardClient({ user }) {
 
         {/* Empty state */}
         {loaded && results.length === 0 && (
-          <div className="text-center py-16">
-            <div className="text-[52px] mb-4">🧪</div>
-            <h2 className="font-heading font-bold text-[22px] text-primary mb-2">No quizzes taken yet</h2>
-            <p className="text-secondary text-[14px] mb-6">Take your first wellness quiz to see your results here.</p>
+          <div className="text-center py-16 px-4 bg-white/90 backdrop-blur-md rounded-[24px] border border-white shadow-lg shadow-black/5 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+            <img src="/images/holistic.png" alt="Start your wellness journey" className="w-48 h-48 object-contain mx-auto mb-4 opacity-90 drop-shadow-sm hover:scale-105 transition-transform duration-500" />
+            <h2 className="font-heading font-bold text-[22px] text-primary mb-2">Begin Your Wellness Journey</h2>
+            <p className="text-secondary text-[14px] mb-6 max-w-md mx-auto">Take your first wellness quiz to discover actionable insights and track your progress here.</p>
             <Link
               href="/quizzes"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-bold text-[13.5px] text-white no-underline"
@@ -202,21 +222,20 @@ export default function QuizDashboardClient({ user }) {
                 <Link
                   key={quiz.slug}
                   href={`/quizzes/${quiz.slug}`}
-                  className="no-underline group flex items-center gap-4 bg-white rounded-[20px] p-5 border border-slate-200/60 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
+                  className="no-underline group flex items-center gap-4 backdrop-blur-md rounded-[20px] p-5 transition-all duration-300 shadow-md shadow-black/10 hover:shadow-xl hover:shadow-black/20 hover:-translate-y-1"
+                  style={{ background: quiz.categoryBg + 'e6', border: `1px solid ${quiz.categoryColor}44` }}
                 >
                   <div
-                    className="w-12 h-12 rounded-full flex items-center justify-center text-[22px] shrink-0"
-                    style={{ background: quiz.categoryBg }}
+                    className="w-12 h-12 bg-white shadow-sm rounded-full flex items-center justify-center shrink-0"
                   >
-                    {quiz.icon}
+                    {renderQuizIcon(quiz)}
                   </div>
                   <div className="flex-1">
                     <p className="font-heading font-bold text-[14px] text-primary">{quiz.title}</p>
                     <p className="text-[12px] text-muted">{quiz.estimatedMinutes} min · {quiz.questionCount} Qs</p>
                   </div>
                   <div
-                    className="w-8 h-8 rounded-full flex items-center justify-center group-hover:translate-x-1 transition-transform"
-                    style={{ background: quiz.categoryBg }}
+                    className="w-8 h-8 bg-white shadow-sm rounded-full flex items-center justify-center group-hover:translate-x-1 transition-transform"
                   >
                     <svg className="w-3.5 h-3.5" style={{ color: quiz.categoryColor }} fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />

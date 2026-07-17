@@ -428,19 +428,19 @@ export default function ContactDetailsEditor({ siteId, initialData }) {
               key={i}
               className="bg-slate-50 border border-slate-200 rounded-lg p-4 space-y-3"
             >
-              <div className="flex items-center justify-between">
+              <div className="flex flex-wrap items-center justify-between gap-2">
                 <input
                   type="text"
                   value={addr.label}
                   onChange={(e) => updateAddress(i, "label", e.target.value)}
                   placeholder="Location label, e.g. Head Office"
-                  className="px-2.5 py-1 text-xs font-semibold border border-slate-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 bg-white w-64"
+                  className="px-2.5 py-1 text-xs font-semibold border border-slate-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 bg-white flex-1 min-w-0 sm:flex-none sm:w-64"
                 />
                 {addresses.length > 1 && (
                   <button
                     type="button"
                     onClick={() => removeAddress(i)}
-                    className="text-red-500 hover:text-red-700 transition-colors"
+                    className="text-red-500 hover:text-red-700 transition-colors shrink-0"
                   >
                     <Trash2 size={14} />
                   </button>
@@ -780,16 +780,16 @@ export default function ContactDetailsEditor({ siteId, initialData }) {
       </SectionCard>
 
       {/* Sticky footer save bar */}
-      <div className="flex justify-end gap-3 pt-4">
+      <div className="flex flex-wrap justify-end gap-3 pt-4 pb-2">
         {error && (
-          <div className="flex items-center gap-1.5 text-red-600 text-xs font-semibold bg-red-50 border border-red-200 px-3 py-2 rounded-lg">
-            <AlertCircle size={13} /> {error}
+          <div className="flex items-center gap-1.5 text-red-600 text-xs font-semibold bg-red-50 border border-red-200 px-3 py-2 rounded-lg flex-1 min-w-0">
+            <AlertCircle size={13} className="shrink-0" /> <span className="truncate">{error}</span>
           </div>
         )}
         <button
           onClick={handleSave}
           disabled={saving}
-          className="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-900 hover:bg-slate-700 disabled:bg-slate-300 text-white text-sm font-bold rounded-lg transition-colors shadow-sm"
+          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-slate-900 hover:bg-slate-700 disabled:bg-slate-300 text-white text-sm font-bold rounded-lg transition-colors shadow-sm shrink-0 w-full sm:w-auto"
         >
           <Save size={14} />
           {saving ? "Saving..." : "Save Contact Details"}

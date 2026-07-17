@@ -249,7 +249,7 @@ export default function CrmDashboardClient({
         </div>
 
         {/* Tab Buttons */}
-        <div className="flex gap-1 bg-gray-100 rounded-xl p-1 border">
+        <div className="flex flex-wrap gap-1 bg-gray-100 rounded-xl p-1 border">
           <button
             onClick={() => setActiveTab("overview")}
             className={`flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-lg transition ${
@@ -281,7 +281,7 @@ export default function CrmDashboardClient({
       {activeTab === "overview" && (
         <div className="space-y-6 animate-in fade-in duration-200">
           {/* Quick Actions */}
-          <div className="bg-gradient-to-r from-slate-50 to-indigo-50/30 border rounded-2xl p-5 shadow-sm">
+          <div className="bg-slate-50/50 border rounded-2xl p-5 shadow-sm">
             <h2 className="text-xs font-bold text-slate-800 mb-4">CRM Workspace Shortcuts</h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               <Link href="/crm/campaigns" className="flex flex-col p-3 bg-white border border-slate-150 rounded-xl hover:border-indigo-300 transition">
@@ -413,14 +413,14 @@ export default function CrmDashboardClient({
       {/* --- TAB 2: ADVERTISEMENT PLACEMENTS --- */}
       {activeTab === "ads" && (
         <div className="space-y-6 animate-in fade-in duration-200">
-          <div className="flex justify-between items-center">
-            <div>
+          <div className="flex flex-wrap justify-between items-start sm:items-center gap-4">
+            <div className="flex-1 min-w-[200px]">
               <h2 className="text-base font-bold text-gray-900">Campaigns & Display Banners</h2>
-              <p className="text-xs text-gray-500">Configure visual banner spots or integrate responsive Google AdSense scripts.</p>
+              <p className="text-xs text-gray-500 mt-1">Configure visual banner spots or integrate responsive Google AdSense scripts.</p>
             </div>
             <button
               onClick={() => setIsAdFormOpen(true)}
-              className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold transition"
+              className="flex items-center justify-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold transition shrink-0 whitespace-nowrap w-full sm:w-auto"
             >
               <Plus size={14} /> New Ad Campaign
             </button>
@@ -428,13 +428,13 @@ export default function CrmDashboardClient({
 
           {/* Form Modal */}
           {isAdFormOpen && (
-            <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-              <div className="bg-white rounded-xl shadow-xl w-full max-w-lg overflow-hidden border">
-                <div className="px-6 py-4 bg-gray-50 border-b flex justify-between items-center">
+            <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 overflow-y-auto">
+              <div className="bg-white rounded-xl shadow-xl w-full max-w-lg overflow-hidden border flex flex-col max-h-[90vh]">
+                <div className="px-6 py-4 bg-gray-50 border-b flex justify-between items-center shrink-0">
                   <h3 className="font-bold text-gray-900 text-sm">Deploy Campaign</h3>
                   <button onClick={() => setIsAdFormOpen(false)} className="text-xs text-gray-400 hover:text-gray-600 font-bold">Close</button>
                 </div>
-                <form onSubmit={handleCreateAd} className="p-6 space-y-4">
+                <form onSubmit={handleCreateAd} className="p-6 space-y-4 overflow-y-auto">
                   {adError && <div className="p-3 bg-red-50 text-red-700 text-xs rounded-lg border">{adError}</div>}
                   {adSuccess && <div className="p-3 bg-green-50 text-green-700 text-xs rounded-lg border">{adSuccess}</div>}
 
@@ -500,8 +500,8 @@ export default function CrmDashboardClient({
           ) : ads.length === 0 ? (
             <div className="py-12 text-center text-xs text-gray-400 border border-dashed rounded-xl bg-slate-50">No ads configured. Click "New Ad Campaign" to get started.</div>
           ) : (
-            <div className="border rounded-xl bg-white overflow-hidden shadow-sm">
-              <table className="w-full text-left border-collapse">
+            <div className="border rounded-xl bg-white overflow-hidden shadow-sm overflow-x-auto">
+              <table className="w-full text-left border-collapse min-w-[600px]">
                 <thead>
                   <tr className="bg-gray-50 border-b text-[10px] font-bold text-gray-400 uppercase tracking-wider">
                     <th className="px-5 py-3">Ad Name</th>
@@ -608,8 +608,8 @@ export default function CrmDashboardClient({
               )}
 
               {reportType === "traffic" && Array.isArray(reportResults.data) && (
-                <div className="border rounded-xl bg-white overflow-hidden max-h-96 overflow-y-auto">
-                  <table className="w-full text-left border-collapse">
+                <div className="border rounded-xl bg-white overflow-hidden max-h-96 overflow-y-auto overflow-x-auto">
+                  <table className="w-full text-left border-collapse min-w-[500px]">
                     <thead>
                       <tr className="bg-gray-50 border-b text-[10px] font-bold text-gray-400 uppercase tracking-wider">
                         <th className="px-4 py-3">Timestamp</th>

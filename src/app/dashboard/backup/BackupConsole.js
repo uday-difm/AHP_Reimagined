@@ -330,19 +330,19 @@ export default function BackupConsole({ siteId, initialHistory }) {
             </div>
           </div>
 
-          <div className="bg-gray-50 border rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="bg-gray-50 border rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 flex-wrap">
             <div className="text-xs text-gray-500">
               ⚡ Scope: All tables filtered under Site ID{" "}
               <span className="font-mono text-gray-800 bg-gray-200 px-1 py-0.5 rounded">
                 {siteId}
               </span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
               <select
                 value={exportFormat}
                 onChange={(e) => setExportFormat(e.target.value)}
                 disabled={isBackingUp || isBackingUpMedia || isRestoring}
-                className="bg-white border rounded-lg px-3 py-2 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                className="bg-white border rounded-lg px-3 py-2 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 flex-grow sm:flex-grow-0"
               >
                 <option value="json">JSON Backup</option>
                 <option value="sql">SQL Dump</option>
@@ -351,7 +351,7 @@ export default function BackupConsole({ siteId, initialHistory }) {
               <button
                 onClick={triggerBackup}
                 disabled={isBackingUp || isBackingUpMedia || isRestoring}
-                className="flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 disabled:bg-blue-300 transition"
+                className="flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 disabled:bg-blue-300 transition flex-grow sm:flex-grow-0"
               >
                 {isBackingUp ? (
                   <>
@@ -386,7 +386,7 @@ export default function BackupConsole({ siteId, initialHistory }) {
             </div>
           </div>
 
-          <div className="bg-gray-50 border rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="bg-gray-50 border rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 flex-wrap">
             <div className="text-xs text-gray-500">
               ⚡ Scope: Media assets and folder hierarchies under Site ID{" "}
               <span className="font-mono text-gray-800 bg-gray-200 px-1 py-0.5 rounded">
@@ -396,7 +396,7 @@ export default function BackupConsole({ siteId, initialHistory }) {
             <button
               onClick={triggerMediaBackup}
               disabled={isBackingUp || isBackingUpMedia || isRestoring}
-              className="flex items-center gap-2 rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700 disabled:bg-emerald-300 transition"
+              className="flex items-center justify-center gap-2 rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700 disabled:bg-emerald-300 transition w-full sm:w-auto"
             >
               {isBackingUpMedia ? (
                 <>
