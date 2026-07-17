@@ -882,7 +882,6 @@ export default function PushPage() {
             <Plus size={14} /> Compose Push
           </button>
         </div>
-        </div>
       </div>
 
       {/* Tabs */}
