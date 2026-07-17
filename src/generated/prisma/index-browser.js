@@ -1347,14 +1347,18 @@ exports.GlobalRole = exports.$Enums.GlobalRole = {
   ADMIN: 'ADMIN',
   EDITOR: 'EDITOR',
   AUTHOR: 'AUTHOR',
-  VIEWER: 'VIEWER'
+  MARKETING: 'MARKETING',
+  VIEWER: 'VIEWER',
+  VISITOR: 'VISITOR'
 };
 
 exports.SiteRole = exports.$Enums.SiteRole = {
   ADMIN: 'ADMIN',
   EDITOR: 'EDITOR',
   AUTHOR: 'AUTHOR',
-  VIEWER: 'VIEWER'
+  MARKETING: 'MARKETING',
+  VIEWER: 'VIEWER',
+  VISITOR: 'VISITOR'
 };
 
 exports.PageStatus = exports.$Enums.PageStatus = {

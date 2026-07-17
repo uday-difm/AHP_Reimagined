@@ -154,7 +154,7 @@ export default function BlogCategorySlider() {
             modules={[Navigation, Pagination, Autoplay]}
             spaceBetween={30}
             slidesPerView={1}
-            loop={true}
+            loop={blogs && blogs.length > 4}
             speed={500}
             autoplay={{
               delay: 2000,
