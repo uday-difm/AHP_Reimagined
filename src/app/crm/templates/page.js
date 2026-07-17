@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Trash2, Edit2, Code, CheckSquare, Square, AlertTriangle } from "lucide-react";
+import { Plus, Trash2, Edit2, Code, CheckSquare, Square, AlertTriangle, Eye } from "lucide-react";
 
 export default function TemplatesPage() {
   const [templates, setTemplates] = useState([]);
@@ -11,6 +11,23 @@ export default function TemplatesPage() {
   const [newTemplate, setNewTemplate] = useState({ name: "", subject: "", htmlContent: "" });
   const [siteId, setSiteId] = useState("");
   const [saveError, setSaveError] = useState(null);
+
+  // Editor view states
+  const [formTab, setFormTab] = useState("editor"); // "editor" | "preview"
+  const [previewTemplate, setPreviewTemplate] = useState(null); // Template model to preview
+
+  // Debounced html preview state
+  const [debouncedHtml, setDebouncedHtml] = useState("");
+  const [isPreviewLoading, setIsPreviewLoading] = useState(false);
+
+  useEffect(() => {
+    setIsPreviewLoading(true);
+    const timer = setTimeout(() => {
+      setDebouncedHtml(newTemplate.htmlContent);
+      setIsPreviewLoading(false);
+    }, 800);
+    return () => clearTimeout(timer);
+  }, [newTemplate.htmlContent]);
 
   // Bulk select state
   const [selected, setSelected] = useState(new Set());
@@ -197,14 +214,35 @@ export default function TemplatesPage() {
               onChange={(e) => setNewTemplate({ ...newTemplate, subject: e.target.value })}
               className="p-2 border rounded text-xs dark:bg-slate-900 w-full" />
           </div>
-          <div className="flex flex-wrap gap-2 items-center">
-            <span className="text-[10px] text-slate-400 font-bold uppercase shrink-0">Presets:</span>
-            <button type="button" onClick={() => handleApplyPreset("newsletter")} className="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-[10px] hover:bg-slate-200 shrink-0">Weekly Newsletter</button>
-            <button type="button" onClick={() => handleApplyPreset("promotion")} className="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-[10px] hover:bg-slate-200 shrink-0">Promo Event Card</button>
+          <div className="flex gap-2 items-center border-b border-slate-100 dark:border-slate-700 pb-2">
+            <span className="text-[10px] text-slate-400 font-bold uppercase">Presets:</span>
+            <button type="button" onClick={() => handleApplyPreset("newsletter")} className="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-[10px] hover:bg-slate-200">Weekly Newsletter</button>
+            <button type="button" onClick={() => handleApplyPreset("promotion")} className="px-2 py-1 bg-slate-100 dark:bg-slate-700 rounded text-[10px] hover:bg-slate-200">Promo Event Card</button>
           </div>
-          <textarea placeholder="Template HTML Markup" rows={12} required value={newTemplate.htmlContent}
-            onChange={(e) => setNewTemplate({ ...newTemplate, htmlContent: e.target.value })}
-            className="p-2 border rounded text-xs dark:bg-slate-900 w-full font-mono" />
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className="space-y-1.5">
+              <label className="block text-xs font-semibold text-slate-650 dark:text-slate-400">Template HTML Markup *</label>
+              <textarea placeholder="Template HTML Markup" rows={18} required value={newTemplate.htmlContent}
+                onChange={(e) => setNewTemplate({ ...newTemplate, htmlContent: e.target.value })}
+                className="p-3 border rounded-xl text-xs dark:bg-slate-900 w-full font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none h-[420px]" />
+            </div>
+
+            <div className="space-y-1.5">
+              <div className="flex justify-between items-center">
+                <label className="block text-xs font-semibold text-slate-650 dark:text-slate-400">Live Visual Preview</label>
+                {isPreviewLoading && <span className="text-[10px] text-indigo-500 font-bold animate-pulse">Syncing preview...</span>}
+              </div>
+              <div className="border rounded-xl bg-white dark:bg-white overflow-hidden shadow-xs h-[420px] relative">
+                <iframe
+                  srcDoc={debouncedHtml || "<div style='font-family: sans-serif; color: #94a3b8; padding: 20px; text-align: center; font-size: 12px;'>Write some HTML markup or apply a preset template above to see the live preview.</div>"}
+                  title="Template Preview"
+                  className={`w-full h-full transition-opacity duration-200 ${isPreviewLoading ? "opacity-60" : "opacity-100"}`}
+                  sandbox="allow-same-origin"
+                />
+              </div>
+            </div>
+          </div>
           <div className="flex gap-2 items-center">
             <button type="submit" className="px-4 py-2 bg-indigo-600 text-white rounded text-xs font-semibold hover:bg-indigo-700 transition">Save Template</button>
             <button type="button" onClick={() => { setShowAddForm(false); setSaveError(null); }} className="px-4 py-2 bg-slate-100 dark:bg-slate-700 rounded text-xs font-semibold">Cancel</button>
@@ -276,6 +314,15 @@ export default function TemplatesPage() {
               </div>
               <div className="flex gap-1 justify-end items-center mt-4 pt-3 border-t border-slate-100 dark:border-slate-700">
                 <button
+                  type="button"
+                  onClick={(e) => { e.stopPropagation(); setPreviewTemplate(tpl); }}
+                  className="p-1 bg-emerald-50 text-emerald-600 rounded hover:bg-emerald-100 transition"
+                  title="Visual Preview"
+                >
+                  <Eye size={11} />
+                </button>
+                <button
+                  type="button"
                   onClick={(e) => { e.stopPropagation(); handleEdit(tpl); }}
                   className="p-1 bg-indigo-50 text-indigo-600 rounded hover:bg-indigo-100 transition"
                   title="Edit"
@@ -283,6 +330,7 @@ export default function TemplatesPage() {
                   <Edit2 size={11} />
                 </button>
                 <button
+                  type="button"
                   onClick={(e) => { e.stopPropagation(); handleDelete(tpl.id); }}
                   className="p-1 bg-red-50 text-red-600 rounded hover:bg-red-100 transition"
                   title="Delete"
@@ -294,6 +342,48 @@ export default function TemplatesPage() {
           ))
         )}
       </div>
+
+      {/* Visual Preview Modal Dialog */}
+      {previewTemplate && (
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-in fade-in duration-200">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 max-w-3xl w-full overflow-hidden shadow-2xl flex flex-col max-h-[85vh]">
+            <div className="px-5 py-4 border-b border-slate-150 dark:border-slate-700 flex items-center justify-between bg-slate-50 dark:bg-slate-900/50">
+              <div>
+                <h3 className="font-bold text-sm text-slate-900 dark:text-white">Preview: {previewTemplate.name}</h3>
+                {previewTemplate.subject && (
+                  <p className="text-[10px] text-slate-400 mt-0.5">Subject: "{previewTemplate.subject}"</p>
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={() => setPreviewTemplate(null)}
+                className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xs font-bold bg-slate-100 dark:bg-slate-800 p-1.5 rounded-full"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="p-4 bg-slate-100 dark:bg-slate-900 flex-1 flex flex-col min-h-0">
+              <iframe
+                srcDoc={previewTemplate.htmlContent || "<p class='p-4 text-xs text-center text-slate-400'>This template has no layout HTML content.</p>"}
+                title="Visual Preview"
+                className="w-full flex-1 border border-slate-200 dark:border-slate-700 rounded-xl bg-white min-h-[400px]"
+                sandbox="allow-same-origin"
+              />
+            </div>
+
+            <div className="px-5 py-3.5 border-t border-slate-150 dark:border-slate-700 flex justify-end bg-slate-50 dark:bg-slate-900/50">
+              <button
+                type="button"
+                onClick={() => setPreviewTemplate(null)}
+                className="px-4 py-2 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded text-xs font-semibold hover:bg-slate-300 dark:hover:bg-slate-650 transition"
+              >
+                Close Preview
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

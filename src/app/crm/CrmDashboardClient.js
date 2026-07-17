@@ -46,10 +46,17 @@ export default function CrmDashboardClient({
   }, []);
 
   // --- TAB 1: Overview States ---
-  const [stats, setStats] = useState(initialStats);
-  const [trends, setTrends] = useState(initialTrends);
-  const [campaigns, setCampaigns] = useState(initialCampaignPerformance);
-  const [loading, setLoading] = useState(false);
+  const [stats, setStats] = useState(initialStats || {
+    crmSubscribers: 0,
+    crmLeads: 0,
+    totalPipelineValue: 0,
+    conversionRate: 0,
+    totalPageViews: 0
+  });
+  const [trends, setTrends] = useState(initialTrends || []);
+  const [campaigns, setCampaigns] = useState(initialCampaignPerformance || []);
+  const [subscribers, setSubscribers] = useState(recentSubscribers || []);
+  const [loading, setLoading] = useState(!initialStats);
   const [range, setRange] = useState("30");
 
   // --- TAB 2: Ads States ---
@@ -102,40 +109,24 @@ export default function CrmDashboardClient({
     }
   }, [activeTab]);
 
+  useEffect(() => {
+    if (!initialStats && siteId) {
+      refreshOverviewData(range);
+    }
+  }, [siteId]);
+
   const refreshOverviewData = async (newRange = range) => {
     setLoading(true);
     try {
-      const [resStats, resReports] = await Promise.all([
-        fetch(`/api/dashboard/analytics/dashboard?range=${newRange}`, {
-          headers: { "x-site-id": siteId },
-        }),
-        fetch(`/api/dashboard/reports/advanced?range=${newRange}`, {
-          headers: { "x-site-id": siteId },
-        }),
-      ]);
-
-      const jsonStats = await resStats.json();
-      const jsonReports = await resReports.json();
-
-      if (resStats.ok && jsonStats.data) {
-        setStats((prev) => ({
-          ...prev,
-          crmLeads: jsonStats.data.summary?.crmLeads ?? prev.crmLeads,
-          crmSubscribers: jsonStats.data.summary?.crmSubscribers ?? prev.crmSubscribers,
-          contactSubmissions: jsonStats.data.summary?.contactSubmissions ?? prev.contactSubmissions,
-          totalPageViews: jsonStats.data.summary?.totalPageViews ?? prev.totalPageViews,
-        }));
-      }
-
-      if (resReports.ok && jsonReports.data) {
-        setTrends(jsonReports.data.trafficTrends || []);
-        setCampaigns(jsonReports.data.campaignPerformance || []);
-        setStats((prev) => ({
-          ...prev,
-          totalPipelineValue: jsonReports.data.revenue?.totalPipelineValue ?? prev.totalPipelineValue,
-          convertedValue: jsonReports.data.revenue?.convertedValue ?? prev.convertedValue,
-          conversionRate: jsonReports.data.revenue?.conversionRate ?? prev.conversionRate,
-        }));
+      const res = await fetch(`/api/crm?range=${newRange}`, {
+        headers: { "x-site-id": siteId },
+      });
+      const json = await res.json();
+      if (res.ok && json.success && json.data) {
+        setStats(json.data.stats);
+        setTrends(json.data.trends);
+        setCampaigns(json.data.campaignsPerf);
+        setSubscribers(json.data.recentSubscribers || []);
       }
     } catch (err) {
       console.error("Failed to refresh CRM stats", err);
@@ -374,36 +365,48 @@ export default function CrmDashboardClient({
             <div className="border rounded-xl p-4 bg-white space-y-3">
               <h3 className="font-bold text-gray-900 text-xs border-b pb-2">Email Campaigns</h3>
               <div className="space-y-3 max-h-60 overflow-y-auto">
-                {campaigns.map((c) => (
-                  <div key={c.id} className="p-3 border rounded-lg text-xs space-y-1">
-                    <div className="flex justify-between items-center">
-                      <span className="font-bold text-gray-800">{c.name}</span>
-                      <span className="text-[10px] text-gray-400 uppercase font-bold">{c.status}</span>
-                    </div>
-                    {c.status === "sent" && (
-                      <div className="flex gap-4 text-[10px] text-gray-500 font-mono mt-1 pt-1 border-t">
-                        <span>Sent: {c.sentCount}</span>
-                        <span>Opens: {c.openRate}%</span>
-                        <span>Clicks: {c.clickRate}%</span>
+                {loading && campaigns.length === 0 ? (
+                  <div className="text-center text-xs text-slate-400 py-4">Loading campaigns...</div>
+                ) : campaigns.length === 0 ? (
+                  <div className="text-center text-xs text-slate-400 py-4">No campaigns found.</div>
+                ) : (
+                  campaigns.map((c) => (
+                    <div key={c.id} className="p-3 border rounded-lg text-xs space-y-1">
+                      <div className="flex justify-between items-center">
+                        <span className="font-bold text-gray-800">{c.name}</span>
+                        <span className="text-[10px] text-gray-400 uppercase font-bold">{c.status}</span>
                       </div>
-                    )}
-                  </div>
-                ))}
+                      {c.status === "sent" && (
+                        <div className="flex gap-4 text-[10px] text-gray-500 font-mono mt-1 pt-1 border-t">
+                          <span>Sent: {c.sentCount}</span>
+                          <span>Opens: {c.openRate}%</span>
+                          <span>Clicks: {c.clickRate}%</span>
+                        </div>
+                      )}
+                    </div>
+                  ))
+                )}
               </div>
             </div>
 
             <div className="border rounded-xl p-4 bg-white space-y-3">
               <h3 className="font-bold text-gray-900 text-xs border-b pb-2">Recent Subscribers</h3>
               <div className="space-y-2 max-h-60 overflow-y-auto">
-                {recentSubscribers.map((sub) => (
-                  <div key={sub.id} className="flex justify-between items-center text-xs pb-1.5 border-b last:border-0">
-                    <div>
-                      <span className="font-semibold text-gray-800">{sub.name || sub.email}</span>
-                      <span className="text-[10px] text-gray-400 block">{sub.email}</span>
+                {loading && subscribers.length === 0 ? (
+                  <div className="text-center text-xs text-slate-400 py-4">Loading subscribers...</div>
+                ) : subscribers.length === 0 ? (
+                  <div className="text-center text-xs text-slate-400 py-4">No subscribers found.</div>
+                ) : (
+                  subscribers.map((sub) => (
+                    <div key={sub.id} className="flex justify-between items-center text-xs pb-1.5 border-b last:border-0">
+                      <div>
+                        <span className="font-semibold text-gray-800">{sub.name || sub.email}</span>
+                        <span className="text-[10px] text-gray-400 block">{sub.email}</span>
+                      </div>
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-green-50 text-green-700 font-semibold">{sub.status}</span>
                     </div>
-                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-green-50 text-green-700 font-semibold">{sub.status}</span>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </div>
           </div>

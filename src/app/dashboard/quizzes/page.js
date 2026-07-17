@@ -791,6 +791,260 @@ function HomePagePanel({ allQuestions, quizTypes }) {
   );
 }
 
+// ─── Healthy Bite Panel ──────────────────────────────────────────────────────
+
+function HealthyBitePanel({ siteId }) {
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  // Healthy Bite form states
+  const [title, setTitle] = useState("Healthy Bite of the Day");
+  const [recipeName, setRecipeName] = useState("Quinoa & Avocado Power Bowl");
+  const [time, setTime] = useState("15 mins");
+  const [calories, setCalories] = useState("320 kcal");
+  const [points, setPoints] = useState("High in Protein, Gut Friendly, Quick & Easy");
+  const [recipeLink, setRecipeLink] = useState("/blogs/quinoa-avocado-power-bowl");
+  const [image, setImage] = useState("/images/healthy_bite.png");
+
+  // Keep track of the original full settings object to merge back on save
+  const [fullWebsiteSettings, setFullWebsiteSettings] = useState({});
+
+  useEffect(() => {
+    if (!siteId) return;
+    setLoading(true);
+    fetch("/api/dashboard/settings", {
+      headers: { "x-site-id": siteId }
+    })
+      .then(res => res.ok ? res.json() : {})
+      .then(resData => {
+        const dataObj = resData.data?.websiteSettings || resData.websiteSettings || {};
+        setFullWebsiteSettings(dataObj);
+        
+        if (dataObj.wellnessBanner?.healthyBite) {
+          const hb = dataObj.wellnessBanner.healthyBite;
+          setTitle(hb.title || "Healthy Bite of the Day");
+          setRecipeName(hb.recipeName || "Quinoa & Avocado Power Bowl");
+          setTime(hb.time || "15 mins");
+          setCalories(hb.calories || "320 kcal");
+          setPoints(Array.isArray(hb.points) ? hb.points.join(", ") : (hb.points || ""));
+          setRecipeLink(hb.recipeLink || "/blogs/quinoa-avocado-power-bowl");
+          setImage(hb.image || "/images/healthy_bite.png");
+        }
+      })
+      .catch(err => console.error("Error loading settings:", err))
+      .finally(() => setLoading(false));
+  }, [siteId]);
+
+  const handleSave = async (e) => {
+    e.preventDefault();
+    setSaving(true);
+    setSaved(false);
+
+    // Split points back into array
+    const pointsArray = points.split(",").map(p => p.trim()).filter(Boolean);
+
+    // Merge changes back into websiteSettings
+    const updatedSettings = {
+      ...fullWebsiteSettings,
+      wellnessBanner: {
+        ...(fullWebsiteSettings.wellnessBanner || { enabled: true }),
+        healthyBite: {
+          title,
+          recipeName,
+          time,
+          calories,
+          points: pointsArray,
+          recipeLink,
+          image
+        }
+      }
+    };
+
+    try {
+      const res = await fetch("/api/dashboard/settings", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "x-site-id": siteId
+        },
+        body: JSON.stringify(updatedSettings)
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "Failed to save Healthy Bite");
+      }
+
+      setSaved(true);
+      setTimeout(() => setSaved(false), 3000);
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  if (loading) return (
+    <div className="flex justify-center py-20">
+      <Loader2 size={24} className="animate-spin text-indigo-550" />
+    </div>
+  );
+
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      {/* Form column (7 cols) */}
+      <form onSubmit={handleSave} className="lg:col-span-7 bg-white border border-slate-100 rounded-3xl p-6 shadow-xs space-y-5">
+        <div className="border-b border-slate-100 pb-3 flex items-center justify-between">
+          <div>
+            <h3 className="font-heading font-extrabold text-slate-800 text-sm">Healthy Bite Parameters</h3>
+            <p className="text-[11px] text-slate-400 font-semibold mt-0.5">Customize daily nutrition recommendations displayed on the home page.</p>
+          </div>
+          <button
+            type="submit"
+            disabled={saving}
+            className={`inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-xl transition ${
+              saved ? "bg-green-500 text-white" : "bg-[#0f7c85] hover:bg-[#0c6b73] text-white disabled:opacity-60"
+            }`}
+          >
+            {saving ? <Loader2 size={13} className="animate-spin" /> : saved ? <Check size={13} /> : <Save size={13} />}
+            {saving ? "Saving…" : saved ? "Saved!" : "Save Recipe"}
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-1">
+            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Widget Title</label>
+            <input
+              type="text"
+              required
+              value={title}
+              onChange={e => setTitle(e.target.value)}
+              className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white transition"
+            />
+          </div>
+          <div className="space-y-1">
+            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Recipe Name</label>
+            <input
+              type="text"
+              required
+              value={recipeName}
+              onChange={e => setRecipeName(e.target.value)}
+              className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white transition"
+            />
+          </div>
+          <div className="space-y-1">
+            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Preparation Time</label>
+            <input
+              type="text"
+              required
+              value={time}
+              onChange={e => setTime(e.target.value)}
+              className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white transition"
+            />
+          </div>
+          <div className="space-y-1">
+            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Calories Info</label>
+            <input
+              type="text"
+              required
+              value={calories}
+              onChange={e => setCalories(e.target.value)}
+              className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white transition"
+            />
+          </div>
+          <div className="md:col-span-2 space-y-1">
+            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Highlight Tags (comma-separated)</label>
+            <input
+              type="text"
+              required
+              value={points}
+              onChange={e => setPoints(e.target.value)}
+              placeholder="e.g. High in Protein, Gut Friendly, Quick & Easy"
+              className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white transition"
+            />
+          </div>
+          <div className="md:col-span-2 space-y-1">
+            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Recipe Blog Link</label>
+            <input
+              type="text"
+              required
+              value={recipeLink}
+              onChange={e => setRecipeLink(e.target.value)}
+              className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white transition font-mono"
+            />
+          </div>
+          <div className="md:col-span-2 space-y-1">
+            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Image Path</label>
+            <input
+              type="text"
+              required
+              value={image}
+              onChange={e => setImage(e.target.value)}
+              className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white transition font-mono"
+            />
+          </div>
+        </div>
+      </form>
+
+      {/* Visual Live Mockup column (5 cols) */}
+      <div className="lg:col-span-5 space-y-3">
+        <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider pl-1">Live Widget Mockup</span>
+        <div className="bg-slate-50 border border-slate-100 rounded-3xl p-6 flex justify-center items-center">
+          <div className="bg-white rounded-[28px] border border-slate-200/60 shadow-md flex flex-col overflow-hidden h-[380px] w-full max-w-sm">
+            
+            {/* Full-bleed recipe cover image */}
+            <div className="relative h-[155px] bg-slate-50 w-full overflow-hidden shrink-0 border-b">
+              <img 
+                src={image} 
+                alt={recipeName} 
+                className="w-full h-full object-cover" 
+                onError={(e) => { 
+                  e.target.src = "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300&auto=format&fit=crop&q=60"; 
+                }} 
+              />
+              <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-xs px-3 py-1 rounded-full shadow-sm text-[10px] font-extrabold text-slate-800 tracking-wider uppercase flex items-center gap-1.5 border border-slate-100/80">
+                <span className="text-red-400">❤️</span> {title}
+              </div>
+            </div>
+
+            {/* Content area */}
+            <div className="p-4.5 flex-1 flex flex-col justify-between min-h-[200px]">
+              <div>
+                <h4 className="font-heading font-extrabold text-[15px] text-slate-800 leading-tight mb-2.5">
+                  {recipeName}
+                </h4>
+                <div className="flex flex-wrap gap-1.5 mb-1">
+                  {points.split(",").map(p => p.trim()).filter(Boolean).map((pt, i) => (
+                    <span key={i} className="inline-flex items-center gap-0.5 bg-[#0f7c85]/5 text-[#0f7c85] text-[10px] font-extrabold px-2 py-0.5 rounded-md border border-[#0f7c85]/10 shadow-3xs">
+                      ✓ {pt}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-2.5">
+                <div className="flex justify-between items-center text-xs font-bold text-slate-600 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-100">
+                  <span>⏱ {time}</span>
+                  <span>🔥 {calories}</span>
+                </div>
+                <button
+                  type="button"
+                  className="w-full bg-[#0f7c85] text-white text-center py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm"
+                >
+                  View Recipe →
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  );
+}
+
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function QuizzesAdminPage() {
@@ -949,8 +1203,9 @@ export default function QuizzesAdminPage() {
       {/* ── Tab Switcher ── */}
       <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-xl w-fit">
         {[
-          { id: "types",     label: "Quiz Types & Questions", icon: <Layers size={14} /> },
-          { id: "home-page", label: "Home Page Quiz",          icon: <Home size={14} /> },
+          { id: "types",        label: "Quiz Types & Questions", icon: <Layers size={14} /> },
+          { id: "home-page",    label: "Home Page Quiz",          icon: <Home size={14} /> },
+          { id: "healthy-bite", label: "Healthy Bite of the Day", icon: <Settings size={14} /> },
         ].map((tab) => (
           <button
             key={tab.id}
@@ -1055,6 +1310,10 @@ export default function QuizzesAdminPage() {
       {/* Tab content */}
       {activeTab === "home-page" && !loading && (
         <HomePagePanel allQuestions={allQuestions} quizTypes={quizTypes} />
+      )}
+
+      {activeTab === "healthy-bite" && (
+        <HealthyBitePanel siteId={siteId} />
       )}
 
       {activeTab === "types" && (

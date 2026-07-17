@@ -39,6 +39,7 @@ export default function AdsPage() {
   const [zones, setZones] = useState([]);
   const [campaigns, setCampaigns] = useState([]);
   const [advertisers, setAdvertisers] = useState([]);
+  const [pages, setPages] = useState([]);
   
   // Forms & Modals
   const [panelOpen, setPanelOpen] = useState(false);
@@ -86,13 +87,14 @@ export default function AdsPage() {
     if (!siteId) return;
     setLoading(true);
     try {
-      const [adsRes, zonesRes, campaignsRes, advertisersRes, analyticsRes, settingsRes] = await Promise.all([
+      const [adsRes, zonesRes, campaignsRes, advertisersRes, analyticsRes, settingsRes, pagesRes] = await Promise.all([
         fetch("/api/dashboard/ads", { headers: { "x-site-id": siteId } }),
         fetch("/api/dashboard/ads/zones", { headers: { "x-site-id": siteId } }),
         fetch("/api/dashboard/advertisement-campaigns", { headers: { "x-site-id": siteId } }),
         fetch("/api/dashboard/advertisers", { headers: { "x-site-id": siteId } }),
         fetch("/api/dashboard/ads/analytics", { headers: { "x-site-id": siteId } }),
-        fetch("/api/dashboard/ads/settings", { headers: { "x-site-id": siteId } })
+        fetch("/api/dashboard/ads/settings", { headers: { "x-site-id": siteId } }),
+        fetch("/api/dashboard/pages", { headers: { "x-site-id": siteId } })
       ]);
 
       if (adsRes.ok) {
@@ -119,6 +121,10 @@ export default function AdsPage() {
         const settingsData = await settingsRes.json();
         setAdsensePublisherId(settingsData.data?.adSettings?.adsensePublisherId || "");
         setAutoAdsEnabled(settingsData.data?.adSettings?.autoAdsEnabled || false);
+      }
+      if (pagesRes.ok) {
+        const pagesData = await pagesRes.json();
+        setPages(pagesData.data?.pages || []);
       }
     } catch (e) {
       console.error("Failed to load ads context:", e);
@@ -455,6 +461,35 @@ export default function AdsPage() {
       return matchesSearch && matchesStatus && matchesZone;
     });
   }, [ads, searchQuery, statusFilter, zoneFilter]);
+
+  const combinedRoutes = useMemo(() => {
+    const staticList = [
+      { slug: "/", title: "Home Page" },
+      { slug: "/about", title: "About Us" },
+      { slug: "/blogs", title: "Blogs Directory" },
+      { slug: "/blogs/*", title: "All Individual Blog Posts" },
+      { slug: "/services", title: "Services Directory" },
+      { slug: "/contact", title: "Contact Us" },
+      { slug: "/quizzes", title: "Quizzes Directory" },
+      { slug: "/quizzes/*", title: "All Individual Quizzes" },
+      { slug: "/publication", title: "Publications Page" },
+      { slug: "/magazine/*", title: "All Individual Magazines" }
+    ];
+
+    const dynamicList = pages.map(p => ({
+      slug: p.slug.startsWith("/") ? p.slug : `/${p.slug}`,
+      title: `${p.title} (Custom Page)`
+    }));
+
+    const all = [...staticList];
+    dynamicList.forEach(item => {
+      if (!all.some(x => x.slug === item.slug)) {
+        all.push(item);
+      }
+    });
+
+    return all;
+  }, [pages]);
 
   return (
     <div className="space-y-6 w-full relative">
@@ -1383,13 +1418,98 @@ export default function AdsPage() {
                     </div>
                   </div>
                   <div>
-                    <label className="text-[9.5px] font-bold text-slate-450 block mb-1">Route filter tags (comma separated)</label>
-                    <input
-                      type="text" placeholder="/blogs/*, /services"
-                      value={formAd.targetRoutes}
-                      onChange={e => setFormAd({ ...formAd, targetRoutes: e.target.value })}
-                      className="w-full p-1.5 border rounded-lg text-xs dark:bg-slate-900 outline-none"
-                    />
+                    {(() => {
+                      const isTargetingAll = !formAd.targetRoutes || formAd.targetRoutes.trim() === "" || formAd.targetRoutes.trim() === "all";
+                      return (
+                        <div className="space-y-3.5">
+                          <div>
+                            <label className="text-[9.5px] font-bold text-slate-450 uppercase block mb-1.5">Route Page Targeting</label>
+                            <div className="flex gap-2">
+                              <button
+                                type="button"
+                                onClick={() => setFormAd({ ...formAd, targetRoutes: "" })}
+                                className={`flex-1 py-2.5 rounded-lg text-xs font-bold border transition-all ${
+                                  isTargetingAll
+                                    ? "bg-indigo-50 border-indigo-200 text-indigo-600 dark:bg-indigo-950/20"
+                                    : "border-slate-200 text-slate-500 hover:text-slate-700 hover:bg-slate-50 dark:border-slate-700"
+                                }`}
+                              >
+                                All Pages (Site-wide)
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  if (isTargetingAll) {
+                                    setFormAd({ ...formAd, targetRoutes: "/" });
+                                  }
+                                }}
+                                className={`flex-1 py-2.5 rounded-lg text-xs font-bold border transition-all ${
+                                  !isTargetingAll
+                                    ? "bg-indigo-50 border-indigo-200 text-indigo-600 dark:bg-indigo-950/20"
+                                    : "border-slate-200 text-slate-500 hover:text-slate-700 hover:bg-slate-50 dark:border-slate-700"
+                                }`}
+                              >
+                                Selected Pages Only
+                              </button>
+                            </div>
+                          </div>
+
+                          {!isTargetingAll && (
+                            <div className="space-y-3 animation-fade-in">
+                              <div className="bg-slate-50/50 dark:bg-slate-900/40 p-3 rounded-2xl border border-slate-150/80">
+                                <span className="block text-[9.5px] font-extrabold text-slate-400 uppercase tracking-wider mb-2 pl-0.5">Select target pages:</span>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-56 overflow-y-auto p-1 pr-1.5 scrollbar-thin">
+                                  {combinedRoutes.map(routeObj => {
+                                    const isChecked = formAd.targetRoutes.split(",").map(r => r.trim()).includes(routeObj.slug);
+                                    return (
+                                      <label
+                                        key={routeObj.slug}
+                                        className={`flex items-start gap-2.5 p-2 rounded-xl border text-[11px] font-bold cursor-pointer select-none transition-all ${
+                                          isChecked
+                                            ? "bg-indigo-50/80 border-indigo-200 text-indigo-700 dark:bg-indigo-950/30 dark:border-indigo-850"
+                                            : "bg-white border-slate-200/80 hover:bg-slate-50 text-slate-600 dark:bg-slate-900 dark:border-slate-850"
+                                        }`}
+                                      >
+                                        <input
+                                          type="checkbox"
+                                          checked={isChecked}
+                                          className="mt-0.5 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-3.5 h-3.5 shrink-0"
+                                          onChange={() => {
+                                            const currentList = formAd.targetRoutes.split(",").map(r => r.trim()).filter(Boolean);
+                                            let newList;
+                                            if (currentList.includes(routeObj.slug)) {
+                                              newList = currentList.filter(s => s !== routeObj.slug);
+                                            } else {
+                                              newList = [...currentList, routeObj.slug];
+                                            }
+                                            setFormAd({ ...formAd, targetRoutes: newList.join(", ") });
+                                          }}
+                                        />
+                                        <div className="leading-tight min-w-0">
+                                          <span className="block truncate">{routeObj.title}</span>
+                                          <code className="block text-[9px] text-slate-450 font-mono font-normal mt-0.5 truncate">{routeObj.slug}</code>
+                                        </div>
+                                      </label>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+
+                              <div>
+                                <label className="text-[9.5px] font-bold text-slate-450 block mb-1">Or type custom route rule paths (comma separated)</label>
+                                <input
+                                  type="text"
+                                  placeholder="Ex: /quizzes/results/*, /legal/*"
+                                  value={formAd.targetRoutes}
+                                  onChange={e => setFormAd({ ...formAd, targetRoutes: e.target.value })}
+                                  className="w-full p-2.5 border rounded-lg text-xs dark:bg-slate-900 outline-none font-mono"
+                                />
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })()}
                   </div>
                 </div>
 

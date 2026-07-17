@@ -11,29 +11,29 @@ import {
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 const CAMPAIGN_TYPES = [
-  { value: "newsletter",     label: "Newsletter" },
-  { value: "promotional",    label: "Promotional" },
-  { value: "educational",    label: "Educational" },
+  { value: "newsletter", label: "Newsletter" },
+  { value: "promotional", label: "Promotional" },
+  { value: "educational", label: "Educational" },
   { value: "product_launch", label: "Product Launch" },
-  { value: "event",          label: "Event" },
-  { value: "webinar",        label: "Webinar" },
-  { value: "magazine",       label: "Magazine" },
-  { value: "survey",         label: "Survey" },
-  { value: "healthcare",     label: "Healthcare" },
-  { value: "drip",           label: "Drip Campaign" },
-  { value: "automation",     label: "Automation" },
+  { value: "event", label: "Event" },
+  { value: "webinar", label: "Webinar" },
+  { value: "magazine", label: "Magazine" },
+  { value: "survey", label: "Survey" },
+  { value: "healthcare", label: "Healthcare" },
+  { value: "drip", label: "Drip Campaign" },
+  { value: "automation", label: "Automation" },
 ];
 
 const STATUS_CONFIG = {
-  draft:     { label: "Draft",     cls: "bg-slate-100 text-slate-700 border-slate-200",       icon: FileText },
-  scheduled: { label: "Scheduled", cls: "bg-blue-50 text-blue-700 border-blue-200",           icon: Clock },
-  queued:    { label: "Queued",    cls: "bg-indigo-50 text-indigo-700 border-indigo-200",     icon: Radio },
-  sending:   { label: "Sending",   cls: "bg-amber-50 text-amber-700 border-amber-200",       icon: Send },
-  sent:      { label: "Sent",      cls: "bg-emerald-50 text-emerald-700 border-emerald-200",  icon: CheckCircle },
-  completed: { label: "Completed", cls: "bg-emerald-50 text-emerald-700 border-emerald-200",  icon: CheckCircle },
-  paused:    { label: "Paused",    cls: "bg-amber-50 text-amber-600 border-amber-200",       icon: Pause },
-  cancelled: { label: "Cancelled", cls: "bg-slate-100 text-slate-500 border-slate-200",      icon: XCircle },
-  failed:    { label: "Failed",    cls: "bg-red-50 text-red-700 border-red-200",             icon: AlertCircle },
+  draft: { label: "Draft", cls: "bg-slate-100 text-slate-700 border-slate-200", icon: FileText },
+  scheduled: { label: "Scheduled", cls: "bg-blue-50 text-blue-700 border-blue-200", icon: Clock },
+  queued: { label: "Queued", cls: "bg-indigo-50 text-indigo-700 border-indigo-200", icon: Radio },
+  sending: { label: "Sending", cls: "bg-amber-50 text-amber-700 border-amber-200", icon: Send },
+  sent: { label: "Sent", cls: "bg-emerald-50 text-emerald-700 border-emerald-200", icon: CheckCircle },
+  completed: { label: "Completed", cls: "bg-emerald-50 text-emerald-700 border-emerald-200", icon: CheckCircle },
+  paused: { label: "Paused", cls: "bg-amber-50 text-amber-600 border-amber-200", icon: Pause },
+  cancelled: { label: "Cancelled", cls: "bg-slate-100 text-slate-500 border-slate-200", icon: XCircle },
+  failed: { label: "Failed", cls: "bg-red-50 text-red-700 border-red-200", icon: AlertCircle },
 };
 
 const TIMEZONES = [
@@ -101,7 +101,7 @@ function RateBar({ label, pct, color }) {
 
 // ─── Analytics Panel ──────────────────────────────────────────────────────────
 function AnalyticsPanel({ campaignId, siteId, onClose }) {
-  const [data, setData]       = useState(null);
+  const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -115,8 +115,8 @@ function AnalyticsPanel({ campaignId, siteId, onClose }) {
   }, [campaignId, siteId]);
 
   const campaign = data?.campaign;
-  const stats    = data?.stats;
-  const logs     = data?.recentLogs || [];
+  const stats = data?.stats;
+  const logs = data?.recentLogs || [];
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-end bg-black/30 backdrop-blur-sm" onClick={e => e.target === e.currentTarget && onClose()}>
@@ -170,9 +170,9 @@ function AnalyticsPanel({ campaignId, siteId, onClose }) {
               <>
                 <div className="grid grid-cols-3 gap-3">
                   {[
-                    { label: "Delivered",  value: stats.sent,    color: "text-emerald-600" },
-                    { label: "Opened",     value: stats.opened,  color: "text-blue-600"    },
-                    { label: "Clicked",    value: stats.clicked, color: "text-indigo-600"  },
+                    { label: "Delivered", value: stats.sent, color: "text-emerald-600" },
+                    { label: "Opened", value: stats.opened, color: "text-blue-600" },
+                    { label: "Clicked", value: stats.clicked, color: "text-indigo-600" },
                   ].map(s => (
                     <div key={s.label} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-center">
                       <div className={`text-xl font-extrabold ${s.color}`}>{s.value}</div>
@@ -189,8 +189,8 @@ function AnalyticsPanel({ campaignId, siteId, onClose }) {
                 <div className="space-y-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4">
                   <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Performance Rates</h3>
                   <RateBar label="Delivery Rate" pct={stats.deliveryRate} color="bg-emerald-500" />
-                  <RateBar label="Open Rate"     pct={stats.openRate}     color="bg-blue-500"    />
-                  <RateBar label="Click Rate"    pct={stats.clickRate}    color="bg-indigo-500"  />
+                  <RateBar label="Open Rate" pct={stats.openRate} color="bg-blue-500" />
+                  <RateBar label="Click Rate" pct={stats.clickRate} color="bg-indigo-500" />
                 </div>
               </>
             )}
@@ -230,14 +230,27 @@ function AnalyticsPanel({ campaignId, siteId, onClose }) {
 
 // ─── 5-Step Campaign Wizard ───────────────────────────────────────────────────
 function CampaignWizard({ onClose, onSaved, lists, templates, siteId, editData }) {
-  const [step, setStep]     = useState(1);
-  const [data, setData]     = useState(editData ? { ...DEFAULT_WIZARD, ...editData } : { ...DEFAULT_WIZARD });
+  const [step, setStep] = useState(1);
+  const [data, setData] = useState(editData ? { ...DEFAULT_WIZARD, ...editData } : { ...DEFAULT_WIZARD });
   const [saving, setSaving] = useState(false);
-  const [error, setError]   = useState(null);
-  const [testEmail, setTestEmail]    = useState("");
+  const [error, setError] = useState(null);
+  const [testEmail, setTestEmail] = useState("");
   const [testSending, setTestSending] = useState(false);
-  const [testMsg, setTestMsg]        = useState(null);
-  const [launching, setLaunching]    = useState(false);
+  const [testMsg, setTestMsg] = useState(null);
+  const [launching, setLaunching] = useState(false);
+
+  // Debounced campaign body preview state
+  const [debouncedBody, setDebouncedBody] = useState("");
+  const [isPreviewLoading, setIsPreviewLoading] = useState(false);
+
+  useEffect(() => {
+    setIsPreviewLoading(true);
+    const timer = setTimeout(() => {
+      setDebouncedBody(data.body);
+      setIsPreviewLoading(false);
+    }, 800);
+    return () => clearTimeout(timer);
+  }, [data.body]);
 
   const isEdit = !!editData?.id;
   const up = (field, val) => setData(d => ({ ...d, [field]: val }));
@@ -496,21 +509,42 @@ function CampaignWizard({ onClose, onSaved, lists, templates, siteId, editData }
                 </div>
               )}
               <div>
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-1.5">
-                  <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 shrink-0">Email Body (HTML) *</label>
-                  <div className="flex flex-wrap gap-1.5 text-[10px] text-slate-400">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="block text-xs font-semibold text-slate-600 dark:text-slate-400">Compose Message Body</span>
+                  <div className="flex gap-1.5 text-[10px] text-slate-400">
                     <span className="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded font-mono">{"{{first_name}}"}</span>
                     <span className="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded font-mono">{"{{email}}"}</span>
                     <span className="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded font-mono">{"{{unsubscribe_link}}"}</span>
                   </div>
                 </div>
-                <textarea
-                  value={data.body}
-                  onChange={e => { up("body", e.target.value); up("templateId", ""); }}
-                  rows={14}
-                  placeholder={"<h1>Hello {{first_name}},</h1>\n<p>Your email content here...</p>"}
-                  className="w-full px-3 py-2 text-xs border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
-                />
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Email Body (HTML) *</label>
+                    <textarea
+                      value={data.body}
+                      onChange={e => { up("body", e.target.value); up("templateId", ""); }}
+                      rows={16}
+                      placeholder={"<h1>Hello {{first_name}},</h1>\n<p>Your email content here...</p>"}
+                      className="w-full px-3 py-2 text-xs border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none h-[400px]"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <div className="flex justify-between items-center">
+                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Live Visual Preview</label>
+                      {isPreviewLoading && <span className="text-[9px] text-indigo-500 font-bold animate-pulse">Syncing preview...</span>}
+                    </div>
+                    <div className="border border-slate-200 dark:border-slate-700 rounded-lg bg-white overflow-hidden shadow-xs h-[400px]">
+                      <iframe
+                        srcDoc={debouncedBody || "<div style='font-family: sans-serif; color: #94a3b8; padding: 20px; text-align: center; font-size: 12px;'>Write some HTML markup or select a template above to see the campaign body live.</div>"}
+                        title="Visual Preview"
+                        className={`w-full h-full transition-opacity duration-200 ${isPreviewLoading ? "opacity-60" : "opacity-100"}`}
+                        sandbox="allow-same-origin"
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           )}
@@ -520,9 +554,9 @@ function CampaignWizard({ onClose, onSaved, lists, templates, siteId, editData }
             <div className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {[
-                  { key: "now",       label: "Send Now",       icon: Send, desc: "Dispatch immediately after launching" },
-                  { key: "later",     label: "Schedule Later", icon: Calendar, desc: "Pick a date & time to send" },
-                  { key: "recurring", label: "Recurring",      icon: RefreshCw, desc: "Send on a repeating schedule" },
+                  { key: "now", label: "Send Now", icon: Send, desc: "Dispatch immediately after launching" },
+                  { key: "later", label: "Schedule Later", icon: Calendar, desc: "Pick a date & time to send" },
+                  { key: "recurring", label: "Recurring", icon: RefreshCw, desc: "Send on a repeating schedule" },
                 ].map(opt => {
                   const Icon = opt.icon;
                   return (
@@ -599,11 +633,11 @@ function CampaignWizard({ onClose, onSaved, lists, templates, siteId, editData }
               <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-4 space-y-2.5">
                 <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Campaign Summary</h3>
                 {[
-                  ["Name",      data.name],
-                  ["Type",      CAMPAIGN_TYPES.find(t => t.value === data.type)?.label || data.type],
-                  ["Subject",   data.subject],
-                  ["Audience",  audience ? `${audience.name} (${subscriberCount} subscribers)` : "No list selected (draft)"],
-                  ["Schedule",  data.scheduleMode === "now" ? "Send immediately" : data.scheduleMode === "later" ? `${data.scheduledDate} at ${data.scheduledTime} (${data.timezone})` : "Recurring"],
+                  ["Name", data.name],
+                  ["Type", CAMPAIGN_TYPES.find(t => t.value === data.type)?.label || data.type],
+                  ["Subject", data.subject],
+                  ["Audience", audience ? `${audience.name} (${subscriberCount} subscribers)` : "No list selected (draft)"],
+                  ["Schedule", data.scheduleMode === "now" ? "Send immediately" : data.scheduleMode === "later" ? `${data.scheduledDate} at ${data.scheduledTime} (${data.timezone})` : "Recurring"],
                 ].map(([label, value]) => (
                   <div key={label} className="flex items-start gap-3 text-xs">
                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide w-20 shrink-0 mt-0.5">{label}</span>
@@ -729,17 +763,17 @@ function CampaignWizard({ onClose, onSaved, lists, templates, siteId, editData }
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 export default function CampaignsPage() {
-  const [campaigns, setCampaigns]   = useState([]);
-  const [lists, setLists]           = useState([]);
-  const [templates, setTemplates]   = useState([]);
-  const [loading, setLoading]       = useState(true);
-  const [siteId, setSiteId]         = useState("");
+  const [campaigns, setCampaigns] = useState([]);
+  const [lists, setLists] = useState([]);
+  const [templates, setTemplates] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [siteId, setSiteId] = useState("");
 
   // UI state
-  const [search, setSearch]         = useState("");
+  const [search, setSearch] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
   const [wizardOpen, setWizardOpen] = useState(false);
-  const [editData, setEditData]     = useState(null);
+  const [editData, setEditData] = useState(null);
   const [analyticsId, setAnalyticsId] = useState(null);
 
   useEffect(() => {
@@ -760,7 +794,7 @@ export default function CampaignsPage() {
   const fetchCampaigns = async () => {
     try {
       const res = await fetch("/api/crm/campaigns", { headers: { "x-site-id": siteId } });
-      const d   = await res.json().catch(() => ({}));
+      const d = await res.json().catch(() => ({}));
       if (d.success) setCampaigns(d.data?.campaigns || []);
     } catch (err) { console.error(err); }
   };
@@ -768,7 +802,7 @@ export default function CampaignsPage() {
   const fetchLists = async () => {
     try {
       const res = await fetch("/api/crm/lists", { headers: { "x-site-id": siteId } });
-      const d   = await res.json().catch(() => ({}));
+      const d = await res.json().catch(() => ({}));
       if (d.success) setLists(d.data?.lists || []);
     } catch (err) { console.error(err); }
   };
@@ -776,7 +810,7 @@ export default function CampaignsPage() {
   const fetchTemplates = async () => {
     try {
       const res = await fetch("/api/crm/templates", { headers: { "x-site-id": siteId } });
-      const d   = await res.json().catch(() => ({}));
+      const d = await res.json().catch(() => ({}));
       if (d.success) setTemplates(d.data?.templates || []);
     } catch (err) { console.error(err); }
   };
@@ -785,7 +819,7 @@ export default function CampaignsPage() {
     if (!confirm("Delete this campaign? This cannot be undone.")) return;
     try {
       const res = await fetch(`/api/crm/campaigns/${id}`, { method: "DELETE", headers: { "x-site-id": siteId } });
-      const d   = await res.json();
+      const d = await res.json();
       if (d.success) setCampaigns(prev => prev.filter(c => c.id !== id));
     } catch (err) { console.error(err); }
   };
@@ -793,7 +827,7 @@ export default function CampaignsPage() {
   const handleDuplicate = async (id) => {
     try {
       const res = await fetch(`/api/crm/campaigns/${id}/duplicate`, { method: "POST", headers: { "x-site-id": siteId } });
-      const d   = await res.json();
+      const d = await res.json();
       if (d.success) { await fetchCampaigns(); }
     } catch (err) { console.error(err); }
   };
@@ -802,11 +836,11 @@ export default function CampaignsPage() {
     if (!confirm("Send this campaign to all active subscribers now?")) return;
     try {
       const res = await fetch(`/api/crm/campaigns/${id}/send`, { method: "POST", headers: { "x-site-id": siteId } });
-      const d   = await res.json();
+      const d = await res.json();
       if (d.success) {
         alert(`📤 Campaign queued — ${d.data?.queued || 0} emails being sent.`);
         await fetchCampaigns();
-        
+
         let pollCount = 0;
         const pollInterval = setInterval(async () => {
           pollCount++;
@@ -820,7 +854,7 @@ export default function CampaignsPage() {
                 clearInterval(pollInterval);
               }
             }
-          } catch (e) {}
+          } catch (e) { }
           if (pollCount >= 24) clearInterval(pollInterval);
         }, 5000);
       } else {
@@ -831,9 +865,9 @@ export default function CampaignsPage() {
 
   // Stats
   const stats = useMemo(() => {
-    const sent      = campaigns.filter(c => ["sent", "completed"].includes(c.status)).length;
+    const sent = campaigns.filter(c => ["sent", "completed"].includes(c.status)).length;
     const scheduled = campaigns.filter(c => c.status === "scheduled").length;
-    const draft     = campaigns.filter(c => c.status === "draft").length;
+    const draft = campaigns.filter(c => c.status === "draft").length;
     return { total: campaigns.length, sent, scheduled, draft };
   }, [campaigns]);
 
@@ -884,10 +918,10 @@ export default function CampaignsPage() {
 
       {/* Stats bar */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <MetricCard label="Total Campaigns" value={stats.total}     icon={Megaphone}     color="text-indigo-600" />
-        <MetricCard label="Sent"            value={stats.sent}      icon={CheckCircle}   color="text-emerald-600" />
-        <MetricCard label="Scheduled"       value={stats.scheduled} icon={Calendar}      color="text-blue-600"   />
-        <MetricCard label="Draft"           value={stats.draft}     icon={FileText}      color="text-slate-500"  />
+        <MetricCard label="Total Campaigns" value={stats.total} icon={Megaphone} color="text-indigo-600" />
+        <MetricCard label="Sent" value={stats.sent} icon={CheckCircle} color="text-emerald-600" />
+        <MetricCard label="Scheduled" value={stats.scheduled} icon={Calendar} color="text-blue-600" />
+        <MetricCard label="Draft" value={stats.draft} icon={FileText} color="text-slate-500" />
       </div>
 
       {/* Filters */}
@@ -1042,9 +1076,9 @@ export default function CampaignsPage() {
       {/* Quick Links */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {[
-          { href: "/crm/templates",  label: "Email Templates",   icon: FileText,  desc: "Manage reusable HTML templates" },
-          { href: "/crm/subscribers",label: "Subscribers",       icon: Users,     desc: "View and import subscriber contacts" },
-          { href: "/crm/lists",      label: "Contact Lists",     icon: LayoutGrid,desc: "Organize subscribers into lists" },
+          { href: "/crm/templates", label: "Email Templates", icon: FileText, desc: "Manage reusable HTML templates" },
+          { href: "/crm/subscribers", label: "Subscribers", icon: Users, desc: "View and import subscriber contacts" },
+          { href: "/crm/lists", label: "Contact Lists", icon: LayoutGrid, desc: "Organize subscribers into lists" },
         ].map(link => (
           <a key={link.href} href={link.href} className="flex items-center gap-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4 hover:border-indigo-300 hover:shadow-md transition-all group">
             <link.icon size={18} className="text-indigo-600 shrink-0 group-hover:scale-110 transition-transform" />

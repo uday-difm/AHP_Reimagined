@@ -1124,3 +1124,39 @@ model Auth {
 
   @@map("auth")
 }
+
+model LegacyAd {
+  id             Int             @id @default(autoincrement())
+  title          String          @db.VarChar(255)
+  description    String?         @db.Text
+  mediaUrl       String          @map("media_url") @db.Text
+  mediaType      String          @default("image") @map("media_type") @db.VarChar(20)
+  targetUrl      String          @map("target_url") @db.Text
+  placement      String          @db.VarChar(50)
+  status         String          @default("draft") @db.VarChar(20)
+  priority       Int             @default(1)
+  startDate      DateTime?       @map("start_date")
+  endDate        DateTime?       @map("end_date")
+  targetDevice   String?         @map("target_device") @db.VarChar(20)
+  targetLocation String?         @map("target_location") @db.VarChar(100)
+  createdBy      Int?            @map("created_by")
+  createdAt      DateTime        @default(now()) @map("created_at")
+  updatedAt      DateTime        @default(now()) @updatedAt @map("updated_at")
+  events         LegacyAdEvent[]
+
+  @@index([placement, status])
+  @@map("ads")
+}
+
+model LegacyAdEvent {
+  id        Int      @id @default(autoincrement())
+  adId      Int      @map("ad_id")
+  eventType String   @map("event_type") @db.VarChar(10)
+  userIp    String?  @map("user_ip") @db.VarChar(45)
+  userAgent String?  @map("user_agent") @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+  ad        LegacyAd @relation(fields: [adId], references: [id], onDelete: Cascade)
+
+  @@index([adId, eventType])
+  @@map("ad_events")
+}

@@ -55,11 +55,13 @@ const ZONE_DIMENSIONS = {
   }
 };
 
-export default function AdSlot({ zone, layout = 'strip', width, height, className }) {
+export default function AdSlot({ zone, placement, layout = 'strip', width, height, className }) {
   const [ads, setAds] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const trackedImpressions = useRef(new Set());
+
+  const isSpecAd = !!placement;
 
   useEffect(() => {
     setIsMobile(window.innerWidth < 768);
@@ -71,22 +73,36 @@ export default function AdSlot({ zone, layout = 'strip', width, height, classNam
   }, []);
 
   useEffect(() => {
+    if (process.env.NEXT_PUBLIC_DISABLE_ADS === 'true') {
+      setLoading(false);
+      return;
+    }
+
     async function fetchAds() {
       try {
         const currentRoute = typeof window !== 'undefined' ? window.location.pathname : '/';
-        const res = await fetch(`/api/ads/serve?zone=${zone}&route=${encodeURIComponent(currentRoute)}`);
+        const device = isMobile ? 'mobile' : 'desktop';
+        
+        let url;
+        if (isSpecAd) {
+          url = `/api/ads/active?placement=${placement}&device=${device}`;
+        } else {
+          url = `/api/ads/serve?zone=${zone}&route=${encodeURIComponent(currentRoute)}`;
+        }
+
+        const res = await fetch(url);
         const data = await res.json();
         if (data.success && data.data?.ads) {
           setAds(data.data.ads);
         }
       } catch (err) {
-        console.error(`Failed to fetch ads for zone ${zone}:`, err);
+        console.error(`Failed to fetch ads for ${isSpecAd ? 'placement ' + placement : 'zone ' + zone}:`, err);
       } finally {
         setLoading(false);
       }
     }
     fetchAds();
-  }, [zone]);
+  }, [zone, placement, isMobile, isSpecAd]);
 
   // impression tracking
   useEffect(() => {
@@ -94,35 +110,56 @@ export default function AdSlot({ zone, layout = 'strip', width, height, classNam
       ads.forEach(ad => {
         if (!trackedImpressions.current.has(ad.id)) {
           trackedImpressions.current.add(ad.id);
-          fetch('/api/ads/track', {
+          
+          let trackUrl;
+          let trackBody;
+          if (isSpecAd) {
+            trackUrl = `/api/ads/${ad.id}/event`;
+            trackBody = { type: 'impression' };
+          } else {
+            trackUrl = '/api/ads/track';
+            trackBody = { adId: ad.id, type: 'impression' };
+          }
+
+          fetch(trackUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ adId: ad.id, type: 'impression' })
+            body: JSON.stringify(trackBody)
           }).catch(err => console.error('Failed to track impression:', err));
         }
       });
     }
-  }, [ads]);
+  }, [ads, isSpecAd]);
 
   const handleAdClick = (adId) => {
-    fetch('/api/ads/track', {
+    let trackUrl;
+    let trackBody;
+    if (isSpecAd) {
+      trackUrl = `/api/ads/${adId}/event`;
+      trackBody = { type: 'click' };
+    } else {
+      trackUrl = '/api/ads/track';
+      trackBody = { adId, type: 'click' };
+    }
+
+    fetch(trackUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ adId, type: 'click' })
+      body: JSON.stringify(trackBody)
     }).catch(err => console.error('Failed to track click:', err));
   };
 
   if (loading) return null;
 
-  const zoneConfig = ZONE_DIMENSIONS[zone];
-  const activeDimensions = isMobile ? (zoneConfig?.mobile || zoneConfig?.desktop) : zoneConfig?.desktop;
+  const zoneConfig = zone ? ZONE_DIMENSIONS[zone] : null;
+  const activeDimensions = zoneConfig ? (isMobile ? (zoneConfig.mobile || zoneConfig.desktop) : zoneConfig.desktop) : null;
 
   const w = width || activeDimensions?.width;
   const h = height || activeDimensions?.height;
 
   // Helper to normalize ad type checks
-  const isCodeType = (ad) => ad.type === 'CODE' || ad.type === 'adsense';
-  const isImageType = (ad) => ad.type === 'IMAGE' || ad.type === 'banner';
+  const isCodeType = (ad) => ad.type === 'CODE' || ad.type === 'adsense' || ad.mediaType === 'html' || ad.mediaType === 'video';
+  const isImageType = (ad) => ad.type === 'IMAGE' || ad.type === 'banner' || ad.mediaType === 'image';
 
   // ── Active ads ──────────────────────────────────────────────
   if (ads.length > 0) {
