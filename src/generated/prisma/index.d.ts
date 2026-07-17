@@ -342,6 +342,14 @@ export const ServiceStatus: {
 
 export type ServiceStatus = (typeof ServiceStatus)[keyof typeof ServiceStatus]
 
+
+export const ServiceVisibility: {
+  PUBLIC: 'PUBLIC',
+  PRIVATE: 'PRIVATE'
+};
+
+export type ServiceVisibility = (typeof ServiceVisibility)[keyof typeof ServiceVisibility]
+
 }
 
 export type GlobalRole = $Enums.GlobalRole
@@ -363,6 +371,10 @@ export const PostStatus: typeof $Enums.PostStatus
 export type ServiceStatus = $Enums.ServiceStatus
 
 export const ServiceStatus: typeof $Enums.ServiceStatus
+
+export type ServiceVisibility = $Enums.ServiceVisibility
+
+export const ServiceVisibility: typeof $Enums.ServiceVisibility
 
 /**
  * ##  Prisma Client ʲˢ
@@ -27879,6 +27891,9 @@ export namespace Prisma {
     ctaButtonLink: string | null
     sortOrder: number | null
     status: $Enums.ServiceStatus | null
+    visibility: $Enums.ServiceVisibility | null
+    slug: string | null
+    accessToken: string | null
     visible: boolean | null
     featuredImageId: string | null
     createdAt: Date | null
@@ -27896,6 +27911,9 @@ export namespace Prisma {
     ctaButtonLink: string | null
     sortOrder: number | null
     status: $Enums.ServiceStatus | null
+    visibility: $Enums.ServiceVisibility | null
+    slug: string | null
+    accessToken: string | null
     visible: boolean | null
     featuredImageId: string | null
     createdAt: Date | null
@@ -27913,6 +27931,9 @@ export namespace Prisma {
     ctaButtonLink: number
     sortOrder: number
     status: number
+    visibility: number
+    slug: number
+    accessToken: number
     faqs: number
     visible: number
     featuredImageId: number
@@ -27941,6 +27962,9 @@ export namespace Prisma {
     ctaButtonLink?: true
     sortOrder?: true
     status?: true
+    visibility?: true
+    slug?: true
+    accessToken?: true
     visible?: true
     featuredImageId?: true
     createdAt?: true
@@ -27958,6 +27982,9 @@ export namespace Prisma {
     ctaButtonLink?: true
     sortOrder?: true
     status?: true
+    visibility?: true
+    slug?: true
+    accessToken?: true
     visible?: true
     featuredImageId?: true
     createdAt?: true
@@ -27975,6 +28002,9 @@ export namespace Prisma {
     ctaButtonLink?: true
     sortOrder?: true
     status?: true
+    visibility?: true
+    slug?: true
+    accessToken?: true
     faqs?: true
     visible?: true
     featuredImageId?: true
@@ -28080,6 +28110,9 @@ export namespace Prisma {
     ctaButtonLink: string | null
     sortOrder: number
     status: $Enums.ServiceStatus
+    visibility: $Enums.ServiceVisibility
+    slug: string | null
+    accessToken: string | null
     faqs: JsonValue | null
     visible: boolean
     featuredImageId: string | null
@@ -28117,6 +28150,9 @@ export namespace Prisma {
     ctaButtonLink?: boolean
     sortOrder?: boolean
     status?: boolean
+    visibility?: boolean
+    slug?: boolean
+    accessToken?: boolean
     faqs?: boolean
     visible?: boolean
     featuredImageId?: boolean
@@ -28139,6 +28175,9 @@ export namespace Prisma {
     ctaButtonLink?: boolean
     sortOrder?: boolean
     status?: boolean
+    visibility?: boolean
+    slug?: boolean
+    accessToken?: boolean
     faqs?: boolean
     visible?: boolean
     featuredImageId?: boolean
@@ -28147,7 +28186,7 @@ export namespace Prisma {
     deletedAt?: boolean
   }
 
-  export type ServiceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "title" | "description" | "price" | "ctaButtonText" | "ctaButtonLink" | "sortOrder" | "status" | "faqs" | "visible" | "featuredImageId" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["service"]>
+  export type ServiceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "siteId" | "title" | "description" | "price" | "ctaButtonText" | "ctaButtonLink" | "sortOrder" | "status" | "visibility" | "slug" | "accessToken" | "faqs" | "visible" | "featuredImageId" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["service"]>
   export type ServiceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     site?: boolean | SiteDefaultArgs<ExtArgs>
     featuredImage?: boolean | Service$featuredImageArgs<ExtArgs>
@@ -28169,6 +28208,9 @@ export namespace Prisma {
       ctaButtonLink: string | null
       sortOrder: number
       status: $Enums.ServiceStatus
+      visibility: $Enums.ServiceVisibility
+      slug: string | null
+      accessToken: string | null
       faqs: Prisma.JsonValue | null
       visible: boolean
       featuredImageId: string | null
@@ -28555,6 +28597,9 @@ export namespace Prisma {
     readonly ctaButtonLink: FieldRef<"Service", 'String'>
     readonly sortOrder: FieldRef<"Service", 'Int'>
     readonly status: FieldRef<"Service", 'ServiceStatus'>
+    readonly visibility: FieldRef<"Service", 'ServiceVisibility'>
+    readonly slug: FieldRef<"Service", 'String'>
+    readonly accessToken: FieldRef<"Service", 'String'>
     readonly faqs: FieldRef<"Service", 'Json'>
     readonly visible: FieldRef<"Service", 'Boolean'>
     readonly featuredImageId: FieldRef<"Service", 'String'>
@@ -63318,6 +63363,9 @@ export namespace Prisma {
     ctaButtonLink: 'ctaButtonLink',
     sortOrder: 'sortOrder',
     status: 'status',
+    visibility: 'visibility',
+    slug: 'slug',
+    accessToken: 'accessToken',
     faqs: 'faqs',
     visible: 'visible',
     featuredImageId: 'featuredImageId',
@@ -64140,6 +64188,8 @@ export namespace Prisma {
     price: 'price',
     ctaButtonText: 'ctaButtonText',
     ctaButtonLink: 'ctaButtonLink',
+    slug: 'slug',
+    accessToken: 'accessToken',
     featuredImageId: 'featuredImageId'
   };
 
@@ -64644,6 +64694,13 @@ export namespace Prisma {
    * Reference to a field of type 'ServiceStatus'
    */
   export type EnumServiceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ServiceStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'ServiceVisibility'
+   */
+  export type EnumServiceVisibilityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ServiceVisibility'>
     
   /**
    * Deep Input Types
@@ -66485,6 +66542,9 @@ export namespace Prisma {
     ctaButtonLink?: StringNullableFilter<"Service"> | string | null
     sortOrder?: IntFilter<"Service"> | number
     status?: EnumServiceStatusFilter<"Service"> | $Enums.ServiceStatus
+    visibility?: EnumServiceVisibilityFilter<"Service"> | $Enums.ServiceVisibility
+    slug?: StringNullableFilter<"Service"> | string | null
+    accessToken?: StringNullableFilter<"Service"> | string | null
     faqs?: JsonNullableFilter<"Service">
     visible?: BoolFilter<"Service"> | boolean
     featuredImageId?: StringNullableFilter<"Service"> | string | null
@@ -66505,6 +66565,9 @@ export namespace Prisma {
     ctaButtonLink?: SortOrderInput | SortOrder
     sortOrder?: SortOrder
     status?: SortOrder
+    visibility?: SortOrder
+    slug?: SortOrderInput | SortOrder
+    accessToken?: SortOrderInput | SortOrder
     faqs?: SortOrderInput | SortOrder
     visible?: SortOrder
     featuredImageId?: SortOrderInput | SortOrder
@@ -66518,6 +66581,8 @@ export namespace Prisma {
 
   export type ServiceWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    accessToken?: string
+    siteId_slug?: ServiceSiteIdSlugCompoundUniqueInput
     AND?: ServiceWhereInput | ServiceWhereInput[]
     OR?: ServiceWhereInput[]
     NOT?: ServiceWhereInput | ServiceWhereInput[]
@@ -66529,6 +66594,8 @@ export namespace Prisma {
     ctaButtonLink?: StringNullableFilter<"Service"> | string | null
     sortOrder?: IntFilter<"Service"> | number
     status?: EnumServiceStatusFilter<"Service"> | $Enums.ServiceStatus
+    visibility?: EnumServiceVisibilityFilter<"Service"> | $Enums.ServiceVisibility
+    slug?: StringNullableFilter<"Service"> | string | null
     faqs?: JsonNullableFilter<"Service">
     visible?: BoolFilter<"Service"> | boolean
     featuredImageId?: StringNullableFilter<"Service"> | string | null
@@ -66537,7 +66604,7 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableFilter<"Service"> | Date | string | null
     site?: XOR<SiteScalarRelationFilter, SiteWhereInput>
     featuredImage?: XOR<MediaNullableScalarRelationFilter, MediaWhereInput> | null
-  }, "id">
+  }, "id" | "accessToken" | "siteId_slug">
 
   export type ServiceOrderByWithAggregationInput = {
     id?: SortOrder
@@ -66549,6 +66616,9 @@ export namespace Prisma {
     ctaButtonLink?: SortOrderInput | SortOrder
     sortOrder?: SortOrder
     status?: SortOrder
+    visibility?: SortOrder
+    slug?: SortOrderInput | SortOrder
+    accessToken?: SortOrderInput | SortOrder
     faqs?: SortOrderInput | SortOrder
     visible?: SortOrder
     featuredImageId?: SortOrderInput | SortOrder
@@ -66575,6 +66645,9 @@ export namespace Prisma {
     ctaButtonLink?: StringNullableWithAggregatesFilter<"Service"> | string | null
     sortOrder?: IntWithAggregatesFilter<"Service"> | number
     status?: EnumServiceStatusWithAggregatesFilter<"Service"> | $Enums.ServiceStatus
+    visibility?: EnumServiceVisibilityWithAggregatesFilter<"Service"> | $Enums.ServiceVisibility
+    slug?: StringNullableWithAggregatesFilter<"Service"> | string | null
+    accessToken?: StringNullableWithAggregatesFilter<"Service"> | string | null
     faqs?: JsonNullableWithAggregatesFilter<"Service">
     visible?: BoolWithAggregatesFilter<"Service"> | boolean
     featuredImageId?: StringNullableWithAggregatesFilter<"Service"> | string | null
@@ -71369,6 +71442,9 @@ export namespace Prisma {
     ctaButtonLink?: string | null
     sortOrder?: number
     status?: $Enums.ServiceStatus
+    visibility?: $Enums.ServiceVisibility
+    slug?: string | null
+    accessToken?: string | null
     faqs?: NullableJsonNullValueInput | InputJsonValue
     visible?: boolean
     createdAt?: Date | string
@@ -71388,6 +71464,9 @@ export namespace Prisma {
     ctaButtonLink?: string | null
     sortOrder?: number
     status?: $Enums.ServiceStatus
+    visibility?: $Enums.ServiceVisibility
+    slug?: string | null
+    accessToken?: string | null
     faqs?: NullableJsonNullValueInput | InputJsonValue
     visible?: boolean
     featuredImageId?: string | null
@@ -71405,6 +71484,9 @@ export namespace Prisma {
     ctaButtonLink?: NullableStringFieldUpdateOperationsInput | string | null
     sortOrder?: IntFieldUpdateOperationsInput | number
     status?: EnumServiceStatusFieldUpdateOperationsInput | $Enums.ServiceStatus
+    visibility?: EnumServiceVisibilityFieldUpdateOperationsInput | $Enums.ServiceVisibility
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     faqs?: NullableJsonNullValueInput | InputJsonValue
     visible?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -71424,6 +71506,9 @@ export namespace Prisma {
     ctaButtonLink?: NullableStringFieldUpdateOperationsInput | string | null
     sortOrder?: IntFieldUpdateOperationsInput | number
     status?: EnumServiceStatusFieldUpdateOperationsInput | $Enums.ServiceStatus
+    visibility?: EnumServiceVisibilityFieldUpdateOperationsInput | $Enums.ServiceVisibility
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     faqs?: NullableJsonNullValueInput | InputJsonValue
     visible?: BoolFieldUpdateOperationsInput | boolean
     featuredImageId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -71442,6 +71527,9 @@ export namespace Prisma {
     ctaButtonLink?: string | null
     sortOrder?: number
     status?: $Enums.ServiceStatus
+    visibility?: $Enums.ServiceVisibility
+    slug?: string | null
+    accessToken?: string | null
     faqs?: NullableJsonNullValueInput | InputJsonValue
     visible?: boolean
     featuredImageId?: string | null
@@ -71459,6 +71547,9 @@ export namespace Prisma {
     ctaButtonLink?: NullableStringFieldUpdateOperationsInput | string | null
     sortOrder?: IntFieldUpdateOperationsInput | number
     status?: EnumServiceStatusFieldUpdateOperationsInput | $Enums.ServiceStatus
+    visibility?: EnumServiceVisibilityFieldUpdateOperationsInput | $Enums.ServiceVisibility
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     faqs?: NullableJsonNullValueInput | InputJsonValue
     visible?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -71476,6 +71567,9 @@ export namespace Prisma {
     ctaButtonLink?: NullableStringFieldUpdateOperationsInput | string | null
     sortOrder?: IntFieldUpdateOperationsInput | number
     status?: EnumServiceStatusFieldUpdateOperationsInput | $Enums.ServiceStatus
+    visibility?: EnumServiceVisibilityFieldUpdateOperationsInput | $Enums.ServiceVisibility
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     faqs?: NullableJsonNullValueInput | InputJsonValue
     visible?: BoolFieldUpdateOperationsInput | boolean
     featuredImageId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -76242,10 +76336,22 @@ export namespace Prisma {
     not?: NestedEnumServiceStatusFilter<$PrismaModel> | $Enums.ServiceStatus
   }
 
+  export type EnumServiceVisibilityFilter<$PrismaModel = never> = {
+    equals?: $Enums.ServiceVisibility | EnumServiceVisibilityFieldRefInput<$PrismaModel>
+    in?: $Enums.ServiceVisibility[]
+    notIn?: $Enums.ServiceVisibility[]
+    not?: NestedEnumServiceVisibilityFilter<$PrismaModel> | $Enums.ServiceVisibility
+  }
+
   export type ServiceOrderByRelevanceInput = {
     fields: ServiceOrderByRelevanceFieldEnum | ServiceOrderByRelevanceFieldEnum[]
     sort: SortOrder
     search: string
+  }
+
+  export type ServiceSiteIdSlugCompoundUniqueInput = {
+    siteId: string
+    slug: string
   }
 
   export type ServiceCountOrderByAggregateInput = {
@@ -76258,6 +76364,9 @@ export namespace Prisma {
     ctaButtonLink?: SortOrder
     sortOrder?: SortOrder
     status?: SortOrder
+    visibility?: SortOrder
+    slug?: SortOrder
+    accessToken?: SortOrder
     faqs?: SortOrder
     visible?: SortOrder
     featuredImageId?: SortOrder
@@ -76280,6 +76389,9 @@ export namespace Prisma {
     ctaButtonLink?: SortOrder
     sortOrder?: SortOrder
     status?: SortOrder
+    visibility?: SortOrder
+    slug?: SortOrder
+    accessToken?: SortOrder
     visible?: SortOrder
     featuredImageId?: SortOrder
     createdAt?: SortOrder
@@ -76297,6 +76409,9 @@ export namespace Prisma {
     ctaButtonLink?: SortOrder
     sortOrder?: SortOrder
     status?: SortOrder
+    visibility?: SortOrder
+    slug?: SortOrder
+    accessToken?: SortOrder
     visible?: SortOrder
     featuredImageId?: SortOrder
     createdAt?: SortOrder
@@ -76316,6 +76431,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumServiceStatusFilter<$PrismaModel>
     _max?: NestedEnumServiceStatusFilter<$PrismaModel>
+  }
+
+  export type EnumServiceVisibilityWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ServiceVisibility | EnumServiceVisibilityFieldRefInput<$PrismaModel>
+    in?: $Enums.ServiceVisibility[]
+    notIn?: $Enums.ServiceVisibility[]
+    not?: NestedEnumServiceVisibilityWithAggregatesFilter<$PrismaModel> | $Enums.ServiceVisibility
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumServiceVisibilityFilter<$PrismaModel>
+    _max?: NestedEnumServiceVisibilityFilter<$PrismaModel>
   }
 
   export type TestimonialOrderByRelevanceInput = {
@@ -80889,6 +81014,10 @@ export namespace Prisma {
     set?: $Enums.ServiceStatus
   }
 
+  export type EnumServiceVisibilityFieldUpdateOperationsInput = {
+    set?: $Enums.ServiceVisibility
+  }
+
   export type SiteUpdateOneRequiredWithoutServicesNestedInput = {
     create?: XOR<SiteCreateWithoutServicesInput, SiteUncheckedCreateWithoutServicesInput>
     connectOrCreate?: SiteCreateOrConnectWithoutServicesInput
@@ -82185,6 +82314,13 @@ export namespace Prisma {
     not?: NestedEnumServiceStatusFilter<$PrismaModel> | $Enums.ServiceStatus
   }
 
+  export type NestedEnumServiceVisibilityFilter<$PrismaModel = never> = {
+    equals?: $Enums.ServiceVisibility | EnumServiceVisibilityFieldRefInput<$PrismaModel>
+    in?: $Enums.ServiceVisibility[]
+    notIn?: $Enums.ServiceVisibility[]
+    not?: NestedEnumServiceVisibilityFilter<$PrismaModel> | $Enums.ServiceVisibility
+  }
+
   export type NestedEnumServiceStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.ServiceStatus | EnumServiceStatusFieldRefInput<$PrismaModel>
     in?: $Enums.ServiceStatus[]
@@ -82193,6 +82329,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumServiceStatusFilter<$PrismaModel>
     _max?: NestedEnumServiceStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumServiceVisibilityWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ServiceVisibility | EnumServiceVisibilityFieldRefInput<$PrismaModel>
+    in?: $Enums.ServiceVisibility[]
+    notIn?: $Enums.ServiceVisibility[]
+    not?: NestedEnumServiceVisibilityWithAggregatesFilter<$PrismaModel> | $Enums.ServiceVisibility
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumServiceVisibilityFilter<$PrismaModel>
+    _max?: NestedEnumServiceVisibilityFilter<$PrismaModel>
   }
 
   export type SiteUserCreateWithoutSiteInput = {
@@ -82594,6 +82740,9 @@ export namespace Prisma {
     ctaButtonLink?: string | null
     sortOrder?: number
     status?: $Enums.ServiceStatus
+    visibility?: $Enums.ServiceVisibility
+    slug?: string | null
+    accessToken?: string | null
     faqs?: NullableJsonNullValueInput | InputJsonValue
     visible?: boolean
     createdAt?: Date | string
@@ -82611,6 +82760,9 @@ export namespace Prisma {
     ctaButtonLink?: string | null
     sortOrder?: number
     status?: $Enums.ServiceStatus
+    visibility?: $Enums.ServiceVisibility
+    slug?: string | null
+    accessToken?: string | null
     faqs?: NullableJsonNullValueInput | InputJsonValue
     visible?: boolean
     featuredImageId?: string | null
@@ -83892,6 +84044,9 @@ export namespace Prisma {
     ctaButtonLink?: StringNullableFilter<"Service"> | string | null
     sortOrder?: IntFilter<"Service"> | number
     status?: EnumServiceStatusFilter<"Service"> | $Enums.ServiceStatus
+    visibility?: EnumServiceVisibilityFilter<"Service"> | $Enums.ServiceVisibility
+    slug?: StringNullableFilter<"Service"> | string | null
+    accessToken?: StringNullableFilter<"Service"> | string | null
     faqs?: JsonNullableFilter<"Service">
     visible?: BoolFilter<"Service"> | boolean
     featuredImageId?: StringNullableFilter<"Service"> | string | null
@@ -85969,6 +86124,9 @@ export namespace Prisma {
     ctaButtonLink?: string | null
     sortOrder?: number
     status?: $Enums.ServiceStatus
+    visibility?: $Enums.ServiceVisibility
+    slug?: string | null
+    accessToken?: string | null
     faqs?: NullableJsonNullValueInput | InputJsonValue
     visible?: boolean
     createdAt?: Date | string
@@ -85987,6 +86145,9 @@ export namespace Prisma {
     ctaButtonLink?: string | null
     sortOrder?: number
     status?: $Enums.ServiceStatus
+    visibility?: $Enums.ServiceVisibility
+    slug?: string | null
+    accessToken?: string | null
     faqs?: NullableJsonNullValueInput | InputJsonValue
     visible?: boolean
     createdAt?: Date | string
@@ -96411,6 +96572,9 @@ export namespace Prisma {
     ctaButtonLink?: string | null
     sortOrder?: number
     status?: $Enums.ServiceStatus
+    visibility?: $Enums.ServiceVisibility
+    slug?: string | null
+    accessToken?: string | null
     faqs?: NullableJsonNullValueInput | InputJsonValue
     visible?: boolean
     featuredImageId?: string | null
@@ -97160,6 +97324,9 @@ export namespace Prisma {
     ctaButtonLink?: NullableStringFieldUpdateOperationsInput | string | null
     sortOrder?: IntFieldUpdateOperationsInput | number
     status?: EnumServiceStatusFieldUpdateOperationsInput | $Enums.ServiceStatus
+    visibility?: EnumServiceVisibilityFieldUpdateOperationsInput | $Enums.ServiceVisibility
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     faqs?: NullableJsonNullValueInput | InputJsonValue
     visible?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -97177,6 +97344,9 @@ export namespace Prisma {
     ctaButtonLink?: NullableStringFieldUpdateOperationsInput | string | null
     sortOrder?: IntFieldUpdateOperationsInput | number
     status?: EnumServiceStatusFieldUpdateOperationsInput | $Enums.ServiceStatus
+    visibility?: EnumServiceVisibilityFieldUpdateOperationsInput | $Enums.ServiceVisibility
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     faqs?: NullableJsonNullValueInput | InputJsonValue
     visible?: BoolFieldUpdateOperationsInput | boolean
     featuredImageId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -97194,6 +97364,9 @@ export namespace Prisma {
     ctaButtonLink?: NullableStringFieldUpdateOperationsInput | string | null
     sortOrder?: IntFieldUpdateOperationsInput | number
     status?: EnumServiceStatusFieldUpdateOperationsInput | $Enums.ServiceStatus
+    visibility?: EnumServiceVisibilityFieldUpdateOperationsInput | $Enums.ServiceVisibility
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     faqs?: NullableJsonNullValueInput | InputJsonValue
     visible?: BoolFieldUpdateOperationsInput | boolean
     featuredImageId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -98446,6 +98619,9 @@ export namespace Prisma {
     ctaButtonLink?: string | null
     sortOrder?: number
     status?: $Enums.ServiceStatus
+    visibility?: $Enums.ServiceVisibility
+    slug?: string | null
+    accessToken?: string | null
     faqs?: NullableJsonNullValueInput | InputJsonValue
     visible?: boolean
     createdAt?: Date | string
@@ -98528,6 +98704,9 @@ export namespace Prisma {
     ctaButtonLink?: NullableStringFieldUpdateOperationsInput | string | null
     sortOrder?: IntFieldUpdateOperationsInput | number
     status?: EnumServiceStatusFieldUpdateOperationsInput | $Enums.ServiceStatus
+    visibility?: EnumServiceVisibilityFieldUpdateOperationsInput | $Enums.ServiceVisibility
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     faqs?: NullableJsonNullValueInput | InputJsonValue
     visible?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -98546,6 +98725,9 @@ export namespace Prisma {
     ctaButtonLink?: NullableStringFieldUpdateOperationsInput | string | null
     sortOrder?: IntFieldUpdateOperationsInput | number
     status?: EnumServiceStatusFieldUpdateOperationsInput | $Enums.ServiceStatus
+    visibility?: EnumServiceVisibilityFieldUpdateOperationsInput | $Enums.ServiceVisibility
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     faqs?: NullableJsonNullValueInput | InputJsonValue
     visible?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -98563,6 +98745,9 @@ export namespace Prisma {
     ctaButtonLink?: NullableStringFieldUpdateOperationsInput | string | null
     sortOrder?: IntFieldUpdateOperationsInput | number
     status?: EnumServiceStatusFieldUpdateOperationsInput | $Enums.ServiceStatus
+    visibility?: EnumServiceVisibilityFieldUpdateOperationsInput | $Enums.ServiceVisibility
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     faqs?: NullableJsonNullValueInput | InputJsonValue
     visible?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

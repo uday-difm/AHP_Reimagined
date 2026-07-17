@@ -391,6 +391,9 @@ exports.Prisma.ServiceScalarFieldEnum = {
   ctaButtonLink: 'ctaButtonLink',
   sortOrder: 'sortOrder',
   status: 'status',
+  visibility: 'visibility',
+  slug: 'slug',
+  accessToken: 'accessToken',
   faqs: 'faqs',
   visible: 'visible',
   featuredImageId: 'featuredImageId',
@@ -1030,6 +1033,8 @@ exports.Prisma.ServiceOrderByRelevanceFieldEnum = {
   price: 'price',
   ctaButtonText: 'ctaButtonText',
   ctaButtonLink: 'ctaButtonLink',
+  slug: 'slug',
+  accessToken: 'accessToken',
   featuredImageId: 'featuredImageId'
 };
 
@@ -1375,6 +1380,11 @@ exports.PostStatus = exports.$Enums.PostStatus = {
 exports.ServiceStatus = exports.$Enums.ServiceStatus = {
   DRAFT: 'DRAFT',
   ACTIVE: 'ACTIVE'
+};
+
+exports.ServiceVisibility = exports.$Enums.ServiceVisibility = {
+  PUBLIC: 'PUBLIC',
+  PRIVATE: 'PRIVATE'
 };
 
 exports.Prisma.ModelName = {

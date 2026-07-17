@@ -32,7 +32,14 @@ export default function ServiceEditor({ siteId, service }) {
     status: "DRAFT",
     visible: true,
     featuredImageId: null,
+    visibility: "PUBLIC",
+    slug: "",
   });
+
+  const [accessToken, setAccessToken] = useState(null);
+  const [isRegeneratingToken, setIsRegeneratingToken] = useState(false);
+  const [showVisibilityWarning, setShowVisibilityWarning] = useState(false);
+  const [pendingVisibility, setPendingVisibility] = useState(null);
 
   const [featuredImageUrl, setFeaturedImageUrl] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -70,7 +77,11 @@ export default function ServiceEditor({ siteId, service }) {
         status: service.status || "DRAFT",
         visible: service.visible !== false,
         featuredImageId: service.featuredImageId || null,
+        visibility: service.visibility || "PUBLIC",
+        slug: service.slug || "",
       });
+
+      setAccessToken(service.accessToken || null);
 
       if (service.featuredImage) {
         setFeaturedImageUrl(
@@ -105,6 +116,13 @@ export default function ServiceEditor({ siteId, service }) {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+    
+    if (name === "visibility" && isEditMode && value !== service.visibility) {
+      setPendingVisibility(value);
+      setShowVisibilityWarning(true);
+      return;
+    }
+
     setFormData((prev) => ({
       ...prev,
       [name]:
@@ -114,6 +132,35 @@ export default function ServiceEditor({ siteId, service }) {
             ? parseInt(value, 10) || 0
             : value,
     }));
+  };
+
+  const confirmVisibilityChange = () => {
+    setFormData((prev) => ({ ...prev, visibility: pendingVisibility }));
+    setShowVisibilityWarning(false);
+    setPendingVisibility(null);
+  };
+
+  const cancelVisibilityChange = () => {
+    setShowVisibilityWarning(false);
+    setPendingVisibility(null);
+  };
+
+  const regenerateToken = async () => {
+    if (!confirm("Are you sure? The old private link will immediately stop working.")) return;
+    setIsRegeneratingToken(true);
+    try {
+      const res = await fetch(`/api/dashboard/services/${service.id}/regenerate-token`, {
+        method: "POST",
+        headers: { "x-site-id": siteId },
+      });
+      if (!res.ok) throw new Error("Failed to regenerate token");
+      const data = await res.json();
+      setAccessToken(data.data.service.accessToken);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsRegeneratingToken(false);
+    }
   };
 
   // Submit main service data
@@ -557,6 +604,106 @@ export default function ServiceEditor({ siteId, service }) {
                 />
               </label>
 
+              {/* Service Access Type (Visibility) */}
+              <div className="space-y-3 pt-3 border-t border-slate-100 mt-2">
+                <div>
+                  <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Access Type</h3>
+                  <div className="grid grid-cols-1 gap-2">
+                    <label className={`flex flex-col p-3 border rounded-xl cursor-pointer transition ${formData.visibility === 'PUBLIC' ? 'border-indigo-500 bg-indigo-50/30' : 'border-slate-200 hover:border-indigo-200'}`}>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          name="visibility"
+                          value="PUBLIC"
+                          checked={formData.visibility === 'PUBLIC'}
+                          onChange={handleChange}
+                          className="text-indigo-600 focus:ring-indigo-500"
+                        />
+                        <span className="text-xs font-bold text-slate-800">Public (Indexable & Searchable)</span>
+                      </div>
+                      <p className="text-[10px] text-slate-500 mt-1 pl-6">Available to anyone, indexed by Google, appears in sitemap.</p>
+                    </label>
+
+                    <label className={`flex flex-col p-3 border rounded-xl cursor-pointer transition ${formData.visibility === 'PRIVATE' ? 'border-indigo-500 bg-indigo-50/30' : 'border-slate-200 hover:border-indigo-200'}`}>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          name="visibility"
+                          value="PRIVATE"
+                          checked={formData.visibility === 'PRIVATE'}
+                          onChange={handleChange}
+                          className="text-indigo-600 focus:ring-indigo-500"
+                        />
+                        <span className="text-xs font-bold text-slate-800">Private (Token-Only Access)</span>
+                      </div>
+                      <p className="text-[10px] text-slate-500 mt-1 pl-6">Accessible only via secure link, hidden from search & SEO.</p>
+                    </label>
+                  </div>
+                </div>
+
+                {formData.visibility === 'PUBLIC' ? (
+                  <div className="pt-2">
+                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
+                      URL Slug
+                    </label>
+                    <div className="flex items-center">
+                      <span className="text-[10px] text-slate-400 bg-slate-50 border border-slate-200 border-r-0 rounded-l-xl px-2 py-2.5 whitespace-nowrap">
+                        /services/
+                      </span>
+                      <input
+                        type="text"
+                        name="slug"
+                        value={formData.slug}
+                        onChange={handleChange}
+                        placeholder="auto-generated-if-empty"
+                        className="w-full rounded-r-xl border border-slate-200 bg-slate-50/30 px-3 py-2.5 text-xs font-semibold text-slate-800 outline-none hover:border-slate-300 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all"
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="pt-2 space-y-2">
+                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
+                      Secure Access Link
+                    </label>
+                    {accessToken ? (
+                      <div className="flex flex-col gap-2">
+                        <div className="flex items-center">
+                          <input
+                            type="text"
+                            readOnly
+                            value={`${typeof window !== 'undefined' ? window.location.origin : ''}/services/private/${accessToken}`}
+                            className="w-full rounded-l-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-[10px] font-mono text-slate-600 outline-none"
+                            onClick={(e) => e.target.select()}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              navigator.clipboard.writeText(`${window.location.origin}/services/private/${accessToken}`);
+                              alert("Link copied!");
+                            }}
+                            className="shrink-0 bg-indigo-600 text-white px-3 py-2.5 text-[10px] font-bold rounded-r-xl hover:bg-indigo-700 transition"
+                          >
+                            Copy
+                          </button>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={regenerateToken}
+                          disabled={isRegeneratingToken}
+                          className="w-full text-center text-[10px] font-bold text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-lg py-1.5 transition disabled:opacity-50"
+                        >
+                          {isRegeneratingToken ? "Regenerating..." : "Regenerate Link (Revokes old link)"}
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="text-[10px] text-slate-500 p-2 bg-slate-50 rounded-lg border border-slate-100">
+                        A secure token link will be generated after you save this service.
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
               <div>
                 <label
                   htmlFor="price"
@@ -698,6 +845,32 @@ export default function ServiceEditor({ siteId, service }) {
           onClose={() => setShowMediaPicker(false)}
           siteId={siteId}
         />
+      )}
+
+      {/* Visibility Warning Modal */}
+      {showVisibilityWarning && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={cancelVisibilityChange} />
+          <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 z-10 border border-slate-100 animate-fade-in">
+            <div className="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center mb-4 text-amber-600">
+              <AlertCircle size={24} />
+            </div>
+            <h3 className="font-bold text-slate-800 text-lg mb-2">Change Visibility?</h3>
+            <p className="text-xs text-slate-500 mb-6 leading-relaxed">
+              {pendingVisibility === 'PRIVATE' 
+                ? "Switching to Private will immediately break the public URL for this service. Anyone with the old link will see a 404 Not Found. A new private link will be generated."
+                : "Switching to Public will immediately invalidate the current private secure token. A new public slug will be created and this page will be indexed by search engines."}
+            </p>
+            <div className="flex justify-end gap-3">
+              <button type="button" onClick={cancelVisibilityChange} className="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl text-xs font-bold hover:bg-slate-200 transition">
+                Cancel
+              </button>
+              <button type="button" onClick={confirmVisibilityChange} className="px-4 py-2 bg-amber-600 text-white rounded-xl text-xs font-bold hover:bg-amber-700 shadow-md transition">
+                Yes, Change It
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* FAQ Edit/Create Modal */}

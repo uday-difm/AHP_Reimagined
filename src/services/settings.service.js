@@ -140,7 +140,7 @@ export class SettingsService extends BaseService {
     });
 
     // Ping frontend to revalidate cached settings
-    if (["header", "footer", "websiteSettings"].includes(fieldName)) {
+    if (["header", "footer", "websiteSettings", "ctaConfig", "compliance", "scripts"].includes(fieldName)) {
       try {
         const { revalidateTag } = await import("next/cache");
         revalidateTag("layout");

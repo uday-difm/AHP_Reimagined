@@ -73,5 +73,15 @@
     "slug": "/services",
     "title": "Services",
     "isDynamic": false
+  },
+  {
+    "slug": "/services/private/[token]",
+    "title": "Private Detail",
+    "isDynamic": true
+  },
+  {
+    "slug": "/services/[slug]",
+    "title": "Services Detail",
+    "isDynamic": true
   }
 ]

@@ -511,6 +511,11 @@ enum ServiceStatus {
   ACTIVE
 }
 
+enum ServiceVisibility {
+  PUBLIC
+  PRIVATE
+}
+
 model Service {
   id     String @id @default(cuid())
   siteId String
@@ -521,10 +526,13 @@ model Service {
   price         String?
   ctaButtonText String?
   ctaButtonLink String?
-  sortOrder     Int           @default(0)
-  status        ServiceStatus @default(DRAFT)
+  sortOrder     Int               @default(0)
+  status        ServiceStatus     @default(DRAFT)
+  visibility    ServiceVisibility @default(PUBLIC)
+  slug          String?
+  accessToken   String?           @unique
   faqs          Json?
-  visible       Boolean       @default(true)
+  visible       Boolean           @default(true)
 
   featuredImageId String?
   featuredImage   Media?  @relation(fields: [featuredImageId], references: [id])
@@ -533,6 +541,7 @@ model Service {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
+  @@unique([siteId, slug])
   @@index([siteId])
   @@index([featuredImageId])
   @@index([siteId, status, visible])

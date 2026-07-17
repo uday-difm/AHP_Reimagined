@@ -1,5 +1,18 @@
 import { serviceRepository } from "@/repositories/service.repository";
 import { BaseService } from "@/core/service";
+import { randomBytes } from "crypto";
+
+function slugify(text) {
+  return text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/[^\w\-]+/g, '')
+    .replace(/\-\-+/g, '-')
+    .replace(/^-+/, '')
+    .replace(/-+$/, '');
+}
 
 function formatServiceFromDb(service) {
   if (!service) return service;
@@ -74,15 +87,83 @@ export class ServiceService extends BaseService {
     return formatServiceFromDb(record);
   }
 
+  async generateUniqueSlug(siteId, title, currentId = null) {
+    let baseSlug = slugify(title || "service");
+    if (!baseSlug) baseSlug = "service";
+    
+    let slug = baseSlug;
+    let counter = 1;
+    while (true) {
+      const existing = await this.repository.db.findFirst({
+        where: {
+          siteId,
+          slug,
+          ...(currentId ? { id: { not: currentId } } : {})
+        }
+      });
+      if (!existing) return slug;
+      counter++;
+      slug = `${baseSlug}-${counter}`;
+    }
+  }
+
   async create(siteId, data, userId = null, options = {}) {
     const dbPayload = formatServiceToDb(data, true);
+    
+    // Visibility logic
+    const visibility = dbPayload.visibility || "PUBLIC";
+    if (visibility === "PUBLIC") {
+      dbPayload.slug = dbPayload.slug || await this.generateUniqueSlug(siteId, dbPayload.title);
+      dbPayload.accessToken = null;
+    } else {
+      dbPayload.slug = null;
+      dbPayload.accessToken = randomBytes(24).toString("hex");
+    }
+
     const created = await super.create(siteId, dbPayload, userId, options);
     return formatServiceFromDb(created);
   }
 
   async update(siteId, id, data, userId = null, options = {}) {
+    const existingService = await this.getById(siteId, id);
+    if (!existingService) throw new Error("Service not found");
+
     const dbPayload = formatServiceToDb(data, false);
+    
+    // Check if visibility is changing or if slug is manually provided
+    const newVisibility = dbPayload.visibility || existingService.visibility;
+    const isVisibilityChanged = dbPayload.visibility && dbPayload.visibility !== existingService.visibility;
+
+    if (newVisibility === "PUBLIC") {
+      dbPayload.accessToken = null;
+      if (isVisibilityChanged || (dbPayload.title && dbPayload.title !== existingService.title && !dbPayload.slug) || dbPayload.slug) {
+         dbPayload.slug = dbPayload.slug || await this.generateUniqueSlug(siteId, dbPayload.title || existingService.title, id);
+      } else {
+         // Keep existing slug
+         dbPayload.slug = existingService.slug;
+      }
+    } else if (newVisibility === "PRIVATE") {
+      dbPayload.slug = null;
+      if (isVisibilityChanged || !existingService.accessToken) {
+        dbPayload.accessToken = randomBytes(24).toString("hex");
+      }
+    }
+
     const updated = await super.update(siteId, id, dbPayload, userId, options);
+    return formatServiceFromDb(updated);
+  }
+
+  async regenerateToken(siteId, id, userId = null) {
+    const service = await this.getById(siteId, id);
+    if (!service || service.visibility !== "PRIVATE") {
+      throw new Error("Invalid service or visibility type");
+    }
+    
+    const dbPayload = {
+      accessToken: randomBytes(24).toString("hex")
+    };
+    
+    const updated = await super.update(siteId, id, dbPayload, userId);
     return formatServiceFromDb(updated);
   }
 }

@@ -20,7 +20,9 @@ import {
   ToggleLeft,
   ToggleRight,
   Layout,
+  Image as ImageIcon,
 } from "lucide-react";
+import MediaPickerModal from "@/components/media/MediaPickerModal";
 
 export default function CtaEditorClient({ siteId, initialCtaConfig }) {
   const [activeTab, setActiveTab] = useState("main");
@@ -46,6 +48,7 @@ export default function CtaEditorClient({ siteId, initialCtaConfig }) {
     icon: "",
     position: "bottom-right",
     color: "#1e293b",
+    textColor: "#ffffff",
     enabled: true,
   });
 
@@ -61,7 +64,10 @@ export default function CtaEditorClient({ siteId, initialCtaConfig }) {
     triggerOn: "page-load",
     triggerValue: "0",
     showOnce: false,
+    imageUrl: "",
   });
+
+  const [mediaPickerType, setMediaPickerType] = useState(null);
 
   // Test Simulator State
   const [activeTestPopup, setActiveTestPopup] = useState(null);
@@ -96,6 +102,7 @@ export default function CtaEditorClient({ siteId, initialCtaConfig }) {
         icon: "",
         position: "bottom-right",
         color: "#1e293b",
+        textColor: "#ffffff",
         enabled: true,
       });
     }
@@ -141,6 +148,7 @@ export default function CtaEditorClient({ siteId, initialCtaConfig }) {
         triggerOn: "page-load",
         triggerValue: "0",
         showOnce: false,
+        imageUrl: "",
       });
     }
     setPopupModalOpen(true);
@@ -358,6 +366,35 @@ export default function CtaEditorClient({ siteId, initialCtaConfig }) {
                         placeholder="e.g. /contact or https://yourdomain.com"
                         className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
                       />
+                    </div>
+                  </div>
+
+                  <div className="mt-4">
+                    <label
+                      htmlFor="mainIcon"
+                      className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2"
+                    >
+                      CTA Icon / Custom Image URL
+                    </label>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        id="mainIcon"
+                        list="iconOptions"
+                        name="icon"
+                        value={main.icon || ""}
+                        onChange={handleMainChange}
+                        placeholder="e.g. sparkles or https://..."
+                        className="flex-1 px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setMediaPickerType("mainIcon")}
+                        className="px-3 py-2 bg-gray-100 hover:bg-gray-200 border border-gray-200 rounded-lg text-xs font-bold text-gray-700 flex items-center gap-1 transition-colors"
+                      >
+                        <ImageIcon className="w-3.5 h-3.5" />
+                        Browse
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -750,18 +787,44 @@ export default function CtaEditorClient({ siteId, initialCtaConfig }) {
                     htmlFor="btnIcon"
                     className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5"
                   >
-                    Icon Name
+                    Icon / Custom Image URL
                   </label>
-                  <input
-                    type="text"
-                    id="btnIcon"
-                    value={btnForm.icon}
-                    onChange={(e) =>
-                      setBtnForm((prev) => ({ ...prev, icon: e.target.value }))
-                    }
-                    placeholder="e.g. message-circle, phone"
-                    className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
-                  />
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      id="btnIcon"
+                      list="iconOptions"
+                      value={btnForm.icon}
+                      onChange={(e) =>
+                        setBtnForm((prev) => ({ ...prev, icon: e.target.value }))
+                      }
+                      placeholder="e.g. message-circle or https://..."
+                      className="flex-1 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+                    />
+                    <datalist id="iconOptions">
+                      <option value="phone" />
+                      <option value="mail" />
+                      <option value="message-circle" />
+                      <option value="message-square" />
+                      <option value="map" />
+                      <option value="share" />
+                      <option value="instagram" />
+                      <option value="facebook" />
+                      <option value="twitter" />
+                      <option value="youtube" />
+                      <option value="help" />
+                      <option value="info" />
+                      <option value="sparkles" />
+                    </datalist>
+                    <button
+                      type="button"
+                      onClick={() => setMediaPickerType("btnIcon")}
+                      className="px-3 py-2 bg-gray-100 hover:bg-gray-200 border border-gray-200 rounded-lg text-xs font-bold text-gray-700 flex items-center gap-1 transition-colors"
+                    >
+                      <ImageIcon className="w-3.5 h-3.5" />
+                      Browse
+                    </button>
+                  </div>
                 </div>
 
                 <div>
@@ -801,18 +864,6 @@ export default function CtaEditorClient({ siteId, initialCtaConfig }) {
                   <div className="flex gap-2">
                     <input
                       type="color"
-                      id="btnColorPicker"
-                      value={btnForm.color || "#1e293b"}
-                      onChange={(e) =>
-                        setBtnForm((prev) => ({
-                          ...prev,
-                          color: e.target.value,
-                        }))
-                      }
-                      className="w-10 h-9 p-0.5 border border-gray-200 rounded cursor-pointer"
-                    />
-                    <input
-                      type="text"
                       id="btnColor"
                       value={btnForm.color}
                       onChange={(e) =>
@@ -821,11 +872,57 @@ export default function CtaEditorClient({ siteId, initialCtaConfig }) {
                           color: e.target.value,
                         }))
                       }
-                      placeholder="#1e293b"
-                      className="flex-1 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all font-mono"
+                      className="w-10 h-10 p-1 rounded cursor-pointer border border-gray-200"
+                    />
+                    <input
+                      type="text"
+                      value={btnForm.color}
+                      onChange={(e) =>
+                        setBtnForm((prev) => ({
+                          ...prev,
+                          color: e.target.value,
+                        }))
+                      }
+                      className="flex-1 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
                 </div>
+
+                <div>
+                  <label
+                    htmlFor="btnTextColor"
+                    className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5 flex items-center gap-1.5"
+                  >
+                    <Palette className="w-3 h-3" />
+                    Text & Icon Color
+                  </label>
+                  <div className="flex gap-2">
+                    <input
+                      type="color"
+                      id="btnTextColor"
+                      value={btnForm.textColor || "#ffffff"}
+                      onChange={(e) =>
+                        setBtnForm((prev) => ({
+                          ...prev,
+                          textColor: e.target.value,
+                        }))
+                      }
+                      className="w-10 h-10 p-1 rounded cursor-pointer border border-gray-200"
+                    />
+                    <input
+                      type="text"
+                      value={btnForm.textColor || "#ffffff"}
+                      onChange={(e) =>
+                        setBtnForm((prev) => ({
+                          ...prev,
+                          textColor: e.target.value,
+                        }))
+                      }
+                      className="flex-1 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+                </div>
+
 
                 <div>
                   <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
@@ -976,6 +1073,35 @@ export default function CtaEditorClient({ siteId, initialCtaConfig }) {
                   placeholder="e.g. Get 10% off your next purchase and stays updated."
                   className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all resize-none"
                 />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="popupImage"
+                  className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5"
+                >
+                  Popup Image URL
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    id="popupImage"
+                    value={popupForm.imageUrl || ""}
+                    onChange={(e) =>
+                      setPopupForm((prev) => ({ ...prev, imageUrl: e.target.value }))
+                    }
+                    placeholder="e.g. https://... or /images/..."
+                    className="flex-1 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setMediaPickerType("popupImage")}
+                    className="px-3 py-2 bg-gray-100 hover:bg-gray-200 border border-gray-200 rounded-lg text-xs font-bold text-gray-700 flex items-center gap-1 transition-colors"
+                  >
+                    <ImageIcon className="w-3.5 h-3.5" />
+                    Browse
+                  </button>
+                </div>
               </div>
 
               {/* Button Text & Link */}
@@ -1269,6 +1395,23 @@ export default function CtaEditorClient({ siteId, initialCtaConfig }) {
             </div>
           </div>
         </div>
+      )}
+      {mediaPickerType && (
+        <MediaPickerModal
+          siteId={siteId}
+          onClose={() => setMediaPickerType(null)}
+          onSelect={(media) => {
+            const url = media.secureUrl || media.url;
+            if (mediaPickerType === "btnIcon") {
+              setBtnForm((prev) => ({ ...prev, icon: url }));
+            } else if (mediaPickerType === "popupImage") {
+              setPopupForm((prev) => ({ ...prev, imageUrl: url }));
+            } else if (mediaPickerType === "mainIcon") {
+              setMain((prev) => ({ ...prev, icon: url }));
+            }
+            setMediaPickerType(null);
+          }}
+        />
       )}
     </div>
   );

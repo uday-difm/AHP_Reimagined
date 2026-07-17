@@ -6,6 +6,7 @@ import { GlobalAnalytics } from "@yourcompany/global-backend-next/components";
 import CustomScripts from "@/components/utils/CustomScripts";
 import PerformanceEffects from "@/components/utils/PerformanceEffects";
 import ScrollProvider from "@/components/providers/ScrollProvider";
+import GlobalPopup from "@/components/GlobalPopup";
 
 function isDashboardPath(pathname) {
   return (
@@ -38,6 +39,7 @@ export default function ClientLayoutHelpers({ children, layout, complianceSettin
         {children}
       </ScrollProvider>
       <CookieBanner complianceSettings={complianceSettings} />
+      <GlobalPopup ctaConfig={layout?.rawSettings?.ctaConfig} />
     </>
   );
 }

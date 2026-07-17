@@ -31,6 +31,12 @@ export class SeoService extends BaseService {
       orderBy: { updatedAt: "desc" },
     });
 
+    const services = await prisma.service.findMany({
+      where: { siteId, status: "ACTIVE", visibility: "PUBLIC", deletedAt: null, slug: { not: null } },
+      select: { slug: true, updatedAt: true },
+      orderBy: { updatedAt: "desc" },
+    });
+
     // Universal: exclude Next.js dynamic route patterns like [slug], [...catchall], [[optional]]
     const DYNAMIC_SEGMENT = /\[.*?\]/;
     const isInfinium = siteId === "infinium";
@@ -61,6 +67,10 @@ export class SeoService extends BaseService {
             lastModified: lp.updatedAt.toISOString(),
           };
         }),
+      ...services.map((s) => ({
+        url: `/services/${s.slug}`,
+        lastModified: s.updatedAt.toISOString(),
+      })),
     ];
 
     return items;
@@ -103,7 +113,7 @@ Sitemap: ${domain}/sitemap.xml
       where: { id: siteId },
       include: {
         services: {
-          where: { status: "ACTIVE" },
+          where: { status: "ACTIVE", visibility: "PUBLIC" },
           select: { title: true, description: true },
         },
         posts: {

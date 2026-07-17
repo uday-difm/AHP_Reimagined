@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 
 function getThumbnailUrl(url) {
   if (!url) return url;
@@ -35,12 +36,12 @@ export default function MediaGrid({ media, onDelete, onCopyUrl, onSelectMedia })
               className="relative aspect-square overflow-hidden bg-slate-50 cursor-pointer"
             >
               {isImage ? (
-                <img
+                <Image
                   src={getThumbnailUrl(item.url)}
                   alt={item.altText || item.fileName}
-                  loading="lazy"
-                  decoding="async"
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  fill
+                  sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 15vw"
+                  className="object-cover transition-transform duration-300 group-hover:scale-105"
                 />
               ) : (
                 <div className="flex h-full items-center justify-center">
