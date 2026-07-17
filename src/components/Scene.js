@@ -4,13 +4,32 @@ import { Suspense } from 'react';
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Environment } from "@react-three/drei";
 import Book from "./Book";
+import React from 'react';
+
+class SceneErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return null;
+    }
+    return this.props.children; 
+  }
+}
 
 export default function Scene({ frontUrl, backUrl, spineUrl }) {
     return (
         <Canvas
             shadows
             camera={{ position: [0, 0.2, 8.5], fov: 30 }}
-            style={{ width: '15vw', height: '40vh' }}
+            className="!w-[200px] !h-[300px] sm:!w-[240px] sm:!h-[360px] md:!w-[260px] md:!h-[400px] lg:!w-[15vw] lg:!h-[40vh]"
         >
             {/* Background */}
             <color attach="background" args={["#f3f7f8"]} />
@@ -58,9 +77,11 @@ export default function Scene({ frontUrl, backUrl, spineUrl }) {
                 <shadowMaterial opacity={0.35} />
             </mesh>
 
-            <Suspense fallback={null}>
-                <Book frontUrl={frontUrl} backUrl={backUrl} spineUrl={spineUrl} />
-            </Suspense>
+            <SceneErrorBoundary>
+                <Suspense fallback={null}>
+                    <Book frontUrl={frontUrl} backUrl={backUrl} spineUrl={spineUrl} />
+                </Suspense>
+            </SceneErrorBoundary>
 
             {/* Y-axis only drag — lock polar angle to prevent camera tilt */}
             <OrbitControls

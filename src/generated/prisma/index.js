@@ -1418,7 +1418,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\Admin\\Desktop\\AHP\\src\\generated\\prisma",
+      "value": "C:\\Users\\udayv\\Desktop\\Integration\\Ahp_reimagined\\src\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -1432,7 +1432,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\Admin\\Desktop\\AHP\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\udayv\\Desktop\\Integration\\Ahp_reimagined\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
