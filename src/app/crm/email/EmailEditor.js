@@ -102,12 +102,12 @@ export default function EmailEditor({ siteId, initialEmailSettings }) {
     initialEmailSettings?.failedLogs || [],
   );
 
-  // OneSignal / Push Notifications
-  const [oneSignalAppId, setOneSignalAppId] = useState(
-    initialEmailSettings?.oneSignalAppId || "",
+  // Novu / Push Notifications
+  const [novuWorkflowId, setNovuWorkflowId] = useState(
+    initialEmailSettings?.novuWorkflowId || "",
   );
-  const [oneSignalRestKey, setOneSignalRestKey] = useState(
-    initialEmailSettings?.oneSignalRestKey || "",
+  const [novuApiKey, setNovuApiKey] = useState(
+    initialEmailSettings?.novuApiKey || "",
   );
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -138,8 +138,8 @@ export default function EmailEditor({ siteId, initialEmailSettings }) {
         enabled: adminAlertsEnabled,
         email: adminAlertsEmail,
       },
-      oneSignalAppId,
-      oneSignalRestKey,
+      novuWorkflowId,
+      novuApiKey,
     };
 
     try {
@@ -338,7 +338,7 @@ export default function EmailEditor({ siteId, initialEmailSettings }) {
           >
             <BellRingIcon className="w-4 h-4" />
             Push Notifications
-            {oneSignalAppId && (
+            {novuWorkflowId && (
               <span className="bg-emerald-100 text-emerald-600 font-bold px-1.5 py-0.5 rounded-full text-[9px] border border-emerald-200">
                 ON
               </span>
@@ -793,74 +793,74 @@ export default function EmailEditor({ siteId, initialEmailSettings }) {
             </div>
           )}
 
-          {/* TAB 4: Push Notifications (OneSignal) */}
+          {/* TAB 4: Push Notifications (Novu) */}
           {activeTab === "push" && (
             <div className="space-y-6">
               <div className="border-b border-gray-100 pb-3">
                 <h3 className="text-sm font-bold text-gray-800 uppercase tracking-wider">
-                  OneSignal Push Notification Settings
+                  Novu Notification Settings
                 </h3>
                 <p className="text-xs text-gray-500 mt-1">
-                  Configure your OneSignal credentials to enable browser and mobile push campaigns from the CRM.
+                  Configure your Novu credentials to enable push and device campaigns from the CRM.
                 </p>
               </div>
 
               {/* Connection Status */}
               <div className={`flex items-center gap-3 p-4 rounded-xl border ${
-                oneSignalAppId
+                novuWorkflowId
                   ? "bg-emerald-50 border-emerald-200 text-emerald-700"
                   : "bg-amber-50 border-amber-200 text-amber-700"
               }`}>
-                <CheckCircle2 className={`w-5 h-5 shrink-0 ${oneSignalAppId ? "text-emerald-500" : "text-amber-400"}`} />
+                <CheckCircle2 className={`w-5 h-5 shrink-0 ${novuWorkflowId ? "text-emerald-500" : "text-amber-400"}`} />
                 <div>
                   <p className="text-xs font-bold">
-                    {oneSignalAppId ? "OneSignal Connected" : "OneSignal Not Configured"}
+                    {novuWorkflowId ? "Novu Connected" : "Novu Not Configured"}
                   </p>
                   <p className="text-[10px] mt-0.5 opacity-80">
-                    {oneSignalAppId
-                      ? "Your App ID is saved. Push notifications are ready to send from the CRM."
-                      : "Enter your App ID and REST key below, then click Save Settings."}
+                    {novuWorkflowId
+                      ? "Your Workflow ID is saved. Notifications are ready to send from the CRM."
+                      : "Enter your Workflow ID and Secret API key below, then click Save Settings."}
                   </p>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* App ID */}
+                {/* Workflow ID */}
                 <div>
                   <label
-                    htmlFor="onesignal_app_id"
+                    htmlFor="novu_workflow_id"
                     className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2"
                   >
-                    OneSignal App ID
+                    Novu Workflow ID
                   </label>
                   <input
                     type="text"
-                    id="onesignal_app_id"
-                    value={oneSignalAppId}
-                    onChange={(e) => setOneSignalAppId(e.target.value)}
-                    placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                    id="novu_workflow_id"
+                    value={novuWorkflowId}
+                    onChange={(e) => setNovuWorkflowId(e.target.value)}
+                    placeholder="Your Novu Workflow Identifier (e.g., push-notification)"
                     className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all font-mono"
                   />
-                  <p className="text-[10px] text-gray-400 mt-1">Found in OneSignal Dashboard → Settings → Keys &amp; IDs</p>
+                  <p className="text-[10px] text-gray-400 mt-1">Found in your Novu Dashboard under Workflows</p>
                 </div>
 
-                {/* REST Key */}
+                {/* Secret API Key */}
                 <div>
                   <label
-                    htmlFor="onesignal_rest_key"
+                    htmlFor="novu_api_key"
                     className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2"
                   >
-                    REST API Key
+                    Secret API Key
                   </label>
                   <input
                     type="password"
-                    id="onesignal_rest_key"
-                    value={oneSignalRestKey}
-                    onChange={(e) => setOneSignalRestKey(e.target.value)}
-                    placeholder={initialEmailSettings?.oneSignalRestKey ? "••••••••••••••••" : "Your OneSignal REST API Key"}
+                    id="novu_api_key"
+                    value={novuApiKey}
+                    onChange={(e) => setNovuApiKey(e.target.value)}
+                    placeholder={initialEmailSettings?.novuApiKey ? "••••••••••••••••" : "Your Novu Secret API Key"}
                     className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all font-mono"
                   />
-                  <p className="text-[10px] text-gray-400 mt-1">Stored securely. Leave blank to keep the existing key.</p>
+                  <p className="text-[10px] text-gray-400 mt-1">Required to authenticate and trigger notifications server-side.</p>
                 </div>
               </div>
 

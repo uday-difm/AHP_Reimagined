@@ -60,7 +60,15 @@ export default async function RootLayout({ children }) {
       lang="en"
       className={`${inter.variable} ${outfit.variable} ${playfair.variable}`}
       suppressHydrationWarning>
-      <head />
+      <head>
+        {layout.adSettings?.autoAdsEnabled && layout.adSettings?.adsensePublisherId && (
+          <script
+            async
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${layout.adSettings.adsensePublisherId}`}
+            crossOrigin="anonymous"
+          />
+        )}
+      </head>
       <body>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <AuthProvider>

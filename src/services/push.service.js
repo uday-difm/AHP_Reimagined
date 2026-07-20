@@ -1,4 +1,6 @@
 import prisma from "@/lib/prisma";
+import { Novu } from "@novu/api";
+import { AppError } from "@/core/errors";
 
 export const pushService = {
   async getNotifications(siteId) {
@@ -174,7 +176,8 @@ export const pushService = {
       select: { emailSettings: true }
     });
     const emailSettings = settings?.emailSettings || {};
-    if (!emailSettings.oneSignalAppId || !emailSettings.oneSignalRestKey) {
+    const novuApiKey = emailSettings.novuApiKey || process.env.NOVU_API_KEY;
+    if (!novuApiKey) {
       return {
         sentCount: notification.sentCount,
         deliveredCount: notification.deliveredCount,
@@ -185,18 +188,19 @@ export const pushService = {
 
     try {
       const response = await fetch(
-        `https://onesignal.com/api/v1/notifications/${notification.oneSignalId}?app_id=${emailSettings.oneSignalAppId}`,
+        `https://api.novu.co/v1/messages?transactionId=${notification.oneSignalId}`,
         {
           headers: {
-            "Authorization": `Basic ${emailSettings.oneSignalRestKey}`
+            "Authorization": `ApiKey ${novuApiKey}`
           }
         }
       );
       const data = await response.json();
-      if (response.ok && data.id) {
-        const sentCount = data.successful || notification.sentCount;
-        const clickedCount = data.converted || 0;
-        const failedCount = data.failed || 0;
+      if (response.ok && data.data && Array.isArray(data.data)) {
+        const messages = data.data;
+        const sentCount = messages.length;
+        const clickedCount = messages.filter(m => m.status === 'clicked' || m.status === 'opened').length;
+        const failedCount = messages.filter(m => m.status === 'failed').length;
         const deliveredCount = sentCount - failedCount;
 
         await prisma.pushNotification.update({
@@ -207,7 +211,7 @@ export const pushService = {
         return { sentCount, deliveredCount, clickedCount, failedCount };
       }
     } catch (e) {
-      console.error("Failed to fetch OneSignal stats:", e);
+      console.error("Failed to fetch Novu stats:", e);
     }
 
     return {
@@ -269,7 +273,7 @@ export const pushService = {
     });
     if (!notification) throw new Error("Notification not found");
 
-    // If sendToDevice is disabled, bypass OneSignal
+    // If sendToDevice is disabled, bypass Novu
     if (!notification.sendToDevice) {
       const isFuture = notification.scheduledAt && new Date(notification.scheduledAt) > new Date();
       await prisma.pushNotification.update({
@@ -292,8 +296,11 @@ export const pushService = {
     });
 
     const emailSettings = settings?.emailSettings || {};
-    if (!emailSettings.oneSignalAppId || !emailSettings.oneSignalRestKey) {
-      console.warn("OneSignal credentials are not configured on this site. Skipping OneSignal and marking as sent/scheduled locally.");
+    const novuApiKey = emailSettings.novuApiKey || process.env.NOVU_API_KEY;
+    const novuWorkflowId = emailSettings.novuWorkflowId || process.env.NOVU_WORKFLOW_ID || "push-notification";
+
+    if (!novuApiKey) {
+      console.warn("Novu credentials are not configured on this site. Skipping Novu and marking as sent/scheduled locally.");
       
       const isFuture = notification.scheduledAt && new Date(notification.scheduledAt) > new Date();
       await prisma.pushNotification.update({
@@ -305,7 +312,7 @@ export const pushService = {
       });
       return {
         success: true,
-        warning: "Announcements posted to website, but device push was skipped (OneSignal credentials missing)",
+        warning: "Announcements posted to website, but device push was skipped (Novu API key missing)",
         recipients: 0
       };
     }
@@ -316,77 +323,63 @@ export const pushService = {
       data: { status: "sending" }
     });
 
-    // Build OneSignal payload
-    const payload = {
-      app_id: emailSettings.oneSignalAppId,
-      headings: { en: notification.title },
-      contents: { en: notification.message }
-    };
+    try {
+      const novu = new Novu({ secretKey: novuApiKey });
 
-    if (notification.url) {
-      payload.url = notification.url;
-    }
-    if (notification.iconUrl) {
-      payload.small_icon = notification.iconUrl;
-      payload.large_icon = notification.iconUrl;
-    }
-    if (notification.imageUrl) {
-      payload.big_picture = notification.imageUrl;
-      payload.chrome_web_image = notification.imageUrl;
-    }
+      // Target topic: slugify segment name
+      const rawSegment = notification.segment || "Subscribed Users";
+      const topicKey = rawSegment
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, "-")
+        .replace(/[^a-z0-9_-]/g, "");
 
-    // Audience targeting
-    if (notification.filters) {
-      try {
-        const parsedFilters = JSON.parse(notification.filters);
-        if (Array.isArray(parsedFilters) && parsedFilters.length > 0) {
-          payload.filters = parsedFilters;
-        } else {
-          payload.included_segments = [notification.segment || "Subscribed Users"];
-        }
-      } catch {
-        payload.included_segments = [notification.segment || "Subscribed Users"];
-      }
-    } else {
-      payload.included_segments = [notification.segment || "Subscribed Users"];
-    }
+      const payload = {
+        title: notification.title,
+        message: notification.message,
+      };
 
-    // Scheduling
-    if (notification.scheduledAt && new Date(notification.scheduledAt) > new Date()) {
-      payload.send_after = notification.scheduledAt.toISOString();
-    }
+      if (notification.url) payload.url = notification.url;
+      if (notification.iconUrl) payload.iconUrl = notification.iconUrl;
+      if (notification.imageUrl) payload.imageUrl = notification.imageUrl;
 
-    const response = await fetch("https://onesignal.com/api/v1/notifications", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Basic ${emailSettings.oneSignalRestKey}`
-      },
-      body: JSON.stringify(payload)
-    });
+      // Novu trigger call
+      const triggerResult = await novu.trigger({
+        workflowId: novuWorkflowId,
+        to: [{ type: "Topic", topicKey }],
+        payload
+      });
+      const transactionId = triggerResult.data?.transactionId || triggerResult.data?.eventId || "novu-triggered";
 
-    const data = await response.json();
-
-    if (response.ok && !data.errors) {
       await prisma.pushNotification.update({
         where: { id: notificationId },
         data: {
           status: notification.scheduledAt && new Date(notification.scheduledAt) > new Date()
             ? "scheduled"
             : "sent",
-          oneSignalId: data.id,
-          sentCount: data.recipients || 0,
+          oneSignalId: transactionId,
+          sentCount: 1,
           sentAt: new Date()
         }
       });
-      return { success: true, recipients: data.recipients || 0, oneSignalId: data.id };
-    } else {
-      const errorMsg = data.errors ? data.errors.join(", ") : "OneSignal request failed";
+
+      return { success: true, recipients: 1, oneSignalId: transactionId };
+    } catch (error) {
       await prisma.pushNotification.update({
         where: { id: notificationId },
         data: { status: "failed" }
       });
-      throw new Error(errorMsg);
+      
+      let cleanMessage = error.message;
+      if (error.body) {
+        try {
+          const parsed = JSON.parse(error.body);
+          if (parsed.message) {
+            cleanMessage = `Novu API error: ${parsed.message}`;
+          }
+        } catch {}
+      }
+      throw new AppError(cleanMessage, "NOVU_API_ERROR", 400);
     }
   }
 };

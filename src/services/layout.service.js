@@ -42,7 +42,8 @@ const fetchLayoutData = async () => {
           emailSettings: true,
           ctaConfig: true,
           scripts: true,
-          performanceConfig: true
+          performanceConfig: true,
+          adSettings: true
         }
       }),
       prisma.legalPage.findMany({
@@ -57,6 +58,7 @@ const fetchLayoutData = async () => {
     const footer = settings?.footer || {};
     const navigation = settings?.navigation || {};
     const navItems = navigation.main || [];
+    const adSettings = settings?.adSettings || {};
 
     const dbLogoUrl = header.logoUrl || ws.logoUrl;
     const dbFooterLogoUrl = footer.logoUrl || (footer.columns && footer.columns[0]?.logoUrl) || dbLogoUrl;
@@ -92,6 +94,7 @@ const fetchLayoutData = async () => {
 
     const emailSettings = settings?.emailSettings || {};
     const oneSignalAppId = emailSettings.oneSignalAppId || null;
+    const novuWorkflowId = emailSettings.novuWorkflowId || null;
 
     return {
       siteName: ws.title || FALLBACK.siteName,
@@ -112,6 +115,8 @@ const fetchLayoutData = async () => {
       analytics: settings?.analytics || null,
       securityControls: publicSecurityControls,
       oneSignalAppId,
+      novuWorkflowId,
+      adSettings,
       rawSettings: {
         isActive,
         websiteSettings: ws,
@@ -120,6 +125,8 @@ const fetchLayoutData = async () => {
         analytics: settings?.analytics || null,
         securityControls: publicSecurityControls,
         oneSignalAppId,
+        novuWorkflowId,
+        adSettings,
         scripts: settings?.scripts || null,
         performanceConfig: settings?.performanceConfig || null
       },
