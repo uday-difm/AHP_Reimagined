@@ -798,41 +798,76 @@ function HealthyBitePanel({ siteId }) {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
-  // Healthy Bite form states
   const [title, setTitle] = useState("Healthy Bite of the Day");
   const [recipeName, setRecipeName] = useState("Quinoa & Avocado Power Bowl");
+  const [description, setDescription] = useState("");
+  const [image, setImage] = useState("/images/healthy_bite.png");
+  const [difficulty, setDifficulty] = useState("Easy");
+  const [category, setCategory] = useState("Breakfast");
+  const [recipeLink, setRecipeLink] = useState("/blogs/quinoa-avocado-power-bowl");
+  
   const [time, setTime] = useState("15 mins");
   const [calories, setCalories] = useState("320 kcal");
+  const [protein, setProtein] = useState("");
+  const [carbs, setCarbs] = useState("");
+  const [fat, setFat] = useState("");
+  const [fiber, setFiber] = useState("");
   const [points, setPoints] = useState("High in Protein, Gut Friendly, Quick & Easy");
-  const [recipeLink, setRecipeLink] = useState("/blogs/quinoa-avocado-power-bowl");
-  const [image, setImage] = useState("/images/healthy_bite.png");
 
-  // Keep track of the original full settings object to merge back on save
+  const [contributorName, setContributorName] = useState("");
+  const [contributorRole, setContributorRole] = useState("");
+  const [contributorAvatar, setContributorAvatar] = useState("");
+
+  const [ingredients, setIngredients] = useState([""]);
+  const [instructions, setInstructions] = useState([""]);
+  const [allergens, setAllergens] = useState([""]);
+  const [relatedRecipes, setRelatedRecipes] = useState("");
+
+  const [displayEnabled, setDisplayEnabled] = useState(true);
+  const [showBadges, setShowBadges] = useState(true);
+
   const [fullWebsiteSettings, setFullWebsiteSettings] = useState({});
 
   useEffect(() => {
     if (!siteId) return;
     setLoading(true);
-    fetch("/api/dashboard/settings", {
-      headers: { "x-site-id": siteId }
-    })
+    fetch("/api/dashboard/settings", { headers: { "x-site-id": siteId } })
       .then(res => res.ok ? res.json() : {})
       .then(resData => {
         const dataObj = resData.data?.websiteSettings || resData.websiteSettings || {};
         setFullWebsiteSettings(dataObj);
-        
         if (dataObj.wellnessBanner?.healthyBite) {
           const hb = dataObj.wellnessBanner.healthyBite;
           setTitle(hb.title || "Healthy Bite of the Day");
-          setRecipeName(hb.recipeName || "Quinoa & Avocado Power Bowl");
-          setTime(hb.time || "15 mins");
-          setCalories(hb.calories || "320 kcal");
+          setRecipeName(hb.recipeName || "");
+          setDescription(hb.description || "");
+          setImage(hb.image || "");
+          setDifficulty(hb.difficulty || "");
+          setCategory(hb.category || "");
+          setRecipeLink(hb.recipeLink || "");
+          
+          setTime(hb.time || "");
+          setCalories(hb.calories || "");
+          setProtein(hb.protein || "");
+          setCarbs(hb.carbs || "");
+          setFat(hb.fat || "");
+          setFiber(hb.fiber || "");
           setPoints(Array.isArray(hb.points) ? hb.points.join(", ") : (hb.points || ""));
-          setRecipeLink(hb.recipeLink || "/blogs/quinoa-avocado-power-bowl");
-          setImage(hb.image || "/images/healthy_bite.png");
+          
+          setContributorName(hb.contributorName || "");
+          setContributorRole(hb.contributorRole || "");
+          setContributorAvatar(hb.contributorAvatar || "");
+          
+          setIngredients(hb.ingredients?.length ? hb.ingredients : [""]);
+          setInstructions(hb.instructions?.length ? hb.instructions : [""]);
+          setAllergens(hb.allergens?.length ? hb.allergens : [""]);
+          setRelatedRecipes(hb.relatedRecipes || "");
+          
+          if (hb.displayEnabled !== undefined) setDisplayEnabled(hb.displayEnabled);
+          if (hb.showBadges !== undefined) setShowBadges(hb.showBadges);
         }
       })
-      .catch(err => console.error("Error loading settings:", err))
+      .catch(err => console.error(err))
       .finally(() => setLoading(false));
   }, [siteId]);
 
@@ -841,22 +876,21 @@ function HealthyBitePanel({ siteId }) {
     setSaving(true);
     setSaved(false);
 
-    // Split points back into array
     const pointsArray = points.split(",").map(p => p.trim()).filter(Boolean);
-
-    // Merge changes back into websiteSettings
+    
     const updatedSettings = {
       ...fullWebsiteSettings,
       wellnessBanner: {
         ...(fullWebsiteSettings.wellnessBanner || { enabled: true }),
         healthyBite: {
-          title,
-          recipeName,
-          time,
-          calories,
-          points: pointsArray,
-          recipeLink,
-          image
+          title, recipeName, description, image, difficulty, category, recipeLink,
+          time, calories, protein, carbs, fat, fiber, points: pointsArray,
+          contributorName, contributorRole, contributorAvatar,
+          ingredients: ingredients.filter(Boolean),
+          instructions: instructions.filter(Boolean),
+          allergens: allergens.filter(Boolean),
+          relatedRecipes,
+          displayEnabled, showBadges
         }
       }
     };
@@ -864,18 +898,10 @@ function HealthyBitePanel({ siteId }) {
     try {
       const res = await fetch("/api/dashboard/settings", {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "x-site-id": siteId
-        },
+        headers: { "Content-Type": "application/json", "x-site-id": siteId },
         body: JSON.stringify(updatedSettings)
       });
-
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || "Failed to save Healthy Bite");
-      }
-
+      if (!res.ok) throw new Error("Failed to save");
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
     } catch (err) {
@@ -885,162 +911,157 @@ function HealthyBitePanel({ siteId }) {
     }
   };
 
+  const handleArrayChange = (setter, index, value, arr) => {
+    const newArr = [...arr];
+    newArr[index] = value;
+    setter(newArr);
+  };
+  const addArrayItem = (setter, arr) => setter([...arr, ""]);
+  const removeArrayItem = (setter, index, arr) => {
+    if (arr.length > 1) {
+      const newArr = [...arr];
+      newArr.splice(index, 1);
+      setter(newArr);
+    }
+  };
+
   if (loading) return (
-    <div className="flex justify-center py-20">
-      <Loader2 size={24} className="animate-spin text-indigo-550" />
-    </div>
+    <div className="flex justify-center py-20"><Loader2 size={24} className="animate-spin text-indigo-500" /></div>
   );
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-      
-      {/* Form column (7 cols) */}
-      <form onSubmit={handleSave} className="lg:col-span-7 bg-white border border-slate-100 rounded-3xl p-6 shadow-xs space-y-5">
-        <div className="border-b border-slate-100 pb-3 flex items-center justify-between">
+      <form onSubmit={handleSave} className="lg:col-span-7 bg-white border border-slate-100 rounded-3xl p-6 shadow-sm space-y-8">
+        <div className="border-b border-slate-100 pb-4 flex items-center justify-between sticky top-0 bg-white z-10 pt-2">
           <div>
-            <h3 className="font-heading font-extrabold text-slate-800 text-sm">Healthy Bite Parameters</h3>
-            <p className="text-[11px] text-slate-400 font-semibold mt-0.5">Customize daily nutrition recommendations displayed on the home page.</p>
+            <h3 className="font-heading font-extrabold text-slate-800 text-lg">Healthy Bite CMS</h3>
+            <p className="text-xs text-slate-500 font-medium mt-1">Manage all recipe content for the dashboard.</p>
           </div>
-          <button
-            type="submit"
-            disabled={saving}
-            className={`inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-xl transition ${
-              saved ? "bg-green-500 text-white" : "bg-[#0f7c85] hover:bg-[#0c6b73] text-white disabled:opacity-60"
-            }`}
-          >
-            {saving ? <Loader2 size={13} className="animate-spin" /> : saved ? <Check size={13} /> : <Save size={13} />}
-            {saving ? "Saving…" : saved ? "Saved!" : "Save Recipe"}
+          <button type="submit" disabled={saving} className={`inline-flex items-center gap-1.5 px-5 py-2.5 text-sm font-bold rounded-xl transition shadow-sm ${saved ? "bg-emerald-500 text-white" : "bg-indigo-600 hover:bg-indigo-700 text-white"}`}>
+            {saving ? <Loader2 size={16} className="animate-spin" /> : saved ? <Check size={16} /> : <Save size={16} />}
+            {saving ? "Saving..." : saved ? "Saved!" : "Save Changes"}
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="space-y-4">
+          <h4 className="text-sm font-bold text-slate-700 uppercase tracking-wider border-b pb-2">Section 1: Overview</h4>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-1"><label className="block text-xs font-bold text-slate-500">Widget Title</label><input type="text" value={title} onChange={e => setTitle(e.target.value)} className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg" /></div>
+            <div className="space-y-1"><label className="block text-xs font-bold text-slate-500">Recipe Name</label><input type="text" value={recipeName} onChange={e => setRecipeName(e.target.value)} className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg" /></div>
+            <div className="space-y-1 md:col-span-2"><label className="block text-xs font-bold text-slate-500">Description</label><textarea rows="2" value={description} onChange={e => setDescription(e.target.value)} className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg" /></div>
+            <div className="space-y-1"><label className="block text-xs font-bold text-slate-500">Image Path</label><input type="text" value={image} onChange={e => setImage(e.target.value)} className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg" /></div>
+            <div className="space-y-1"><label className="block text-xs font-bold text-slate-500">Recipe Link</label><input type="text" value={recipeLink} onChange={e => setRecipeLink(e.target.value)} className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg" /></div>
+            <div className="space-y-1"><label className="block text-xs font-bold text-slate-500">Difficulty</label><input type="text" value={difficulty} onChange={e => setDifficulty(e.target.value)} className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg" /></div>
+            <div className="space-y-1"><label className="block text-xs font-bold text-slate-500">Category</label><input type="text" value={category} onChange={e => setCategory(e.target.value)} className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg" /></div>
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <h4 className="text-sm font-bold text-slate-700 uppercase tracking-wider border-b pb-2">Section 2: Nutrition</h4>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="space-y-1"><label className="block text-xs font-bold text-slate-500">Calories</label><input type="text" value={calories} onChange={e => setCalories(e.target.value)} className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg" /></div>
+            <div className="space-y-1"><label className="block text-xs font-bold text-slate-500">Protein</label><input type="text" value={protein} onChange={e => setProtein(e.target.value)} className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg" /></div>
+            <div className="space-y-1"><label className="block text-xs font-bold text-slate-500">Carbs</label><input type="text" value={carbs} onChange={e => setCarbs(e.target.value)} className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg" /></div>
+            <div className="space-y-1"><label className="block text-xs font-bold text-slate-500">Fat</label><input type="text" value={fat} onChange={e => setFat(e.target.value)} className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg" /></div>
+            <div className="space-y-1"><label className="block text-xs font-bold text-slate-500">Fiber</label><input type="text" value={fiber} onChange={e => setFiber(e.target.value)} className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg" /></div>
+            <div className="space-y-1"><label className="block text-xs font-bold text-slate-500">Prep Time</label><input type="text" value={time} onChange={e => setTime(e.target.value)} className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg" /></div>
+            <div className="space-y-1 md:col-span-3"><label className="block text-xs font-bold text-slate-500">Highlight Tags (comma-separated)</label><input type="text" value={points} onChange={e => setPoints(e.target.value)} placeholder="e.g. High in Protein, Gut Friendly" className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg" /></div>
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <h4 className="text-sm font-bold text-slate-700 uppercase tracking-wider border-b pb-2">Section 3: Contributor</h4>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="space-y-1"><label className="block text-xs font-bold text-slate-500">Name</label><input type="text" value={contributorName} onChange={e => setContributorName(e.target.value)} className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg" /></div>
+            <div className="space-y-1"><label className="block text-xs font-bold text-slate-500">Role</label><input type="text" value={contributorRole} onChange={e => setContributorRole(e.target.value)} className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg" /></div>
+            <div className="space-y-1"><label className="block text-xs font-bold text-slate-500">Avatar URL</label><input type="text" value={contributorAvatar} onChange={e => setContributorAvatar(e.target.value)} className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg" /></div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="space-y-3">
+            <h4 className="text-sm font-bold text-slate-700 uppercase tracking-wider border-b pb-2">Section 4: Ingredients</h4>
+            {ingredients.map((ing, idx) => (
+              <div key={idx} className="flex gap-2">
+                <input type="text" value={ing} onChange={e => handleArrayChange(setIngredients, idx, e.target.value, ingredients)} className="w-full px-2 py-1 text-sm bg-slate-50 border rounded" />
+                <button type="button" onClick={() => removeArrayItem(setIngredients, idx, ingredients)} className="text-red-400 hover:text-red-600"><X size={16}/></button>
+              </div>
+            ))}
+            <button type="button" onClick={() => addArrayItem(setIngredients, ingredients)} className="text-xs text-indigo-600 font-bold">+ Add</button>
+          </div>
+          <div className="space-y-3">
+            <h4 className="text-sm font-bold text-slate-700 uppercase tracking-wider border-b pb-2">Section 5: Instructions</h4>
+            {instructions.map((inst, idx) => (
+              <div key={idx} className="flex gap-2">
+                <input type="text" value={inst} onChange={e => handleArrayChange(setInstructions, idx, e.target.value, instructions)} className="w-full px-2 py-1 text-sm bg-slate-50 border rounded" />
+                <button type="button" onClick={() => removeArrayItem(setInstructions, idx, instructions)} className="text-red-400 hover:text-red-600"><X size={16}/></button>
+              </div>
+            ))}
+            <button type="button" onClick={() => addArrayItem(setInstructions, instructions)} className="text-xs text-indigo-600 font-bold">+ Add</button>
+          </div>
+          <div className="space-y-3">
+            <h4 className="text-sm font-bold text-slate-700 uppercase tracking-wider border-b pb-2">Section 6: Allergens</h4>
+            {allergens.map((al, idx) => (
+              <div key={idx} className="flex gap-2">
+                <input type="text" value={al} onChange={e => handleArrayChange(setAllergens, idx, e.target.value, allergens)} className="w-full px-2 py-1 text-sm bg-slate-50 border rounded" />
+                <button type="button" onClick={() => removeArrayItem(setAllergens, idx, allergens)} className="text-red-400 hover:text-red-600"><X size={16}/></button>
+              </div>
+            ))}
+            <button type="button" onClick={() => addArrayItem(setAllergens, allergens)} className="text-xs text-indigo-600 font-bold">+ Add</button>
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <h4 className="text-sm font-bold text-slate-700 uppercase tracking-wider border-b pb-2">Section 7: Related Recipes</h4>
           <div className="space-y-1">
-            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Widget Title</label>
-            <input
-              type="text"
-              required
-              value={title}
-              onChange={e => setTitle(e.target.value)}
-              className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white transition"
-            />
+            <label className="block text-xs font-bold text-slate-500">Related URLs (comma-separated)</label>
+            <input type="text" value={relatedRecipes} onChange={e => setRelatedRecipes(e.target.value)} className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg" />
           </div>
-          <div className="space-y-1">
-            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Recipe Name</label>
-            <input
-              type="text"
-              required
-              value={recipeName}
-              onChange={e => setRecipeName(e.target.value)}
-              className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white transition"
-            />
-          </div>
-          <div className="space-y-1">
-            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Preparation Time</label>
-            <input
-              type="text"
-              required
-              value={time}
-              onChange={e => setTime(e.target.value)}
-              className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white transition"
-            />
-          </div>
-          <div className="space-y-1">
-            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Calories Info</label>
-            <input
-              type="text"
-              required
-              value={calories}
-              onChange={e => setCalories(e.target.value)}
-              className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white transition"
-            />
-          </div>
-          <div className="md:col-span-2 space-y-1">
-            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Highlight Tags (comma-separated)</label>
-            <input
-              type="text"
-              required
-              value={points}
-              onChange={e => setPoints(e.target.value)}
-              placeholder="e.g. High in Protein, Gut Friendly, Quick & Easy"
-              className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white transition"
-            />
-          </div>
-          <div className="md:col-span-2 space-y-1">
-            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Recipe Blog Link</label>
-            <input
-              type="text"
-              required
-              value={recipeLink}
-              onChange={e => setRecipeLink(e.target.value)}
-              className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white transition font-mono"
-            />
-          </div>
-          <div className="md:col-span-2 space-y-1">
-            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Image Path</label>
-            <input
-              type="text"
-              required
-              value={image}
-              onChange={e => setImage(e.target.value)}
-              className="w-full px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:bg-white transition font-mono"
-            />
+        </div>
+
+        <div className="space-y-4 pb-6">
+          <h4 className="text-sm font-bold text-slate-700 uppercase tracking-wider border-b pb-2">Section 8: Display Settings</h4>
+          <div className="flex gap-6">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" checked={displayEnabled} onChange={e => setDisplayEnabled(e.target.checked)} className="rounded text-indigo-600" />
+              <span className="text-sm font-medium text-slate-700">Enable on Dashboard</span>
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" checked={showBadges} onChange={e => setShowBadges(e.target.checked)} className="rounded text-indigo-600" />
+              <span className="text-sm font-medium text-slate-700">Show Badges</span>
+            </label>
           </div>
         </div>
       </form>
 
-      {/* Visual Live Mockup column (5 cols) */}
-      <div className="lg:col-span-5 space-y-3">
+      <div className="lg:col-span-5 space-y-3 sticky top-6">
         <span className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider pl-1">Live Widget Mockup</span>
         <div className="bg-slate-50 border border-slate-100 rounded-3xl p-6 flex justify-center items-center">
-          <div className="bg-white rounded-[28px] border border-slate-200/60 shadow-md flex flex-col overflow-hidden h-[380px] w-full max-w-sm">
-            
-            {/* Full-bleed recipe cover image */}
-            <div className="relative h-[155px] bg-slate-50 w-full overflow-hidden shrink-0 border-b">
-              <img 
-                src={image} 
-                alt={recipeName} 
-                className="w-full h-full object-cover" 
-                onError={(e) => { 
-                  e.target.src = "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300&auto=format&fit=crop&q=60"; 
-                }} 
-              />
-              <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-xs px-3 py-1 rounded-full shadow-sm text-[10px] font-extrabold text-slate-800 tracking-wider uppercase flex items-center gap-1.5 border border-slate-100/80">
-                <span className="text-red-400">❤️</span> {title}
-              </div>
+          <div className="relative overflow-hidden bg-slate-50 rounded-[32px] flex flex-col group border border-slate-100/50 shadow-sm w-full max-w-sm">
+            <div className="w-full h-52 relative overflow-hidden bg-slate-100">
+              <img src={image} alt={recipeName} className="absolute inset-0 w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
             </div>
-
-            {/* Content area */}
-            <div className="p-4.5 flex-1 flex flex-col justify-between min-h-[200px]">
-              <div>
-                <h4 className="font-heading font-extrabold text-[15px] text-slate-800 leading-tight mb-2.5">
-                  {recipeName}
-                </h4>
-                <div className="flex flex-wrap gap-1.5 mb-1">
+            <div className="p-6 flex-1 flex flex-col justify-center z-10 bg-white">
+              <span className="text-[#0f7c85] font-extrabold text-xs uppercase tracking-[2px] mb-3 flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#ff7373] animate-pulse inline-block" />
+                {title}
+              </span>
+              <h3 className="text-[#1a1c29] font-heading font-extrabold text-2xl leading-tight tracking-tight mb-4">{recipeName}</h3>
+              {showBadges && (
+                <div className="flex flex-wrap gap-2 mb-6">
                   {points.split(",").map(p => p.trim()).filter(Boolean).map((pt, i) => (
-                    <span key={i} className="inline-flex items-center gap-0.5 bg-[#0f7c85]/5 text-[#0f7c85] text-[10px] font-extrabold px-2 py-0.5 rounded-md border border-[#0f7c85]/10 shadow-3xs">
-                      ✓ {pt}
-                    </span>
+                    <span key={i} className="inline-flex items-center gap-1.5 bg-[#0f7c85]/10 text-[#0f7c85] text-[11px] font-extrabold px-3 py-1 rounded-full">✓ {pt}</span>
                   ))}
                 </div>
-              </div>
-
-              <div className="flex flex-col gap-2.5">
-                <div className="flex justify-between items-center text-xs font-bold text-slate-600 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-100">
-                  <span>⏱ {time}</span>
-                  <span>🔥 {calories}</span>
-                </div>
-                <button
-                  type="button"
-                  className="w-full bg-[#0f7c85] text-white text-center py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm"
-                >
-                  View Recipe →
-                </button>
+              )}
+              <div className="flex flex-col gap-4 items-center mt-auto">
+                <button type="button" className="bg-[#0f7c85] text-white font-bold text-xs py-3 px-6 rounded-[12px] w-full">View Recipe →</button>
               </div>
             </div>
           </div>
         </div>
       </div>
-
     </div>
   );
 }
