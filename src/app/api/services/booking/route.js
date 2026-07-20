@@ -102,6 +102,51 @@ About Story / Brand Mission: ${story}
       // Do not fail request if email failed, as database save succeeded
     }
 
+    // 4. Trigger Novu notification for PR Team
+    try {
+      const settings = await prisma.globalSettings.findUnique({
+        where: { siteId },
+        select: { emailSettings: true }
+      });
+      const emailConfig = settings?.emailSettings || {};
+      const novuApiKey = emailConfig.novuApiKey || process.env.NOVU_API_KEY;
+      const novuWorkflowId = emailConfig.novuWorkflowId || process.env.NOVU_WORKFLOW_ID || "push-notification";
+
+      const prAlertsConfig = emailConfig.prAlerts || {};
+      const prAlertsEnabled = prAlertsConfig.enabled !== false;
+      const prEmail = prAlertsConfig.email || process.env.PR_TEAM_EMAIL || "manish.yadav@difm.tech";
+
+      if (prAlertsEnabled && novuApiKey && novuWorkflowId && prEmail) {
+        const { Novu } = await import('@novu/api');
+        const novu = new Novu({ secretKey: novuApiKey });
+
+        await novu.trigger({
+          workflowId: novuWorkflowId,
+          to: [{
+            subscriberId: "pr-team",
+            email: prEmail,
+            firstName: "PR",
+            lastName: "Team"
+          }],
+          payload: {
+            title: `New Media Booking Request: ${fullName} - ${mediaPackage}`,
+            message: `You have received a new media package inquiry:\n\nClient: ${fullName}\nEmail: ${email}\n${messageText}`,
+            fullName,
+            professionalTitle,
+            email,
+            websiteUrl,
+            phone,
+            location,
+            mediaPackage,
+            timeline,
+            story
+          }
+        });
+      }
+    } catch (novuErr) {
+      console.error('Failed to trigger Novu notification to PR team:', novuErr);
+    }
+
     return NextResponse.json({ success: true, submissionId: submission.id, leadId: lead.id });
   } catch (err) {
     console.error('POST /api/services/booking error:', err);

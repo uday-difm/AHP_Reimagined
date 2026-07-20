@@ -22,6 +22,7 @@
     "@mantine/core": "^9.4.0",
     "@mantine/hooks": "^9.4.0",
     "@mantine/utils": "^6.0.22",
+    "@novu/api": "^3.18.2",
     "@prisma/client": "^6.19.3",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.6.1",

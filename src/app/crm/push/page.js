@@ -140,6 +140,8 @@ function ComposePanel({ open, onClose, onSaved, editingId, siteId, emailCampaign
   const [error, setError] = useState(null);
   const [showPreview, setShowPreview] = useState(true);
 
+
+
   useEffect(() => {
     if (editingId && open) {
       fetch(`/api/crm/push/${editingId}`, { headers: { "x-site-id": siteId } })
@@ -596,8 +598,8 @@ export default function PushPage() {
   const [statusFilter, setStatusFilter] = useState("all");
 
   // Settings
-  const [oneSignalAppId, setOneSignalAppId] = useState("");
-  const [oneSignalRestKey, setOneSignalRestKey] = useState("");
+  const [novuWorkflowId, setNovuWorkflowId] = useState("");
+  const [novuApiKey, setNovuApiKey] = useState("");
   const [configSaving, setConfigSaving] = useState(false);
   const [emailCampaigns, setEmailCampaigns] = useState([]);
   const [subscriberLists, setSubscriberLists] = useState([]);
@@ -678,8 +680,8 @@ export default function PushPage() {
       const res = await fetch("/api/dashboard/email/smtp", { headers: { "x-site-id": siteId } });
       const data = await res.json();
       if (data.success && data.data?.emailSettings) {
-        setOneSignalAppId(data.data.emailSettings.oneSignalAppId || "");
-        setOneSignalRestKey(data.data.emailSettings.oneSignalRestKey || "");
+        setNovuWorkflowId(data.data.emailSettings.novuWorkflowId || "");
+        setNovuApiKey(data.data.emailSettings.novuApiKey || "");
       }
     } catch (err) {
       console.error(err);
@@ -693,11 +695,11 @@ export default function PushPage() {
       const res = await fetch("/api/dashboard/email/smtp", {
         method: "PUT",
         headers: { "Content-Type": "application/json", "x-site-id": siteId },
-        body: JSON.stringify({ oneSignalAppId, oneSignalRestKey }),
+        body: JSON.stringify({ novuWorkflowId, novuApiKey }),
       });
       const data = await res.json();
       if (data.success) {
-        showToast("OneSignal credentials saved successfully!");
+        showToast("Novu credentials saved successfully!");
       } else {
         showToast(data.error || "Failed to save credentials", "error");
       }
@@ -821,7 +823,7 @@ export default function PushPage() {
     return matchStatus && matchSearch;
   });
 
-  const configured = !!oneSignalAppId;
+  const configured = !!novuWorkflowId;
 
   const TABS = [
     { id: "campaigns", label: "Campaigns", icon: Bell },
@@ -1223,9 +1225,9 @@ export default function PushPage() {
           }`}>
             {configured ? <CheckCircle2 size={18} /> : <AlertCircle size={18} />}
             <div>
-              <p className="text-sm font-bold">{configured ? "OneSignal Connected" : "OneSignal Not Configured"}</p>
+              <p className="text-sm font-bold">{configured ? "Novu Connected" : "Novu Not Configured"}</p>
               <p className="text-xs mt-0.5 opacity-80">
-                {configured ? "Your OneSignal App ID and REST key are saved. Push notifications are ready to send." : "Enter your App ID and REST API key below to enable push notifications."}
+                {configured ? "Your Novu Workflow ID and Secret API key are saved. Notifications are ready to send." : "Enter your Workflow ID and Secret API key below to enable notifications."}
               </p>
             </div>
           </div>
@@ -1240,7 +1242,7 @@ export default function PushPage() {
                 Credentials are shared with Email Settings
               </p>
               <p className="text-[10px] text-indigo-600 dark:text-indigo-400 mt-0.5 leading-relaxed">
-                OneSignal App ID and REST Key are stored alongside your SMTP/email configuration. You can also manage them from the <strong>Email Settings</strong> page under the <strong>Push Notifications</strong> tab — changes sync automatically.
+                Novu Workflow ID and Secret API Key are stored alongside your SMTP/email configuration. You can also manage them from the <strong>Email Settings</strong> page under the <strong>Push Notifications</strong> tab — changes sync automatically.
               </p>
               <a
                 href="/crm/email"
@@ -1255,32 +1257,32 @@ export default function PushPage() {
           <form onSubmit={handleSaveConfig} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-sm overflow-hidden">
             <div className="border-b border-slate-200 dark:border-slate-700 px-5 py-4">
               <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                <Settings size={15} className="text-indigo-500" /> OneSignal API Credentials
+                <Settings size={15} className="text-indigo-500" /> Novu API Credentials
               </h3>
-              <p className="text-xs text-slate-400 mt-0.5">Find these in your OneSignal dashboard under Settings → Keys &amp; IDs</p>
+              <p className="text-xs text-slate-400 mt-0.5">Find these in your Novu dashboard under Settings → API Keys</p>
             </div>
             <div className="p-5 space-y-4">
               <div>
                 <label className="block text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 mb-1.5">
-                  OneSignal App ID
+                  Novu Workflow ID
                 </label>
                 <input
                   type="text"
-                  placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-                  value={oneSignalAppId}
-                  onChange={e => setOneSignalAppId(e.target.value)}
+                  placeholder="Your Novu Workflow Identifier (e.g., push-notification)"
+                  value={novuWorkflowId}
+                  onChange={e => setNovuWorkflowId(e.target.value)}
                   className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 transition font-mono"
                 />
               </div>
               <div>
                 <label className="block text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 mb-1.5">
-                  REST API Key
+                  Secret API Key
                 </label>
                 <input
                   type="password"
-                  placeholder="Your OneSignal REST API Key"
-                  value={oneSignalRestKey}
-                  onChange={e => setOneSignalRestKey(e.target.value)}
+                  placeholder="Your Novu Secret API Key"
+                  value={novuApiKey}
+                  onChange={e => setNovuApiKey(e.target.value)}
                   className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 transition font-mono"
                 />
                 <p className="text-[10px] text-slate-400 mt-1">This key is stored securely in your site settings and never exposed to the browser.</p>

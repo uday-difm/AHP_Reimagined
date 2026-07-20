@@ -61,6 +61,13 @@ export default async function RootLayout({ children }) {
       className={`${inter.variable} ${outfit.variable} ${playfair.variable}`}
       suppressHydrationWarning>
       <head>
+        {layout.adSettings?.autoAdsEnabled && layout.adSettings?.adsensePublisherId && (
+          <script
+            async
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${layout.adSettings.adsensePublisherId}`}
+            crossOrigin="anonymous"
+          />
+        )}
         {layout.globalJsonLd && (
           <script
             type="application/ld+json"
