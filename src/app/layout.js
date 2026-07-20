@@ -68,6 +68,7 @@ export default async function RootLayout({ children }) {
             crossOrigin="anonymous"
           />
         )}
+
         {layout.globalJsonLd && (
           <script
             type="application/ld+json"

@@ -36,48 +36,77 @@ export function startEmailWorker() {
       if (!sub) throw new Error(`Subscriber ${subscriberId} not found`);
       if (sub.status !== "active") return;
 
+      const site = await prisma.site.findUnique({
+        where: { id: campaign.siteId }
+      });
+      
+      // Prioritize NEXTAUTH_URL to allow dynamic local/ngrok/stage tracking, fallback to site domain
+      const baseUrl = process.env.NEXTAUTH_URL
+        ? process.env.NEXTAUTH_URL.replace(/\/$/, "") // remove trailing slash if any
+        : (site && site.domain
+            ? (site.domain.startsWith("http") ? site.domain : `https://${site.domain}`)
+            : "http://localhost:3000");
+
+      // 1. Pre-create/upsert the CampaignLog to get its ID
+      const campaignLog = await prisma.campaignLog.upsert({
+        where: {
+          campaignId_subscriberId: {
+            campaignId,
+            subscriberId: sub.id,
+          },
+        },
+        update: {
+          status: "sending",
+          errorMessage: null,
+        },
+        create: {
+          campaignId,
+          subscriberId: sub.id,
+          status: "sending",
+        },
+      });
+
+      const logId = campaignLog.id;
+
+      // 2. Inject tracking pixel and rewrite links
+      let trackedBody = campaign.body || "";
+      const trackingPixelHtml = `<img src="${baseUrl}/api/crm/track/open?logId=${logId}" width="1" height="1" style="display:none !important;" alt="" />`;
+      if (trackedBody.includes("</body>")) {
+        trackedBody = trackedBody.replace("</body>", `${trackingPixelHtml}</body>`);
+      } else {
+        trackedBody = trackedBody + trackingPixelHtml;
+      }
+
+      // Match href="...", href='...', and support spaces around '=': href  =  "..."
+      trackedBody = trackedBody.replace(/href\s*=\s*["']([^"']+)["']/gi, (match, url) => {
+        if (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("/")) {
+          if (url.includes("/api/crm/track/")) return match;
+          const absoluteUrl = url.startsWith("/") ? `${baseUrl}${url}` : url;
+          const trackingClickUrl = `${baseUrl}/api/crm/track/click?logId=${logId}&url=${encodeURIComponent(absoluteUrl)}`;
+          return `href="${trackingClickUrl}"`;
+        }
+        return match;
+      });
+
       try {
         await transporter.sendMail({
           from: `"Global Backend" <${fromEmail}>`,
           to: sub.email,
           subject: campaign.subject,
-          html: campaign.body
+          html: trackedBody
         });
 
-        await prisma.campaignLog.upsert({
-          where: {
-            campaignId_subscriberId: {
-              campaignId,
-              subscriberId: sub.id,
-            },
-          },
-          update: {
-            status: "sent",
-            sentAt: new Date(),
-            errorMessage: null,
-          },
-          create: {
-            campaignId,
-            subscriberId: sub.id,
+        await prisma.campaignLog.update({
+          where: { id: logId },
+          data: {
             status: "sent",
             sentAt: new Date(),
           },
         });
       } catch (err) {
-        await prisma.campaignLog.upsert({
-          where: {
-            campaignId_subscriberId: {
-              campaignId,
-              subscriberId: sub.id,
-            },
-          },
-          update: {
-            status: "failed",
-            errorMessage: err.message,
-          },
-          create: {
-            campaignId,
-            subscriberId: sub.id,
+        await prisma.campaignLog.update({
+          where: { id: logId },
+          data: {
             status: "failed",
             errorMessage: err.message,
           },
