@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { X, Sparkles, MessageCircle, Phone, Mail, HelpCircle, Info, MapPin, Share2, MessageSquare } from "lucide-react";
-import { Instagram, Twitter, Facebook, Youtube } from "./SocialIcons";
+
 
 const getIcon = (iconName) => {
   const icons = {
@@ -14,10 +14,6 @@ const getIcon = (iconName) => {
     info: Info,
     map: MapPin,
     share: Share2,
-    instagram: Instagram,
-    twitter: Twitter,
-    facebook: Facebook,
-    youtube: Youtube,
     sparkles: Sparkles,
   };
   const IconComponent = icons[iconName?.toLowerCase()] || Sparkles;

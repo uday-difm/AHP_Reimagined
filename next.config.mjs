@@ -2,7 +2,7 @@
 const nextConfig = {
   reactCompiler: true,
   // Treat these as server external packages so Next.js server-side bundler doesn't try to bundle JSDOM/dompurify sub-dependencies.
-  serverExternalPackages: ["isomorphic-dompurify", "jsdom"],
+  serverExternalPackages: ["isomorphic-dompurify", "jsdom", "bullmq"],
   transpilePackages: ["@yourcompany/global-backend-next"],
   images: {
     remotePatterns: [
@@ -11,6 +11,10 @@ const nextConfig = {
     localPatterns: [
       {
         pathname: "/api/media/**",
+      },
+      {
+        pathname: '/**',
+        search: '',
       },
     ],
   },
