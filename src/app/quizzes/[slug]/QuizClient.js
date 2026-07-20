@@ -399,16 +399,16 @@ export default function QuizClient({ quiz }) {
                     </div>
                   </div>
 
-                  <div className="flex gap-4">
+                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto px-4 sm:px-0">
                     <Link
                       href="/quizzes/dashboard"
-                      className="bg-white text-[#0f7c85] hover:bg-slate-100 px-6 py-2.5 rounded-full font-bold text-[13.5px] no-underline transition-all shadow-sm"
+                      className="bg-white text-[#0f7c85] hover:bg-slate-100 px-6 py-3 sm:py-2.5 rounded-full font-bold text-[13.5px] no-underline transition-all shadow-sm w-full sm:w-auto"
                     >
                       My Dashboard
                     </Link>
                     <Link
                       href="/quizzes"
-                      className="border border-white/20 hover:bg-white/10 text-white px-6 py-2.5 rounded-full font-bold text-[13.5px] no-underline transition-all"
+                      className="border border-white/20 hover:bg-white/10 text-white px-6 py-3 sm:py-2.5 rounded-full font-bold text-[13.5px] no-underline transition-all w-full sm:w-auto"
                     >
                       All Quizzes
                     </Link>

@@ -51,123 +51,30 @@ class WebhookService {
       data: payload,
     });
 
-    await Promise.allSettled(
-      subscriptions.map((sub) => this._send(sub, body, eventType, siteId))
-    );
-  }
+    const { webhookQueue } = await import("../lib/queues/webhookQueue.js");
 
-  /**
-   * Send a single webhook to one subscriber.
-   * Retries once on transient failure. Disables after 10 failures.
-   *
-   * @private
-   */
-  async _send(subscription, body, eventType, siteId) {
-    const signature = this._sign(body, subscription.secret);
-    let success = false;
-    let errorMessage = null;
-
-    try {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 10000); // 10s timeout
-
-      const res = await fetch(subscription.url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-cms-event": eventType,
-          "x-cms-signature": signature,
-          "x-cms-site-id": siteId,
-          "User-Agent": "GlobalBackend-CMS-Webhook/1.0",
-        },
+    const jobs = subscriptions.map((sub) => ({
+      name: "deliver-webhook",
+      data: {
+        subscriptionId: sub.id,
         body,
-        signal: controller.signal,
-      }).finally(() => clearTimeout(timeout));
-
-      if (res.ok) {
-        success = true;
-      } else {
-        errorMessage = `HTTP ${res.status}: ${res.statusText}`;
+        eventType,
+        siteId,
+        url: sub.url
+      },
+      opts: {
+        attempts: 4, // Initial + 3 retries
+        backoff: { type: "exponential", delay: 5000 },
+        removeOnComplete: 100,
+        removeOnFail: 500
       }
+    }));
+
+    try {
+      await webhookQueue.addBulk(jobs);
     } catch (err) {
-      // Retry once on network error
-      try {
-        const res2 = await fetch(subscription.url, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-cms-event": eventType,
-            "x-cms-signature": signature,
-          },
-          body,
-        });
-        success = res2.ok;
-        if (!res2.ok) errorMessage = `Retry HTTP ${res2.status}`;
-      } catch (retryErr) {
-        errorMessage = retryErr.message || "Network error after retry";
-      }
+      console.error("[Webhook] Failed to enqueue webhook jobs:", err);
     }
-
-    // Log the delivery attempt
-    try {
-      await prisma.webhookEvent.create({
-        data: {
-          siteId,
-          type: eventType,
-          payload: { subscriptionId: subscription.id, url: subscription.url, success, error: errorMessage },
-        },
-      });
-    } catch (logErr) {
-      console.error("[Webhook] Failed to log webhook event:", logErr.message);
-    }
-
-    // Track failure count — auto-disable after 10 consecutive failures
-    try {
-      if (!success) {
-        const updated = await prisma.webhookSubscription.update({
-          where: { id: subscription.id },
-          data: {
-            failCount: { increment: 1 },
-            lastError: errorMessage,
-          },
-        });
-        if (updated.failCount >= 10) {
-          await prisma.webhookSubscription.update({
-            where: { id: subscription.id },
-            data: { isActive: false },
-          });
-          console.warn(`[Webhook] Subscription ${subscription.id} auto-disabled after 10 failures.`);
-        }
-      } else if (subscription.failCount > 0) {
-        // Reset fail count on success
-        await prisma.webhookSubscription.update({
-          where: { id: subscription.id },
-          data: { failCount: 0, lastError: null },
-        });
-      }
-    } catch (updateErr) {
-      console.error("[Webhook] Failed to update subscription failure count:", updateErr.message);
-    }
-
-    if (!success) {
-      console.error(`[Webhook] Delivery failed for subscription ${subscription.id} → ${subscription.url}: ${errorMessage}`);
-    } else {
-      console.log(`[Webhook] ✓ Delivered ${eventType} to ${subscription.url}`);
-    }
-  }
-
-  /**
-   * Create an HMAC-SHA256 signature for the payload.
-   * Frontend can verify: crypto.createHmac("sha256", secret).update(rawBody).digest("hex")
-   *
-   * @param {string} body - Raw JSON string
-   * @param {string} secret - Subscription secret
-   * @returns {string} - "sha256=<hex_digest>"
-   */
-  _sign(body, secret) {
-    const hmac = crypto.createHmac("sha256", secret);
-    hmac.update(body);
-    return `sha256=${hmac.digest("hex")}`;
   }
 
   /**

@@ -155,9 +155,10 @@ export default async function MagazineIssuePage({ params }) {
                   <h3 className="font-heading font-bold text-primary text-[15px] uppercase tracking-wider mb-3">
                     Dear Readers,
                   </h3>
-                  <p className="font-serif text-[15px] md:text-[16px] leading-[1.8] text-slate-700 whitespace-pre-line">
-                    {mag.introduction}
-                  </p>
+                  <div 
+                    className="font-serif text-[15px] md:text-[16px] leading-[1.8] text-slate-700 whitespace-pre-line prose"
+                    dangerouslySetInnerHTML={{ __html: mag.introduction }}
+                  />
                 </div>
               )}
 
@@ -167,9 +168,10 @@ export default async function MagazineIssuePage({ params }) {
                   <h3 className="font-heading font-extrabold text-[20px] text-primary tracking-[-0.5px] mb-3">
                     Issue Overview
                   </h3>
-                  <p className="text-[15px] leading-relaxed">
-                    {mag.description}
-                  </p>
+                  <div 
+                    className="text-[15px] leading-relaxed prose prose-sm max-w-none"
+                    dangerouslySetInnerHTML={{ __html: mag.description }}
+                  />
                 </div>
               )}
 

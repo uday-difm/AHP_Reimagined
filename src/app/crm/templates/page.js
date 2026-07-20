@@ -11,7 +11,7 @@ export default function TemplatesPage() {
   const [newTemplate, setNewTemplate] = useState({ name: "", subject: "", htmlContent: "" });
   const [siteId, setSiteId] = useState("");
   const [saveError, setSaveError] = useState(null);
-  
+
   // Editor view states
   const [formTab, setFormTab] = useState("editor"); // "editor" | "preview"
   const [previewTemplate, setPreviewTemplate] = useState(null); // Template model to preview
@@ -206,7 +206,7 @@ export default function TemplatesPage() {
       {showAddForm && (
         <form onSubmit={handleSave} className="p-5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl space-y-4">
           <h3 className="text-sm font-bold">{editingId ? "Edit Template" : "Compose Layout Template"}</h3>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <input type="text" placeholder="Template Name" required value={newTemplate.name}
               onChange={(e) => setNewTemplate({ ...newTemplate, name: e.target.value })}
               className="p-2 border rounded text-xs dark:bg-slate-900 w-full" />
@@ -227,7 +227,7 @@ export default function TemplatesPage() {
                 onChange={(e) => setNewTemplate({ ...newTemplate, htmlContent: e.target.value })}
                 className="p-3 border rounded-xl text-xs dark:bg-slate-900 w-full font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none h-[420px]" />
             </div>
-            
+
             <div className="space-y-1.5">
               <div className="flex justify-between items-center">
                 <label className="block text-xs font-semibold text-slate-650 dark:text-slate-400">Live Visual Preview</label>
@@ -362,7 +362,7 @@ export default function TemplatesPage() {
                 ✕
               </button>
             </div>
-            
+
             <div className="p-4 bg-slate-100 dark:bg-slate-900 flex-1 flex flex-col min-h-0">
               <iframe
                 srcDoc={previewTemplate.htmlContent || "<p class='p-4 text-xs text-center text-slate-400'>This template has no layout HTML content.</p>"}
@@ -371,7 +371,7 @@ export default function TemplatesPage() {
                 sandbox="allow-same-origin"
               />
             </div>
-            
+
             <div className="px-5 py-3.5 border-t border-slate-150 dark:border-slate-700 flex justify-end bg-slate-50 dark:bg-slate-900/50">
               <button
                 type="button"

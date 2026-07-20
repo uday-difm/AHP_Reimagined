@@ -11,20 +11,30 @@ export function startEmailWorker() {
   worker = new Worker(
     "email-campaign",
     async (job) => {
-      const { campaignId, subscriberId } = job.data;
+      const { campaignId, subscriberId, isTest, targetEmail } = job.data;
       
       const campaign = await prisma.emailCampaign.findUnique({
         where: { id: campaignId }
       });
       if (!campaign) throw new Error(`Campaign ${campaignId} not found`);
 
+      const { transporter, fromEmail } = await emailService.getTransporterForSite(campaign.siteId);
+
+      if (isTest) {
+        await transporter.sendMail({
+          from: `"Global Backend" <${fromEmail}>`,
+          to: targetEmail,
+          subject: `[TEST] ${campaign.subject}`,
+          html: campaign.body
+        });
+        return; // Test emails don't create campaignLogs
+      }
+
       const sub = await prisma.subscriber.findUnique({
         where: { id: subscriberId }
       });
       if (!sub) throw new Error(`Subscriber ${subscriberId} not found`);
       if (sub.status !== "active") return;
-
-      const { transporter, fromEmail } = await emailService.getTransporterForSite(campaign.siteId);
 
       try {
         await transporter.sendMail({
@@ -80,7 +90,9 @@ export function startEmailWorker() {
 
   worker.on("completed", async (job) => {
     try {
-      const campaignId = job.data.campaignId;
+      const { campaignId, isTest } = job.data;
+      if (isTest) return; // No status updates for test emails
+      
       // Check if all active subscribers for this campaign have a log entry
       const campaign = await prisma.emailCampaign.findUnique({
         where: { id: campaignId },

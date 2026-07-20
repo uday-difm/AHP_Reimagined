@@ -397,10 +397,10 @@ export default function PublicationPage() {
                         onMouseMove={(e) => handleCardMouseMove(e, i)}
                         onMouseLeave={() => handleCardMouseLeave(i)}
                         style={{ transitionDelay: `${i * 0.1}s` }}
-                        className="project-card tilt-card bg-bg-light rounded-[24px] overflow-hidden border border-slate-200 transition-all duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer flex flex-col [transform-style:preserve-3d] [perspective:1000px] hover:border-[#0f7c85]/40 hover:shadow-[0_24px_48px_rgba(15,124,133,0.14)] hover:scale-[1.04] hover:-translate-y-2.5 active:scale-[0.98] reveal-slide p-5 min-h-[400px] md:min-h-[490px] group relative"
+                        className="project-card tilt-card bg-bg-light rounded-[24px] overflow-hidden border border-slate-200 transition-all duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer flex flex-col [transform-style:preserve-3d] [perspective:1000px] hover:border-[#0f7c85]/40 hover:shadow-[0_24px_48px_rgba(15,124,133,0.14)] hover:scale-[1.04] hover:-translate-y-2.5 active:scale-[0.98] reveal-slide p-5 min-h-[400px] md:min-h-[490px] group relative mobile-flip-card"
                       >
                         {/* The Flipping Card Wrapper */}
-                        <div className="w-full h-full relative transition-transform duration-[800ms] [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] flex flex-col flex-grow">
+                        <div className="w-full h-full relative transition-transform duration-[800ms] [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] group-[.mobile-flipped]:[transform:rotateY(180deg)] flex flex-col flex-grow">
 
                           {/* Front Face */}
                           <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] flex flex-col justify-between">

@@ -830,7 +830,7 @@ export default function PushPage() {
   ];
 
   return (
-    <div className="space-y-5 w-full relative">
+    <div className="space-y-6 w-full relative">
       {/* Toast */}
       {toast && (
         <div className={`fixed top-5 right-5 z-[100] flex items-center gap-3 px-5 py-3.5 rounded-xl shadow-2xl text-sm font-semibold text-white transition-all ${
@@ -846,7 +846,7 @@ export default function PushPage() {
       )}
 
       {/* Header */}
-      <div className="flex flex-wrap gap-4 items-start justify-between">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <div className="flex items-center gap-2">
             <div className="p-2 bg-indigo-100 dark:bg-indigo-950/40 rounded-xl">
@@ -862,20 +862,25 @@ export default function PushPage() {
             </div>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+
+        <div className="flex flex-wrap gap-2 w-full sm:w-auto">
           {!configured && (
             <div className="flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-bold text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/40 rounded-lg">
               <Shield size={11} /> OneSignal not configured
             </div>
           )}
-          {tab === "campaigns" && (
-            <button
-              onClick={openNew}
-              className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition shadow-sm shadow-indigo-500/20"
-            >
-              <Plus size={14} /> Compose Push
-            </button>
-          )}
+          <button
+            onClick={() => setTab("settings")}
+            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold bg-white text-slate-700 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 rounded-lg hover:bg-slate-50 transition"
+          >
+            <Settings size={14} /> OneSignal Settings
+          </button>
+          <button
+            onClick={openNew}
+            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition shadow-sm shadow-indigo-500/20"
+          >
+            <Plus size={14} /> Compose Push
+          </button>
         </div>
       </div>
 

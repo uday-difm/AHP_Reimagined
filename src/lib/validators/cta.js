@@ -5,7 +5,9 @@ export const CtaConfigSchema = z.object({
     .object({
       text: z.string().optional(),
       link: z.string().optional(),
+      icon: z.string().optional(),
     })
+    .passthrough()
     .optional(),
 
   floatingButtons: z
@@ -14,7 +16,12 @@ export const CtaConfigSchema = z.object({
         id: z.string(),
         label: z.string(),
         link: z.string().optional(),
-      }),
+        icon: z.string().optional(),
+        position: z.string().optional(),
+        color: z.string().optional(),
+        textColor: z.string().optional(),
+        enabled: z.boolean().optional(),
+      }).passthrough()
     )
     .optional(),
 
@@ -24,7 +31,13 @@ export const CtaConfigSchema = z.object({
         id: z.string(),
         title: z.string(),
         body: z.string().optional(),
-      }),
+        type: z.string().optional(),
+        buttonText: z.string().optional(),
+        buttonLink: z.string().optional(),
+        triggerOn: z.string().optional(),
+        triggerValue: z.string().optional(),
+        showOnce: z.boolean().optional(),
+      }).passthrough()
     )
     .optional(),
 });

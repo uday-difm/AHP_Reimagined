@@ -35,8 +35,16 @@ export async function register() {
         const { startEmailWorker } = await import("./lib/queues/emailWorker.js");
         startEmailWorker();
         console.log("[Startup] Email campaign worker started in-process.");
+        
+        const { startWebhookWorker } = await import("./lib/queues/webhookWorker.js");
+        startWebhookWorker();
+        console.log("[Startup] Webhook worker started in-process.");
+        
+        const { startSystemEmailWorker } = await import("./lib/queues/systemEmailWorker.js");
+        startSystemEmailWorker();
+        console.log("[Startup] System email worker started in-process.");
       } catch (err) {
-        console.error("[Startup] Failed to start email worker:", err);
+        console.error("[Startup] Failed to start background workers:", err);
       }
     }
   }
