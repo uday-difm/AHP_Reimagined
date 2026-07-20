@@ -75,6 +75,7 @@ model Site {
   adZones              AdZone[]
   advertisers          Advertiser[]
   adCampaigns          AdCampaign[]
+  recipes              Recipe[]
 
   @@index([isActive])
 }
@@ -104,6 +105,12 @@ model User {
   twoFactor      TwoFactor?
   posts          Post[]
   passwordResets PasswordReset[]
+
+  recipes        Recipe[]         @relation("UserRecipes")
+  savedRecipes   SavedRecipe[]
+  recipeRatings  RecipeRating[]
+  recipeComments RecipeComment[]
+  recipeLikes    RecipeLike[]
 
   @@index([email])
   @@index([isActive])
@@ -1161,5 +1168,107 @@ model LegacyAdEvent {
   @@map("ad_events")
 }
 
+// --- Community Recipe Models ---
 
+enum RecipeStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model Recipe {
+  id              String       @id @default(cuid())
+  siteId          String?
+  site            Site?        @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  
+  title           String
+  description     String?      @db.Text
+  ingredients     Json
+  steps           Json
+  cookingTime     Int?
+  calories        Int?
+  difficulty      String?
+  imageUrl        String?      @db.Text
+  
+  status          RecipeStatus @default(PENDING)
+  
+  contributorId   String
+  contributor     User         @relation("UserRecipes", fields: [contributorId], references: [id])
+  
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  
+  tags            RecipeTag[]
+  allergens       RecipeAllergen[]
+  ratings         RecipeRating[]
+  comments        RecipeComment[]
+  savedBy         SavedRecipe[]
+  likes           RecipeLike[]
+  
+  protein         Float?
+  carbs           Float?
+  fiber           Float?
+  fat             Float?
+  sugar           Float?
+
+  @@index([siteId])
+  @@index([contributorId])
+  @@index([status])
+}
+
+model RecipeTag {
+  id      String   @id @default(cuid())
+  name    String   @unique
+  recipes Recipe[]
+}
+
+model RecipeAllergen {
+  id      String   @id @default(cuid())
+  name    String   @unique
+  recipes Recipe[]
+}
+
+model RecipeRating {
+  id        String   @id @default(cuid())
+  recipeId  String
+  recipe    Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rating    Int
+  createdAt DateTime @default(now())
+  
+  @@unique([recipeId, userId])
+}
+
+model RecipeLike {
+  id        String   @id @default(cuid())
+  recipeId  String
+  recipe    Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([recipeId, userId])
+}
+
+model RecipeComment {
+  id        String   @id @default(cuid())
+  recipeId  String
+  recipe    Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+}
+
+model SavedRecipe {
+  id        String   @id @default(cuid())
+  recipeId  String
+  recipe    Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([recipeId, userId])
+}
 

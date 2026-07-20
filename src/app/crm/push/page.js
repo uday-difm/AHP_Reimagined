@@ -879,7 +879,7 @@ export default function PushPage() {
           </button>
           <button
             onClick={openNew}
-            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition shadow-sm shadow-indigo-500/20"
+            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition shadow-sm shadow-emerald-500/20"
           >
             <Plus size={14} /> Compose Push
           </button>
@@ -887,18 +887,19 @@ export default function PushPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-0.5 bg-slate-100 dark:bg-slate-800/60 p-1 rounded-xl w-fit">
+      <div className="grid grid-cols-3 sm:flex sm:flex-row gap-1 bg-slate-100 dark:bg-slate-800/60 p-1 rounded-xl w-full sm:w-fit">
         {TABS.map(t => (
           <button
             key={t.id}
             onClick={() => setTab(t.id)}
-            className={`flex items-center gap-1.5 px-4 py-1.5 text-xs font-semibold rounded-lg transition ${
+            className={`flex items-center justify-center gap-1.5 px-2 sm:px-4 py-2 sm:py-1.5 text-xs font-semibold rounded-lg transition ${
               tab === t.id
                 ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm"
                 : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
             }`}
           >
-            <t.icon size={13} /> {t.label}
+            <t.icon size={13} className="shrink-0 hidden sm:block" />
+            <span className="truncate">{t.label}</span>
           </button>
         ))}
       </div>

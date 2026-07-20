@@ -37,6 +37,7 @@ import {
   ChevronRight,
   Globe,
   Package,
+  Utensils,
 } from "lucide-react";
 
 const ROLE_LEVEL = {
@@ -212,6 +213,12 @@ const sections = [
         icon: HelpCircle,
         minRole: "EDITOR",
       },
+      {
+        href: "/dashboard/recipes",
+        label: "Recipes",
+        icon: Utensils,
+        minRole: "EDITOR",
+      },
     ],
   },
 
@@ -330,8 +337,8 @@ function SidebarLink({ href, label, icon: Icon, pathname }) {
     <Link
       href={href}
       className={`flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-all border ${isActive
-          ? "bg-indigo-50 text-indigo-700 border-indigo-100 dark:bg-indigo-950/40 dark:text-indigo-300 dark:border-indigo-900/50 shadow-sm"
-          : "text-slate-600 dark:text-slate-300 hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-800 dark:hover:text-white border-transparent"
+        ? "bg-indigo-50 text-indigo-700 border-indigo-100 dark:bg-indigo-950/40 dark:text-indigo-300 dark:border-indigo-900/50 shadow-sm"
+        : "text-slate-600 dark:text-slate-300 hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-800 dark:hover:text-white border-transparent"
         }`}
     >
       <Icon
@@ -436,7 +443,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
                 )}
               </button>
 
-               {advancedOpen && (
+              {advancedOpen && (
                 <div className="mt-1 space-y-0.5">
                   <SidebarLink
                     href="/dashboard/backup"
