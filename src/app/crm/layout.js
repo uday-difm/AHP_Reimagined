@@ -13,7 +13,8 @@ export default async function Layout({ children }) {
     redirect("/dashboard/login");
   }
 
-  if (user.globalRole === "VISITOR") {
+  const allowedRoles = ["SUPERADMIN", "ADMIN", "MARKETING"];
+  if (!allowedRoles.includes(user.globalRole)) {
     redirect("/");
   }
 

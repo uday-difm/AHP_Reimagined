@@ -29,7 +29,8 @@ export default function SessionTimeoutHandler({ timeoutMinutes = 30 }) {
       if (now - lastActivity > timeoutMs) {
         console.warn("Session inactivity timeout reached. Logging out...");
         signOut({ redirect: false }).then(() => {
-          router.push("/login?reason=timeout");
+          const isBackend = window.location.pathname.startsWith('/dashboard') || window.location.pathname.startsWith('/crm');
+          router.push(isBackend ? "/dashboard/login?reason=timeout" : "/login?reason=timeout");
         });
       }
     }, 10000); // Check every 10 seconds
@@ -47,7 +48,8 @@ export default function SessionTimeoutHandler({ timeoutMinutes = 30 }) {
   useEffect(() => {
     if (session?.error === "SessionExpired") {
       signOut({ redirect: false }).then(() => {
-        router.push("/login?reason=timeout");
+        const isBackend = window.location.pathname.startsWith('/dashboard') || window.location.pathname.startsWith('/crm');
+        router.push(isBackend ? "/dashboard/login?reason=timeout" : "/login?reason=timeout");
       });
     }
   }, [session, router]);

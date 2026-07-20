@@ -4,6 +4,7 @@ import { checkSitePermission } from "@/lib/apiAuth";
 import nodemailer from "nodemailer";
 import { z } from "zod";
 import { EventBus } from "@/core/events";
+import "@/core/listeners"; // IMPORTANT: registers EventBus listeners for this API isolate
 import { apiSuccess } from "@/core/errors";
 
 const FormSubmitSchema = z.object({

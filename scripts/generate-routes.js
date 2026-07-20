@@ -14,6 +14,7 @@ const EXCLUDED_PREFIXES = [
   "/login",
   "/forgot-password",
   "/reset-password",
+  "/services/private",
 ];
 
 function slugToTitle(slug) {

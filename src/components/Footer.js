@@ -7,6 +7,38 @@ export default function Footer({ className = "" }) {
   const [footerConfig, setFooterConfig] = useState(null);
   const [navMenus, setNavMenus] = useState({});
 
+  const handleNewsletterSubmit = async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const emailInput = form.querySelector('input[type="email"]');
+    const email = emailInput.value;
+    const btn = form.querySelector('button[type="submit"]');
+    const originalText = btn.innerText;
+
+    if (!email) return;
+
+    try {
+      btn.innerText = "Joining...";
+      btn.disabled = true;
+      const siteId = process.env.NEXT_PUBLIC_SITE_ID || "AHP";
+      const res = await fetch(`/api/newsletter/subscribe?siteId=${siteId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, metadata: { source: "footer-newsletter" } })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to subscribe.");
+      
+      btn.innerText = "Joined!";
+      emailInput.value = "";
+      setTimeout(() => { btn.innerText = originalText; btn.disabled = false; }, 3000);
+    } catch (err) {
+      alert(err.message || "Something went wrong.");
+      btn.innerText = originalText;
+      btn.disabled = false;
+    }
+  };
+
   // Fetch footer layout configurations from DB
   useEffect(() => {
     fetch('/api/footer')
@@ -242,7 +274,7 @@ export default function Footer({ className = "" }) {
                 {col.type === "newsletter" && (
                   <div className="flex flex-col gap-4 font-body">
                     <form
-                      onSubmit={(e) => e.preventDefault()}
+                      onSubmit={handleNewsletterSubmit}
                       className="flex bg-white/10 rounded-xl p-1 border border-white/20 focus-within:border-teal-300/50 transition"
                     >
                       <input

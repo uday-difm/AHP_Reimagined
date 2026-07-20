@@ -10,11 +10,6 @@
     "isDynamic": false
   },
   {
-    "slug": "/admin/ads",
-    "title": "Ads",
-    "isDynamic": false
-  },
-  {
     "slug": "/blogs",
     "title": "Blogs",
     "isDynamic": false
@@ -78,11 +73,6 @@
     "slug": "/services",
     "title": "Services",
     "isDynamic": false
-  },
-  {
-    "slug": "/services/private/[token]",
-    "title": "Private Detail",
-    "isDynamic": true
   },
   {
     "slug": "/services/[slug]",

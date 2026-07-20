@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { subscriberService } from "@/services/subscriber.service";
 import { apiSuccess } from "@/core/errors";
+import { EventBus } from "@/core/events";
+import "@/core/listeners";
 
 export async function POST(req) {
   try {
@@ -59,6 +61,9 @@ export async function POST(req) {
       metadata: metadata || { source: "newsletter-form" },
       listIds: listIds || [],
     });
+
+    // 3. Fire event so admin dashboard gets a notification alert
+    EventBus.emit("newsletter.subscribed", { siteId, data: subscriber });
 
     return NextResponse.json(apiSuccess({ subscriber }));
   } catch (err) {

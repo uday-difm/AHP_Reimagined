@@ -5,7 +5,9 @@ export const ROLES = {
   ADMIN: "ADMIN",
   EDITOR: "EDITOR",
   AUTHOR: "AUTHOR",
+  MARKETING: "MARKETING",
   VIEWER: "VIEWER",
+  VISITOR: "VISITOR",
 };
 
 // numeric hierarchy
