@@ -2,7 +2,8 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Facebook, Instagram, Linkedin, Youtube, Twitter, Mail } from 'lucide-react';
+import { Mail } from 'lucide-react';
+import { Facebook, Instagram, Linkedin, Youtube, Twitter } from '../components/SocialIcons';
 import Button from './Button';
 import ScrollToTopLink from './ScrollToTopLink';
 import Image from 'next/image';

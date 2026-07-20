@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { X, Sparkles, MessageCircle, Phone, Mail, HelpCircle, Info, MapPin, Share2, Instagram, Twitter, Facebook, Youtube, MessageSquare } from "lucide-react";
+import { X, Sparkles, MessageCircle, Phone, Mail, HelpCircle, Info, MapPin, Share2, MessageSquare } from "lucide-react";
+import { Instagram, Twitter, Facebook, Youtube } from "./SocialIcons";
 
 const getIcon = (iconName) => {
   const icons = {
