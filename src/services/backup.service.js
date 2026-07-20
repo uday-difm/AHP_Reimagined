@@ -362,7 +362,7 @@ export class BackupService extends BaseService {
     return devTools.backupHistory || [];
   }
 
-  async logBackupHistory(siteId, type, size) {
+  async logBackupHistory(siteId, type, size, fileUrl = null) {
     const settings = await prisma.globalSettings.findUnique({
       where: { siteId },
       select: { devTools: true },
@@ -378,6 +378,7 @@ export class BackupService extends BaseService {
       type,
       timestamp: new Date().toISOString(),
       size,
+      ...(fileUrl ? { fileUrl } : {}),
     });
 
     await prisma.globalSettings.update({
