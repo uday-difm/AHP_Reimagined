@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import BackdropBlobs from '@/components/BackdropBlobs';
 import ScrollReveal from '@/components/ScrollReveal';
 import CustomCursor from '@/components/CustomCursor';
+import RecaptchaWidget from '@/components/RecaptchaWidget';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -33,6 +34,11 @@ export default function ContactPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const token = typeof window !== 'undefined' && window.grecaptcha ? window.grecaptcha.getResponse() : null;
+    if (typeof window !== 'undefined' && document.querySelector('meta[name="recaptcha-site-key"]') && !token) {
+      setErrorMsg('Please complete the reCAPTCHA verification.');
+      return;
+    }
     setLoading(true);
     setErrorMsg('');
     const siteId = process.env.NEXT_PUBLIC_SITE_ID || "AHP";
@@ -267,6 +273,7 @@ export default function ContactPage() {
                       </div>
                     )}
 
+                    <RecaptchaWidget />
                     <button 
                       type="submit" 
                       disabled={loading}

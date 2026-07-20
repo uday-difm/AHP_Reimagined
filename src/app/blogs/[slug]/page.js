@@ -98,6 +98,12 @@ export default async function ArticlePage({ params }) {
 
   return (
     <div className="min-h-screen bg-bg-light relative">
+      {post.jsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(post.jsonLd) }}
+        />
+      )}
       <Header />
 
       <main className="pt-[140px] pb-20">

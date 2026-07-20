@@ -71,6 +71,24 @@ EventBus.on("form.failed", async ({ siteId, data }) => {
   }
 });
 
+EventBus.on("newsletter.subscribed", async ({ siteId, data }) => {
+  console.log("🔥 [EventBus] newsletter.subscribed received for site:", siteId);
+  try {
+    const email = data.email || "Unknown Email";
+    await prisma.notificationAlert.create({
+      data: {
+        siteId,
+        title: "New Newsletter Subscriber",
+        message: `A new user subscribed to the newsletter: ${email}`,
+        type: "NEW_LEAD",
+      },
+    });
+    console.log("✅ [EventBus] NotificationAlert created in DB for newsletter.");
+  } catch (err) {
+    console.error("❌ [EventBus] Failed to create dashboard NotificationAlert for newsletter:", err);
+  }
+});
+
 // ---------------------------------------------------------------------------
 // CONTENT EVENTS → Webhook Delivery (Automatic Website Synchronization)
 // ---------------------------------------------------------------------------

@@ -1,12 +1,31 @@
 'use client';
 
-import { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Button from '@/components/Button';
 import AdSlot from '@/components/AdSlot';
 import Book from './Book';
 import Scene from './Scene';
+
+class SceneErrorBoundary extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { hasError: false };
+    }
+    static getDerivedStateFromError(error) {
+        return { hasError: true };
+    }
+    componentDidCatch(error, errorInfo) {
+        console.error("3D Scene Error:", error, errorInfo);
+    }
+    render() {
+        if (this.state.hasError) {
+            return <div className="w-[200px] h-[300px] bg-slate-100 rounded-lg flex items-center justify-center text-slate-400 text-sm p-4 text-center border border-slate-200">Interactive 3D cover unavailable</div>;
+        }
+        return this.props.children;
+    }
+}
 
 function proxyUrl(url) {
   if (!url) return url;
@@ -94,8 +113,11 @@ export default function ArticlesGrid() {
     card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)';
   };
 
-  if (loading || !latestIssue) {
-    return null;
+  if (loading) {
+    return <div className="py-20 text-center text-slate-500 font-bold">Loading Latest Magazine...</div>;
+  }
+  if (!latestIssue) {
+    return <div className="py-20 text-center text-slate-500 font-bold">No magazines published yet.</div>;
   }
 
   return (
@@ -116,14 +138,16 @@ export default function ArticlesGrid() {
               Step into our latest featured edition containing clinically reviewed blueprints, expert columns, and mindfulness guides.
             </p>
 
-            {/* 3D Book Container - Removed Link wrapper so it can be freely dragged */}
+            {/* 3D Book Container */}
             <div className="block mb-8">
               <div className="flex justify-center lg:justify-start cursor-grab active:cursor-grabbing">
-                <Scene
-                  frontUrl={latestIssue && latestIssue.img ? proxyUrl(latestIssue.img) : ""}
-                  backUrl={latestIssue && latestIssue.backImg ? proxyUrl(latestIssue.backImg) : null}
-                  spineUrl={latestIssue && latestIssue.spineImg ? proxyUrl(latestIssue.spineImg) : null}
-                />
+                <SceneErrorBoundary>
+                  <Scene
+                    frontUrl={latestIssue && latestIssue.img ? proxyUrl(latestIssue.img) : ""}
+                    backUrl={latestIssue && latestIssue.backImg ? proxyUrl(latestIssue.backImg) : null}
+                    spineUrl={latestIssue && latestIssue.spineImg ? proxyUrl(latestIssue.spineImg) : null}
+                  />
+                </SceneErrorBoundary>
               </div>
             </div>
 

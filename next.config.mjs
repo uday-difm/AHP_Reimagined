@@ -10,6 +10,9 @@ const nextConfig = {
     ],
     localPatterns: [
       {
+        pathname: "/api/media/**",
+      },
+      {
         pathname: '/**',
         search: '',
       },

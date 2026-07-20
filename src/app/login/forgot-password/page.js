@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Mail, ArrowLeft, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import RecaptchaWidget from "@/components/RecaptchaWidget";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -14,6 +15,12 @@ export default function ForgotPasswordPage() {
     e.preventDefault();
     setError("");
     setSuccess(false);
+
+    const token = typeof window !== 'undefined' && window.grecaptcha ? window.grecaptcha.getResponse() : null;
+    if (typeof window !== 'undefined' && document.querySelector('meta[name="recaptcha-site-key"]') && !token) {
+      setError('Please complete the reCAPTCHA verification.');
+      return;
+    }
 
     if (!email.trim()) {
       return setError("Email address is required.");
@@ -112,6 +119,7 @@ export default function ForgotPasswordPage() {
             )}
 
             <div className="flex flex-col gap-3">
+              <RecaptchaWidget />
               <button
                 type="submit"
                 disabled={loading}

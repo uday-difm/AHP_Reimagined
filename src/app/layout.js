@@ -60,7 +60,25 @@ export default async function RootLayout({ children }) {
       lang="en"
       className={`${inter.variable} ${outfit.variable} ${playfair.variable}`}
       suppressHydrationWarning>
-      <head />
+      <head>
+        {layout.adSettings?.autoAdsEnabled && layout.adSettings?.adsensePublisherId && (
+          <script
+            async
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${layout.adSettings.adsensePublisherId}`}
+            crossOrigin="anonymous"
+          />
+        )}
+
+        {layout.globalJsonLd && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: layout.globalJsonLd }}
+          />
+        )}
+        {layout.recaptchaSiteKey && (
+          <meta name="recaptcha-site-key" content={layout.recaptchaSiteKey} />
+        )}
+      </head>
       <body>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <AuthProvider>

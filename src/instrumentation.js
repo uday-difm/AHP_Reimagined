@@ -43,6 +43,19 @@ export async function register() {
         const { startSystemEmailWorker } = await import("./lib/queues/systemEmailWorker.js");
         startSystemEmailWorker();
         console.log("[Startup] System email worker started in-process.");
+
+        const { startBackupWorker } = await import("./lib/queues/backupWorker.js");
+        startBackupWorker();
+        console.log("[Startup] Backup worker started in-process.");
+
+        // Schedule automated daily + weekly backups for all active sites
+        const { scheduleAutomatedBackups } = await import("./lib/queues/backupQueue.js");
+        const { default: prisma } = await import("./lib/prisma.js");
+        const sites = await prisma.site.findMany({ select: { id: true } });
+        for (const site of sites) {
+          await scheduleAutomatedBackups(site.id);
+        }
+        console.log(`[Startup] Automated backups scheduled for ${sites.length} site(s).`);
       } catch (err) {
         console.error("[Startup] Failed to start background workers:", err);
       }

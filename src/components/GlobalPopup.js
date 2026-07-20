@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { X, Sparkles, MessageCircle, Phone, Mail, HelpCircle, Info, MapPin, Share2, MessageSquare } from "lucide-react";
 
+
 const getIcon = (iconName) => {
   const icons = {
     "message-circle": MessageCircle,
@@ -16,7 +17,7 @@ const getIcon = (iconName) => {
     sparkles: Sparkles,
   };
   const IconComponent = icons[iconName?.toLowerCase()] || Sparkles;
-  
+
   if (iconName && (iconName.startsWith("http") || iconName.startsWith("/"))) {
     // eslint-disable-next-line @next/next/no-img-element
     return <img src={iconName} alt="icon" className="w-5 h-5 shrink-0 object-contain" />;

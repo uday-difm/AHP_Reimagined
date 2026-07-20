@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
+import MediaPickerModal from "@/components/media/MediaPickerModal";
 import {
   Plus, Layers, RefreshCw, BarChart3, Eye, MousePointerClick,
   Target, Calendar, Users, Briefcase, FileText, CheckCircle2,
@@ -46,6 +47,24 @@ export default function AdsPage() {
   const [editingAdId, setEditingAdId] = useState(null);
   const [toast, setToast] = useState(null);
   const [actionLoading, setActionLoading] = useState({});
+
+  const [mediaPickerOpen, setMediaPickerOpen] = useState(false);
+  const [mediaPickerTarget, setMediaPickerTarget] = useState(""); // "adImageUrl" | "advertiserLogo"
+
+  const openMediaPicker = (target) => {
+    setMediaPickerTarget(target);
+    setMediaPickerOpen(true);
+  };
+
+  const handleMediaSelect = (mediaItem) => {
+    const url = mediaItem.secureUrl || mediaItem.url;
+    if (mediaPickerTarget === "adImageUrl") {
+      setFormAd(prev => ({ ...prev, imageUrl: url }));
+    } else if (mediaPickerTarget === "advertiserLogo") {
+      setNewAdvertiser(prev => ({ ...prev, logo: url }));
+    }
+    setMediaPickerOpen(false);
+  };
 
   // Search & Filter state
   const [searchQuery, setSearchQuery] = useState("");
@@ -1046,9 +1065,18 @@ export default function AdsPage() {
                 />
               </div>
               <div>
-                <label className="text-[9.5px] font-bold text-slate-450 uppercase block mb-1">Logo URL</label>
+                <div className="flex justify-between items-center mb-1">
+                  <label className="text-[9.5px] font-bold text-slate-455 uppercase block">Logo URL</label>
+                  <button
+                    type="button"
+                    onClick={() => openMediaPicker("advertiserLogo")}
+                    className="text-[9px] font-extrabold text-indigo-650 hover:text-indigo-855 dark:text-indigo-400 dark:hover:text-indigo-300 transition cursor-pointer"
+                  >
+                    Choose from Media
+                  </button>
+                </div>
                 <input
-                  type="url" placeholder="https://image-hosting.com/logo.png"
+                  type="text" placeholder="https://image-hosting.com/logo.png"
                   value={newAdvertiser.logo}
                   onChange={e => setNewAdvertiser({ ...newAdvertiser, logo: e.target.value })}
                   className="w-full p-2.5 border rounded-lg text-xs dark:bg-slate-900 outline-none"
@@ -1360,9 +1388,18 @@ export default function AdsPage() {
                   {formAd.type === "banner" ? (
                     <div className="space-y-3 pt-1">
                       <div>
-                        <label className="text-[9.5px] font-bold text-slate-400 uppercase block mb-1">Banner Image URL *</label>
+                        <div className="flex justify-between items-center mb-1">
+                          <label className="text-[9.5px] font-bold text-slate-400 uppercase block">Banner Image URL *</label>
+                          <button
+                            type="button"
+                            onClick={() => openMediaPicker("adImageUrl")}
+                            className="text-[9px] font-extrabold text-indigo-600 hover:text-indigo-800 transition dark:text-indigo-400 dark:hover:text-indigo-300 cursor-pointer"
+                          >
+                            Choose from Media
+                          </button>
+                        </div>
                         <input
-                          type="url" required={formAd.type === "banner"} placeholder="https://example.com/creative.png"
+                          type="text" required={formAd.type === "banner"} placeholder="https://example.com/creative.png"
                           value={formAd.imageUrl}
                           onChange={e => setFormAd({ ...formAd, imageUrl: e.target.value })}
                           className="w-full p-2 border rounded-lg text-xs dark:bg-slate-900 outline-none"
@@ -1371,7 +1408,7 @@ export default function AdsPage() {
                       <div>
                         <label className="text-[9.5px] font-bold text-slate-400 uppercase block mb-1">Target Click Destination *</label>
                         <input
-                          type="url" required={formAd.type === "banner"} placeholder="https://advertiser-site.com/landing"
+                          type="text" required={formAd.type === "banner"} placeholder="https://advertiser-site.com/landing"
                           value={formAd.targetUrl}
                           onChange={e => setFormAd({ ...formAd, targetUrl: e.target.value })}
                           className="w-full p-2 border rounded-lg text-xs dark:bg-slate-900 outline-none"
@@ -1642,6 +1679,14 @@ export default function AdsPage() {
             </div>
           </div>
         </>
+      )}
+      {mediaPickerOpen && (
+        <MediaPickerModal
+          siteId={siteId}
+          filter="images"
+          onSelect={handleMediaSelect}
+          onClose={() => setMediaPickerOpen(false)}
+        />
       )}
     </div>
   );

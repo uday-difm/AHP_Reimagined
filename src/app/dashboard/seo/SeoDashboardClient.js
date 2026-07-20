@@ -152,13 +152,14 @@ export default function SeoDashboardClient({ siteId, initialPages, initialPosts 
       }
 
       const result = await res.json();
-      const updated = result.page || result.post;
+      const data = result.data || result;
+      const updated = data.page || data.post;
 
       // Update local state
       const updater = (prev) =>
         prev.map((p) => (p.id === selectedItem.id ? { ...p, ...updated } : p));
 
-      if (result.type === "post") {
+      if (data.type === "post") {
         setPosts(updater);
       } else {
         setPages(updater);

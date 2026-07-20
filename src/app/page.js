@@ -29,11 +29,58 @@ async function getWellnessBannerContent() {
   }
 }
 
+export async function generateMetadata() {
+  const siteId = process.env.NEXT_PUBLIC_SITE_ID || process.env.SITE_ID || 'infinium';
+  try {
+    const page = await prisma.page.findFirst({
+      where: { siteId, slug: '/', status: 'PUBLISHED', deletedAt: null },
+      select: {
+        seoTitle: true,
+        seoDescription: true,
+        canonicalUrl: true,
+        ogImage: true,
+      },
+    });
+
+    if (page) {
+      return {
+        ...(page.seoTitle && { title: page.seoTitle }),
+        ...(page.seoDescription && { description: page.seoDescription }),
+        ...(page.canonicalUrl && { alternates: { canonical: page.canonicalUrl } }),
+        ...(page.ogImage && { openGraph: { images: [{ url: page.ogImage }] } }),
+      };
+    }
+  } catch (err) {
+    console.error('Error fetching homepage metadata:', err);
+  }
+  return {};
+}
+
 export default async function Home() {
   const wellnessBannerContent = await getWellnessBannerContent();
+  
+  const siteId = process.env.NEXT_PUBLIC_SITE_ID || process.env.SITE_ID || 'infinium';
+  let jsonLd = null;
+  try {
+    const page = await prisma.page.findFirst({
+      where: { siteId, slug: '/', status: 'PUBLISHED', deletedAt: null },
+      select: { jsonLd: true },
+    });
+    if (page && page.jsonLd) {
+      jsonLd = page.jsonLd;
+    }
+  } catch (err) {
+    console.error('Error fetching homepage JSON-LD:', err);
+  }
 
   return (
     <>
+      {jsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      )}
       {/* Global Animation Utilities */}
       <CustomCursor />
       <ScrollReveal />

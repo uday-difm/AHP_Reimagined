@@ -71,7 +71,7 @@ export default function MediaUploader({ onUpload, currentFolderId, siteId }) {
   }
 
   return (
-    <div className="flex flex-col items-end gap-2">
+    <div className="relative flex flex-col items-end gap-2">
       <label
         htmlFor="media-upload"
         className={`inline-flex cursor-pointer items-center gap-2 rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-700 ${uploading ? "opacity-70 cursor-not-allowed" : ""}`}
@@ -91,11 +91,11 @@ export default function MediaUploader({ onUpload, currentFolderId, siteId }) {
 
       {/* Per-file progress badges */}
       {progress.length > 0 && (
-        <div className="flex flex-wrap gap-1.5 max-w-xs justify-end">
+        <div className="absolute top-full right-0 mt-2 flex flex-wrap gap-1.5 w-max max-w-xs justify-end max-h-40 overflow-y-auto bg-white p-3 rounded-xl shadow-xl border border-slate-200 z-50 styled-scrollbar">
           {progress.map((p, i) => (
             <span
               key={i}
-              className={`inline-flex items-center gap-1 text-2xs font-semibold px-2 py-0.5 rounded-full border ${
+              className={`inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full border ${
                 p.status === "done"
                   ? "bg-green-50 text-green-700 border-green-200"
                   : p.status === "error"

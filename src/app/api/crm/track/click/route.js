@@ -1,0 +1,37 @@
+import { NextResponse } from "next/server";
+import prisma from "@/lib/prisma";
+
+export async function GET(request) {
+  const { searchParams } = new URL(request.url);
+  const logId = searchParams.get("logId");
+  const targetUrl = searchParams.get("url");
+
+  if (logId) {
+    try {
+      const log = await prisma.campaignLog.findUnique({
+        where: { id: logId }
+      });
+      if (log) {
+        const updateData = {
+          status: "clicked",
+          clickedAt: log.clickedAt || new Date()
+        };
+        if (!log.openedAt) {
+          updateData.openedAt = new Date();
+        }
+        
+        await prisma.campaignLog.update({
+          where: { id: logId },
+          data: updateData
+        });
+      }
+    } catch (err) {
+      console.error("[TrackClick] Error updating log:", err.message);
+    }
+  }
+
+  const origin = new URL(request.url).origin;
+  const redirectUrl = targetUrl || `${origin}/`;
+  return NextResponse.redirect(redirectUrl, 302);
+}
+export const dynamic = "force-dynamic";
