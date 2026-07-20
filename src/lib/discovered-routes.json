@@ -20,6 +20,11 @@
     "isDynamic": false
   },
   {
+    "slug": "/blogs/quinoa-avocado-power-bowl",
+    "title": "Quinoa Avocado Power Bowl",
+    "isDynamic": false
+  },
+  {
     "slug": "/blogs/[slug]",
     "title": "Blogs Detail",
     "isDynamic": true
@@ -77,6 +82,11 @@
   {
     "slug": "/recipes",
     "title": "Recipes",
+    "isDynamic": false
+  },
+  {
+    "slug": "/recipes/submit",
+    "title": "Submit",
     "isDynamic": false
   },
   {

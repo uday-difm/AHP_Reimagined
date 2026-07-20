@@ -2,13 +2,14 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getSiteId } from "@/lib/siteGuard";
 import { handleApiError, apiSuccess } from "@/core/errors";
+import { requireAuth } from "@/lib/requireAuth";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(req, { params }) {
   try {
     const siteId = getSiteId(req);
-    const { id } = params;
+    const { id } = await Promise.resolve(params);
 
     if (id === 'demo') {
       return NextResponse.json(apiSuccess({
@@ -47,11 +48,15 @@ export async function GET(req, { params }) {
       }));
     }
 
+    const user = await requireAuth().catch(() => null);
+    const isAdmin = user?.globalRole === "SUPERADMIN" || user?.globalRole === "ADMIN" || user?.globalRole === "EDITOR";
+
     const recipe = await prisma.recipe.findFirst({
       where: {
         id,
         siteId,
-        status: "APPROVED" // Only allow fetching approved recipes here
+        // If not admin, restrict to APPROVED. If admin, don't restrict by status.
+        ...(isAdmin ? {} : { status: "APPROVED" }) 
       },
       include: {
         tags: true,
@@ -59,6 +64,18 @@ export async function GET(req, { params }) {
         contributor: { select: { id: true, name: true, email: true, bio: true } },
       },
     });
+
+    // If still not found (meaning it's not approved and user isn't admin), 
+    // maybe check if the user is the contributor themselves
+    if (!recipe && user) {
+      const myRecipe = await prisma.recipe.findFirst({
+         where: { id, siteId, contributorId: user.id },
+         include: { tags: true, allergens: true, contributor: { select: { id: true, name: true, email: true, bio: true } } }
+      });
+      if (myRecipe) {
+        return NextResponse.json(apiSuccess({ recipe: myRecipe }));
+      }
+    }
 
     if (!recipe) {
       return NextResponse.json({ error: "Recipe not found" }, { status: 404 });

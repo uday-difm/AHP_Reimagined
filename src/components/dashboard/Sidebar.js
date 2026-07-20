@@ -37,6 +37,7 @@ import {
   ChevronRight,
   Globe,
   Package,
+  Utensils,
 } from "lucide-react";
 
 const ROLE_LEVEL = {
@@ -210,6 +211,12 @@ const sections = [
         href: "/dashboard/quizzes",
         label: "Quizzes",
         icon: HelpCircle,
+        minRole: "EDITOR",
+      },
+      {
+        href: "/dashboard/recipes",
+        label: "Recipes",
+        icon: Utensils,
         minRole: "EDITOR",
       },
     ],

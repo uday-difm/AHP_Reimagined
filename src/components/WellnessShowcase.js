@@ -263,10 +263,10 @@ export default function WellnessShowcase({ content }) {
             <h3 className="text-2xl font-extrabold text-[#1a1c29] tracking-tight">Community Kitchen</h3>
             <p className="text-sm text-slate-500 mt-1">Discover, share, and enjoy healthy recipes from the community.</p>
           </div>
-          <button onClick={() => window.location.href = '/recipes/upload'} className="bg-[#ff3b6a] hover:bg-[#e02d58] text-white font-bold text-sm py-2.5 px-6 rounded-full transition-all shadow-md flex items-center gap-2 hover:-translate-y-0.5">
+          <Link href="/dashboard/recipes/submit" className="bg-[#ff3b6a] hover:bg-[#e02d58] text-white font-bold text-sm py-2.5 px-6 rounded-full transition-all shadow-md flex items-center gap-2 hover:-translate-y-0.5">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
             Add Your Recipe
-          </button>
+          </Link>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">

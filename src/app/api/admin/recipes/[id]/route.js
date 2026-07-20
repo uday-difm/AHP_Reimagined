@@ -12,7 +12,7 @@ export async function PATCH(req, { params }) {
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const siteId = getSiteId(req);
-    const { id } = params;
+    const { id } = await Promise.resolve(params);
     const body = await req.json();
 
     // The admin can update status and potentially edit details
@@ -38,7 +38,7 @@ export async function DELETE(req, { params }) {
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const siteId = getSiteId(req);
-    const { id } = params;
+    const { id } = await Promise.resolve(params);
 
     await prisma.recipe.delete({
       where: { id, siteId }

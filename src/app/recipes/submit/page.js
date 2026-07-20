@@ -54,7 +54,10 @@ export default function SubmitRecipe() {
       });
       const data = await res.json();
       if (data.error) setError(data.error);
-      else router.push("/dashboard/recipes");
+      else {
+        alert("Recipe submitted successfully for review!");
+        router.push("/recipes");
+      }
     } catch (err) {
       setError("An unexpected error occurred.");
     } finally {
