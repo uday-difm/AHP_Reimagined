@@ -53,6 +53,7 @@ export async function PUT(req) {
       sendgridApiKey,
       autoReplyTemplate,
       adminAlerts,
+      prAlerts,
       oneSignalAppId,
       oneSignalRestKey,
       novuWorkflowId,
@@ -113,6 +114,10 @@ export async function PUT(req) {
         adminAlerts !== undefined
           ? adminAlerts
           : currentEmailSettings.adminAlerts,
+      prAlerts:
+        prAlerts !== undefined
+          ? prAlerts
+          : currentEmailSettings.prAlerts,
       failedLogs: currentEmailSettings.failedLogs || [],
     };
 

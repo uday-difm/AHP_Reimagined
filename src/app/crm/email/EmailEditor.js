@@ -98,6 +98,13 @@ export default function EmailEditor({ siteId, initialEmailSettings }) {
     initialEmailSettings?.adminAlerts?.email || "",
   );
 
+  const [prAlertsEnabled, setPrAlertsEnabled] = useState(
+    initialEmailSettings?.prAlerts?.enabled !== false,
+  );
+  const [prEmail, setPrEmail] = useState(
+    initialEmailSettings?.prAlerts?.email || "",
+  );
+
   const [failedLogs, setFailedLogs] = useState(
     initialEmailSettings?.failedLogs || [],
   );
@@ -137,6 +144,10 @@ export default function EmailEditor({ siteId, initialEmailSettings }) {
       adminAlerts: {
         enabled: adminAlertsEnabled,
         email: adminAlertsEmail,
+      },
+      prAlerts: {
+        enabled: prAlertsEnabled,
+        email: prEmail,
       },
       novuWorkflowId,
       novuApiKey,
@@ -691,6 +702,52 @@ export default function EmailEditor({ siteId, initialEmailSettings }) {
                       value={adminAlertsEmail}
                       onChange={(e) => setAdminAlertsEmail(e.target.value)}
                       placeholder="e.g. admin@company.com"
+                      className="w-full max-w-md px-3.5 py-2.5 bg-white border border-gray-200 rounded-lg text-xs text-gray-900 focus:outline-none focus:ring-1 focus:ring-blue-500 font-mono"
+                    />
+                  </div>
+                )}
+              </div>
+
+              {/* PR & Media alerts Configuration Card */}
+              <div className="bg-gray-50/50 border border-gray-200 rounded-xl p-5 space-y-4">
+                <div className="flex items-center justify-between border-b pb-2.5">
+                  <div className="flex items-center gap-2">
+                    <BellRingIcon className="w-5 h-5 text-teal-600 shrink-0" />
+                    <div>
+                      <h4 className="text-xs font-bold text-gray-800 uppercase tracking-wider">
+                        PR &amp; Media Booking Alerts
+                      </h4>
+                      <p className="text-[10px] text-gray-500">
+                        Trigger automated notifications to your PR team when media packages are booked.
+                      </p>
+                    </div>
+                  </div>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={prAlertsEnabled}
+                      onChange={(e) => setPrAlertsEnabled(e.target.checked)}
+                      className="sr-only peer"
+                    />
+                    <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                  </label>
+                </div>
+
+                {prAlertsEnabled && (
+                  <div className="animate-in fade-in slide-in-from-top-1 duration-150">
+                    <label
+                      htmlFor="pr_email"
+                      className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5"
+                    >
+                      Target PR Team Email Address
+                    </label>
+                    <input
+                      type="email"
+                      id="pr_email"
+                      required={prAlertsEnabled}
+                      value={prEmail}
+                      onChange={(e) => setPrEmail(e.target.value)}
+                      placeholder="e.g. pr-team@company.com"
                       className="w-full max-w-md px-3.5 py-2.5 bg-white border border-gray-200 rounded-lg text-xs text-gray-900 focus:outline-none focus:ring-1 focus:ring-blue-500 font-mono"
                     />
                   </div>
