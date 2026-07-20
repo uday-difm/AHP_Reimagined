@@ -75,6 +75,16 @@
     "isDynamic": true
   },
   {
+    "slug": "/recipes",
+    "title": "Recipes",
+    "isDynamic": false
+  },
+  {
+    "slug": "/recipes/[id]",
+    "title": "Recipes Detail",
+    "isDynamic": true
+  },
+  {
     "slug": "/services",
     "title": "Services",
     "isDynamic": false

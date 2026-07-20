@@ -857,6 +857,68 @@ exports.Prisma.LegacyAdEventScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.RecipeScalarFieldEnum = {
+  id: 'id',
+  siteId: 'siteId',
+  title: 'title',
+  description: 'description',
+  ingredients: 'ingredients',
+  steps: 'steps',
+  cookingTime: 'cookingTime',
+  calories: 'calories',
+  difficulty: 'difficulty',
+  imageUrl: 'imageUrl',
+  status: 'status',
+  contributorId: 'contributorId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  protein: 'protein',
+  carbs: 'carbs',
+  fiber: 'fiber',
+  fat: 'fat',
+  sugar: 'sugar'
+};
+
+exports.Prisma.RecipeTagScalarFieldEnum = {
+  id: 'id',
+  name: 'name'
+};
+
+exports.Prisma.RecipeAllergenScalarFieldEnum = {
+  id: 'id',
+  name: 'name'
+};
+
+exports.Prisma.RecipeRatingScalarFieldEnum = {
+  id: 'id',
+  recipeId: 'recipeId',
+  userId: 'userId',
+  rating: 'rating',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.RecipeLikeScalarFieldEnum = {
+  id: 'id',
+  recipeId: 'recipeId',
+  userId: 'userId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.RecipeCommentScalarFieldEnum = {
+  id: 'id',
+  recipeId: 'recipeId',
+  userId: 'userId',
+  content: 'content',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.SavedRecipeScalarFieldEnum = {
+  id: 'id',
+  recipeId: 'recipeId',
+  userId: 'userId',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1393,6 +1455,51 @@ exports.Prisma.LegacyAdEventOrderByRelevanceFieldEnum = {
   userIp: 'userIp',
   userAgent: 'userAgent'
 };
+
+exports.Prisma.RecipeOrderByRelevanceFieldEnum = {
+  id: 'id',
+  siteId: 'siteId',
+  title: 'title',
+  description: 'description',
+  difficulty: 'difficulty',
+  imageUrl: 'imageUrl',
+  contributorId: 'contributorId'
+};
+
+exports.Prisma.RecipeTagOrderByRelevanceFieldEnum = {
+  id: 'id',
+  name: 'name'
+};
+
+exports.Prisma.RecipeAllergenOrderByRelevanceFieldEnum = {
+  id: 'id',
+  name: 'name'
+};
+
+exports.Prisma.RecipeRatingOrderByRelevanceFieldEnum = {
+  id: 'id',
+  recipeId: 'recipeId',
+  userId: 'userId'
+};
+
+exports.Prisma.RecipeLikeOrderByRelevanceFieldEnum = {
+  id: 'id',
+  recipeId: 'recipeId',
+  userId: 'userId'
+};
+
+exports.Prisma.RecipeCommentOrderByRelevanceFieldEnum = {
+  id: 'id',
+  recipeId: 'recipeId',
+  userId: 'userId',
+  content: 'content'
+};
+
+exports.Prisma.SavedRecipeOrderByRelevanceFieldEnum = {
+  id: 'id',
+  recipeId: 'recipeId',
+  userId: 'userId'
+};
 exports.GlobalRole = exports.$Enums.GlobalRole = {
   SUPERADMIN: 'SUPERADMIN',
   ADMIN: 'ADMIN',
@@ -1431,6 +1538,12 @@ exports.ServiceStatus = exports.$Enums.ServiceStatus = {
 exports.ServiceVisibility = exports.$Enums.ServiceVisibility = {
   PUBLIC: 'PUBLIC',
   PRIVATE: 'PRIVATE'
+};
+
+exports.RecipeStatus = exports.$Enums.RecipeStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
 };
 
 exports.Prisma.ModelName = {
@@ -1490,7 +1603,14 @@ exports.Prisma.ModelName = {
   Magazine: 'Magazine',
   Auth: 'Auth',
   LegacyAd: 'LegacyAd',
-  LegacyAdEvent: 'LegacyAdEvent'
+  LegacyAdEvent: 'LegacyAdEvent',
+  Recipe: 'Recipe',
+  RecipeTag: 'RecipeTag',
+  RecipeAllergen: 'RecipeAllergen',
+  RecipeRating: 'RecipeRating',
+  RecipeLike: 'RecipeLike',
+  RecipeComment: 'RecipeComment',
+  SavedRecipe: 'SavedRecipe'
 };
 
 /**

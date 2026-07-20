@@ -1,0 +1,251 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { useSession } from 'next-auth/react';
+import QuizIcon from '@/components/quiz/QuizIcon';
+
+const getQuizEmoji = (slug = "") => {
+  const s = String(slug).toLowerCase();
+  if (s.includes("sleep")) return "🌙";
+  if (s.includes("stress") || s.includes("burnout")) return "🧠";
+  if (s.includes("dosha") || s.includes("ayurveda") || s.includes("body-type")) return "🌿";
+  if (s.includes("nutrition") || s.includes("diet") || s.includes("gut")) return "🥗";
+  return "📋";
+};
+
+const DEFAULT_CONTENT = {
+  enabled: true,
+  headline: 'Know your body,\none quiz at a time.',
+  subtext:
+    'Our clinically informed quizzes help you understand your health from the inside out — covering sleep, stress, nutrition, and Ayurvedic wellness. Start free, go deeper with a free account.',
+  badges: ['Clinically Informed', 'Personalised Insights', 'Private & Secure'],
+  heroTag: 'Daily Wellness Quiz',
+  heroTitle: 'Test yourself today.',
+  heroBody:
+    'Take a quick 5-minute assessment and discover actionable insights about your sleep, stress, nutrition, or Ayurvedic body type — all backed by clinical research.',
+  heroPrimaryLabel: 'Browse All Quizzes',
+  heroPrimaryLink: '/quizzes',
+  heroSecondaryLabel: 'Start Now →',
+  heroSecondaryLink: '/quizzes/sleep-quality',
+  quickCards: [
+    {
+      tag: 'Daily Quiz',
+      icon: '🌅',
+      desc: 'A fresh 5-question wellness check, updated every day.',
+      link: '/quizzes/sleep-quality',
+    },
+    {
+      tag: 'Stress Check',
+      icon: '🧠',
+      desc: 'Measure your mental load and unlock targeted breathing guides.',
+      link: '/quizzes/stress-burnout',
+    },
+    {
+      tag: 'Nutrition IQ',
+      icon: '🥗',
+      desc: 'Rate your diet quality and get personalised food insights.',
+      link: '/quizzes/nutrition-gut',
+    },
+  ],
+  snapshot: {
+    title: "Your Today's Wellness Snapshot",
+    sleep: 78,
+    stress: 62,
+    nutrition: 72,
+    hydration: 48,
+    score: 72,
+  },
+  healthyBite: {
+    title: 'Healthy Bite of the Day',
+    recipeName: 'Quinoa & Avocado Power Bowl',
+    image: '/images/healthy_bite.png',
+    points: ['High in Protein', 'Gut Friendly', 'Quick & Easy'],
+    recipeLink: '/blogs/quinoa-avocado-power-bowl',
+    time: '15 mins',
+    calories: '320 kcal',
+  },
+  wellnessTip: {
+    title: 'Daily Wellness Tip',
+    quote: 'A 10-minute walk after meals can improve digestion and boost your energy.',
+    linkText: 'Learn more →',
+    linkUrl: '/blogs/benefits-of-walking',
+  },
+  popularQuizzes: [
+    {
+      title: 'Sleep Quality Assessment',
+      duration: '5 min',
+      image: '/images/physical_health.png',
+      link: '/quizzes/sleep-quality',
+    },
+    {
+      title: 'Stress & Mental Wellness Check',
+      duration: '5 min',
+      image: '/images/ayurveda.png',
+      link: '/quizzes/stress-burnout',
+    },
+    {
+      title: 'Nutrition & Diet Evaluation',
+      duration: '5 min',
+      image: '/images/mag_mindfulness.png',
+      link: '/quizzes/nutrition-gut',
+    },
+    {
+      title: 'Ayurvedic Body Type Quiz',
+      duration: '5 min',
+      image: '/images/dosha-body-type.png',
+      link: '/quizzes/dosha-body-type',
+    },
+  ],
+  progressTracker: {
+    title: 'Track Your Progress',
+    chartValues: [30, 45, 58, 80],
+    btnLabel: 'Go to Dashboard →',
+    btnLink: '/quizzes/dashboard',
+  },
+};
+
+export default function WellnessShowcase({ content }) {
+  const { status } = useSession();
+  const isAuthenticated = status === 'authenticated';
+
+  // State for dynamically loaded active quizzes
+  const [dbQuizzes, setDbQuizzes] = useState([]);
+
+  useEffect(() => {
+    fetch('/api/quizzes/types')
+      .then(res => res.ok ? res.json() : [])
+      .then(data => {
+        if (data && data.length > 0) {
+          const fallbackImages = {
+            'sleep-quality': '/images/physical_health.png',
+            'stress-burnout': '/images/ayurveda.png',
+            'nutrition-gut': '/images/mag_mindfulness.png',
+            'dosha-body-type': '/images/dosha-body-type.png',
+          };
+          const mapped = data.map(q => ({
+            title: q.title,
+            duration: `${q.estimatedMinutes || 5} min`,
+            image: q.imageUrl || fallbackImages[q.slug] || '/images/dosha-body-type.png',
+            link: `/quizzes/${q.slug}`
+          }));
+          setDbQuizzes(mapped);
+        }
+      })
+      .catch(err => console.error('Error loading db popular quizzes:', err));
+  }, []);
+
+  // Merge dynamic content with defaults
+  const cmsQuizzes = content?.popularQuizzes?.length > 0 ? content.popularQuizzes : DEFAULT_CONTENT.popularQuizzes;
+  
+  // Use database quizzes if present, padded/backed up by CMS/default quizzes if less than 4
+  let displayQuizzes = [...dbQuizzes];
+  if (displayQuizzes.length < 4) {
+    const defaultQuizzesToPad = cmsQuizzes.filter(
+      dq => !displayQuizzes.some(dbq => dbq.link === dq.link)
+    );
+    displayQuizzes = [...displayQuizzes, ...defaultQuizzesToPad].slice(0, 4);
+  } else {
+    displayQuizzes = displayQuizzes.slice(0, 4);
+  }
+
+  const c = {
+    ...DEFAULT_CONTENT,
+    ...content,
+    quickCards: content?.quickCards?.length > 0 ? content.quickCards : DEFAULT_CONTENT.quickCards,
+    snapshot: { ...DEFAULT_CONTENT.snapshot, ...content?.snapshot },
+    healthyBite: { ...DEFAULT_CONTENT.healthyBite, ...content?.healthyBite },
+    wellnessTip: { ...DEFAULT_CONTENT.wellnessTip, ...content?.wellnessTip },
+    popularQuizzes: displayQuizzes,
+    progressTracker: { ...DEFAULT_CONTENT.progressTracker, ...content?.progressTracker },
+  };
+
+  if (c.enabled === false) return null;
+
+  // Render headline with \n → <br />
+  const headlineLines = (c.headline || '').split('\n');
+
+  // Overall Score Circular Progress Calculations
+  const radius = 34;
+  const circumference = 2 * Math.PI * radius;
+  const strokeDashoffset = circumference - ((c.snapshot.score || 0) / 100) * circumference;
+
+  // Render customized SVG path for the progress tracker line chart
+  const getChartPath = (values) => {
+    if (!values || values.length === 0) return '';
+    const width = 180;
+    const height = 60;
+    const maxVal = Math.max(...values, 100);
+    const points = values.map((val, idx) => {
+      const x = (idx / (values.length - 1)) * width + 10;
+      const y = height - (val / maxVal) * (height - 20) - 10;
+      return `${x},${y}`;
+    });
+    return `M ${points.join(' L ')}`;
+  };
+
+  return (
+    <section id="wellness-dashboard" className="py-20 bg-slate-50/50 rounded-b-[40px] border-b border-slate-100 overflow-hidden relative">
+      {/* Decorative background elements */}
+      <div className="absolute top-40 left-[-10%] w-96 h-96 bg-[#0f7c85]/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-20 right-[-5%] w-80 h-80 bg-teal-200/20 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="container mx-auto px-4 relative z-10">
+        
+        {/* Header Grid: Title, intro text & badges */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center mb-16 relative">
+          
+          {/* Header Left (6 cols) */}
+          <div className="lg:col-span-6 space-y-6 reveal-slide z-10">
+            <h2 className="font-heading font-extrabold text-3xl md:text-5xl text-primary tracking-[-1.5px] leading-[1.1] mb-2">
+              {headlineLines.map((line, i) => (
+                <span key={i}>
+                  {line}
+                  {i < headlineLines.length - 1 && <br />}
+                </span>
+              ))}
+            </h2>
+            <p className="text-secondary text-sm md:text-base leading-relaxed max-w-lg">
+              {c.subtext}
+            </p>
+            
+            {/* Header Badges List */}
+            <div className="flex flex-wrap gap-3.5 pt-2">
+              {(c.badges || DEFAULT_CONTENT.badges).map((badge, idx) => (
+                <div key={idx} className="flex items-center gap-2 px-3 py-1.5 bg-white/80 backdrop-blur-sm border border-slate-200/80 rounded-full text-xs font-bold text-slate-700 shadow-sm transition-transform hover:-translate-y-0.5">
+                  {idx === 0 && (
+                    <svg className="w-3.5 h-3.5 text-[#0f7c85]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
+                    </svg>
+                  )}
+                  {idx === 1 && (
+                    <svg className="w-3.5 h-3.5 text-[#0f7c85]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                    </svg>
+                  )}
+                  {idx === 2 && (
+                    <svg className="w-3.5 h-3.5 text-[#0f7c85]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                    </svg>
+                  )}
+                  <span>{badge}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          {/* Header Right — Graphic background woman headshot (6 cols) */}
+          <div className="lg:col-span-6 flex justify-center lg:justify-end relative">
+            <div className="relative w-80 h-72 rounded-[40px] overflow-hidden bg-gradient-to-tr from-[#c8e8e7] to-teal-50 shadow-md border border-white">
+              <div className="absolute inset-0 bg-radial-gradient(from 70% 30%, transparent, rgba(15,124,133,0.05))" />
+              <img
+                src="/images/wellness_avatar.png"
+                alt="Mindfulness Serene Woman"
+                className="w-full h-full object-cover object-center"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* ── ROW 1: Hero Healthy Bite & Wellness Snapshot ────────────────────── */}
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.

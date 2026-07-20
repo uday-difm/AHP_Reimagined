@@ -534,7 +534,7 @@ export default function AdsPage() {
       </div>
 
       {/* Tab Navigation */}
-      <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800/60 p-1 rounded-xl w-fit">
+      <div className="flex flex-wrap items-center gap-1 bg-slate-100 dark:bg-slate-800/60 p-1 rounded-xl w-full lg:w-fit">
         {[
           { key: "overview", label: "Overview", icon: BarChart3 },
           { key: "ads", label: "Advertisements", icon: FileText },
@@ -545,13 +545,14 @@ export default function AdsPage() {
           <button
             key={t.key}
             onClick={() => setActiveTab(t.key)}
-            className={`flex items-center gap-1.5 px-4 py-1.8 text-xs font-semibold rounded-lg transition-all ${
+            className={`flex-auto sm:flex-none flex items-center justify-center gap-1.5 px-3 sm:px-4 py-2 text-xs font-semibold rounded-lg transition-all ${
               activeTab === t.key
                 ? "bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm"
                 : "text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
             }`}
           >
-            <t.icon size={13} /> {t.label}
+            <t.icon size={13} className="shrink-0 hidden sm:block" /> 
+            <span className="whitespace-nowrap">{t.label}</span>
           </button>
         ))}
       </div>
