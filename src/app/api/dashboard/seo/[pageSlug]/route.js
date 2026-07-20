@@ -43,7 +43,7 @@ export async function GET(req, context) {
         siteId: auth.siteId,
         OR: [{ slug: postSlug }, { slug: formattedSlug }],
       },
-      select: { seoTitle: true, seoDescription: true, canonicalUrl: true, ogImage: true }
+      select: { seoTitle: true, seoDescription: true, jsonLd: true, canonicalUrl: true, ogImage: true }
     });
 
     if (post) {
@@ -51,6 +51,7 @@ export async function GET(req, context) {
         type: "post",
         seoTitle: post.seoTitle || "",
         seoDescription: post.seoDescription || "",
+        jsonLd: post.jsonLd || null,
         canonicalUrl: post.canonicalUrl || "",
         ogImage: post.ogImage || ""
       }));
@@ -127,6 +128,7 @@ export async function PUT(req, context) {
           seoTitle: seoTitle !== undefined ? seoTitle : post.seoTitle,
           seoDescription:
             seoDescription !== undefined ? seoDescription : post.seoDescription,
+          jsonLd: jsonLd !== undefined ? jsonLd : post.jsonLd,
           canonicalUrl:
             canonicalUrl !== undefined ? canonicalUrl : post.canonicalUrl,
           ogImage: ogImage !== undefined ? ogImage : post.ogImage,

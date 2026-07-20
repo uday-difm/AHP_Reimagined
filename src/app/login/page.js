@@ -6,7 +6,8 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { Loader2 } from 'lucide-react';
+import { Loader2, AlertCircle, ArrowLeft, CheckCircle2 } from 'lucide-react';
+import RecaptchaWidget from '@/components/RecaptchaWidget';
 
 function LoginClient() {
   const { data: session, status } = useSession();
@@ -48,6 +49,12 @@ function LoginClient() {
     setError('');
     setSuccessMsg('');
 
+    const token = typeof window !== 'undefined' && window.grecaptcha ? window.grecaptcha.getResponse() : null;
+    if (typeof window !== 'undefined' && document.querySelector('meta[name="recaptcha-site-key"]') && !token) {
+      setError('Please complete the reCAPTCHA verification.');
+      return;
+    }
+
     if (!email.trim() || !password) {
       return setError('Please enter both email and password.');
     }
@@ -80,6 +87,12 @@ function LoginClient() {
     e.preventDefault();
     setError('');
     setSuccessMsg('');
+
+    const token = typeof window !== 'undefined' && window.grecaptcha ? window.grecaptcha.getResponse() : null;
+    if (typeof window !== 'undefined' && document.querySelector('meta[name="recaptcha-site-key"]') && !token) {
+      setError('Please complete the reCAPTCHA verification.');
+      return;
+    }
 
     if (!email.trim() || !password || !name.trim() || !username.trim()) {
       return setError('All fields are required.');
@@ -222,13 +235,16 @@ function LoginClient() {
                 )}
               </div>
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full py-4 rounded-full font-heading font-bold text-[14px] text-white bg-[#0f7c85] hover:bg-[#0c6b73] transition-colors disabled:opacity-50 cursor-pointer shadow-sm mt-8"
-              >
-                {loading ? 'Signing In...' : 'Sign In'}
-              </button>
+              <div className="mt-8 space-y-4">
+                <RecaptchaWidget />
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full py-4 rounded-full font-heading font-bold text-[14px] text-white bg-[#0f7c85] hover:bg-[#0c6b73] transition-colors disabled:opacity-50 cursor-pointer shadow-sm mt-8"
+                >
+                  {loading ? 'Signing In...' : 'Sign In'}
+                </button>
+              </div>
             </form>
           ) : (
             <form onSubmit={handleRegister} className="flex-1 flex flex-col justify-between">
@@ -302,13 +318,16 @@ function LoginClient() {
                 )}
               </div>
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full py-4 rounded-full font-heading font-bold text-[14px] text-white bg-[#0f7c85] hover:bg-[#0c6b73] transition-colors disabled:opacity-50 cursor-pointer shadow-sm mt-8"
-              >
-                {loading ? 'Creating Account...' : 'Create Account'}
-              </button>
+              <div className="mt-8 space-y-4">
+                <RecaptchaWidget />
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full py-4 rounded-full font-heading font-bold text-[14px] text-white bg-[#0f7c85] hover:bg-[#0c6b73] transition-colors disabled:opacity-50 cursor-pointer shadow-sm mt-8"
+                >
+                  {loading ? 'Creating Account...' : 'Create Account'}
+                </button>
+              </div>
             </form>
           )}
 

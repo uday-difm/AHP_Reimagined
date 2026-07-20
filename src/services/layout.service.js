@@ -102,6 +102,7 @@ const fetchLayoutData = async () => {
       titleTemplate: ws.titleTemplate || null,
       description: ws.description || null,
       ogImageUrl: ws.ogImageUrl || null,
+      globalJsonLd: ws.globalJsonLd || null,
       navigation: navItems,
       footerLinks,
       footerColumns: footer.columns || [],

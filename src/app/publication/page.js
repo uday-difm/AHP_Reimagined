@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CustomCursor from '@/components/CustomCursor';
+import RecaptchaWidget from '@/components/RecaptchaWidget';
 
 // Proxy external URLs through the Next.js server to avoid CORS / hostname issues
 function proxyUrl(url) {
@@ -113,6 +114,12 @@ export default function PublicationPage() {
   const handleSubscribe = async (e) => {
     e.preventDefault();
     if (!email) return;
+
+    const token = typeof window !== 'undefined' && window.grecaptcha ? window.grecaptcha.getResponse() : null;
+    if (typeof window !== 'undefined' && document.querySelector('meta[name="recaptcha-site-key"]') && !token) {
+      setErrorSubscribe('Please complete the reCAPTCHA verification.');
+      return;
+    }
 
     setLoadingSubscribe(true);
     setErrorSubscribe('');
@@ -555,6 +562,7 @@ export default function PublicationPage() {
                         {loadingSubscribe ? "Subscribing..." : "Subscribe Now"}
                       </Button>
                     </div>
+                    <RecaptchaWidget />
                     {errorSubscribe && (
                       <div className="text-red-800 bg-red-100/90 border border-red-200/50 rounded-xl px-4 py-2 text-xs font-semibold">
                         {errorSubscribe}

@@ -12,16 +12,19 @@ export default function ContactFormSection({ siteId = "", content = {}, recaptch
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState(null);
 
+  // Extract from global meta tag if not passed via props
+  const finalSiteKey = recaptchaSiteKey || (typeof document !== "undefined" ? document.querySelector('meta[name="recaptcha-site-key"]')?.getAttribute("content") : "");
+
   // Dynamic loading of Google reCAPTCHA script if sitekey is present
   useEffect(() => {
-    if (recaptchaSiteKey) {
+    if (finalSiteKey) {
       const script = document.createElement("script");
       script.src = "https://www.google.com/recaptcha/api.js";
       script.async = true;
       script.defer = true;
       document.body.appendChild(script);
     }
-  }, [recaptchaSiteKey]);
+  }, [finalSiteKey]);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -30,7 +33,7 @@ export default function ContactFormSection({ siteId = "", content = {}, recaptch
 
     // Get reCAPTCHA token if configured
     let recaptchaToken = undefined;
-    if (recaptchaSiteKey && typeof window !== "undefined" && window.grecaptcha) {
+    if (finalSiteKey && typeof window !== "undefined" && window.grecaptcha) {
       try {
         recaptchaToken = window.grecaptcha.getResponse();
       } catch (err) {
@@ -70,7 +73,8 @@ export default function ContactFormSection({ siteId = "", content = {}, recaptch
       setEmail("");
       setPhone("");
       setMessage("");
-      if (recaptchaSiteKey && typeof window !== "undefined" && window.grecaptcha) {
+      // Reset reCAPTCHA if used
+      if (finalSiteKey && typeof window !== "undefined" && window.grecaptcha) {
         window.grecaptcha.reset();
       }
     } catch (err) {
@@ -164,9 +168,9 @@ export default function ContactFormSection({ siteId = "", content = {}, recaptch
           </div>
 
           {/* reCAPTCHA Placement */}
-          {recaptchaSiteKey && (
-            <div className="flex justify-start my-4">
-              <div className="g-recaptcha" data-sitekey={recaptchaSiteKey}></div>
+          {finalSiteKey && (
+            <div className="mb-4 flex justify-center lg:justify-start">
+              <div className="g-recaptcha" data-sitekey={finalSiteKey}></div>
             </div>
           )}
 
