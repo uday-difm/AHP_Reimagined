@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Button from '@/components/Button';
+import RecaptchaWidget from '@/components/RecaptchaWidget';
 
 export default function Newsletter() {
   const [newsEmail, setNewsEmail] = useState('');
@@ -10,6 +11,11 @@ export default function Newsletter() {
 
   const handleNewsSubmit = async (e) => {
     e.preventDefault();
+    const token = typeof window !== 'undefined' && window.grecaptcha ? window.grecaptcha.getResponse() : null;
+    if (typeof window !== 'undefined' && document.querySelector('meta[name="recaptcha-site-key"]') && !token) {
+      setStatus({ type: 'error', message: 'Please complete the reCAPTCHA verification.' });
+      return;
+    }
     setLoading(true);
     setStatus(null);
 
@@ -56,19 +62,22 @@ export default function Newsletter() {
             Join 50,000+ wellness readers receiving expert medical guidelines directly in their inbox every week. Zero spam, unsubscribe at any time.
           </p>
 
-          <form className="flex flex-col sm:flex-row gap-3 w-full max-w-[520px] mx-auto" onSubmit={handleNewsSubmit}>
-            <input
-              type="email"
-              value={newsEmail}
-              disabled={loading}
-              onChange={(e) => setNewsEmail(e.target.value)}
-              placeholder="Enter your email"
-              required
-              className="flex-grow bg-white border border-slate-200 rounded-full px-6 py-4 text-sm outline-none text-primary focus:border-accent focus:shadow-[0_0_0_4px_rgba(31,185,251,0.1)] transition-all shadow-sm disabled:opacity-60"
-            />
-            <Button type="submit" variant="primary" disabled={loading} className="whitespace-nowrap !py-4 !px-8">
-              {loading ? "Subscribing..." : "Subscribe"}
-            </Button>
+          <form className="flex flex-col gap-4 w-full max-w-[520px] mx-auto" onSubmit={handleNewsSubmit}>
+            <div className="flex flex-col sm:flex-row gap-3 w-full">
+              <input
+                type="email"
+                value={newsEmail}
+                disabled={loading}
+                onChange={(e) => setNewsEmail(e.target.value)}
+                placeholder="Enter your email"
+                required
+                className="flex-grow bg-white border border-slate-200 rounded-full px-6 py-4 text-sm outline-none text-primary focus:border-accent focus:shadow-[0_0_0_4px_rgba(31,185,251,0.1)] transition-all shadow-sm disabled:opacity-60"
+              />
+              <Button type="submit" variant="primary" disabled={loading} className="whitespace-nowrap !py-4 !px-8">
+                {loading ? "Subscribing..." : "Subscribe"}
+              </Button>
+            </div>
+            <RecaptchaWidget />
           </form>
 
           {status && (

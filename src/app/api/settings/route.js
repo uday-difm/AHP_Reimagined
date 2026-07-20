@@ -40,6 +40,7 @@ export async function GET(req) {
 
     const emailSettings = settings?.emailSettings || {};
     const oneSignalAppId = emailSettings.oneSignalAppId || null;
+    const novuWorkflowId = emailSettings.novuWorkflowId || null;
 
     const response = NextResponse.json(apiSuccess({ 
       isActive: site.isActive,
@@ -48,7 +49,8 @@ export async function GET(req) {
       compliance: settings?.compliance || null,
       analytics: settings?.analytics || null,
       securityControls: publicSecurityControls,
-      oneSignalAppId
+      oneSignalAppId,
+      novuWorkflowId
     }));
     response.headers.set("Cache-Control", "public, max-age=10, s-maxage=60, stale-while-revalidate=30");
     return response;

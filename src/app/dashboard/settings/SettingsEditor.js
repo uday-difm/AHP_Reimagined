@@ -1775,6 +1775,29 @@ export default function SettingsEditor({ siteId, initialSettings }) {
                 />
               </div>
 
+              {/* Global JSON-LD */}
+              <div>
+                <label
+                  htmlFor="seo_globalJsonLd"
+                  className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2 flex items-center gap-1.5"
+                >
+                  <Code className="w-3.5 h-3.5 text-gray-400" />
+                  Global JSON-LD Structured Data
+                </label>
+                <p className="text-xs text-gray-500 mb-2 font-normal">
+                  This JSON-LD structured data will be injected into the &lt;head&gt; of <strong>every single page</strong> on the site.
+                </p>
+                <textarea
+                  id="seo_globalJsonLd"
+                  name="globalJsonLd"
+                  value={websiteSettings.globalJsonLd || ""}
+                  onChange={handleWebsiteChange}
+                  rows={8}
+                  placeholder='{"@context": "https://schema.org", "@type": "Organization"}'
+                  className="w-full px-3.5 py-2.5 bg-gray-900 border border-gray-700 text-gray-100 rounded-lg text-xs font-mono focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all resize-y"
+                />
+              </div>
+
               {/* Default OG Image */}
               <div className="space-y-2 pt-2">
                 <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-1">

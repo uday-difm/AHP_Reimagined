@@ -4,6 +4,7 @@ import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Eye, EyeOff, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import RecaptchaWidget from "@/components/RecaptchaWidget";
 
 function ResetPasswordForm() {
   const router = useRouter();
@@ -21,6 +22,12 @@ function ResetPasswordForm() {
     e.preventDefault();
     setError("");
     setSuccess(false);
+
+    const recaptchaToken = typeof window !== 'undefined' && window.grecaptcha ? window.grecaptcha.getResponse() : null;
+    if (typeof window !== 'undefined' && document.querySelector('meta[name="recaptcha-site-key"]') && !recaptchaToken) {
+      setError('Please complete the reCAPTCHA verification.');
+      return;
+    }
 
     if (!token) {
       return setError("Invalid or missing password reset token. Please check your email link.");
@@ -156,6 +163,7 @@ function ResetPasswordForm() {
           )}
 
           <div className="flex flex-col gap-3 pt-2">
+            <RecaptchaWidget />
             <button
               type="submit"
               disabled={loading || !token}

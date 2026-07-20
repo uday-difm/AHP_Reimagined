@@ -450,27 +450,34 @@
 [2026-07-17T10:18:21.740Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
 [2026-07-17T10:18:21.741Z] [Auth] Authenticating against authService for: admin@example.com
 [2026-07-17T10:18:22.208Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh
-[2026-07-20T07:10:07.489Z] [Auth] Attempt started. Email: admin@example.com
-[2026-07-20T07:10:07.502Z] [Auth] Request Host: localhost:3000
-[2026-07-20T07:10:07.504Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
-[2026-07-20T07:10:07.504Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
-[2026-07-20T07:10:07.513Z] [Auth] Authenticating against authService for: admin@example.com
-[2026-07-20T07:10:08.314Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh
-[2026-07-20T08:18:03.698Z] [Auth] Attempt started. Email: admin@example.com
-[2026-07-20T08:18:03.699Z] [Auth] Request Host: localhost:3000
-[2026-07-20T08:18:03.700Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
-[2026-07-20T08:18:03.700Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
-[2026-07-20T08:18:03.708Z] [Auth] Authenticating against authService for: admin@example.com
-[2026-07-20T08:18:04.239Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh
-[2026-07-20T10:20:04.805Z] [Auth] Attempt started. Email: admin@example.com
-[2026-07-20T10:20:04.806Z] [Auth] Request Host: localhost:3000
-[2026-07-20T10:20:04.807Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
-[2026-07-20T10:20:04.808Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
-[2026-07-20T10:20:04.808Z] [Auth] Authenticating against authService for: admin@example.com
-[2026-07-20T10:20:05.287Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh
-[2026-07-20T10:58:35.873Z] [Auth] Attempt started. Email: admin@example.com
-[2026-07-20T10:58:35.874Z] [Auth] Request Host: localhost:3000
-[2026-07-20T10:58:35.874Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
-[2026-07-20T10:58:35.875Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
-[2026-07-20T10:58:35.883Z] [Auth] Authenticating against authService for: admin@example.com
-[2026-07-20T10:58:36.329Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh
+[2026-07-17T12:12:32.604Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-17T12:12:32.605Z] [Auth] Request Host: localhost:3000
+[2026-07-17T12:12:32.605Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
+[2026-07-17T12:12:32.606Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-17T12:12:32.607Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-17T12:12:33.073Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh
+[2026-07-20T06:05:44.690Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-20T06:05:44.691Z] [Auth] Request Host: localhost:3000
+[2026-07-20T06:05:44.691Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
+[2026-07-20T06:05:44.692Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-20T06:05:44.694Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-20T06:05:45.194Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh
+[2026-07-20T06:07:13.074Z] [Auth] Attempt started. Email: uday.verma@difm.tech
+[2026-07-20T06:07:13.074Z] [Auth] Request Host: localhost:3000
+[2026-07-20T06:07:13.075Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
+[2026-07-20T06:07:13.076Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-20T06:07:13.076Z] [Auth] Authenticating against authService for: uday.verma@difm.tech
+[2026-07-20T06:07:13.410Z] [Auth] Authentication successful for: uday.verma@difm.tech. User ID: cmrstmzsj0014uhhwzyunz0s1
+[2026-07-20T06:08:05.562Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-20T06:08:05.563Z] [Auth] Request Host: localhost:3000
+[2026-07-20T06:08:05.564Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
+[2026-07-20T06:08:05.565Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-20T06:08:05.566Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-20T06:08:05.899Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh
+[2026-07-20T07:46:37.260Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-20T07:46:37.261Z] [Auth] Request Host: localhost:3000
+[2026-07-20T07:46:37.261Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
+[2026-07-20T07:46:37.262Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-20T07:46:37.262Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-20T07:46:37.710Z] [Auth] Admin authentication failed, trying frontend auth table for: admin@example.com
+[2026-07-20T07:46:37.814Z] [Auth] All authentication methods failed for: admin@example.com
