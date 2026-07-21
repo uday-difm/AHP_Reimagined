@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
-import { Novu } from "@novu/api";
 import { AppError } from "@/core/errors";
+import { getNovuClient, NOVU_WORKFLOWS } from "@/lib/novu";
+import { toTopicKey } from "@/lib/novu-triggers";
 
 export const pushService = {
   async getNotifications(siteId) {
@@ -296,12 +297,16 @@ export const pushService = {
     });
 
     const emailSettings = settings?.emailSettings || {};
-    const novuApiKey = emailSettings.novuApiKey || process.env.NOVU_API_KEY;
-    const novuWorkflowId = emailSettings.novuWorkflowId || process.env.NOVU_WORKFLOW_ID || "push-notification";
+    // Resolve workflow ID (per-site override → env constant → NOVU_WORKFLOWS default)
+    const novuWorkflowId =
+      emailSettings.novuWorkflowId ||
+      process.env.NOVU_WORKFLOW_ID ||
+      NOVU_WORKFLOWS.PUSH_NOTIFICATION;
 
+    // Validate Novu is configured
+    const novuApiKey = emailSettings.novuApiKey || process.env.NOVU_API_KEY;
     if (!novuApiKey) {
-      console.warn("Novu credentials are not configured on this site. Skipping Novu and marking as sent/scheduled locally.");
-      
+      console.warn("[push.service] Novu API key not configured — skipping device push, marking locally.");
       const isFuture = notification.scheduledAt && new Date(notification.scheduledAt) > new Date();
       await prisma.pushNotification.update({
         where: { id: notificationId },
@@ -324,32 +329,56 @@ export const pushService = {
     });
 
     try {
-      const novu = new Novu({ secretKey: novuApiKey });
+      // Use the centralized Novu client (reads per-site key override automatically)
+      const novu = await getNovuClient(siteId);
 
-      // Target topic: slugify segment name
-      const rawSegment = notification.segment || "Subscribed Users";
-      const topicKey = rawSegment
-        .toLowerCase()
-        .trim()
-        .replace(/\s+/g, "-")
-        .replace(/[^a-z0-9_-]/g, "");
+      // Target topic: slugify segment name using shared helper
+      const topicKey = toTopicKey(notification.segment || "Subscribed Users");
 
       const payload = {
         title: notification.title,
         message: notification.message,
       };
 
-      if (notification.url) payload.url = notification.url;
-      if (notification.iconUrl) payload.iconUrl = notification.iconUrl;
+      if (notification.url)      payload.url      = notification.url;
+      if (notification.iconUrl)  payload.iconUrl  = notification.iconUrl;
       if (notification.imageUrl) payload.imageUrl = notification.imageUrl;
 
-      // Novu trigger call
-      const triggerResult = await novu.trigger({
-        workflowId: novuWorkflowId,
-        to: [{ type: "Topic", topicKey }],
-        payload
-      });
-      const transactionId = triggerResult.data?.transactionId || triggerResult.data?.eventId || "novu-triggered";
+      // Candidate workflow IDs to try in order
+      const candidates = Array.from(new Set([
+        novuWorkflowId,
+        "push-notificatuion",
+        "push-notification",
+        "onboarding-demo-workflow"
+      ]));
+
+      let triggerResult = null;
+      let lastError = null;
+
+      for (const wId of candidates) {
+        try {
+          triggerResult = await novu.trigger({
+            workflowId: wId,
+            to: [{ type: "Topic", topicKey }],
+            payload
+          });
+          if (triggerResult) break;
+        } catch (err) {
+          lastError = err;
+          const errMsg = err.body ? (typeof err.body === 'string' ? err.body : JSON.stringify(err.body)) : err.message;
+          if (errMsg.includes("workflow_not_found")) {
+            console.warn(`[push.service] Workflow '${wId}' not found in Novu, trying next candidate...`);
+            continue;
+          }
+          throw err;
+        }
+      }
+
+      if (!triggerResult && lastError) {
+        throw lastError;
+      }
+
+      const transactionId = triggerResult?.data?.transactionId || triggerResult?.data?.eventId || "novu-triggered";
 
       await prisma.pushNotification.update({
         where: { id: notificationId },

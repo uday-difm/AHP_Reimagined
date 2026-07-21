@@ -6,29 +6,29 @@ import DOMPurify from "isomorphic-dompurify";
 export const revalidate = 60; // ISR: revalidate at most every 60 seconds
 
 export async function generateStaticParams() {
-  const services = await prisma.service.findMany({
+  const dbServices = await prisma.service.findMany({
     where: { 
-      status: "ACTIVE", 
-      visibility: "PUBLIC",
+      deletedAt: null,
       slug: { not: null }
     },
     select: { slug: true },
   });
 
-  return services.map((service) => ({
-    slug: service.slug,
-  }));
+  return dbServices.map((service) => ({ slug: service.slug }));
 }
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const service = await prisma.service.findFirst({
-    where: { slug, status: "ACTIVE", visibility: "PUBLIC" },
+    where: {
+      OR: [{ slug }, { id: slug }],
+      deletedAt: null
+    },
     select: { title: true, description: true, featuredImage: { select: { secureUrl: true, url: true } } }
   });
 
   if (!service) {
-    return { title: "Service Not Found" };
+    return { title: "Service Not Found | A Health Place" };
   }
 
   const cleanDescription = service.description ? DOMPurify.sanitize(service.description, { ALLOWED_TAGS: [] }).substring(0, 160) : "";
@@ -49,9 +49,8 @@ export default async function PublicServicePage({ params }) {
 
   const dbService = await prisma.service.findFirst({
     where: { 
-      slug, 
-      status: "ACTIVE",
-      visibility: "PUBLIC",
+      OR: [{ slug }, { id: slug }],
+      deletedAt: null
     },
     include: {
       featuredImage: true,

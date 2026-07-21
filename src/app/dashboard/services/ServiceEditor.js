@@ -29,7 +29,7 @@ export default function ServiceEditor({ siteId, service }) {
     ctaButtonText: "",
     ctaButtonLink: "",
     sortOrder: 0,
-    status: "DRAFT",
+    status: "ACTIVE",
     visible: true,
     featuredImageId: null,
     visibility: "PUBLIC",
