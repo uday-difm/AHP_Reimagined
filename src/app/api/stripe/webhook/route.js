@@ -85,6 +85,14 @@ Stripe Session ID: ${session.id}
       } catch (alertErr) {
         console.error('Failed to create notification alert for Stripe payment:', alertErr);
       }
+
+      // 4. Trigger Novu Push Notification
+      try {
+        const { triggerServiceBooked } = await import('@/lib/novu-service-events');
+        await triggerServiceBooked(siteId, lead);
+      } catch (pushErr) {
+        console.error('Failed to send push notification for Stripe payment:', pushErr);
+      }
     }
 
     return NextResponse.json({ received: true });
