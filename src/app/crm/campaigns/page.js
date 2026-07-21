@@ -7,6 +7,7 @@ import {
   XCircle, AlertCircle, BarChart2, Calendar, Users,
   FileText, Heart, X, TrendingUp, Radio, Pause,
   LayoutGrid, Search, Filter, ExternalLink, Zap, Check,
+  MousePointerClick
 } from "lucide-react";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -104,15 +105,48 @@ function AnalyticsPanel({ campaignId, siteId, onClose }) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const fetchData = async (silent = false) => {
     if (!campaignId) return;
-    setLoading(true);
-    fetch(`/api/crm/campaigns/${campaignId}`, { headers: { "x-site-id": siteId } })
-      .then(r => r.json())
-      .then(d => { if (d.success) setData(d.data); })
-      .catch(console.error)
-      .finally(() => setLoading(false));
+    if (!silent && !data) setLoading(true);
+    try {
+      const res = await fetch(`/api/crm/campaigns/${campaignId}?t=${Date.now()}`, {
+        headers: { "x-site-id": siteId },
+        cache: "no-store",
+      });
+      const d = await res.json();
+      if (d.success) setData(d.data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      if (!silent) setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+    const interval = setInterval(() => {
+      fetchData(true);
+    }, 2000);
+    return () => clearInterval(interval);
   }, [campaignId, siteId]);
+
+  const handleSimulateOpen = async (logId) => {
+    try {
+      await fetch(`/api/crm/track/open?logId=${logId}&t=${Date.now()}`, { cache: "no-store" });
+      await fetchData(true);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleSimulateClick = async (logId) => {
+    try {
+      await fetch(`/api/crm/track/click?logId=${logId}&t=${Date.now()}`, { cache: "no-store" });
+      await fetchData(true);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const campaign = data?.campaign;
   const stats = data?.stats;
@@ -130,12 +164,17 @@ function AnalyticsPanel({ campaignId, siteId, onClose }) {
             </h2>
             {campaign && <p className="text-xs text-slate-500 mt-0.5">{campaign.name}</p>}
           </div>
-          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400">
-            <X size={16} />
-          </button>
+          <div className="flex items-center gap-1.5">
+            <button onClick={fetchData} title="Refresh Report Data" className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500">
+              <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
+            </button>
+            <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400">
+              <X size={16} />
+            </button>
+          </div>
         </div>
 
-        {loading ? (
+        {loading && !data ? (
           <div className="flex-1 flex items-center justify-center">
             <RefreshCw size={20} className="animate-spin text-indigo-600" />
           </div>
@@ -198,8 +237,9 @@ function AnalyticsPanel({ campaignId, siteId, onClose }) {
             {/* Recent logs */}
             {logs.length > 0 && (
               <div className="rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden bg-white dark:bg-slate-800">
-                <div className="px-4 py-2.5 border-b border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-900">
+                <div className="px-4 py-2.5 border-b border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 flex justify-between items-center">
                   <h3 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Recent Recipients</h3>
+                  <span className="text-[9px] text-slate-400">Click Eye/Pointer icons to simulate events</span>
                 </div>
                 <div className="divide-y divide-slate-100 dark:divide-slate-700 max-h-64 overflow-y-auto">
                   {logs.map(log => (
@@ -208,7 +248,23 @@ function AnalyticsPanel({ campaignId, siteId, onClose }) {
                         <div className="font-semibold text-slate-900 dark:text-white truncate">{log.subscriber?.name || log.subscriber?.email}</div>
                         {log.subscriber?.name && <div className="text-slate-400 truncate">{log.subscriber.email}</div>}
                       </div>
-                      <StatusBadge status={log.status} />
+                      <div className="flex items-center gap-2 shrink-0">
+                        <StatusBadge status={log.status} />
+                        <button
+                          onClick={() => handleSimulateOpen(log.id)}
+                          title="Simulate Email Open (Updates Stats)"
+                          className="p-1 text-[10px] text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/40 rounded transition border-0 bg-transparent cursor-pointer"
+                        >
+                          <Eye size={12} />
+                        </button>
+                        <button
+                          onClick={() => handleSimulateClick(log.id)}
+                          title="Simulate Email Click (Updates Stats)"
+                          className="p-1 text-[10px] text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 rounded transition border-0 bg-transparent cursor-pointer"
+                        >
+                          <MousePointerClick size={12} />
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>

@@ -6,15 +6,20 @@ import DOMPurify from "isomorphic-dompurify";
 export const revalidate = 60; // ISR: revalidate at most every 60 seconds
 
 export async function generateStaticParams() {
-  const dbServices = await prisma.service.findMany({
-    where: { 
-      deletedAt: null,
-      slug: { not: null }
-    },
-    select: { slug: true },
-  });
+  try {
+    const dbServices = await prisma.service.findMany({
+      where: { 
+        deletedAt: null,
+        slug: { not: null }
+      },
+      select: { slug: true },
+    });
 
-  return dbServices.map((service) => ({ slug: service.slug }));
+    return dbServices.map((service) => ({ slug: service.slug }));
+  } catch (e) {
+    console.warn("[generateStaticParams] Could not fetch service slugs during static build, rendering dynamically:", e.message);
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }) {

@@ -199,10 +199,13 @@ export const pushService = {
       const data = await response.json();
       if (response.ok && data.data && Array.isArray(data.data)) {
         const messages = data.data;
-        const sentCount = messages.length;
-        const clickedCount = messages.filter(m => m.status === 'clicked' || m.status === 'opened').length;
+        const novuClicks = messages.filter(
+          m => m.status === 'clicked' || m.status === 'opened' || m.status === 'read' || m.read === true || m.seen === true || m.readAt || m.seenAt || m.clickedAt
+        ).length;
+        const clickedCount = Math.max(notification.clickedCount || 0, novuClicks);
+        const sentCount = Math.max(notification.sentCount || 1, messages.length);
         const failedCount = messages.filter(m => m.status === 'failed').length;
-        const deliveredCount = sentCount - failedCount;
+        const deliveredCount = Math.max(0, sentCount - failedCount);
 
         await prisma.pushNotification.update({
           where: { id: notificationId },
@@ -224,6 +227,20 @@ export const pushService = {
   },
 
   async getAnalytics(siteId) {
+    // Auto-sync stats for sent notifications so analytics are always up-to-date
+    try {
+      const sentNotifs = await prisma.pushNotification.findMany({
+        where: { siteId, status: "sent" },
+        select: { id: true },
+        take: 10
+      });
+      for (const n of sentNotifs) {
+        await this.getNotificationStats(siteId, n.id).catch(() => {});
+      }
+    } catch (e) {
+      // ignore sync errors
+    }
+
     const notifications = await prisma.pushNotification.findMany({
       where: { siteId },
       select: {
@@ -335,22 +352,24 @@ export const pushService = {
       // Target topic: slugify segment name using shared helper
       const topicKey = toTopicKey(notification.segment || "Subscribed Users");
 
+      const appUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
+      const targetUrl = notification.url || "/";
+      const trackingUrl = `${appUrl}/api/crm/track/click?pushId=${notification.id}&url=${encodeURIComponent(targetUrl)}`;
+
       const payload = {
         title: notification.title,
         message: notification.message,
+        url: trackingUrl,
       };
 
-      if (notification.url)      payload.url      = notification.url;
       if (notification.iconUrl)  payload.iconUrl  = notification.iconUrl;
       if (notification.imageUrl) payload.imageUrl = notification.imageUrl;
 
-      // Candidate workflow IDs to try in order
-      const candidates = Array.from(new Set([
-        novuWorkflowId,
-        "push-notificatuion",
-        "push-notification",
-        "onboarding-demo-workflow"
-      ]));
+      // Candidate workflow IDs to try in order (prioritize slugs with hyphens over raw keys)
+      const isSlug = novuWorkflowId && novuWorkflowId.includes("-");
+      const candidates = isSlug
+        ? Array.from(new Set([novuWorkflowId, "push-notificatuion", "push-notification", "onboarding-demo-workflow"]))
+        : Array.from(new Set(["push-notificatuion", "push-notification", novuWorkflowId, "onboarding-demo-workflow"])).filter(Boolean);
 
       let triggerResult = null;
       let lastError = null;

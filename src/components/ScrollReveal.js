@@ -15,22 +15,36 @@ export default function ScrollReveal() {
 
     const observer = new IntersectionObserver(revealCallback, {
       root: null,
-      threshold: 0.15,
-      rootMargin: '0px 0px -50px 0px',
+      threshold: 0.05,
+      rootMargin: '0px 0px 50px 0px',
     });
 
     const observeElements = () => {
-      const revealElements = document.querySelectorAll('.reveal-text:not(.reveal-observed), .reveal-slide:not(.reveal-observed), .reveal-scale:not(.reveal-observed), .reveal-fade:not(.reveal-observed)');
+      const revealElements = document.querySelectorAll(
+        '.reveal-text, .reveal-slide, .reveal-scale, .reveal-fade'
+      );
       revealElements.forEach(el => {
-        el.classList.add('reveal-observed');
-        observer.observe(el);
+        // If already in viewport on load, activate immediately
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom >= 0) {
+          el.classList.add('reveal-active');
+        } else {
+          observer.observe(el);
+        }
       });
     };
 
     // Initial observation
     observeElements();
 
-    // Watch for dynamically added elements (like ArticlesGrid)
+    // Failsafe: activate any remaining elements after 1.2s to prevent blank sections
+    const failsafeTimer = setTimeout(() => {
+      document.querySelectorAll('.reveal-text, .reveal-slide, .reveal-scale, .reveal-fade').forEach(el => {
+        el.classList.add('reveal-active');
+      });
+    }, 1200);
+
+    // Watch for dynamically added elements
     const mutationObserver = new MutationObserver((mutations) => {
       let shouldObserve = false;
       mutations.forEach(mutation => {
@@ -42,6 +56,7 @@ export default function ScrollReveal() {
     mutationObserver.observe(document.body, { childList: true, subtree: true });
 
     return () => {
+      clearTimeout(failsafeTimer);
       observer.disconnect();
       mutationObserver.disconnect();
     };

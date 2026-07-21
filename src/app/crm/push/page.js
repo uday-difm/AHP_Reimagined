@@ -455,7 +455,7 @@ function ComposePanel({ open, onClose, onSaved, editingId, siteId, emailCampaign
                     >
                       {SEGMENTS.map(s => <option key={s} value={s}>{s}</option>)}
                     </select>
-                    <p className="text-[9px] text-slate-400 mt-1">OneSignal segment to target. Must match a segment defined in your OneSignal dashboard.</p>
+                    <p className="text-[9px] text-slate-400 mt-1">Novu audience topic or segment to target.</p>
                   </div>
                 ) : (
                   <div>
@@ -786,7 +786,8 @@ export default function PushPage() {
         setNotifications(prev => prev.map(n =>
           n.id === id ? { ...n, ...stats } : n
         ));
-        showToast("Stats refreshed from OneSignal.");
+        fetchAnalytics();
+        showToast("Stats refreshed from Novu.");
       }
     } catch (err) {
       showToast("Failed to refresh stats", "error");
@@ -859,7 +860,7 @@ export default function PushPage() {
                 Push Notifications
               </h1>
               <p className="text-slate-500 dark:text-slate-400 text-xs mt-0.5">
-                OneSignal-powered browser & mobile push campaigns
+                Novu-powered browser & mobile push campaigns
               </p>
             </div>
           </div>
@@ -868,14 +869,14 @@ export default function PushPage() {
         <div className="flex flex-wrap gap-2 w-full sm:w-auto">
           {!configured && (
             <div className="flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-bold text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/40 rounded-lg">
-              <Shield size={11} /> OneSignal not configured
+              <Shield size={11} /> Novu not configured
             </div>
           )}
           <button
             onClick={() => setTab("settings")}
             className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold bg-white text-slate-700 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 rounded-lg hover:bg-slate-50 transition"
           >
-            <Settings size={14} /> OneSignal Settings
+            <Settings size={14} /> Novu Settings
           </button>
           <button
             onClick={openNew}
@@ -1065,14 +1066,25 @@ export default function PushPage() {
                                 </button>
                               )}
                               {item.status === "sent" && (
-                                <button
-                                  onClick={() => handleRefreshStats(item.id)}
-                                  disabled={!!loader}
-                                  title="Refresh Stats from OneSignal"
-                                  className="p-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-950/60 transition disabled:opacity-50"
-                                >
-                                  {loader === "refreshing" ? <RefreshCw size={12} className="animate-spin" /> : <RefreshCw size={12} />}
-                                </button>
+                                <>
+                                  <a
+                                    href={`/api/crm/track/click?pushId=${item.id}&url=${encodeURIComponent(item.url || '/')}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    title="Test Link (Simulate User Click)"
+                                    className="p-1.5 rounded-lg bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-950/60 transition"
+                                  >
+                                    <MousePointerClick size={12} />
+                                  </a>
+                                  <button
+                                    onClick={() => handleRefreshStats(item.id)}
+                                    disabled={!!loader}
+                                    title="Refresh Stats from Novu"
+                                    className="p-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-950/60 transition disabled:opacity-50"
+                                  >
+                                    {loader === "refreshing" ? <RefreshCw size={12} className="animate-spin" /> : <RefreshCw size={12} />}
+                                  </button>
+                                </>
                               )}
                               {item.status !== "sent" && (
                                 <button
@@ -1269,11 +1281,14 @@ export default function PushPage() {
                 </label>
                 <input
                   type="text"
-                  placeholder="Your Novu Workflow Identifier (e.g., push-notification)"
+                  placeholder="e.g. push-notificatuion"
                   value={novuWorkflowId}
                   onChange={e => setNovuWorkflowId(e.target.value)}
                   className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/30 transition font-mono"
                 />
+                <p className="text-[10px] text-slate-400 mt-1">
+                  Enter your Novu Workflow Trigger identifier (e.g. <code className="bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded text-indigo-600 dark:text-indigo-400">push-notificatuion</code>). Do NOT paste your API key here.
+                </p>
               </div>
               <div>
                 <label className="block text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 mb-1.5">
@@ -1310,11 +1325,11 @@ export default function PushPage() {
             </div>
             <div className="p-5 space-y-4">
               {[
-                { step: 1, title: "Create a OneSignal account", desc: "Sign up at onesignal.com and create a new Web Push app for your website.", link: "https://onesignal.com" },
-                { step: 2, title: "Configure your web push settings", desc: "Set your site URL and upload your notification icon in the OneSignal dashboard.", link: null },
-                { step: 3, title: "Copy your credentials", desc: "Navigate to Settings → Keys & IDs and copy your App ID and REST API Key.", link: null },
-                { step: 4, title: "Add OneSignal SDK to your site", desc: "Install the OneSignal JavaScript SDK on your frontend to collect subscriber opt-ins.", link: "https://documentation.onesignal.com/docs/web-push-quickstart" },
-                { step: 5, title: "Paste credentials above & save", desc: "Enter your App ID and REST API Key in the form above and click Save.", link: null },
+                { step: 1, title: "Create a Novu account", desc: "Sign up at dashboard.novu.co to manage workflows and subscriber notifications.", link: "https://dashboard.novu.co" },
+                { step: 2, title: "Configure your push workflow", desc: "Set up your push notification workflow (e.g. push-notificatuion) in the Novu dashboard.", link: null },
+                { step: 3, title: "Copy your credentials", desc: "Navigate to Settings → API Keys in Novu and copy your Secret Key and Workflow ID.", link: null },
+                { step: 4, title: "Connect Novu SDK / Triggers", desc: "Use Novu workflow triggers or AHP CRM dashboard to send push messages.", link: "https://docs.novu.co" },
+                { step: 5, title: "Paste credentials above & save", desc: "Enter your Novu Workflow ID and Secret API Key in the form above and click Save.", link: null },
               ].map(({ step, title, desc, link }) => (
                 <div key={step} className="flex gap-3">
                   <div className="w-6 h-6 rounded-full bg-indigo-100 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 text-[10px] font-black flex items-center justify-center shrink-0 mt-0.5">

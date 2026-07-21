@@ -253,12 +253,17 @@ export default async function ArticlePage({ params }) {
 }
 
 export async function generateStaticParams() {
-  const siteId = process.env.NEXT_PUBLIC_SITE_ID || process.env.SITE_ID || "infinium";
-  const posts = await prisma.post.findMany({
-    where: { siteId, status: "PUBLISHED", deletedAt: null },
-    select: { slug: true },
-    orderBy: { publishedAt: 'desc' }, // Generate newest first
-    take: 10,
-  });
-  return posts.map((p) => ({ slug: p.slug }));
+  try {
+    const siteId = process.env.NEXT_PUBLIC_SITE_ID || process.env.SITE_ID || "infinium";
+    const posts = await prisma.post.findMany({
+      where: { siteId, status: "PUBLISHED", deletedAt: null },
+      select: { slug: true },
+      orderBy: { publishedAt: 'desc' },
+      take: 10,
+    });
+    return posts.map((p) => ({ slug: p.slug }));
+  } catch (e) {
+    console.warn("[generateStaticParams] Could not fetch blog slugs during static build, rendering dynamically:", e.message);
+    return [];
+  }
 }

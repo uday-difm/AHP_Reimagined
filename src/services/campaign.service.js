@@ -200,20 +200,23 @@ export const campaignService = {
     const totalLogs = logs.length;
     const sent = logs.filter(l => ["sent", "opened", "clicked"].includes(l.status)).length;
     const failed = logs.filter(l => l.status === "failed").length;
-    const opened = logs.filter(l => l.openedAt !== null).length;
-    const clicked = logs.filter(l => l.clickedAt !== null).length;
+    const opened = logs.filter(l => l.openedAt !== null || l.status === "opened" || l.status === "clicked").length;
+    const clicked = logs.filter(l => l.clickedAt !== null || l.status === "clicked").length;
+
+    const delivered = Math.max(sent, totalLogs - failed);
+    const deliveryBase = delivered > 0 ? delivered : totalLogs;
 
     return {
       campaign,
       stats: {
         totalLogs,
-        sent,
+        sent: delivered,
         failed,
         opened,
         clicked,
-        deliveryRate: totalLogs > 0 ? Math.round((sent / totalLogs) * 100) : 0,
-        openRate: sent > 0 ? Math.round((opened / sent) * 100) : 0,
-        clickRate: sent > 0 ? Math.round((clicked / sent) * 100) : 0,
+        deliveryRate: totalLogs > 0 ? Math.round((delivered / totalLogs) * 100) : 0,
+        openRate: deliveryBase > 0 ? Math.round((opened / deliveryBase) * 100) : 0,
+        clickRate: deliveryBase > 0 ? Math.round((clicked / deliveryBase) * 100) : 0,
       },
       recentLogs: logs.slice(0, 20),
     };

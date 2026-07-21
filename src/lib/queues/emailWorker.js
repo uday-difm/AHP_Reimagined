@@ -40,12 +40,12 @@ export function startEmailWorker() {
         where: { id: campaign.siteId }
       });
       
-      // Prioritize NEXTAUTH_URL to allow dynamic local/ngrok/stage tracking, fallback to site domain
-      const baseUrl = process.env.NEXTAUTH_URL
-        ? process.env.NEXTAUTH_URL.replace(/\/$/, "") // remove trailing slash if any
-        : (site && site.domain
-            ? (site.domain.startsWith("http") ? site.domain : `https://${site.domain}`)
-            : "http://localhost:3000");
+      // Prioritize base tracking URL (with localhost fallback in dev mode)
+      let baseUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXTAUTH_URL || "http://localhost:3000";
+      if (process.env.NODE_ENV === "development" && baseUrl.includes("ngrok")) {
+        baseUrl = "http://localhost:3000";
+      }
+      baseUrl = baseUrl.replace(/\/$/, "");
 
       // 1. Pre-create/upsert the CampaignLog to get its ID
       const campaignLog = await prisma.campaignLog.upsert({
@@ -68,14 +68,15 @@ export function startEmailWorker() {
 
       const logId = campaignLog.id;
 
-      // 2. Inject tracking pixel and rewrite links
+      // 2. Inject tracking pixel at top & bottom + preheader online view link + rewrite links
       let trackedBody = campaign.body || "";
       const trackingPixelHtml = `<img src="${baseUrl}/api/crm/track/open?logId=${logId}" width="1" height="1" style="display:none !important;" alt="" />`;
-      if (trackedBody.includes("</body>")) {
-        trackedBody = trackedBody.replace("</body>", `${trackingPixelHtml}</body>`);
-      } else {
-        trackedBody = trackedBody + trackingPixelHtml;
-      }
+      
+      const preheaderLink = `<div style="font-size:11px; font-family: sans-serif; color:#64748b; padding:8px 12px; background-color:#f8fafc; border-radius:6px; margin-bottom:14px; text-align:center;">
+        Having trouble viewing this email? <a href="${baseUrl}/api/crm/track/click?logId=${logId}&url=${encodeURIComponent(baseUrl)}" target="_blank" style="color:#0f7c85; font-weight:bold; text-decoration:underline;">Click here to view online</a>
+      </div>`;
+
+      trackedBody = `${trackingPixelHtml}${preheaderLink}${trackedBody}${trackingPixelHtml}`;
 
       // Match href="...", href='...', and support spaces around '=': href  =  "..."
       trackedBody = trackedBody.replace(/href\s*=\s*["']([^"']+)["']/gi, (match, url) => {
