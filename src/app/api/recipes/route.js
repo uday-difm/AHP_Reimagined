@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma";
 import { getSiteId } from "@/lib/siteGuard";
 import { handleApiError, apiSuccess } from "@/core/errors";
 import { requireAuth } from "@/lib/requireAuth";
+import { queueUpsertContent } from "@/lib/queues/searchQueue";
 
 export const dynamic = "force-dynamic";
 
@@ -110,6 +111,8 @@ export async function POST(req) {
         }
       }
     });
+
+    await queueUpsertContent("recipe", recipe.id);
 
     return NextResponse.json(apiSuccess({ recipe }));
   } catch (err) {

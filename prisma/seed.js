@@ -32,6 +32,31 @@ async function main() {
   console.log("✅ Super admin created");
   console.log("📧 admin@example.com");
   console.log("🔑 Admin@123");
+
+  const MAIN_NAVIGATION = [];
+  const FOOTER_NAVIGATION = [];
+  const DEFAULT_SITE_ID = "unnamed-site";
+
+  console.log(`  ⚠️ No sites found. Creating default '${DEFAULT_SITE_ID}' site settings...`);
+
+  await prisma.globalSettings.upsert({
+    where: { siteId: DEFAULT_SITE_ID },
+    update: {
+      navigation: {
+        main: MAIN_NAVIGATION,
+        footer: FOOTER_NAVIGATION,
+      },
+    },
+    create: {
+      siteId: DEFAULT_SITE_ID,
+      navigation: {
+        main: MAIN_NAVIGATION,
+        footer: FOOTER_NAVIGATION,
+      },
+    },
+  });
+
+  console.log(`  ✅ Seeding complete for '${DEFAULT_SITE_ID}' site.`);
 }
 
 main()

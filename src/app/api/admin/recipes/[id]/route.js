@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma";
 import { getSiteId } from "@/lib/siteGuard";
 import { handleApiError, apiSuccess } from "@/core/errors";
 import { requireAuth } from "@/lib/requireAuth";
+import { queueUpsertContent, queueDeleteContent } from "@/lib/queues/searchQueue";
 
 export const dynamic = "force-dynamic";
 
@@ -26,6 +27,12 @@ export async function PATCH(req, { params }) {
       data: dataToUpdate
     });
 
+    if (recipe.status === "APPROVED") {
+      await queueUpsertContent("recipe", recipe.id);
+    } else {
+      await queueDeleteContent("recipe", recipe.id);
+    }
+
     return NextResponse.json(apiSuccess({ recipe }));
   } catch (err) {
     return handleApiError(err);
@@ -43,6 +50,8 @@ export async function DELETE(req, { params }) {
     await prisma.recipe.delete({
       where: { id, siteId }
     });
+
+    await queueDeleteContent("recipe", id);
 
     return NextResponse.json(apiSuccess({ message: "Recipe deleted successfully" }));
   } catch (err) {

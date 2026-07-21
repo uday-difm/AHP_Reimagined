@@ -3,6 +3,7 @@ import { emailService } from "@/services/email.service";
 import { notificationService } from "@/services/notification.service";
 import { webhookService } from "@/services/webhook.service";
 import prisma from "@/lib/prisma";
+import { queueUpsertContent, queueDeleteContent } from "@/lib/queues/searchQueue";
 
 const globalForListeners = globalThis;
 if (!globalForListeners.listenersInitialized) {
@@ -109,15 +110,18 @@ async function deliverWebhook(siteId, eventType, data) {
 }
 
 // Pages
-EventBus.on("page.created", ({ siteId, data }) =>
-  deliverWebhook(siteId, "page.created", data),
-);
-EventBus.on("page.updated", ({ siteId, data }) =>
-  deliverWebhook(siteId, "page.updated", data),
-);
-EventBus.on("page.deleted", ({ siteId, data }) =>
-  deliverWebhook(siteId, "page.deleted", data),
-);
+EventBus.on("page.created", ({ siteId, data }) => {
+  deliverWebhook(siteId, "page.created", data);
+  queueUpsertContent("page", data.id);
+});
+EventBus.on("page.updated", ({ siteId, data }) => {
+  deliverWebhook(siteId, "page.updated", data);
+  queueUpsertContent("page", data.id);
+});
+EventBus.on("page.deleted", ({ siteId, data }) => {
+  deliverWebhook(siteId, "page.deleted", data);
+  queueDeleteContent("page", data.id);
+});
 
 // Posts / Blog
 EventBus.on("post.published", async ({ siteId, data }) => {
@@ -127,27 +131,34 @@ EventBus.on("post.published", async ({ siteId, data }) => {
     console.error("Failed to notify new blog post:", err);
   }
   await deliverWebhook(siteId, "post.published", data);
+  queueUpsertContent("post", data.id);
 });
-EventBus.on("post.created", ({ siteId, data }) =>
-  deliverWebhook(siteId, "post.created", data),
-);
-EventBus.on("post.updated", ({ siteId, data }) =>
-  deliverWebhook(siteId, "post.updated", data),
-);
-EventBus.on("post.deleted", ({ siteId, data }) =>
-  deliverWebhook(siteId, "post.deleted", data),
-);
+EventBus.on("post.created", ({ siteId, data }) => {
+  deliverWebhook(siteId, "post.created", data);
+  queueUpsertContent("post", data.id);
+});
+EventBus.on("post.updated", ({ siteId, data }) => {
+  deliverWebhook(siteId, "post.updated", data);
+  queueUpsertContent("post", data.id);
+});
+EventBus.on("post.deleted", ({ siteId, data }) => {
+  deliverWebhook(siteId, "post.deleted", data);
+  queueDeleteContent("post", data.id);
+});
 
 // Services
-EventBus.on("service.created", ({ siteId, data }) =>
-  deliverWebhook(siteId, "service.created", data),
-);
-EventBus.on("service.updated", ({ siteId, data }) =>
-  deliverWebhook(siteId, "service.updated", data),
-);
-EventBus.on("service.deleted", ({ siteId, data }) =>
-  deliverWebhook(siteId, "service.deleted", data),
-);
+EventBus.on("service.created", ({ siteId, data }) => {
+  deliverWebhook(siteId, "service.created", data);
+  queueUpsertContent("service", data.id);
+});
+EventBus.on("service.updated", ({ siteId, data }) => {
+  deliverWebhook(siteId, "service.updated", data);
+  queueUpsertContent("service", data.id);
+});
+EventBus.on("service.deleted", ({ siteId, data }) => {
+  deliverWebhook(siteId, "service.deleted", data);
+  queueDeleteContent("service", data.id);
+});
 
 // Global Settings (header, footer, navigation, branding, etc.)
 EventBus.on("globalSettings.updated", ({ siteId, data }) =>

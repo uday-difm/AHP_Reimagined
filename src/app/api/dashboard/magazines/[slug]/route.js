@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
+import { queueUpsertContent, queueDeleteContent } from "@/lib/queues/searchQueue";
 import { requireAuth } from "@/lib/requireAuth";
 import { getSiteForUser } from "@/lib/getSiteForUser";
 import { uploadToS3 } from "@/../utils/s3Utility";
@@ -224,6 +226,12 @@ export async function PUT(request, context) {
       },
     });
 
+    if (updated.status === 1) {
+      await queueUpsertContent("magazine", updated.id.toString());
+    } else {
+      await queueDeleteContent("magazine", updated.id.toString());
+    }
+
     return NextResponse.json({ success: true, magazine: updated });
   } catch (error) {
     console.error("Error updating magazine:", error);
@@ -250,6 +258,8 @@ export async function DELETE(request, context) {
     await prisma.magazine.delete({
       where: { slug },
     });
+
+    await queueDeleteContent("magazine", existing.id);
 
     return NextResponse.json({ success: true });
   } catch (error) {

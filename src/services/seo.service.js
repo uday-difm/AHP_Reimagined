@@ -94,6 +94,7 @@ Disallow: /api/
 Disallow: /dashboard/
 Disallow: /crm/
 Disallow: /marketing/
+Disallow: /services/private/
 
 Sitemap: ${domain}/sitemap.xml
 `;

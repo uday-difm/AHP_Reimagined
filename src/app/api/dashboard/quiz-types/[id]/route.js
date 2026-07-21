@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/requireAuth";
+import { queueUpsertContent, queueDeleteContent } from "@/lib/queues/searchQueue";
 
 export const dynamic = "force-dynamic";
 
@@ -35,6 +36,12 @@ export async function PUT(req, { params }) {
       },
     });
 
+    if (qt.isActive) {
+      await queueUpsertContent("quiz", qt.id.toString());
+    } else {
+      await queueDeleteContent("quiz", qt.id.toString());
+    }
+
     return NextResponse.json(qt);
   } catch (err) {
     console.error("PUT /api/dashboard/quiz-types/[id] error:", err);
@@ -54,7 +61,10 @@ export async function DELETE(req, { params }) {
 
   try {
     await prisma.quizType.delete({ where: { id } });
-    return NextResponse.json({ success: true });
+
+    await queueDeleteContent("quiz", id.toString());
+
+    return new NextResponse(null, { status: 204 });
   } catch (err) {
     console.error("DELETE /api/dashboard/quiz-types/[id] error:", err);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

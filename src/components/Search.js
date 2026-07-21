@@ -2,64 +2,27 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { Search as SearchIcon, X } from 'lucide-react';
-
-const STATIC_ARTICLES = [
-  {
-    slug: 'ayurvedic-secrets-for-better-digestion',
-    category: 'Ayurveda',
-    title: 'Ayurvedic Secrets for Better Digestion',
-    desc: 'Discover ancient dietary guidelines for optimizing digestive health and maintaining balance.',
-    img: '/images/ayurveda.png',
-  },
-  {
-    slug: 'how-ai-is-changing-healthcare',
-    category: 'Modern Health',
-    title: 'How AI is Changing Healthcare',
-    desc: 'Explore how artificial intelligence is streamlining diagnostics, surgery, and patient care.',
-    img: '/images/disease.png',
-  },
-  {
-    slug: 'breathwork-vs-meditation-for-anxiety',
-    category: 'Holistic',
-    title: 'Breathwork vs. Meditation for Anxiety',
-    desc: 'Find out which mindfulness practices work best for quieting your specific anxiety loops.',
-    img: '/images/holistic.png',
-  },
-  {
-    slug: 'exercise-for-better-mental-health',
-    category: 'Mental Health',
-    title: 'Exercise for Better Mental Health',
-    desc: 'Science-backed evidence showing how regular movement rewires the brain for resilience.',
-    img: '/images/hero_exercise.png',
-  },
-  {
-    slug: 'how-inactivity-impacts-physical-health',
-    category: 'Physical Health',
-    title: 'How Inactivity Impacts Physical Health',
-    desc: 'Research linking modern sedentary lifestyles to cardiovascular risks and joint stiffness.',
-    img: '/images/physical_health.png',
-  },
-  {
-    slug: 'when-is-the-right-time-for-hospice-care',
-    category: 'Hospice Care',
-    title: 'When Is the Right Time for Hospice Care?',
-    desc: 'Compassionate guidelines on when to seek specialized, medical-supported end-of-life care.',
-    img: '/images/hero_hospice.png',
-  }
-];
+import { Search as SearchIcon, X, Loader2 } from 'lucide-react';
+import sanitizeHtml from 'isomorphic-dompurify';
 
 export default function Search() {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
-  const [dbResults, setDbResults] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  
+  // Filters
+  const [activeType, setActiveType] = useState('');
+  const [activeCategory, setActiveCategory] = useState('');
+  const [facets, setFacets] = useState({ types: [], categories: [] });
+
   const inputRef = useRef(null);
+  const abortControllerRef = useRef(null);
 
   // Focus input on open
   useEffect(() => {
     if (isOpen && inputRef.current) {
-      // Focus after animation has started
       const timer = setTimeout(() => {
         inputRef.current.focus();
       }, 100);
@@ -95,56 +58,77 @@ export default function Search() {
 
   // Real-time search
   useEffect(() => {
-    if (!query.trim()) {
+    const cleanQuery = query.toLowerCase().trim();
+    if (cleanQuery.length < 2) {
       setResults([]);
-      setDbResults([]);
+      setFacets({ types: [], categories: [] });
+      setIsLoading(false);
+      setError(null);
       return;
     }
 
-    const cleanQuery = query.toLowerCase().trim();
+    setIsLoading(true);
+    setError(null);
 
-    // 1. Search Static Guides
-    const localFiltered = STATIC_ARTICLES.filter(
-      (art) =>
-        art.title.toLowerCase().includes(cleanQuery) ||
-        art.desc.toLowerCase().includes(cleanQuery) ||
-        art.category.toLowerCase().includes(cleanQuery)
-    );
-    setResults(localFiltered);
+    // Cancel previous request
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    abortControllerRef.current = new AbortController();
 
-    // 2. Fetch Database Articles (Debounced)
     const delayDebounce = setTimeout(async () => {
       try {
-        const res = await fetch(`/api/posts?search=${encodeURIComponent(cleanQuery)}`);
+        const searchParams = new URLSearchParams({
+          q: cleanQuery,
+          perPage: 30
+        });
+        if (activeType) searchParams.set('type', activeType);
+        if (activeCategory) searchParams.set('category', activeCategory);
+
+        const res = await fetch(`/api/search?${searchParams.toString()}`, {
+          signal: abortControllerRef.current.signal
+        });
+        
         if (res.ok) {
           const json = await res.json();
-          if (json.success && Array.isArray(json.data?.posts)) {
-            const mapped = json.data.posts.map((post) => ({
-              slug: post.slug,
-              title: post.title,
-              desc: post.excerpt || '',
-              category: post.categories?.[0]?.name || 'Article',
-              img: post.featuredImage?.url || '/images/Logo-web.png',
-              isDb: true
-            }));
-            setDbResults(mapped);
+          if (json.success && Array.isArray(json.data?.hits)) {
+            setResults(json.data.hits);
+            setFacets(json.data.facets || { types: [], categories: [] });
+          } else {
+            setError(json.error || 'Failed to parse search results');
           }
+        } else {
+          setError('Failed to fetch search results');
         }
       } catch (err) {
-        console.error('Failed to search database posts:', err);
+        if (err.name !== 'AbortError') {
+          console.error('Failed to search:', err);
+          setError('An error occurred while searching');
+        }
+      } finally {
+        setIsLoading(false);
       }
-    }, 300);
+    }, 250);
 
     return () => clearTimeout(delayDebounce);
-  }, [query]);
+  }, [query, activeType, activeCategory]);
 
-  // Combined Results
-  const allResults = [
-    ...results,
-    ...dbResults.filter(
-      (dbArt) => !results.some((localArt) => localArt.slug === dbArt.slug)
-    )
-  ];
+  const LABELS = {
+    post: "Blog",
+    page: "Page",
+    recipe: "Recipe",
+    service: "Service",
+    magazine: "Magazine",
+    quiz: "Quiz",
+  };
+
+  const getLabel = (type) => LABELS[type] || type;
+
+  const renderHighlighted = (htmlString) => {
+    if (!htmlString) return null;
+    const cleanHTML = sanitizeHtml.sanitize(htmlString, { ALLOWED_TAGS: ['mark'] });
+    return <span dangerouslySetInnerHTML={{ __html: cleanHTML }} />;
+  };
 
   return (
     <>
@@ -179,12 +163,12 @@ export default function Search() {
 
           {/* Modal Title/Subtitle */}
           <div className="text-center text-secondary mb-8 flex flex-col items-center">
-            <span className="text-xs font-bold tracking-[2px] text-accent uppercase block mb-2">Guides Database</span>
-            <p className="text-sm font-medium text-slate-400">Type to explore expert-backed medical guides.</p>
+            <span className="text-xs font-bold tracking-[2px] text-accent uppercase block mb-2">Global Search</span>
+            <p className="text-sm font-medium text-slate-400">Type to explore content across the platform.</p>
           </div>
 
           {/* Search Bar Container */}
-          <div className="w-full relative mb-8">
+          <div className="w-full relative mb-4">
             <div className="relative flex items-center border border-slate-200/80 rounded-2xl bg-white shadow-md px-5 py-4 focus-within:border-accent/40 focus-within:shadow-[0_8px_30px_rgba(31,185,251,0.06)] transition-all duration-300">
               <SearchIcon className="w-6 h-6 text-slate-400 mr-4" />
               <input
@@ -195,9 +179,16 @@ export default function Search() {
                 placeholder="Search articles, guides, topics..."
                 className="w-full text-lg md:text-xl font-medium placeholder-slate-400 bg-transparent border-none outline-none text-primary"
               />
+              {isLoading && (
+                <Loader2 className="w-5 h-5 animate-spin text-accent mr-2" />
+              )}
               {query && (
                 <button
-                  onClick={() => setQuery('')}
+                  onClick={() => {
+                    setQuery('');
+                    setActiveType('');
+                    setActiveCategory('');
+                  }}
                   className="text-slate-400 hover:text-slate-600 font-medium text-xs px-2 py-1 bg-slate-100 rounded"
                 >
                   Clear
@@ -206,15 +197,43 @@ export default function Search() {
             </div>
           </div>
 
+          {/* Filters */}
+          {facets.types?.length > 0 && query.length >= 2 && (
+            <div className="flex gap-2 mb-6 overflow-x-auto pb-2 custom-scrollbar">
+              <button
+                onClick={() => setActiveType('')}
+                className={`px-3 py-1 text-xs font-medium rounded-full whitespace-nowrap transition-colors ${!activeType ? 'bg-primary text-white' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}
+              >
+                All
+              </button>
+              {facets.types.map((facet) => (
+                <button
+                  key={facet.value}
+                  onClick={() => setActiveType(facet.value === activeType ? '' : facet.value)}
+                  className={`px-3 py-1 text-xs font-medium rounded-full whitespace-nowrap transition-colors ${activeType === facet.value ? 'bg-primary text-white' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}
+                >
+                  {getLabel(facet.value)} ({facet.count})
+                </button>
+              ))}
+            </div>
+          )}
+
           {/* Results Area */}
           <div className="w-full flex-1 min-h-0 overflow-y-auto pr-2 custom-scrollbar pb-10">
-            {query.trim() === '' ? (
+            {error && (
+              <div className="text-center text-red-500 py-4 bg-red-50 rounded-lg text-sm">
+                {error}
+                <br />
+                <button onClick={() => setQuery(query)} className="mt-2 text-xs font-bold underline">Retry</button>
+              </div>
+            )}
+            
+            {query.trim().length < 2 ? (
               <div className="flex flex-col items-center mt-4">
-                {/* Trending Keywords */}
                 <div className="w-full max-w-lg flex flex-col items-center">
                   <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4 block">Trending Searches</span>
                   <div className="flex flex-wrap justify-center gap-2">
-                    {['Ayurveda', 'Mental Health', 'Nutrition', 'Fitness', 'Sleep', 'Heart Health', 'Immunity'].map(keyword => (
+                    {['Ayurveda', 'Mental Health', 'Nutrition', 'Fitness', 'Sleep'].map(keyword => (
                       <button
                         key={keyword}
                         onClick={() => setQuery(keyword)}
@@ -226,35 +245,49 @@ export default function Search() {
                   </div>
                 </div>
               </div>
-            ) : allResults.length > 0 ? (
+            ) : results.length > 0 ? (
               <div className="flex flex-col gap-4">
                 <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
-                  Found {allResults.length} matching guides
+                  Found {results.length} matching results
                 </span>
 
-                {allResults.map((art) => (
+                {results.map((art) => (
                   <Link
-                    key={art.slug}
-                    href={`/blogs/${art.slug}`}
+                    key={art.id}
+                    href={art.url}
                     onClick={() => setIsOpen(false)}
                     className="flex items-center gap-4 bg-white border border-slate-100 rounded-2xl p-4 shadow-[0_4px_16px_rgba(0,0,0,0.01)] hover:border-accent/25 hover:shadow-[0_8px_24px_rgba(31,185,251,0.04)] hover:-translate-y-[2px] transition-all duration-300 no-underline group"
                   >
-                    <div className="relative w-16 h-16 rounded-xl overflow-hidden shrink-0 border border-slate-100">
-                      <img
-                        src={art.img}
-                        alt={art.title}
-                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                      />
-                    </div>
+                    {art.imageUrl ? (
+                      <div className="relative w-16 h-16 rounded-xl overflow-hidden shrink-0 border border-slate-100">
+                        <img
+                          src={art.imageUrl}
+                          alt={art.title}
+                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                      </div>
+                    ) : (
+                      <div className="relative w-16 h-16 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
+                         <SearchIcon className="w-6 h-6 text-slate-300" />
+                      </div>
+                    )}
+                    
                     <div className="flex-1 min-w-0">
-                      <span className="text-xs font-bold text-accent uppercase tracking-wider block mb-1">
-                        {art.category}
-                      </span>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-xs font-bold text-accent uppercase tracking-wider block">
+                          {getLabel(art.type)}
+                        </span>
+                        {art.category && (
+                          <span className="text-[10px] font-medium text-slate-400 px-2 py-0.5 bg-slate-50 rounded-full">
+                            {art.category}
+                          </span>
+                        )}
+                      </div>
                       <h4 className="font-heading font-bold text-base text-primary truncate group-hover:text-accent transition-colors leading-snug">
-                        {art.title}
+                        {renderHighlighted(art.highlightedTitle)}
                       </h4>
                       <p className="text-xs text-secondary truncate mt-0.5">
-                        {art.desc}
+                        {renderHighlighted(art.highlightedSummary)}
                       </p>
                     </div>
                     <span className="text-slate-300 group-hover:text-accent font-bold text-sm ml-2 transition-colors">
@@ -263,7 +296,7 @@ export default function Search() {
                   </Link>
                 ))}
               </div>
-            ) : (
+            ) : !isLoading ? (
               <div className="text-center text-secondary py-12 border border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
                 <p className="text-sm font-semibold">No results match your search term.</p>
                 <button
@@ -273,7 +306,7 @@ export default function Search() {
                   Clear search query
                 </button>
               </div>
-            )}
+            ) : null}
           </div>
         </div>
       </div>

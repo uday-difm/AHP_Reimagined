@@ -197,7 +197,6 @@ export async function POST(request) {
       }
     }
 
-    // Create magazine issue in Prisma
     const magazine = await prisma.magazine.create({
       data: {
         magazineId: magazine_id || "",
@@ -216,6 +215,11 @@ export async function POST(request) {
         status,
       },
     });
+
+    if (magazine.status === 1) {
+      const { queueUpsertContent } = await import("@/lib/queues/searchQueue");
+      await queueUpsertContent("magazine", magazine.id.toString());
+    }
 
     return NextResponse.json({ success: true, magazine });
   } catch (error) {

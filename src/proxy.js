@@ -62,6 +62,11 @@ export async function proxy(request) {
   requestHeaders.set("x-pathname", pathname);
   let response = NextResponse.next({ request: { headers: requestHeaders } });
 
+  // --------------- Private Services SEO Guard ---------------
+  if (pathname.startsWith("/services/private/")) {
+    response.headers.set("X-Robots-Tag", "noindex, nofollow, noarchive");
+  }
+
   // --------------- CORS handling (API routes only) ---------------
   if (pathname.startsWith("/api/")) {
     if (request.method === "OPTIONS") {

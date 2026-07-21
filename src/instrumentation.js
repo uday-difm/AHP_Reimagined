@@ -48,6 +48,10 @@ export async function register() {
         startBackupWorker();
         console.log("[Startup] Backup worker started in-process.");
 
+        const { startSearchWorker } = await import("./lib/queues/searchWorker.js");
+        startSearchWorker();
+        console.log("[Startup] Search worker started in-process.");
+
         // Schedule automated daily + weekly backups for all active sites
         const { scheduleAutomatedBackups } = await import("./lib/queues/backupQueue.js");
         const { default: prisma } = await import("./lib/prisma.js");

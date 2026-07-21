@@ -1271,6 +1271,11 @@ export default function SettingsEditor({ siteId, initialSettings }) {
                 >
                   Custom Robots.txt Content
                 </label>
+                <div className="mb-2 p-3 bg-amber-50 border border-amber-200 rounded-md">
+                  <p className="text-xs text-amber-800">
+                    <strong>Note:</strong> If you use a custom robots.txt, you are responsible for adding <code>Disallow: /services/private/</code> to prevent search engines from indexing private service pages.
+                  </p>
+                </div>
                 <textarea
                   id="robotsTxt"
                   name="robotsTxt"

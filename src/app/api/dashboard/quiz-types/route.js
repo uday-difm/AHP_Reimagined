@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/requireAuth";
+import { queueUpsertContent } from "@/lib/queues/searchQueue";
 
 export const dynamic = "force-dynamic";
 
@@ -51,7 +52,9 @@ export async function POST(req) {
       },
     });
 
-    return NextResponse.json(qt, { status: 201 });
+    await queueUpsertContent("quiz", qt.id.toString());
+
+    return NextResponse.json({ success: true, data: qt }, { status: 201 });
   } catch (err) {
     if (err.code === "P2002")
       return NextResponse.json({ error: "A quiz type with this slug already exists." }, { status: 409 });

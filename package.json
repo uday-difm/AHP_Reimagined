@@ -12,7 +12,9 @@
     "db:seed": "node prisma/seed.js",
     "db:migrate": "npx prisma migrate deploy --schema=prisma/schema.prisma",
     "postinstall": "prisma generate --schema=prisma/schema.prisma",
-    "ngrok": "npx ngrok http 3000"
+    "ngrok": "npx ngrok http 3000",
+    "search:reindex": "node scripts/reindex-search.js",
+    "search:health": "node scripts/check-typesense.js"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1085.0",
@@ -65,6 +67,7 @@
     "speakeasy": "^2.0.0",
     "swiper": "^14.0.2",
     "three": "^0.185.1",
+    "typesense": "^3.0.6",
     "zod": "^4.4.3"
   },
   "devDependencies": {
