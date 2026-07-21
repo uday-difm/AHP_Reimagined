@@ -18,12 +18,12 @@ export default function Button({
 
   // Variant mappings matching AHP brand colors and shadows
   const variants = {
-    primary: 'bg-[#0f7c85] hover:bg-[#0c6b73] text-white shadow-[0_8px_24px_rgba(15,124,133,0.2)] hover:shadow-[0_12px_32px_rgba(15,124,133,0.3)] hover:-translate-y-0.5',
-    secondary: 'bg-[#27ae60] hover:bg-[#219653] text-white shadow-[0_8px_24px_rgba(39,174,96,0.2)] hover:shadow-[0_12px_32px_rgba(39,174,96,0.3)] hover:-translate-y-0.5',
-    outline: 'bg-transparent border border-[#0f7c85]/30 text-[#0f7c85] hover:bg-[#0f7c85]/5 hover:border-[#0f7c85] hover:-translate-y-0.5',
-    white: 'bg-white hover:bg-slate-50 text-[#0f7c85] border border-slate-200/80 hover:-translate-y-0.5 shadow-sm',
-    glass: 'bg-white/80 hover:bg-white text-[#0f7c85] border border-[#0f7c85]/10 backdrop-blur-sm hover:-translate-y-0.5 shadow-sm',
-    transparent: 'bg-white/10 hover:bg-white/20 border border-white/20 text-white hover:-translate-y-0.5'
+    primary: 'bg-[#0f7c85] hover:bg-[#0c6b73] text-white shadow-[0_8px_24px_rgba(15,124,133,0.2)] hover:shadow-[0_12px_32px_rgba(15,124,133,0.4)] hover:-translate-y-1 hover:scale-105',
+    secondary: 'bg-[#27ae60] hover:bg-[#219653] text-white shadow-[0_8px_24px_rgba(39,174,96,0.2)] hover:shadow-[0_12px_32px_rgba(39,174,96,0.4)] hover:-translate-y-1 hover:scale-105',
+    outline: 'bg-transparent border border-[#0f7c85]/30 text-[#0f7c85] hover:bg-[#0f7c85]/5 hover:border-[#0f7c85] hover:-translate-y-1 hover:scale-105',
+    white: 'bg-white hover:bg-slate-50 text-[#0f7c85] border border-slate-200/80 hover:-translate-y-1 hover:scale-105 shadow-sm hover:shadow-md',
+    glass: 'bg-white/80 hover:bg-white text-[#0f7c85] border border-[#0f7c85]/10 backdrop-blur-sm hover:-translate-y-1 hover:scale-105 shadow-sm hover:shadow-md',
+    transparent: 'bg-white/10 hover:bg-white/20 border border-white/20 text-white hover:-translate-y-1 hover:scale-105'
   };
 
   const finalClasses = `${baseClasses} ${variants[variant] || variants.primary} ${className}`;

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Loader2, Search, CheckCircle, XCircle, Trash2, ExternalLink } from "lucide-react";
+import { Loader2, Search, CheckCircle, XCircle, Trash2, ExternalLink, Star, Plus } from "lucide-react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 
@@ -13,6 +13,8 @@ export default function RecipesDashboard() {
   const [adminLoading, setAdminLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("PENDING");
+  const [healthyBiteId, setHealthyBiteId] = useState(null);
+  const siteId = typeof window !== "undefined" ? localStorage.getItem("x-site-id") : null;
 
   const fetchAdminRecipes = async () => {
     setAdminLoading(true);
@@ -20,6 +22,17 @@ export default function RecipesDashboard() {
       const res = await fetch("/api/admin/recipes", { cache: 'no-store' });
       const data = await res.json();
       if (!data.error) setAdminRecipes(data.data.recipes || []);
+      
+      try {
+        const hbRes = await fetch("/api/dashboard/settings", { headers: { "x-site-id": siteId || "" } });
+        const hbData = await hbRes.json();
+        const hbSettings = hbData.data?.websiteSettings || hbData.websiteSettings || {};
+        const hbLink = hbSettings.wellnessBanner?.healthyBite?.recipeLink || "";
+        if (hbLink.startsWith("/recipes/")) {
+          setHealthyBiteId(hbLink.replace("/recipes/", ""));
+        }
+      } catch(e) {}
+      
     } catch (err) {
       console.error(err);
     } finally {
@@ -62,6 +75,63 @@ export default function RecipesDashboard() {
     }
   };
 
+  const setAsHealthyBite = async (recipe) => {
+    if (!confirm(`Set "${recipe.title}" as the Healthy Bite of the Day?`)) return;
+    try {
+      const fetchRes = await fetch("/api/dashboard/settings", { headers: { "x-site-id": siteId } });
+      const resData = await fetchRes.json();
+      const fullSettings = resData.data?.websiteSettings || resData.websiteSettings || {};
+      
+      const tagsString = recipe.tags && recipe.tags.length > 0 ? recipe.tags.map(t => t.name).join(", ") : "High in Protein, Gut Friendly, Quick & Easy";
+      const pointsArray = tagsString.split(",").map(t => t.trim()).filter(Boolean);
+
+      const updatedSettings = {
+        ...fullSettings,
+        wellnessBanner: {
+          ...(fullSettings.wellnessBanner || { enabled: true }),
+          healthyBite: {
+            title: "Healthy Bite of the Day",
+            recipeName: recipe.title,
+            description: recipe.description || "",
+            image: recipe.imageUrl || "",
+            difficulty: recipe.difficulty || "Easy",
+            category: recipe.category || "General",
+            recipeLink: `/recipes/${recipe.id}`,
+            time: recipe.cookingTime ? `${recipe.cookingTime} mins` : "15 mins",
+            calories: recipe.calories ? `${recipe.calories} kcal` : "320 kcal",
+            protein: recipe.nutrition?.protein || "",
+            carbs: recipe.nutrition?.carbs || "",
+            fat: recipe.nutrition?.fat || "",
+            fiber: recipe.nutrition?.fiber || "",
+            points: pointsArray,
+            contributorName: recipe.contributor?.name || "Unknown User",
+            contributorRole: "Community Member",
+            contributorAvatar: "",
+            ingredients: recipe.ingredients || [""],
+            instructions: recipe.steps || [""],
+            allergens: recipe.allergens || [""],
+            relatedRecipes: "",
+            displayEnabled: true,
+            showBadges: true
+          }
+        }
+      };
+
+      const saveRes = await fetch("/api/dashboard/settings", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", "x-site-id": siteId },
+        body: JSON.stringify(updatedSettings)
+      });
+      
+      if (!saveRes.ok) throw new Error("Failed to save settings");
+      setHealthyBiteId(recipe.id);
+      alert("Healthy Bite of the Day updated successfully!");
+    } catch (err) {
+      console.error(err);
+      alert("Error setting Healthy Bite of the Day.");
+    }
+  };
+
   if (!isAdminOrEditor) {
     return (
       <div className="p-6">
@@ -72,6 +142,9 @@ export default function RecipesDashboard() {
   }
 
   const filteredAdmin = adminRecipes.filter(r => {
+    if (statusFilter === "HEALTHY BITE") {
+      return r.id === healthyBiteId && r.title.toLowerCase().includes(search.toLowerCase());
+    }
     const matchStatus = statusFilter === "ALL" || r.status === statusFilter;
     const matchSearch = r.title.toLowerCase().includes(search.toLowerCase());
     return matchStatus && matchSearch;
@@ -84,12 +157,16 @@ export default function RecipesDashboard() {
           <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Recipes Moderation</h1>
           <p className="text-slate-500 text-sm">Review and moderate community recipes</p>
         </div>
+        <Link href="/recipes/submit" className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg font-bold text-sm flex items-center gap-2 transition-colors mt-4 sm:mt-0">
+          <Plus size={16} />
+          Add Recipe
+        </Link>
       </div>
 
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row gap-4 items-center justify-between bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700">
           <div className="flex items-center gap-2">
-            {["PENDING", "APPROVED", "REJECTED", "ALL"].map(status => (
+            {["PENDING", "APPROVED", "REJECTED", "ALL", "HEALTHY BITE"].map(status => (
               <button
                 key={status}
                 onClick={() => setStatusFilter(status)}
@@ -158,6 +235,11 @@ export default function RecipesDashboard() {
                       </td>
                       <td className="p-4">
                         <div className="flex items-center justify-end gap-2">
+                          {recipe.status === 'APPROVED' && (
+                            <button onClick={() => setAsHealthyBite(recipe)} className="p-2 text-amber-500 hover:bg-amber-50 rounded-lg transition-colors" title="Set as Healthy Bite">
+                              <Star size={18} />
+                            </button>
+                          )}
                           {recipe.status !== 'APPROVED' && (
                             <button onClick={() => updateStatus(recipe.id, 'APPROVED')} className="p-2 text-emerald-500 hover:bg-emerald-50 rounded-lg transition-colors" title="Approve">
                               <CheckCircle size={18} />

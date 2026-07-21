@@ -1111,6 +1111,7 @@ model Magazine {
   slug               String    @unique @map("magazine_slug") @db.VarChar(191)
   status             Int       @default(1)
   timestamp          DateTime  @default(now()) @map("magazine_timestamp")
+  publisherSocials   Json?     @map("publisher_socials")
 
   @@map("magazines")
 }

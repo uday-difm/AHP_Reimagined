@@ -3,6 +3,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 import Button from '@/components/Button';
 import AdSlot from '@/components/AdSlot';
 import Book from './Book';
@@ -127,7 +128,13 @@ export default function ArticlesGrid() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch">
 
           {/* Left Column — 3D Book & Title (4 cols) */}
-          <div className="lg:col-span-4 flex flex-col items-center text-center lg:items-start lg:text-left reveal-slide">
+          <motion.div 
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="lg:col-span-4 flex flex-col items-center text-center lg:items-start lg:text-left"
+          >
             <span className="section-tag text-xs font-extrabold tracking-[3px] text-accent uppercase mb-2 bg-[#0f7c85]/10 px-3.5 py-1.5 rounded-full w-max">
               DIGITAL ISSUES
             </span>
@@ -167,11 +174,17 @@ export default function ArticlesGrid() {
                 Explore Archive
               </Button>
             </div>
-          </div>
+          </motion.div>
 
           {/* Middle Column — Editorial Greeting & Spread Stack (5 cols) */}
-          <div className="lg:col-span-5 reveal-fade flex flex-col">
-            <div className="bg-bg-light rounded-[32px] p-5 sm:p-8 border border-slate-200/60 shadow-[0_12px_40px_rgba(0,0,0,0.02)] flex flex-col gap-8 h-full justify-between hover:border-[#0f7c85]/20 transition-all duration-300">
+          <motion.div 
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+            className="lg:col-span-5 flex flex-col"
+          >
+            <div className="bg-bg-light rounded-[32px] p-5 sm:p-8 border border-slate-200/60 shadow-[0_12px_40px_rgba(0,0,0,0.02)] flex flex-col gap-8 h-full justify-between hover:border-[#0f7c85]/20 hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
 
               {/* Header Details */}
               <div className="flex flex-col gap-4">
@@ -245,12 +258,18 @@ export default function ArticlesGrid() {
               </div>
 
             </div>
-          </div>
+          </motion.div>
 
           {/* Right Column — Ad Card (3 cols) */}
-          <div className="lg:col-span-3 reveal-fade h-full flex flex-col justify-stretch">
+          <motion.div 
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
+            className="lg:col-span-3 h-full flex flex-col justify-stretch"
+          >
             <AdSlot zone="homepage-hero-bottom" layout="card" />
-          </div>
+          </motion.div>
 
         </div>
       </div>

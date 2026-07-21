@@ -136,16 +136,32 @@ export default function WellnessShowcase({ content }) {
   }, []);
 
   const [latestRecipe, setLatestRecipe] = useState(null);
+  const [approvedRecipes, setApprovedRecipes] = useState([]);
+  const [showMoreRecipes, setShowMoreRecipes] = useState(false);
+  const [quote, setQuote] = useState({ text: 'Loading healthy inspiration...', author: '' });
 
   useEffect(() => {
     fetch('/api/recipes?status=Approved')
       .then(res => res.ok ? res.json() : null)
       .then(data => {
         if (data?.data?.recipes?.length > 0) {
+          setApprovedRecipes(data.data.recipes);
           setLatestRecipe(data.data.recipes[0]);
         }
       })
-      .catch(err => console.error('Error loading community recipe:', err));
+      .catch(err => console.error('Error loading community recipes:', err));
+
+    fetch('https://dummyjson.com/quotes/random')
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.quote) {
+          setQuote({ text: data.quote, author: data.author });
+        }
+      })
+      .catch(err => {
+        console.error("Error fetching quote:", err);
+        setQuote({ text: 'Let food be thy medicine and medicine be thy food.', author: 'Hippocrates' });
+      });
   }, []);
 
   // Merge dynamic content with defaults
@@ -167,15 +183,15 @@ export default function WellnessShowcase({ content }) {
     ...content,
     quickCards: content?.quickCards?.length > 0 ? content.quickCards : DEFAULT_CONTENT.quickCards,
     snapshot: { ...DEFAULT_CONTENT.snapshot, ...content?.snapshot },
-    healthyBite: latestRecipe ? {
+    healthyBite: content?.healthyBite?.recipeName ? content.healthyBite : latestRecipe ? {
       title: 'Healthy Bite of the Day',
       recipeName: latestRecipe.title,
-      image: latestRecipe.imageUrl || content?.healthyBite?.image || DEFAULT_CONTENT.healthyBite.image,
+      image: latestRecipe.imageUrl || DEFAULT_CONTENT.healthyBite.image,
       points: latestRecipe.tags && latestRecipe.tags.length > 0 ? latestRecipe.tags.map(t => t.name).slice(0, 3) : ['High in Protein', 'Gut Friendly', 'Quick & Easy'],
       recipeLink: `/recipes/${latestRecipe.id}`,
       time: latestRecipe.cookingTime ? `${latestRecipe.cookingTime} mins` : '15 mins',
       calories: latestRecipe.calories ? `${latestRecipe.calories} kcal` : '320 kcal',
-    } : { ...DEFAULT_CONTENT.healthyBite, ...content?.healthyBite },
+    } : DEFAULT_CONTENT.healthyBite,
     wellnessTip: { ...DEFAULT_CONTENT.wellnessTip, ...content?.wellnessTip },
     popularQuizzes: displayQuizzes,
     progressTracker: { ...DEFAULT_CONTENT.progressTracker, ...content?.progressTracker },
@@ -216,6 +232,7 @@ export default function WellnessShowcase({ content }) {
             alt="Wellness Background"
             className="absolute inset-0 w-full h-full object-cover object-[right_25%]"
           />
+          <div className="absolute inset-0 bg-gradient-to-b from-white/95 via-white/80 to-white/40 md:hidden pointer-events-none" />
 
           {/* Foreground text content */}
           <div className="relative z-10 px-8 py-16 md:px-12 lg:px-16 md:py-20 max-w-2xl space-y-6 reveal-slide">
@@ -263,7 +280,7 @@ export default function WellnessShowcase({ content }) {
             <h3 className="text-2xl font-extrabold text-[#1a1c29] tracking-tight">Community Kitchen</h3>
             <p className="text-sm text-slate-500 mt-1">Discover, share, and enjoy healthy recipes from the community.</p>
           </div>
-          <Link href="/dashboard/recipes/submit" className="bg-[#ff3b6a] hover:bg-[#e02d58] text-white font-bold text-sm py-2.5 px-6 rounded-full transition-all shadow-md flex items-center gap-2 hover:-translate-y-0.5">
+          <Link href="/recipes/submit" className="bg-[#ff3b6a] hover:bg-[#e02d58] text-white font-bold text-sm py-2.5 px-6 rounded-full transition-all shadow-md flex items-center gap-2 hover:-translate-y-0.5">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
             Add Your Recipe
           </Link>
@@ -299,9 +316,9 @@ export default function WellnessShowcase({ content }) {
               </h3>
 
               <div className="flex flex-wrap gap-2 mb-6">
-                {(c.healthyBite.points || []).map((pt, i) => (
-                  <span key={i} className="inline-flex items-center gap-1.5 bg-[#0f7c85]/10 text-[#0f7c85] text-[11px] font-extrabold px-3 py-1 rounded-full border border-[#0f7c85]/20 shadow-sm">
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                {(Array.isArray(c.healthyBite.points) ? c.healthyBite.points : typeof c.healthyBite.points === 'string' ? c.healthyBite.points.split(',').map(p => p.trim()) : []).map((pt, i) => (
+                  <span key={i} className="inline-flex items-center gap-1.5 bg-[#0f7c85]/10 text-[#0f7c85] text-[11px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"></path></svg>
                     {pt}
                   </span>
                 ))}
@@ -327,35 +344,81 @@ export default function WellnessShowcase({ content }) {
             </div>
           </div>
 
-          {/* Quick Quiz Cards Column */}
-          <div className="flex flex-col gap-5 justify-between reveal-slide min-w-0">
-            {c.quickCards.map((item, idx) => (
-              <Link
-                key={idx}
-                href={item.link || '#'}
-                className="bg-white rounded-[24px] p-5 flex items-center justify-between gap-5 border border-slate-100 hover:border-[#0f7c85]/20 hover:shadow-[0_8px_30px_rgb(15,124,133,0.08)] hover:-translate-y-1 transition-all duration-300 group no-underline text-left flex-1 relative overflow-hidden"
+          {/* View More Recipes Dropdown Column */}
+          <div className="flex flex-col justify-start reveal-slide min-w-0 h-full">
+            <div className="bg-white rounded-[24px] border border-slate-100 p-5 shadow-[0_8px_30px_rgb(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] transition-all">
+              <button 
+                onClick={() => setShowMoreRecipes(!showMoreRecipes)}
+                className="w-full flex items-center justify-between gap-4 text-left group"
               >
-                {/* Decorative hover accent line */}
-                <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#0f7c85] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                
-                <div className="flex items-center gap-4 flex-1 pl-1">
-                  <div className="w-12 h-12 rounded-[16px] bg-gradient-to-br from-[#e6f2f1] to-[#d0e8e6] text-[#0f7c85] flex items-center justify-center shrink-0 shadow-inner group-hover:scale-110 transition-transform duration-300">
-                    <QuizIcon name={item.icon} className="w-5 h-5" />
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-[16px] bg-gradient-to-br from-[#ffe8ef] to-[#ffd1de] text-[#ff3b6a] flex items-center justify-center shrink-0 shadow-inner group-hover:scale-110 transition-transform duration-300">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg>
                   </div>
-                  <div className="flex flex-col gap-1 min-w-0">
-                    <span className="text-[#0f7c85] font-extrabold text-[10px] uppercase tracking-widest truncate">{item.tag}</span>
-                    <p className="text-slate-800 font-heading font-extrabold text-[14px] leading-snug line-clamp-2">{item.desc}</p>
+                  <div>
+                    <h4 className="text-slate-800 font-heading font-extrabold text-[16px] leading-snug group-hover:text-[#ff3b6a] transition-colors">View More Recipes</h4>
+                    <p className="text-[#ff3b6a] font-extrabold text-[10px] uppercase tracking-widest mt-0.5">Community Approved</p>
                   </div>
                 </div>
-                
-                <div className="w-10 h-10 bg-slate-50 group-hover:bg-[#0f7c85] text-slate-400 group-hover:text-white rounded-full flex items-center justify-center shrink-0 border border-slate-100 group-hover:border-[#0f7c85] transition-all duration-300 group-hover:shadow-md">
-                  <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform duration-300" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                  </svg>
+                <div className={`w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 transition-transform duration-300 ${showMoreRecipes ? 'rotate-180 bg-[#ff3b6a]/10 text-[#ff3b6a]' : 'group-hover:bg-slate-100'}`}>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
                 </div>
-              </Link>
-            ))}
+              </button>
+
+              {/* Dropdown Content */}
+              <div className={`transition-all duration-300 ease-in-out overflow-hidden ${showMoreRecipes ? 'max-h-[300px] mt-4 opacity-100' : 'max-h-0 opacity-0'}`}>
+                <div className="pt-3 border-t border-slate-100 flex flex-col gap-2 overflow-y-auto max-h-[250px] pr-2 scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent">
+                  {approvedRecipes.slice(1).length > 0 ? approvedRecipes.slice(1).map((recipe, idx) => (
+                    <Link
+                      key={idx}
+                      href={`/recipes/${recipe.id}`}
+                      className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-100 transition-all group/item"
+                    >
+                      <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-slate-100 shadow-inner">
+                        {recipe.imageUrl ? (
+                          <img src={recipe.imageUrl} alt={recipe.title} className="w-full h-full object-cover group-hover/item:scale-110 transition-transform duration-500" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-slate-400">🍲</div>
+                        )}
+                      </div>
+                      <div className="flex flex-col min-w-0 justify-center">
+                        <span className="text-sm font-bold text-slate-800 truncate group-hover/item:text-[#0f7c85] transition-colors">{recipe.title}</span>
+                        <div className="flex items-center gap-2 mt-0.5">
+                          <span className="text-[10px] font-bold text-slate-400 uppercase flex items-center gap-1"><QuizIcon name="⏱️" className="w-3 h-3" /> {recipe.cookingTime}m</span>
+                          <span className="text-[10px] text-slate-300">•</span>
+                          <span className="text-[10px] font-bold text-slate-400 uppercase">{recipe.difficulty}</span>
+                        </div>
+                      </div>
+                      <div className="ml-auto opacity-0 group-hover/item:opacity-100 transition-opacity -translate-x-2 group-hover/item:translate-x-0 duration-300">
+                        <svg className="w-4 h-4 text-[#0f7c85]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+                      </div>
+                    </Link>
+                  )) : (
+                     <div className="text-sm font-medium text-slate-500 p-6 text-center bg-slate-50 rounded-xl border border-slate-100 border-dashed">
+                        More recipes coming soon!<br/>
+                        <span className="text-[11px] text-slate-400 mt-1 block">Share yours today!</span>
+                     </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Quote Block below recipes */}
+            <div className="mt-4 flex-1 bg-gradient-to-br from-emerald-500/10 to-teal-500/10 border border-emerald-500/20 rounded-[24px] p-6 shadow-sm relative overflow-hidden flex flex-col justify-center">
+              <div className="absolute top-0 right-0 p-4 opacity-10">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor"><path d="M14.017 21v-7.391c0-5.714 4.076-7.857 7.747-8.109l.236 1.45c-2.333.256-4.664 2.15-5.042 5.05H22V21h-7.983zm-11 0v-7.391c0-5.714 4.076-7.857 7.747-8.109l.236 1.45c-2.333.256-4.665 2.15-5.042 5.05H11V21H3.017z"/></svg>
+              </div>
+              <div className="relative z-10">
+                <h4 className="text-emerald-600 font-extrabold text-[10px] uppercase tracking-widest mb-3 flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Healthy Inspiration
+                </h4>
+                <p className="text-slate-700 italic font-medium text-[14px] leading-relaxed mb-3">&quot;{quote.text}&quot;</p>
+                <p className="text-emerald-700/80 font-bold text-xs">— {quote.author || "Unknown"}</p>
+              </div>
+            </div>
+
           </div>
+
         </div>
 
       </div>

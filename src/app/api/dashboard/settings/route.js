@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { checkSitePermission } from "@/lib/apiAuth";
 import { settingsService } from "@/services/settings.service";
 import { handleApiError, apiSuccess } from "@/core/errors";
@@ -31,6 +32,9 @@ export async function PUT(req) {
       body,
       auth.user.id
     );
+
+    // Revalidate the homepage to reflect changes immediately
+    revalidatePath("/");
 
     return NextResponse.json(apiSuccess({ websiteSettings: result }));
   } catch (err) {
