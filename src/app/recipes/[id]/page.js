@@ -137,17 +137,17 @@ export default function RecipeDetail({ params }) {
               {recipe.description || "A delicious, healthy, and easy to make recipe that is perfect for any time of the day. Packed with nutrients and flavor."}
             </p>
 
-            <div className="flex items-center justify-between text-center bg-slate-50 rounded-2xl p-4 border border-slate-100">
-              <div className="flex flex-col flex-1 border-r border-slate-200 last:border-0">
-                <span className="text-[#0f7c85] text-xl font-extrabold">{recipe.cookingTime || "25"}</span> 
+            <div className="flex items-center justify-between text-center bg-slate-50 rounded-2xl py-4 px-2 sm:px-6 border border-slate-100">
+              <div className="flex flex-col flex-1 border-r border-slate-200 px-2 sm:px-4">
+                <span className="text-[#0f7c85] text-lg font-extrabold">{recipe.cookingTime || "25"}</span> 
                 <span className="text-[9px] font-bold uppercase tracking-widest text-slate-400 mt-1">MINS</span>
               </div>
-              <div className="flex flex-col flex-1 border-r border-slate-200 last:border-0">
-                <span className="text-[#0f7c85] text-xl font-extrabold capitalize">{recipe.difficulty || "Easy"}</span> 
+              <div className="flex flex-col flex-auto border-r border-slate-200 px-2 sm:px-4">
+                <span className="text-[#0f7c85] text-lg font-extrabold capitalize">{recipe.difficulty || "Easy"}</span> 
                 <span className="text-[9px] font-bold uppercase tracking-widest text-slate-400 mt-1">DIFFICULTY</span>
               </div>
-              <div className="flex flex-col flex-1">
-                <span className="text-[#0f7c85] text-xl font-extrabold">{recipe.calories || "320"}</span> 
+              <div className="flex flex-col flex-1 px-2 sm:px-4">
+                <span className="text-[#0f7c85] text-lg font-extrabold">{recipe.calories || "320"}</span> 
                 <span className="text-[9px] font-bold uppercase tracking-widest text-slate-400 mt-1">KCAL</span>
               </div>
             </div>

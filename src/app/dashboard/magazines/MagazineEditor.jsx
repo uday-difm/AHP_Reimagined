@@ -36,6 +36,12 @@ export default function MagazineEditor({ initialData = null }) {
     MagCloudLink: initialData?.magCloudLink || "",
     magazine_slug: initialData?.slug || "",
     status: initialData ? initialData.status : 1, // Default to Published
+    youtube: initialData?.publisherSocials?.youtube || "",
+    instagram: initialData?.publisherSocials?.instagram || "",
+    facebook: initialData?.publisherSocials?.facebook || "",
+    pinterest: initialData?.publisherSocials?.pinterest || "",
+    linkedin: initialData?.publisherSocials?.linkedin || "",
+    twitter: initialData?.publisherSocials?.twitter || "",
   });
 
   const editorConfig = {
@@ -103,6 +109,14 @@ export default function MagazineEditor({ initialData = null }) {
     formData.append("MagCloudLink", values.MagCloudLink);
     formData.append("magazine_slug", values.magazine_slug);
     formData.append("status", values.status.toString());
+    formData.append("publisherSocials", JSON.stringify({
+      youtube: values.youtube || "",
+      instagram: values.instagram || "",
+      facebook: values.facebook || "",
+      pinterest: values.pinterest || "",
+      linkedin: values.linkedin || "",
+      twitter: values.twitter || ""
+    }));
 
     if (coverUrl) {
       formData.append("magazine_cover_image", coverUrl);
@@ -255,6 +269,75 @@ export default function MagazineEditor({ initialData = null }) {
                 }}
                 onBlur={(val) => setValues((prev) => ({ ...prev, magazine_introduction: val }))}
               />
+            </div>
+          </div>
+
+          {/* Publisher Social Links */}
+          <div className="w-full space-y-4">
+            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
+              Publisher Social Links
+            </label>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-[10px] font-medium text-slate-400 uppercase tracking-wider mb-1">YouTube</label>
+                <input
+                  type="url"
+                  value={values.youtube}
+                  onChange={(e) => setValues({ ...values, youtube: e.target.value })}
+                  placeholder="https://youtube.com/..."
+                  className="w-full text-xs rounded-lg border border-slate-200 dark:border-slate-800 py-2 px-3 bg-transparent focus:ring-2 focus:ring-indigo-500 outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-medium text-slate-400 uppercase tracking-wider mb-1">Instagram</label>
+                <input
+                  type="url"
+                  value={values.instagram}
+                  onChange={(e) => setValues({ ...values, instagram: e.target.value })}
+                  placeholder="https://instagram.com/..."
+                  className="w-full text-xs rounded-lg border border-slate-200 dark:border-slate-800 py-2 px-3 bg-transparent focus:ring-2 focus:ring-indigo-500 outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-medium text-slate-400 uppercase tracking-wider mb-1">Facebook</label>
+                <input
+                  type="url"
+                  value={values.facebook}
+                  onChange={(e) => setValues({ ...values, facebook: e.target.value })}
+                  placeholder="https://facebook.com/..."
+                  className="w-full text-xs rounded-lg border border-slate-200 dark:border-slate-800 py-2 px-3 bg-transparent focus:ring-2 focus:ring-indigo-500 outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-medium text-slate-400 uppercase tracking-wider mb-1">Pinterest</label>
+                <input
+                  type="url"
+                  value={values.pinterest}
+                  onChange={(e) => setValues({ ...values, pinterest: e.target.value })}
+                  placeholder="https://pinterest.com/..."
+                  className="w-full text-xs rounded-lg border border-slate-200 dark:border-slate-800 py-2 px-3 bg-transparent focus:ring-2 focus:ring-indigo-500 outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-medium text-slate-400 uppercase tracking-wider mb-1">LinkedIn</label>
+                <input
+                  type="url"
+                  value={values.linkedin}
+                  onChange={(e) => setValues({ ...values, linkedin: e.target.value })}
+                  placeholder="https://linkedin.com/..."
+                  className="w-full text-xs rounded-lg border border-slate-200 dark:border-slate-800 py-2 px-3 bg-transparent focus:ring-2 focus:ring-indigo-500 outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-medium text-slate-400 uppercase tracking-wider mb-1">Twitter</label>
+                <input
+                  type="url"
+                  value={values.twitter}
+                  onChange={(e) => setValues({ ...values, twitter: e.target.value })}
+                  placeholder="https://twitter.com/..."
+                  className="w-full text-xs rounded-lg border border-slate-200 dark:border-slate-800 py-2 px-3 bg-transparent focus:ring-2 focus:ring-indigo-500 outline-none"
+                />
+              </div>
             </div>
           </div>
         </div>

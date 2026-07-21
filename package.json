@@ -41,6 +41,7 @@
     "bullmq": "^5.80.5",
     "cloudinary": "^2.10.0",
     "dns": "^0.2.2",
+    "framer-motion": "^12.42.2",
     "ioredis": "^5.11.1",
     "isomorphic-dompurify": "^3.18.0",
     "jodit": "^4.12.32",

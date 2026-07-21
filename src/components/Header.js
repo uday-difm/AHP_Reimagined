@@ -62,7 +62,7 @@ function NotificationBell() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-3 w-84 bg-white rounded-2xl border border-[#E6EEF0] shadow-[0_12px_35px_rgba(0,0,0,.08)] z-[10001] overflow-hidden" style={{ minWidth: '320px' }}>
+        <div className="absolute right-[-50px] sm:right-0 mt-3 w-[290px] sm:w-[340px] bg-white rounded-2xl border border-[#E6EEF0] shadow-[0_12px_35px_rgba(0,0,0,.08)] z-[10001] overflow-hidden">
           {/* Header */}
           <div className="px-4 py-3 border-b border-[#E6EEF0] flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -289,15 +289,16 @@ export default function Header() {
         style={bgStyle}
       >
         <div className="header-container flex justify-between items-center w-full mx-auto px-6 md:px-10">
-          <a href="/" className="logo-link flex items-center">
+          <a href="/" className="logo-link flex items-center shrink-0 min-w-[140px] md:min-w-[180px]">
             {logoType === 'image' ? (
               <img
                 src={logoUrl}
                 alt={`${logoText} Logo`}
                 width={logoWidth}
                 height={logoHeight}
+                suppressHydrationWarning
                 className="logo-img w-auto object-contain block transition-transform duration-300 hover:scale-[1.03]"
-                style={{ maxHeight: heightClass === 'h-16' ? '32px' : heightClass === 'h-24' ? '64px' : '48px' }}
+                style={{ maxHeight: heightClass === 'h-16' ? '36px' : heightClass === 'h-24' ? '68px' : '52px' }}
               />
             ) : (
               <span className="font-heading font-black text-xl text-primary hover:text-accent transition-colors">
@@ -497,190 +498,76 @@ export default function Header() {
             )}
           </div>
         </div>
-      </header>
 
-      {/* Universal Hamburger Menu Overlay */}
-      {mobileMenuEnabled && (
-        <>
-          {mobileStyle === 'dropdown' ? (
-            /* Top Overlay Dropdown */
-            <div
-              className={`absolute left-0 w-full bg-white/98 backdrop-blur-2xl border-b border-[#E6EEF0] shadow-2xl z-[8999] flex flex-col transition-all duration-300 ease-in-out transform origin-top`}
-              style={{
-                top: `calc(${heightClass === 'h-16' ? '64px' : heightClass === 'h-24' ? '96px' : '80px'} + ${topOffset})`,
-                opacity: menuOpen ? 1 : 0,
-                transform: menuOpen ? 'scaleY(1)' : 'scaleY(0)',
-                visibility: menuOpen ? 'visible' : 'hidden'
-              }}
-            >
-              <div className="py-8 px-6 overflow-y-auto max-h-[70vh]">
-                <nav className="flex flex-col gap-3">
-                  {displayItems.map((item, idx) => {
-                    const hasChildren = Array.isArray(item.children) && item.children.length > 0;
-                    if (hasChildren) {
-                      const isExpanded = expandedItems[item.label];
-                      return (
-                        <div key={idx} className="w-full flex flex-col">
-                          <button
-                            onClick={() => toggleExpand(item.label)}
-                            className="w-full flex justify-between items-center font-heading font-extrabold text-xl text-primary hover:text-accent py-2 border-none bg-transparent cursor-pointer text-left"
-                          >
-                            <span>{item.label}</span>
-                            <ChevronDown className={`w-5 h-5 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
-                          </button>
-                          {isExpanded && (
-                            <div className="pl-4 flex flex-col gap-2 mt-1 border-l border-[#E6EEF0]">
-                              {item.children.map((child, cIdx) => (
-                                <a
-                                  key={cIdx}
-                                  href={child.url}
-                                  onClick={() => setMenuOpen(false)}
-                                  className="font-heading font-bold text-base text-secondary hover:text-accent py-1 block text-left"
-                                >
-                                  {child.label}
-                                </a>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      );
-                    }
-
-                    return (
-                      <a
-                        key={idx}
-                        href={item.url}
-                        onClick={() => setMenuOpen(false)}
-                        className="font-heading font-extrabold text-xl text-primary hover:text-accent py-2 transition-all block text-left"
-                      >
-                        {item.label}
-                      </a>
-                    );
-                  })}
-                  {isAuthenticated ? (
-                    <>
-                      <a
-                        href="/quizzes/dashboard"
-                        onClick={() => setMenuOpen(false)}
-                        className="font-heading font-extrabold text-xl text-primary hover:text-accent py-2 transition-all block text-left"
-                      >
-                        Dashboard
-                      </a>
-                      <button
-                        onClick={() => { setMenuOpen(false); signOut({ callbackUrl: '/' }); }}
-                        className="font-heading font-extrabold text-xl text-red-500 hover:text-red-600 py-2 transition-all text-left border-none bg-transparent cursor-pointer"
-                      >
-                        Logout
-                      </button>
-                    </>
-                  ) : (
-                    <a
-                      href="/login"
-                      onClick={() => setMenuOpen(false)}
-                      className="font-heading font-extrabold text-xl text-primary hover:text-accent py-2 transition-all block text-left"
-                    >
-                      Login
-                    </a>
-                  )}
-                  {headerConfig?.ctaText && (
-                    <div className="mt-4 pt-4 border-t border-[#E6EEF0]">
-                      <a
-                        href={headerConfig.ctaLink || "/contact"}
-                        onClick={() => setMenuOpen(false)}
-                        className="font-heading font-extrabold text-sm text-white bg-[#0F766E] hover:bg-[#0d655e] text-center px-5 py-3 rounded-full transition-all block w-full"
-                      >
-                        {headerConfig.ctaText}
-                      </a>
-                    </div>
-                  )}
-                </nav>
-              </div>
-            </div>
-          ) : (
-            /* Slide-over Side Drawer */
-            <>
-              {/* Overlay Backdrop */}
+        {/* Universal Hamburger Menu Overlay */}
+        {mobileMenuEnabled && (
+          <>
+            {mobileStyle === 'dropdown' ? (
+              /* Top Overlay Dropdown */
               <div
-                onClick={() => setMenuOpen(false)}
-                className={`fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[8998] transition-opacity duration-300 ${menuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'
-                  }`}
-              />
-              {/* Drawer Panel */}
-              <div
-                className={`fixed top-0 right-0 h-full w-full max-w-xs bg-white z-[8999] shadow-2xl flex flex-col p-6 transition-transform duration-300 ease-in-out transform ${menuOpen ? 'translate-x-0' : 'translate-x-full'
-                  }`}
+                className={`absolute top-full left-0 w-full bg-white/98 backdrop-blur-2xl border-b border-[#E6EEF0] shadow-2xl z-[8999] flex flex-col transition-all duration-300 ease-in-out transform origin-top`}
+                style={{
+                  opacity: menuOpen ? 1 : 0,
+                  transform: menuOpen ? 'scaleY(1)' : 'scaleY(0)',
+                  visibility: menuOpen ? 'visible' : 'hidden'
+                }}
               >
-                {/* Header inside drawer */}
-                <div className="flex items-center justify-between pb-6 border-b border-[#E6EEF0] mb-6">
-                  <span className="font-heading font-black text-lg text-primary">{logoText}</span>
-                  <button
-                    onClick={() => setMenuOpen(false)}
-                    className="p-1 rounded-full hover:bg-slate-100 border-none bg-transparent cursor-pointer"
-                  >
-                    <div className="w-5 h-5 relative flex items-center justify-center">
-                      <span className="w-[18px] h-[2px] bg-primary rotate-45 absolute" />
-                      <span className="w-[18px] h-[2px] bg-primary -rotate-45 absolute" />
-                    </div>
-                  </button>
-                </div>
+                <div className="py-8 px-6 overflow-y-auto max-h-[70vh]">
+                  <nav className="flex flex-col gap-3">
+                    {displayItems.map((item, idx) => {
+                      const hasChildren = Array.isArray(item.children) && item.children.length > 0;
+                      if (hasChildren) {
+                        const isExpanded = expandedItems[item.label];
+                        return (
+                          <div key={idx} className="w-full flex flex-col">
+                            <button
+                              onClick={() => toggleExpand(item.label)}
+                              className="w-full flex justify-between items-center font-heading font-extrabold text-xl text-primary hover:text-accent py-2 border-none bg-transparent cursor-pointer text-left"
+                            >
+                              <span>{item.label}</span>
+                              <ChevronDown className={`w-5 h-5 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
+                            </button>
+                            {isExpanded && (
+                              <div className="pl-4 flex flex-col gap-2 mt-1 border-l border-[#E6EEF0]">
+                                {item.children.map((child, cIdx) => (
+                                  <a
+                                    key={cIdx}
+                                    href={child.url}
+                                    onClick={() => setMenuOpen(false)}
+                                    className="font-heading font-bold text-base text-secondary hover:text-accent py-1 block text-left"
+                                  >
+                                    {child.label}
+                                  </a>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      }
 
-                {/* Scrollable menu links */}
-                <nav className="flex-1 overflow-y-auto flex flex-col gap-4 text-left">
-                  {displayItems.map((item, idx) => {
-                    const hasChildren = Array.isArray(item.children) && item.children.length > 0;
-                    if (hasChildren) {
-                      const isExpanded = expandedItems[item.label];
                       return (
-                        <div key={idx} className="w-full flex flex-col">
-                          <button
-                            onClick={() => toggleExpand(item.label)}
-                            className="w-full flex justify-between items-center font-heading font-extrabold text-2xl text-primary hover:text-accent py-1 border-none bg-transparent cursor-pointer text-left"
-                          >
-                            <span>{item.label}</span>
-                            <ChevronDown className={`w-6 h-6 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
-                          </button>
-                          {isExpanded && (
-                            <div className="pl-4 flex flex-col gap-2.5 mt-2 border-l border-[#E6EEF0]">
-                              {item.children.map((child, cIdx) => (
-                                <a
-                                  key={cIdx}
-                                  href={child.url}
-                                  onClick={() => setMenuOpen(false)}
-                                  className="font-heading font-bold text-lg text-secondary hover:text-accent py-0.5 block text-left"
-                                >
-                                  {child.label}
-                                </a>
-                              ))}
-                            </div>
-                          )}
-                        </div>
+                        <a
+                          key={idx}
+                          href={item.url}
+                          onClick={() => setMenuOpen(false)}
+                          className="font-heading font-extrabold text-xl text-primary hover:text-accent py-2 transition-all block text-left"
+                        >
+                          {item.label}
+                        </a>
                       );
-                    }
-
-                    return (
-                      <a
-                        key={idx}
-                        href={item.url}
-                        onClick={() => setMenuOpen(false)}
-                        className="font-heading font-extrabold text-2xl text-primary hover:text-accent py-1 block text-left"
-                      >
-                        {item.label}
-                      </a>
-                    );
-                  })}
-                  <div className="border-t border-[#E6EEF0] pt-4 mt-2 flex flex-col gap-4">
+                    })}
                     {isAuthenticated ? (
                       <>
                         <a
                           href="/quizzes/dashboard"
                           onClick={() => setMenuOpen(false)}
-                          className="font-heading font-extrabold text-2xl text-primary hover:text-accent py-1 block"
+                          className="font-heading font-extrabold text-xl text-primary hover:text-accent py-2 transition-all block text-left"
                         >
                           Dashboard
                         </a>
                         <button
                           onClick={() => { setMenuOpen(false); signOut({ callbackUrl: '/' }); }}
-                          className="font-heading font-extrabold text-2xl text-red-500 hover:text-red-600 py-1 text-left border-none bg-transparent cursor-pointer"
+                          className="font-heading font-extrabold text-xl text-red-500 hover:text-red-600 py-2 transition-all text-left border-none bg-transparent cursor-pointer"
                         >
                           Logout
                         </button>
@@ -689,27 +576,156 @@ export default function Header() {
                       <a
                         href="/login"
                         onClick={() => setMenuOpen(false)}
-                        className="font-heading font-extrabold text-2xl text-primary hover:text-accent py-1 block"
+                        className="font-heading font-extrabold text-xl text-primary hover:text-accent py-2 transition-all block text-left"
                       >
                         Login
                       </a>
                     )}
-                  </div>
-                  {headerConfig?.ctaText && (
-                    <a
-                      href={headerConfig.ctaLink || "/contact"}
-                      onClick={() => setMenuOpen(false)}
-                      className="font-heading font-extrabold text-base text-white bg-[#0F766E] hover:bg-[#0d655e] text-center px-5 py-3 rounded-full transition-all block mt-6 w-full"
-                    >
-                      {headerConfig.ctaText}
-                    </a>
-                  )}
-                </nav>
+                    {headerConfig?.ctaText && (
+                      <div className="mt-4 pt-4 border-t border-[#E6EEF0]">
+                        <a
+                          href={headerConfig.ctaLink || "/contact"}
+                          onClick={() => setMenuOpen(false)}
+                          className="font-heading font-extrabold text-sm text-white bg-[#0F766E] hover:bg-[#0d655e] text-center px-5 py-3 rounded-full transition-all block w-full"
+                        >
+                          {headerConfig.ctaText}
+                        </a>
+                      </div>
+                    )}
+                  </nav>
+                </div>
               </div>
-            </>
-          )}
-        </>
-      )}
+            ) : (
+              /* Slide-over Side Drawer */
+              <>
+                {/* Overlay Backdrop */}
+                <div
+                  onClick={() => setMenuOpen(false)}
+                  className={`fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[10001] transition-opacity duration-300 ${menuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'
+                    }`}
+                />
+                {/* Drawer Panel */}
+                <div
+                  className={`fixed top-0 right-0 h-full w-full max-w-xs bg-white z-[10002] shadow-2xl flex flex-col p-6 transition-transform duration-300 ease-in-out transform ${menuOpen ? 'translate-x-0' : 'translate-x-full'
+                    }`}
+                >
+                  {/* Header inside drawer */}
+                  <div className="flex items-center justify-between pb-6 border-b border-[#E6EEF0] mb-6">
+                    <a href="/" className="logo-link flex items-center shrink-0">
+                      {logoType === 'image' ? (
+                        <img
+                          src={logoUrl}
+                          alt={`${logoText} Logo`}
+                          width={logoWidth}
+                          height={logoHeight}
+                          suppressHydrationWarning
+                          className="logo-img w-auto object-contain block"
+                          style={{ maxHeight: '40px' }}
+                        />
+                      ) : (
+                        <span className="font-heading font-black text-xl text-primary hover:text-accent transition-colors">
+                          {logoText}
+                        </span>
+                      )}
+                    </a>
+                    <button
+                      onClick={() => setMenuOpen(false)}
+                      className="p-1 rounded-full hover:bg-slate-100 border-none bg-transparent cursor-pointer"
+                    >
+                      <div className="w-5 h-5 relative flex items-center justify-center">
+                        <span className="w-[18px] h-[2px] bg-primary rotate-45 absolute" />
+                        <span className="w-[18px] h-[2px] bg-primary -rotate-45 absolute" />
+                      </div>
+                    </button>
+                  </div>
+
+                  {/* Scrollable menu links */}
+                  <nav className="flex-1 overflow-y-auto flex flex-col gap-4 text-left">
+                    {displayItems.map((item, idx) => {
+                      const hasChildren = Array.isArray(item.children) && item.children.length > 0;
+                      if (hasChildren) {
+                        const isExpanded = expandedItems[item.label];
+                        return (
+                          <div key={idx} className="w-full flex flex-col">
+                            <button
+                              onClick={() => toggleExpand(item.label)}
+                              className="w-full flex justify-between items-center font-heading font-extrabold text-2xl text-primary hover:text-accent py-1 border-none bg-transparent cursor-pointer text-left"
+                            >
+                              <span>{item.label}</span>
+                              <ChevronDown className={`w-6 h-6 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
+                            </button>
+                            {isExpanded && (
+                              <div className="pl-4 flex flex-col gap-2.5 mt-2 border-l border-[#E6EEF0]">
+                                {item.children.map((child, cIdx) => (
+                                  <a
+                                    key={cIdx}
+                                    href={child.url}
+                                    onClick={() => setMenuOpen(false)}
+                                    className="font-heading font-bold text-lg text-secondary hover:text-accent py-0.5 block text-left"
+                                  >
+                                    {child.label}
+                                  </a>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      }
+
+                      return (
+                        <a
+                          key={idx}
+                          href={item.url}
+                          onClick={() => setMenuOpen(false)}
+                          className="font-heading font-extrabold text-2xl text-primary hover:text-accent py-1 block text-left"
+                        >
+                          {item.label}
+                        </a>
+                      );
+                    })}
+                    <div className="border-t border-[#E6EEF0] pt-4 mt-2 flex flex-col gap-4">
+                      {isAuthenticated ? (
+                        <>
+                          <a
+                            href="/quizzes/dashboard"
+                            onClick={() => setMenuOpen(false)}
+                            className="font-heading font-extrabold text-2xl text-primary hover:text-accent py-1 block"
+                          >
+                            Dashboard
+                          </a>
+                          <button
+                            onClick={() => { setMenuOpen(false); signOut({ callbackUrl: '/' }); }}
+                            className="font-heading font-extrabold text-2xl text-red-500 hover:text-red-600 py-1 text-left border-none bg-transparent cursor-pointer"
+                          >
+                            Logout
+                          </button>
+                        </>
+                      ) : (
+                        <a
+                          href="/login"
+                          onClick={() => setMenuOpen(false)}
+                          className="font-heading font-extrabold text-2xl text-primary hover:text-accent py-1 block"
+                        >
+                          Login
+                        </a>
+                      )}
+                    </div>
+                    {headerConfig?.ctaText && (
+                      <a
+                        href={headerConfig.ctaLink || "/contact"}
+                        onClick={() => setMenuOpen(false)}
+                        className="font-heading font-extrabold text-base text-white bg-[#0F766E] hover:bg-[#0d655e] text-center px-5 py-3 rounded-full transition-all block mt-6 w-full"
+                      >
+                        {headerConfig.ctaText}
+                      </a>
+                    )}
+                  </nav>
+                </div>
+              </>
+            )}
+          </>
+        )}
+      </header>
     </>
   );
 }

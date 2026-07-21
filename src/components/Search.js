@@ -148,16 +148,16 @@ export default function Search() {
 
   return (
     <>
-      {/* Search Trigger (Inline Bar style) */}
+      {/* Search Trigger */}
       <button
         onClick={() => setIsOpen(true)}
-        className="flex items-center gap-2 bg-[#F3F4F6] hover:bg-[#E5E7EB] text-slate-500 px-3 md:px-4 py-2 md:py-2.5 rounded-full transition-colors w-[130px] sm:w-[220px] xl:w-[260px] border border-transparent hover:border-[#E6EEF0] group mr-0 sm:mr-2"
+        className="flex items-center justify-center sm:justify-start gap-2 bg-[#F3F4F6] hover:bg-[#E5E7EB] text-slate-500 px-0 sm:px-4 py-2 sm:py-2.5 rounded-full transition-colors w-10 h-10 sm:h-auto sm:w-[200px] md:w-[220px] xl:w-[260px] border border-transparent hover:border-[#E6EEF0] group mr-0 sm:mr-2 shrink-0"
         aria-label="Open Search"
       >
-        <span className="flex-1 text-left text-[12px] md:text-[13px] font-medium text-slate-400 group-hover:text-slate-500 transition-colors truncate">
+        <span className="hidden sm:block flex-1 text-left text-[12px] md:text-[13px] font-medium text-slate-400 group-hover:text-slate-500 transition-colors truncate">
           Search...
         </span>
-        <SearchIcon className="w-4 h-4 text-slate-400 group-hover:text-primary transition-colors shrink-0" />
+        <SearchIcon className="w-4 h-4 sm:w-4 sm:h-4 text-slate-500 group-hover:text-primary transition-colors shrink-0" />
       </button>
 
       {/* Glassmorphic Search Overlay Modal */}

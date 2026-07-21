@@ -811,7 +811,8 @@ exports.Prisma.MagazineScalarFieldEnum = {
   magCloudLink: 'magCloudLink',
   slug: 'slug',
   status: 'status',
-  timestamp: 'timestamp'
+  timestamp: 'timestamp',
+  publisherSocials: 'publisherSocials'
 };
 
 exports.Prisma.AuthScalarFieldEnum = {

@@ -88,7 +88,7 @@ export default function Marquee() {
 
   return (
     <div 
-      className="fixed top-0 left-0 right-0 w-full overflow-hidden whitespace-nowrap py-2 border-b border-white/5 select-none z-[9001] shadow-sm"
+      className="fixed top-0 left-0 right-0 w-full overflow-hidden whitespace-nowrap py-2 border-b border-white/5 select-none z-[8999] shadow-sm"
       style={{ backgroundColor: bgColor }}
     >
       <div className="inline-block animate-marquee whitespace-nowrap">

@@ -145,6 +145,16 @@ export async function POST(request) {
     const magazine_slug = formData.get("magazine_slug");
     const status = parseInt(formData.get("status") || "1");
 
+    let publisherSocials = null;
+    const publisherSocialsStr = formData.get("publisherSocials");
+    if (publisherSocialsStr) {
+      try {
+        publisherSocials = JSON.parse(publisherSocialsStr);
+      } catch (e) {
+        console.error("Failed to parse publisherSocials:", e);
+      }
+    }
+
     if (!magazine_title || !magazine_slug || !magazine_date) {
       return NextResponse.json({ error: "Title, slug, and date are required." }, { status: 400 });
     }
@@ -214,6 +224,7 @@ export async function POST(request) {
         magCloudLink: MagCloudLink || "",
         slug: magazine_slug,
         status,
+        publisherSocials,
       },
     });
 

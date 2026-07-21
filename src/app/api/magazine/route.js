@@ -31,7 +31,8 @@ export async function GET(req) {
       magazine_category: mag.category,
       MagCloudLink: mag.magCloudLink,
       magazine_slug: mag.slug,
-      status: mag.status
+      status: mag.status,
+      publisherSocials: mag.publisherSocials
     }));
 
     // Return the flat array directly as expected by the frontend
