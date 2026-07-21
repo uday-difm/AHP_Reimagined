@@ -112,7 +112,13 @@ function NotificationBell() {
                           </span>
                           <div className="flex items-center gap-2 shrink-0">
                             {n.url && (
-                              <a href={n.url} target="_blank" rel="noopener noreferrer" className="text-[10px] text-[#0F766E] font-semibold hover:underline">
+                              <a
+                                href={`/api/crm/track/click?pushId=${n.id}&url=${encodeURIComponent(n.url)}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-[10px] text-[#0F766E] font-semibold hover:underline"
+                                onClick={() => markAsRead(n.id)}
+                              >
                                 Read →
                               </a>
                             )}

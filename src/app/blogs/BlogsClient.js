@@ -98,7 +98,11 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
   };
 
   const filteredArticles = displayArticles.filter(art => {
-    const matchesFilter = categoryFilter === 'All' || art.category === categoryFilter;
+    const matchesFilter =
+      categoryFilter === 'All' ||
+      art.category.toLowerCase() === categoryFilter.toLowerCase() ||
+      art.category.toLowerCase().includes(categoryFilter.toLowerCase()) ||
+      categoryFilter.toLowerCase().includes(art.category.toLowerCase());
     const matchesTag = !tagFilter || (art.tags && art.tags.some(t =>
       t.slug === tagFilter || t.name.toLowerCase() === tagFilter.toLowerCase()
     ));

@@ -1,5 +1,7 @@
 import prisma from "@/lib/prisma";
 import { emailService } from "./email.service";
+import { notifyMultiple } from "@/lib/novu-triggers";
+import { NOVU_WORKFLOWS, novuSubscriberId } from "@/lib/novu";
 
 export const campaignService = {
   async getTemplates(siteId) {
@@ -124,6 +126,39 @@ export const campaignService = {
       }))
     );
 
+    // Optional: also trigger via Novu email-campaign workflow.
+    // This sends through your Novu email provider in addition to the BullMQ path.
+    // Set NOVU_ENABLE_CAMPAIGN_TRIGGER=true in .env to activate.
+    if (process.env.NOVU_ENABLE_CAMPAIGN_TRIGGER === "true") {
+      try {
+        const recipients = activeMembers
+          .filter((m) => m.subscriber.status === "active")
+          .map((m) => ({
+            subscriberId: novuSubscriberId(campaign.siteId, m.subscriber.id),
+            email: m.subscriber.email,
+            firstName: (m.subscriber.name || "").split(" ")[0] || "",
+            lastName: (m.subscriber.name || "").split(" ").slice(1).join(" ") || "",
+          }));
+
+        if (recipients.length > 0) {
+          await notifyMultiple(
+            recipients,
+            NOVU_WORKFLOWS.EMAIL_CAMPAIGN,
+            {
+              campaignName: campaign.name,
+              subject: campaign.subject,
+              body: campaign.body,
+              campaignId: campaign.id,
+            },
+            { siteId: campaign.siteId }
+          );
+        }
+      } catch (novuErr) {
+        // Never let Novu failure block campaign delivery via BullMQ
+        console.error("[campaign.service] Novu campaign trigger failed:", novuErr?.message);
+      }
+    }
+
     return { success: true, queued: activeMembers.length };
   },
 
@@ -163,22 +198,25 @@ export const campaignService = {
 
     const logs = campaign.logs;
     const totalLogs = logs.length;
-    const sent    = logs.filter(l => ["sent", "opened", "clicked"].includes(l.status)).length;
-    const failed  = logs.filter(l => l.status === "failed").length;
-    const opened  = logs.filter(l => l.openedAt  !== null).length;
-    const clicked = logs.filter(l => l.clickedAt !== null).length;
+    const sent = logs.filter(l => ["sent", "opened", "clicked"].includes(l.status)).length;
+    const failed = logs.filter(l => l.status === "failed").length;
+    const opened = logs.filter(l => l.openedAt !== null || l.status === "opened" || l.status === "clicked").length;
+    const clicked = logs.filter(l => l.clickedAt !== null || l.status === "clicked").length;
+
+    const delivered = Math.max(sent, totalLogs - failed);
+    const deliveryBase = delivered > 0 ? delivered : totalLogs;
 
     return {
       campaign,
       stats: {
         totalLogs,
-        sent,
+        sent: delivered,
         failed,
         opened,
         clicked,
-        deliveryRate: totalLogs > 0 ? Math.round((sent  / totalLogs) * 100) : 0,
-        openRate:     sent    > 0 ? Math.round((opened  / sent)     * 100) : 0,
-        clickRate:    sent    > 0 ? Math.round((clicked / sent)     * 100) : 0,
+        deliveryRate: totalLogs > 0 ? Math.round((delivered / totalLogs) * 100) : 0,
+        openRate: deliveryBase > 0 ? Math.round((opened / deliveryBase) * 100) : 0,
+        clickRate: deliveryBase > 0 ? Math.round((clicked / deliveryBase) * 100) : 0,
       },
       recentLogs: logs.slice(0, 20),
     };
@@ -190,11 +228,11 @@ export const campaignService = {
     return prisma.emailCampaign.create({
       data: {
         siteId,
-        name:    `Copy of ${existing.name}`,
+        name: `Copy of ${existing.name}`,
         subject: existing.subject,
-        body:    existing.body,
-        listId:  existing.listId,
-        status:  "draft",
+        body: existing.body,
+        listId: existing.listId,
+        status: "draft",
       },
       include: { list: { select: { name: true } } },
     });

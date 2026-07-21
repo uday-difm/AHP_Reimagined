@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
-import { Novu } from "@novu/api";
 import { AppError } from "@/core/errors";
+import { getNovuClient, NOVU_WORKFLOWS } from "@/lib/novu";
+import { toTopicKey } from "@/lib/novu-triggers";
 
 export const pushService = {
   async getNotifications(siteId) {
@@ -198,10 +199,13 @@ export const pushService = {
       const data = await response.json();
       if (response.ok && data.data && Array.isArray(data.data)) {
         const messages = data.data;
-        const sentCount = messages.length;
-        const clickedCount = messages.filter(m => m.status === 'clicked' || m.status === 'opened').length;
+        const novuClicks = messages.filter(
+          m => m.status === 'clicked' || m.status === 'opened' || m.status === 'read' || m.read === true || m.seen === true || m.readAt || m.seenAt || m.clickedAt
+        ).length;
+        const clickedCount = Math.max(notification.clickedCount || 0, novuClicks);
+        const sentCount = Math.max(notification.sentCount || 1, messages.length);
         const failedCount = messages.filter(m => m.status === 'failed').length;
-        const deliveredCount = sentCount - failedCount;
+        const deliveredCount = Math.max(0, sentCount - failedCount);
 
         await prisma.pushNotification.update({
           where: { id: notificationId },
@@ -223,6 +227,20 @@ export const pushService = {
   },
 
   async getAnalytics(siteId) {
+    // Auto-sync stats for sent notifications so analytics are always up-to-date
+    try {
+      const sentNotifs = await prisma.pushNotification.findMany({
+        where: { siteId, status: "sent" },
+        select: { id: true },
+        take: 10
+      });
+      for (const n of sentNotifs) {
+        await this.getNotificationStats(siteId, n.id).catch(() => {});
+      }
+    } catch (e) {
+      // ignore sync errors
+    }
+
     const notifications = await prisma.pushNotification.findMany({
       where: { siteId },
       select: {
@@ -296,12 +314,16 @@ export const pushService = {
     });
 
     const emailSettings = settings?.emailSettings || {};
-    const novuApiKey = emailSettings.novuApiKey || process.env.NOVU_API_KEY;
-    const novuWorkflowId = emailSettings.novuWorkflowId || process.env.NOVU_WORKFLOW_ID || "push-notification";
+    // Resolve workflow ID (per-site override → env constant → NOVU_WORKFLOWS default)
+    const novuWorkflowId =
+      emailSettings.novuWorkflowId ||
+      process.env.NOVU_WORKFLOW_ID ||
+      NOVU_WORKFLOWS.PUSH_NOTIFICATION;
 
+    // Validate Novu is configured
+    const novuApiKey = emailSettings.novuApiKey || process.env.NOVU_API_KEY;
     if (!novuApiKey) {
-      console.warn("Novu credentials are not configured on this site. Skipping Novu and marking as sent/scheduled locally.");
-      
+      console.warn("[push.service] Novu API key not configured — skipping device push, marking locally.");
       const isFuture = notification.scheduledAt && new Date(notification.scheduledAt) > new Date();
       await prisma.pushNotification.update({
         where: { id: notificationId },
@@ -324,32 +346,58 @@ export const pushService = {
     });
 
     try {
-      const novu = new Novu({ secretKey: novuApiKey });
+      // Use the centralized Novu client (reads per-site key override automatically)
+      const novu = await getNovuClient(siteId);
 
-      // Target topic: slugify segment name
-      const rawSegment = notification.segment || "Subscribed Users";
-      const topicKey = rawSegment
-        .toLowerCase()
-        .trim()
-        .replace(/\s+/g, "-")
-        .replace(/[^a-z0-9_-]/g, "");
+      // Target topic: slugify segment name using shared helper
+      const topicKey = toTopicKey(notification.segment || "Subscribed Users");
+
+      const appUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
+      const targetUrl = notification.url || "/";
+      const trackingUrl = `${appUrl}/api/crm/track/click?pushId=${notification.id}&url=${encodeURIComponent(targetUrl)}`;
 
       const payload = {
         title: notification.title,
         message: notification.message,
+        url: trackingUrl,
       };
 
-      if (notification.url) payload.url = notification.url;
-      if (notification.iconUrl) payload.iconUrl = notification.iconUrl;
+      if (notification.iconUrl)  payload.iconUrl  = notification.iconUrl;
       if (notification.imageUrl) payload.imageUrl = notification.imageUrl;
 
-      // Novu trigger call
-      const triggerResult = await novu.trigger({
-        workflowId: novuWorkflowId,
-        to: [{ type: "Topic", topicKey }],
-        payload
-      });
-      const transactionId = triggerResult.data?.transactionId || triggerResult.data?.eventId || "novu-triggered";
+      // Candidate workflow IDs to try in order (prioritize slugs with hyphens over raw keys)
+      const isSlug = novuWorkflowId && novuWorkflowId.includes("-");
+      const candidates = isSlug
+        ? Array.from(new Set([novuWorkflowId, "push-notificatuion", "push-notification", "onboarding-demo-workflow"]))
+        : Array.from(new Set(["push-notificatuion", "push-notification", novuWorkflowId, "onboarding-demo-workflow"])).filter(Boolean);
+
+      let triggerResult = null;
+      let lastError = null;
+
+      for (const wId of candidates) {
+        try {
+          triggerResult = await novu.trigger({
+            workflowId: wId,
+            to: [{ type: "Topic", topicKey }],
+            payload
+          });
+          if (triggerResult) break;
+        } catch (err) {
+          lastError = err;
+          const errMsg = err.body ? (typeof err.body === 'string' ? err.body : JSON.stringify(err.body)) : err.message;
+          if (errMsg.includes("workflow_not_found")) {
+            console.warn(`[push.service] Workflow '${wId}' not found in Novu, trying next candidate...`);
+            continue;
+          }
+          throw err;
+        }
+      }
+
+      if (!triggerResult && lastError) {
+        throw lastError;
+      }
+
+      const transactionId = triggerResult?.data?.transactionId || triggerResult?.data?.eventId || "novu-triggered";
 
       await prisma.pushNotification.update({
         where: { id: notificationId },

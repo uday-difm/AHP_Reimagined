@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Button from '@/components/Button';
-import { Star, ArrowLeft, CheckCircle, HelpCircle, Mail } from 'lucide-react';
+import Link from 'next/link';
+import { Star, ArrowLeft, CheckCircle, HelpCircle, Mail, CreditCard, ShieldCheck } from 'lucide-react';
 
 function proxyUrl(url) {
   if (!url) return url;
@@ -18,6 +19,7 @@ function proxyUrl(url) {
 export default function ServiceDetailView({ service }) {
   const [modalStep, setModalStep] = useState('details'); // details | form | success
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isStripeLoading, setIsStripeLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
   // Form Fields
@@ -32,6 +34,16 @@ export default function ServiceDetailView({ service }) {
 
   const img = service.featuredImage?.secureUrl || service.featuredImage?.url || '/images/mag_sleep.png';
   const price = service.price || 'Inquire for pricing';
+
+  // Check URL query params for Stripe payment callback
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('payment') === 'success') {
+        setModalStep('success');
+      }
+    }
+  }, []);
   
   // Format includes and faqs
   let includes = [];
@@ -40,7 +52,6 @@ export default function ServiceDetailView({ service }) {
     includes = service.includes;
     faqs = Array.isArray(service.faqs) ? service.faqs : [];
   } else if (Array.isArray(service.faqs)) {
-    // If no includes array, parse from faqs if they are objects, else just use as strings
     const firstFaq = service.faqs[0];
     if (firstFaq && (typeof firstFaq === 'string' || firstFaq.question === undefined)) {
         includes = service.faqs.map(f => f.question || f.q || String(f));
@@ -85,6 +96,51 @@ export default function ServiceDetailView({ service }) {
     }
   };
 
+  const handleStripeCheckout = async (e) => {
+    e.preventDefault();
+    if (!fullName || !email) {
+      setErrorMsg('Full Name and Email Address are required for Stripe payment.');
+      return;
+    }
+
+    setIsStripeLoading(true);
+    setErrorMsg('');
+
+    try {
+      const res = await fetch('/api/stripe/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          serviceId: service.slug || service.id,
+          serviceTitle: service.title,
+          price: price,
+          fullName,
+          professionalTitle,
+          email,
+          websiteUrl,
+          phone,
+          location,
+          timeline,
+          story,
+          cancelUrl: window.location.href,
+          successUrl: `${window.location.origin}/services/${service.slug || service.id}?payment=success`,
+        }),
+      });
+
+      const data = await res.json();
+      if (res.ok && data.url) {
+        window.location.href = data.url;
+      } else {
+        setErrorMsg(data.error || 'Failed to initiate Stripe payment.');
+      }
+    } catch (err) {
+      console.error(err);
+      setErrorMsg('System error initiating Stripe payment.');
+    } finally {
+      setIsStripeLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-bg-light flex flex-col justify-between">
       <Header />
@@ -95,6 +151,14 @@ export default function ServiceDetailView({ service }) {
             
             {modalStep === 'details' && (
               <div className="flex flex-col gap-8 animate-fade-in">
+                {/* Back Link */}
+                <Link
+                  href="/services"
+                  className="inline-flex items-center gap-2 text-slate-500 hover:text-accent font-bold text-xs uppercase tracking-wider transition-colors w-max"
+                >
+                  <ArrowLeft size={14} /> Back to All Packages
+                </Link>
+
                 {/* Header Image */}
                 <div className="relative w-full h-[300px] md:h-[400px] rounded-3xl overflow-hidden shadow-sm border border-slate-100/50">
                   <Image
@@ -157,13 +221,15 @@ export default function ServiceDetailView({ service }) {
                   </div>
                 )}
 
-                <Button
-                  onClick={() => setModalStep('form')}
-                  variant="primary"
-                  className="!bg-[#0f4c4e] hover:!bg-[#093031] !text-sm !py-4 md:!py-5 mt-4 mb-4 shadow-md select-none w-full"
-                >
-                  {service.ctaButtonText || 'Inquire Now'}
-                </Button>
+                <div className="flex flex-col sm:flex-row gap-4 mt-4 mb-4">
+                  <Button
+                    onClick={() => setModalStep('form')}
+                    variant="primary"
+                    className="!bg-[#0f4c4e] hover:!bg-[#093031] !text-sm !py-4 md:!py-5 shadow-md select-none flex-1 inline-flex justify-center items-center gap-2"
+                  >
+                    <CreditCard size={18} /> {service.ctaButtonText || 'Book & Pay Online'}
+                  </Button>
+                </div>
               </div>
             )}
 
@@ -179,10 +245,10 @@ export default function ServiceDetailView({ service }) {
 
                 <div>
                   <h2 className="font-heading font-extrabold text-[28px] md:text-[32px] text-primary tracking-tight mb-3">
-                    Submit Your Request
+                    Reserve {service.title}
                   </h2>
                   <p className="text-[14px] md:text-[15px] text-secondary leading-relaxed">
-                    Provide your details below to initiate our review process for <strong>{service.title}</strong>.
+                    Enter your contact details below to proceed with online payment or submit an editorial inquiry.
                   </p>
                 </div>
 
@@ -292,14 +358,32 @@ export default function ServiceDetailView({ service }) {
                   />
                 </div>
 
-                <Button
-                  type="submit"
-                  disabled={isSubmitting}
-                  variant="primary"
-                  className="!bg-[#0f4c4e] hover:!bg-[#093031] !text-sm !py-4 md:!py-5 mt-4 w-full shadow-sm"
-                >
-                  {isSubmitting ? 'Submitting...' : 'Submit Inquiry'}
-                </Button>
+                <div className="flex flex-col gap-3 mt-4">
+                  {/* Primary Stripe Button */}
+                  <button
+                    type="button"
+                    onClick={handleStripeCheckout}
+                    disabled={isStripeLoading || isSubmitting}
+                    className="w-full bg-[#0f4c4e] hover:bg-[#093031] text-white font-bold text-sm py-4 rounded-2xl shadow-md transition-colors flex items-center justify-center gap-2 disabled:opacity-60 cursor-pointer"
+                  >
+                    <CreditCard size={18} />
+                    {isStripeLoading ? 'Redirecting to Stripe...' : `Pay & Book with Stripe (${price})`}
+                  </button>
+
+                  <div className="flex items-center justify-center gap-2 text-slate-400 text-[11px] font-semibold">
+                    <ShieldCheck size={14} className="text-accent" /> Encrypted & Secured by Stripe Payments
+                  </div>
+
+                  {/* Secondary Inquiry Button */}
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting || isStripeLoading}
+                    variant="outline"
+                    className="!text-xs !py-3 w-full border border-slate-200 text-slate-600 hover:bg-slate-50"
+                  >
+                    {isSubmitting ? 'Submitting...' : 'Submit Inquiry Only (Without Online Payment)'}
+                  </Button>
+                </div>
               </form>
             )}
 
@@ -309,10 +393,10 @@ export default function ServiceDetailView({ service }) {
                   <CheckCircle size={40} />
                 </div>
                 <h2 className="font-heading font-extrabold text-[28px] md:text-[32px] text-primary tracking-tight mb-4">
-                  Submission Successful
+                  Payment / Inquiry Successful
                 </h2>
                 <p className="text-[15px] md:text-[16px] text-secondary leading-relaxed max-w-lg mb-10">
-                  Thank you, Your media request for <strong>{service.title}</strong> has been securely submitted into our system.
+                  Thank you! Your request and payment details for <strong>{service.title}</strong> have been securely recorded. Our PR & Editorial team will contact you shortly.
                 </p>
                 
                 <div className="w-full bg-[#f8fafc] border border-slate-100 p-6 rounded-2xl text-[14px] text-secondary flex items-center justify-center gap-4 max-w-lg">

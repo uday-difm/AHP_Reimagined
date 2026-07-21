@@ -12,22 +12,27 @@ export const metadata = {
 export default async function ServicesPage() {
   let dbServices = [];
 
+  const siteId = process.env.NEXT_PUBLIC_SITE_ID || process.env.SITE_ID || 'AHP';
+
   try {
     dbServices = await prisma.service.findMany({
       where: { 
-        status: 'ACTIVE',
+        siteId,
         deletedAt: null
       },
       orderBy: { sortOrder: 'asc' },
       select: {
         id: true,
+        slug: true,
         title: true,
         description: true,
         price: true,
         ctaButtonText: true,
         ctaButtonLink: true,
+        status: true,
         faqs: true,
         visible: true,
+        visibility: true,
         featuredImage: {
           select: { url: true, secureUrl: true, altText: true },
         },

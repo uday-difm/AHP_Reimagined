@@ -925,10 +925,10 @@ export default function EmailEditor({ siteId, initialEmailSettings }) {
               <div className="bg-blue-50 border border-blue-100 rounded-xl p-5 space-y-3">
                 <h4 className="text-xs font-bold text-blue-700 uppercase tracking-wider">Quick Setup Guide</h4>
                 {[
-                  { n: 1, t: "Sign up at onesignal.com", d: "Create a free account and add a new Web Push app for your site domain." },
-                  { n: 2, t: "Get your credentials", d: "Go to Settings → Keys & IDs in your OneSignal dashboard and copy your App ID and REST API Key." },
-                  { n: 3, t: "Add the OneSignal SDK to your frontend", d: "Install the JS SDK on your website to collect subscriber opt-ins from visitors." },
-                  { n: 4, t: "Paste credentials above & save", d: "Enter the App ID and REST Key above, then click 'Save Settings' at the bottom." },
+                  { n: 1, t: "Sign up at dashboard.novu.co", d: "Create a Novu account and retrieve your Secret API Key and Workflow ID." },
+                  { n: 2, t: "Get your Novu credentials", d: "Go to Settings → API Keys in your Novu dashboard and copy your Workflow ID and Secret API Key." },
+                  { n: 3, t: "Configure your Push Workflow", d: "Publish your push notification workflow in Novu (e.g. push-notificatuion)." },
+                  { n: 4, t: "Paste credentials & save", d: "Enter the Novu Workflow ID and Secret Key above, then click 'Save Settings' at the bottom." },
                 ].map(({ n, t, d }) => (
                   <div key={n} className="flex gap-3">
                     <div className="w-5 h-5 rounded-full bg-blue-600 text-white text-[9px] font-black flex items-center justify-center shrink-0 mt-0.5">{n}</div>
@@ -954,7 +954,7 @@ export default function EmailEditor({ siteId, initialEmailSettings }) {
             <span className="text-[10px] text-gray-400 font-medium flex items-center gap-1">
               <HelpCircle className="w-3.5 h-3.5 shrink-0" />
               {activeTab === "push"
-                ? "OneSignal credentials are saved securely alongside your email settings."
+                ? "Novu credentials are saved securely alongside your email settings."
                 : "Ensure credentials match outbound security policies (TLS 587 or SSL 465)."}
             </span>
             <button

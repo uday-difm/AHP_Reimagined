@@ -498,5 +498,5 @@ export default function Topbar({ siteId, sites = [], onMenuClick }) {
         )}
       </header>
     </>
-  );
+   );
 }

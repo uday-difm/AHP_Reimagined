@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { sendEmail } from '@/lib/email';
+import {
+  triggerServiceBooked,
+  triggerServiceBookedAdminAlert,
+} from '@/lib/novu-service-events';
 
 export async function POST(req) {
   try {
@@ -67,7 +70,27 @@ About Story / Brand Mission: ${story}
       }
     });
 
-    // 3. Email to the team
+    // 3. Create Dashboard Notification Alert for Topbar & CRM Bell
+    try {
+      const { notificationService } = await import('@/services/notification.service');
+      await notificationService.notifyNewLead(siteId, lead);
+    } catch (notifErr) {
+      console.error('Failed to log lead notification alert via service:', notifErr);
+      try {
+        await prisma.notificationAlert.create({
+          data: {
+            siteId,
+            title: "New Service Booking Request",
+            message: `${fullName} requested ${mediaPackage}`,
+            type: "NEW_LEAD"
+          }
+        });
+      } catch (e) {
+        console.error("Failed to create fallback notification alert:", e);
+      }
+    }
+
+    // 4. Email to the team
     try {
       const { systemEmailQueue } = await import('@/lib/queues/systemEmailQueue');
       await systemEmailQueue.add(
@@ -102,49 +125,34 @@ About Story / Brand Mission: ${story}
       // Do not fail request if email failed, as database save succeeded
     }
 
-    // 4. Trigger Novu notification for PR Team
+    // 4. Trigger Novu notifications via centralized helper
     try {
+      // a) Customer confirmation notification
+      await triggerServiceBooked(siteId, lead);
+
+      // b) PR / Admin alert notification
       const settings = await prisma.globalSettings.findUnique({
         where: { siteId },
         select: { emailSettings: true }
       });
       const emailConfig = settings?.emailSettings || {};
-      const novuApiKey = emailConfig.novuApiKey || process.env.NOVU_API_KEY;
-      const novuWorkflowId = emailConfig.novuWorkflowId || process.env.NOVU_WORKFLOW_ID || "push-notification";
-
       const prAlertsConfig = emailConfig.prAlerts || {};
       const prAlertsEnabled = prAlertsConfig.enabled !== false;
       const prEmail = prAlertsConfig.email || process.env.PR_TEAM_EMAIL || "manish.yadav@difm.tech";
 
-      if (prAlertsEnabled && novuApiKey && novuWorkflowId && prEmail) {
-        const { Novu } = await import('@novu/api');
-        const novu = new Novu({ secretKey: novuApiKey });
-
-        await novu.trigger({
-          workflowId: novuWorkflowId,
-          to: [{
-            subscriberId: "pr-team",
-            email: prEmail,
-            firstName: "PR",
-            lastName: "Team"
-          }],
-          payload: {
-            title: `New Media Booking Request: ${fullName} - ${mediaPackage}`,
-            message: `You have received a new media package inquiry:\n\nClient: ${fullName}\nEmail: ${email}\n${messageText}`,
-            fullName,
-            professionalTitle,
-            email,
-            websiteUrl,
-            phone,
-            location,
-            mediaPackage,
-            timeline,
-            story
-          }
-        });
+      if (prAlertsEnabled && prEmail) {
+        // Use a well-known subscriber ID for the PR team
+        await triggerServiceBookedAdminAlert(
+          siteId,
+          lead,
+          null,          // no service record — booking is package-based
+          "pr-team",    // stable admin subscriber ID
+          prEmail,
+          "PR Team"
+        );
       }
     } catch (novuErr) {
-      console.error('Failed to trigger Novu notification to PR team:', novuErr);
+      console.error('Failed to trigger Novu notifications:', novuErr);
     }
 
     return NextResponse.json({ success: true, submissionId: submission.id, leadId: lead.id });
