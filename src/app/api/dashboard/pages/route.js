@@ -12,6 +12,12 @@ export async function GET(req) {
 
     const pages = await pageService.getList(auth.siteId, {
       orderBy: { createdAt: "desc" },
+      include: {
+        sections: {
+          where: { isDeleted: false },
+          orderBy: { order: "asc" }
+        }
+      }
     });
 
     return NextResponse.json(apiSuccess({ pages }));

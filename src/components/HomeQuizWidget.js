@@ -50,13 +50,21 @@ export default function HomeQuizWidget() {
             explanation: q.explanation || "",
           }));
           setDbQuestions(formatted);
+        } else {
+          setDbQuestions([]);
         }
       })
-      .catch((err) => console.error("Error loading db quizzes:", err));
+      .catch((err) => {
+        console.error("Error loading db quizzes:", err);
+        setDbQuestions([]);
+      });
   }, []);
 
+  if (dbQuestions === null) return null;
+  if (dbQuestions.length === 0) return null;
+
   const quiz = quizzes[FEATURED_QUIZ_INDEX];
-  const questions = dbQuestions && dbQuestions.length > 0 ? dbQuestions : quiz.questions;
+  const questions = dbQuestions;
   const currentQ = questions[currentIndex];
   const isLastQuestion = currentIndex === questions.length - 1;
 
@@ -258,7 +266,7 @@ export default function HomeQuizWidget() {
               </span>
               <h3 className="font-heading font-extrabold text-xl text-primary mb-2">Sign in to continue</h3>
               <p className="text-secondary text-[13.5px] max-w-sm mb-6">
-                Please log in to unlock all {quiz.questionCount} questions and save your score.
+                Please log in to unlock all {questions.length} questions and save your score.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 w-full max-w-xs justify-center">
                 <button

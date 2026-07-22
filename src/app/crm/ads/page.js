@@ -1182,6 +1182,61 @@ export default function AdsPage() {
                 </div>
               )}
             </div>
+
+            {/* Page Sections Reference */}
+            <div className="bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-2xl p-5 space-y-4 shadow-sm">
+              <div>
+                <h3 className="text-sm font-extrabold text-slate-900 dark:text-white flex items-center gap-1.5">
+                  <SlidersHorizontal size={16} className="text-indigo-500" /> Page Sections Map
+                </h3>
+                <p className="text-slate-450 text-[10px] mt-0.5">Automatically fetched layouts and active sections configured on each page</p>
+              </div>
+
+              {pages.length === 0 ? (
+                <p className="text-xs text-slate-450 italic text-center py-6">No custom pages configured.</p>
+              ) : (
+                <div className="space-y-4">
+                  {pages.map(page => {
+                    const pageSections = page.sections || [];
+                    return (
+                      <div key={page.id} className="border dark:border-slate-750 rounded-xl p-3.5 space-y-2 bg-slate-50/20 dark:bg-slate-900/10">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <span className="font-bold text-xs text-slate-800 dark:text-slate-200">{page.title}</span>
+                            <code className="block text-[9px] text-slate-450 font-mono mt-0.5">{page.slug}</code>
+                          </div>
+                          <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold border ${
+                            page.status === "PUBLISHED"
+                              ? "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/20 dark:text-emerald-450"
+                              : "bg-slate-100 text-slate-600 border-slate-200 dark:bg-slate-850 dark:text-slate-400 dark:border-slate-800"
+                          }`}>
+                            {page.status}
+                          </span>
+                        </div>
+
+                        {pageSections.length === 0 ? (
+                          <p className="text-[10px] text-slate-400 italic pl-1">No dynamic layout sections created. Standard template page.</p>
+                        ) : (
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 pt-1.5">
+                            {pageSections.map((sec) => (
+                              <div key={sec.id} className="flex items-center justify-between p-2 rounded-lg bg-white dark:bg-slate-900 border dark:border-slate-800/85 text-[10.5px]">
+                                <div className="min-w-0 mr-2">
+                                  <p className="font-semibold text-slate-750 dark:text-slate-350 truncate">{sec.name || `${sec.type} Section`}</p>
+                                  <span className="text-[9px] text-slate-450 font-mono">{sec.type}</span>
+                                </div>
+                                <span className="text-[9px] font-bold text-slate-400 shrink-0 bg-slate-50 dark:bg-slate-800 px-1.5 py-0.5 rounded">
+                                  Order #{sec.order}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Create Placement Zone Form */}

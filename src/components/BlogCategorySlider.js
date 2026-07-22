@@ -16,78 +16,6 @@ export default function BlogCategorySlider() {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fallback data for when there are no published blogs yet
-  const fallbackBlogs = [
-    {
-      title: 'Physical Health',
-      tag: 'BODY VITALITY',
-      desc: 'Guides on sleep quality, cardiovascular health, physical fitness, and daily preventative routines.',
-      img: '/images/hero_exercise.png',
-      link: '/blogs?filter=Physical%20Health',
-      badgeClass: 'bg-[var(--color-badge-blue-bg)] text-[var(--color-badge-blue-text)]',
-    },
-    {
-      title: 'Mental Health',
-      tag: 'COGNITIVE CALM',
-      desc: 'Insights into stress resilience, anxiety reduction, mindful practices, and neurological health.',
-      img: '/images/holistic.png',
-      link: '/blogs?filter=Mental%20Health',
-      badgeClass: 'bg-[var(--color-badge-purple-bg)] text-[var(--color-badge-purple-text)]',
-    },
-    {
-      title: 'Holistic Ayurveda',
-      tag: 'ANCIENT WISDOM',
-      desc: 'Integrating natural remedies, agni balancing, herbal vetting, and dosha-specific lifestyle guidelines.',
-      img: '/images/ayurveda.png',
-      link: '/blogs?filter=Holistic%20Ayurveda',
-      badgeClass: 'bg-[var(--color-badge-green-bg)] text-[var(--color-badge-green-text)]',
-    },
-    {
-      title: 'Insurance Mappings',
-      tag: 'HEALTH POLICY',
-      desc: 'Demystifying clinical documentation, wellness code mappings, and policy claim options.',
-      img: '/images/disease.png',
-      link: '/blogs?filter=Insurance%20Mappings',
-      badgeClass: 'bg-[var(--color-badge-yellow-bg)] text-[var(--color-badge-yellow-text)]',
-    },
-    {
-      title: 'Nutrition & Diet',
-      tag: 'FUEL & ENERGY',
-      desc: 'Learn about meal prep, balanced diets, clean biophilic eating, and clinical nutrition guidelines.',
-      img: '/images/mag_nutrition.png',
-      link: '/blogs?filter=Nutrition',
-      badgeClass: 'bg-[var(--color-badge-yellow-bg)] text-[var(--color-badge-yellow-text)]',
-    },
-    {
-      title: 'Fitness & Training',
-      tag: 'STRENGTH & MOTION',
-      desc: 'Discover exercise routines, posture corrections, energy maintenance, and active training protocols.',
-      img: '/images/mag_strength.png',
-      link: '/blogs?filter=Fitness',
-      badgeClass: 'bg-[var(--color-badge-red-bg)] text-[var(--color-badge-red-text)]',
-    },
-    {
-      isAd: true,
-      zone: 'homepage-articles-bottom',
-    },
-    {
-      title: 'Alternative Care',
-      tag: 'NATURAL REMEDIES',
-      desc: 'Explore alternative therapies, biophilic setups, and herbal supplement vetting protocols.',
-      img: '/images/holistic.png',
-      link: '/blogs?filter=Alternative',
-      badgeClass: 'bg-[var(--color-badge-green-bg)] text-[var(--color-badge-green-text)]',
-    },
-    {
-      title: 'Digital Wellness',
-      tag: 'MINDFUL FOCUS',
-      desc: 'Insights on reducing screen fatigue, setting tech boundaries, and restoring daily focus.',
-      img: '/images/mag_detox.png',
-      link: '/blogs?filter=Mental%20Health',
-      badgeClass: 'bg-[var(--color-badge-purple-bg)] text-[var(--color-badge-purple-text)]',
-    }
-  ];
-
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
@@ -113,15 +41,14 @@ export default function BlogCategorySlider() {
             
             setBlogs(fetchedBlogs);
           } else {
-            // Use fallback if no published blogs found
-            setBlogs(fallbackBlogs);
+            setBlogs([]);
           }
         } else {
-          setBlogs(fallbackBlogs);
+          setBlogs([]);
         }
       } catch (err) {
         console.error("Failed to fetch blogs:", err);
-        setBlogs(fallbackBlogs);
+        setBlogs([]);
       } finally {
         setLoading(false);
       }
@@ -129,6 +56,10 @@ export default function BlogCategorySlider() {
     fetchBlogs();
   }, []);
 
+  if (loading) return null;
+
+  const realBlogs = blogs.filter(b => !b.isAd);
+  if (realBlogs.length === 0) return null;
 
   return (
     <section id="timeline" className="timeline-section py-[100px] bg-bg-timeline rounded-t-[40px] relative overflow-hidden">

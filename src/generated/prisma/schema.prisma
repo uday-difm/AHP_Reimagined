@@ -267,7 +267,7 @@ model Page {
   site   Site   @relation(fields: [siteId], references: [id], onDelete: Cascade)
 
   title  String
-  slug   String     @db.VarChar(50)
+  slug   String     @db.VarChar(191)
   status PageStatus @default(DRAFT)
 
   jsonLd Json?
@@ -480,7 +480,7 @@ model Post {
   siteId      String
   site        Site       @relation(fields: [siteId], references: [id], onDelete: Cascade)
   title       String
-  slug        String     @db.VarChar(50)
+  slug        String     @db.VarChar(191)
   content     Json?
   contentJson String?    @db.LongText
   excerpt     String?    @db.Text
