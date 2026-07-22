@@ -14,6 +14,7 @@ import {
   Search,
   ChevronRight
 } from 'lucide-react';
+import SaveArticleButton from '@/components/blogs/SaveArticleButton';
 
 
 // Proxy external URLs through the Next.js server to avoid CORS / hostname issues
@@ -289,9 +290,10 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                         unoptimized={true}
                       />
-                      <span className="absolute top-4 left-4 bg-[#e8f4ff] text-[#0f7c85] px-3 py-1.5 rounded-full text-[9.5px] font-bold uppercase tracking-[0.5px]">
+                      <span className="absolute top-4 left-4 z-10 bg-[#e8f4ff] text-[#0f7c85] px-3 py-1.5 rounded-full text-[9.5px] font-bold uppercase tracking-[0.5px]">
                         {art.category}
                       </span>
+                      <SaveArticleButton postId={art.id} />
                     </div>
                     <div className="p-6 flex flex-col gap-2 flex-grow">
                       <h3 className="font-heading font-bold text-base text-primary leading-snug group-hover:text-accent transition-colors">

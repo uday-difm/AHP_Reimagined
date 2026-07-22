@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import QuizIcon from '@/components/quiz/QuizIcon';
+import SaveRecipeButton from '@/components/recipes/SaveRecipeButton';
 
 const getQuizEmoji = (slug = "") => {
   const s = String(slug).toLowerCase();
@@ -183,7 +184,10 @@ export default function WellnessShowcase({ content }) {
     ...content,
     quickCards: content?.quickCards?.length > 0 ? content.quickCards : DEFAULT_CONTENT.quickCards,
     snapshot: { ...DEFAULT_CONTENT.snapshot, ...content?.snapshot },
-    healthyBite: content?.healthyBite?.recipeName ? content.healthyBite : latestRecipe ? {
+    healthyBite: content?.healthyBite?.recipeName ? {
+      ...content.healthyBite,
+      id: content.healthyBite.id || (content.healthyBite.recipeLink ? content.healthyBite.recipeLink.split('/').pop() : null)
+    } : latestRecipe ? {
       title: 'Healthy Bite of the Day',
       recipeName: latestRecipe.title,
       image: latestRecipe.imageUrl || DEFAULT_CONTENT.healthyBite.image,
@@ -191,6 +195,7 @@ export default function WellnessShowcase({ content }) {
       recipeLink: `/recipes/${latestRecipe.id}`,
       time: latestRecipe.cookingTime ? `${latestRecipe.cookingTime} mins` : '15 mins',
       calories: latestRecipe.calories ? `${latestRecipe.calories} kcal` : '320 kcal',
+      id: latestRecipe.id,
     } : DEFAULT_CONTENT.healthyBite,
     wellnessTip: { ...DEFAULT_CONTENT.wellnessTip, ...content?.wellnessTip },
     popularQuizzes: displayQuizzes,
@@ -339,9 +344,11 @@ export default function WellnessShowcase({ content }) {
             </div>
 
             {/* Top right floating button */}
-            <div className="absolute top-6 right-6 w-10 h-10 bg-white rounded-full flex items-center justify-center border border-slate-200 shadow-sm z-20 hover:scale-110 transition-transform cursor-pointer group-hover:border-[#ff7373]/30">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#0f7c85]" />
-            </div>
+            {c.healthyBite.id && (
+              <div className="absolute top-6 right-6 z-20">
+                <SaveRecipeButton recipeId={c.healthyBite.id} className="w-10 h-10 rounded-full" />
+              </div>
+            )}
           </div>
 
           {/* View More Recipes Dropdown Column */}
@@ -368,7 +375,7 @@ export default function WellnessShowcase({ content }) {
               {/* Dropdown Content */}
               <div className={`transition-all duration-300 ease-in-out overflow-hidden ${showMoreRecipes ? 'max-h-[300px] mt-4 opacity-100' : 'max-h-0 opacity-0'}`}>
                 <div className="pt-3 border-t border-slate-100 flex flex-col gap-2 overflow-y-auto max-h-[250px] pr-2 scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent">
-                  {approvedRecipes.slice(1).length > 0 ? approvedRecipes.slice(1).map((recipe, idx) => (
+                  {approvedRecipes.filter(r => r.id !== c.healthyBite.id).length > 0 ? approvedRecipes.filter(r => r.id !== c.healthyBite.id).map((recipe, idx) => (
                     <Link
                       key={idx}
                       href={`/recipes/${recipe.id}`}
@@ -389,8 +396,8 @@ export default function WellnessShowcase({ content }) {
                           <span className="text-[10px] font-bold text-slate-400 uppercase">{recipe.difficulty}</span>
                         </div>
                       </div>
-                      <div className="ml-auto opacity-0 group-hover/item:opacity-100 transition-opacity -translate-x-2 group-hover/item:translate-x-0 duration-300">
-                        <svg className="w-4 h-4 text-[#0f7c85]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+                      <div className="ml-auto z-10" onClick={(e) => e.stopPropagation()}>
+                        <SaveRecipeButton recipeId={recipe.id} className="w-8 h-8 rounded-full" />
                       </div>
                     </Link>
                   )) : (

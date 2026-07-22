@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { useSession, signOut } from 'next-auth/react';
 import Link from 'next/link';
-import { ChevronDown, BookOpen, PenTool, Target, PlayCircle, Activity, Heart, Brain, Calendar, Mail, FileText, Info, HelpCircle, ArrowRight, Users, Bell } from 'lucide-react';
+import { ChevronDown, BookOpen, PenTool, Target, PlayCircle, Activity, Heart, Brain, Calendar, Mail, FileText, Info, HelpCircle, ArrowRight, Users, Bell, UserCircle } from 'lucide-react';
 import Search from '@/components/Search';
 import Marquee from '@/components/Marquee';
 
@@ -112,13 +112,7 @@ function NotificationBell() {
                           </span>
                           <div className="flex items-center gap-2 shrink-0">
                             {n.url && (
-                              <a
-                                href={`/api/crm/track/click?pushId=${n.id}&url=${encodeURIComponent(n.url)}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-[10px] text-[#0F766E] font-semibold hover:underline"
-                                onClick={() => markAsRead(n.id)}
-                              >
+                              <a href={n.url} target="_blank" rel="noopener noreferrer" className="text-[10px] text-[#0F766E] font-semibold hover:underline">
                                 Read →
                               </a>
                             )}
@@ -142,6 +136,18 @@ function NotificationBell() {
         </div>
       )}
     </div>
+  );
+}
+
+function UserProfileDropdown() {
+  return (
+    <Link
+      href="/account"
+      className="relative p-2.5 rounded-full hover:bg-slate-100 transition-colors border-none bg-transparent cursor-pointer text-[#374151]"
+      title="My Account"
+    >
+      <UserCircle className="w-5 h-5 text-[#374151]" />
+    </Link>
   );
 }
 
@@ -461,13 +467,11 @@ export default function Header() {
           <div className="flex items-center gap-2 lg:gap-3 z-[10000]">
             <Search />
             <NotificationBell />
+            {isAuthenticated && <UserProfileDropdown />}
 
             <div className="hidden lg:flex items-center">
               {isAuthenticated ? (
                 <div className="flex items-center gap-3">
-                  <Link href="/quizzes/dashboard" className="bg-[#0F766E] hover:bg-[#0d655e] text-white px-5 py-2.5 rounded-full text-[13px] font-semibold transition-colors shadow-sm">
-                    Dashboard
-                  </Link>
                   <button onClick={() => signOut({ callbackUrl: '/' })} className="text-[13px] font-semibold text-red-500 hover:text-red-600 transition-colors py-2.5 px-2 border-none bg-transparent cursor-pointer">
                     Logout
                   </button>
@@ -564,13 +568,6 @@ export default function Header() {
                     })}
                     {isAuthenticated ? (
                       <>
-                        <a
-                          href="/quizzes/dashboard"
-                          onClick={() => setMenuOpen(false)}
-                          className="font-heading font-extrabold text-xl text-primary hover:text-accent py-2 transition-all block text-left"
-                        >
-                          Dashboard
-                        </a>
                         <button
                           onClick={() => { setMenuOpen(false); signOut({ callbackUrl: '/' }); }}
                           className="font-heading font-extrabold text-xl text-red-500 hover:text-red-600 py-2 transition-all text-left border-none bg-transparent cursor-pointer"
@@ -692,13 +689,6 @@ export default function Header() {
                     <div className="border-t border-[#E6EEF0] pt-4 mt-2 flex flex-col gap-4">
                       {isAuthenticated ? (
                         <>
-                          <a
-                            href="/quizzes/dashboard"
-                            onClick={() => setMenuOpen(false)}
-                            className="font-heading font-extrabold text-2xl text-primary hover:text-accent py-1 block"
-                          >
-                            Dashboard
-                          </a>
                           <button
                             onClick={() => { setMenuOpen(false); signOut({ callbackUrl: '/' }); }}
                             className="font-heading font-extrabold text-2xl text-red-500 hover:text-red-600 py-1 text-left border-none bg-transparent cursor-pointer"

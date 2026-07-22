@@ -237,7 +237,7 @@ export default function RecipesDashboard() {
                         <div className="flex items-center justify-end gap-2">
                           {recipe.status === 'APPROVED' && (
                             <button onClick={() => setAsHealthyBite(recipe)} className="p-2 text-amber-500 hover:bg-amber-50 rounded-lg transition-colors" title="Set as Healthy Bite">
-                              <Star size={18} />
+                              <Star size={18} className={healthyBiteId === recipe.id ? "fill-current" : ""} />
                             </button>
                           )}
                           {recipe.status !== 'APPROVED' && (

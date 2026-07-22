@@ -8,6 +8,7 @@ import Footer from '@/components/Footer';
 import AdSlot from '@/components/AdSlot';
 import { Play } from 'lucide-react';
 import DOMPurify from "isomorphic-dompurify";
+import RecentViewTracker from '@/components/RecentViewTracker';
 export const revalidate = 60; // ISR: Revalidate every 60 seconds
 
 export async function generateMetadata({ params }) {
@@ -105,6 +106,15 @@ export default async function ArticlePage({ params }) {
         />
       )}
       <Header />
+      <RecentViewTracker 
+        item={{
+          id: post.id,
+          title: post.title,
+          image: featuredImgUrl,
+          type: "Article",
+          url: `/blogs/${post.slug}`
+        }}
+      />
 
       <main className="pt-[140px] pb-20">
         <div className="container mx-auto px-4">

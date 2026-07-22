@@ -4,6 +4,7 @@ import ScrollReveal from '@/components/ScrollReveal';
 import { getQuizBySlug, quizzes } from '@/data/quizzes';
 import QuizClient from './QuizClient';
 import { getQuizQuestionsByCategory } from '@/lib/quizService';
+import RecentViewTracker from '@/components/RecentViewTracker';
 
 // Static params for build-time generation
 export function generateStaticParams() {
@@ -39,6 +40,15 @@ export default async function QuizPage({ params }) {
     <>
       <ScrollReveal />
       <Header />
+      <RecentViewTracker 
+        item={{
+          id: quiz.slug,
+          title: quiz.title,
+          image: quiz.image || "/images/q2.png",
+          type: "Quiz",
+          url: `/quizzes/${quiz.slug}`
+        }}
+      />
       <QuizClient quiz={quiz} />
     </>
   );

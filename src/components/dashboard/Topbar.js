@@ -433,6 +433,40 @@ export default function Topbar({ siteId, sites = [], onMenuClick }) {
                     </span>
                   </div>
 
+                  <div className="py-2 border-b border-gray-100 dark:border-slate-700">
+                    <div className="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-2">
+                      👤 ACCOUNT
+                    </div>
+                    <Link
+                      href="/dashboard/settings"
+                      onClick={() => setMenuOpen(false)}
+                      className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700"
+                    >
+                      My Profile
+                    </Link>
+                    <Link
+                      href="/dashboard/settings"
+                      onClick={() => setMenuOpen(false)}
+                      className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700"
+                    >
+                      Edit Profile
+                    </Link>
+                    <Link
+                      href="/dashboard/settings"
+                      onClick={() => setMenuOpen(false)}
+                      className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700"
+                    >
+                      Personal Information
+                    </Link>
+                    <Link
+                      href="/dashboard/settings"
+                      onClick={() => setMenuOpen(false)}
+                      className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700"
+                    >
+                      Change Password
+                    </Link>
+                  </div>
+
                   {/* Logout */}
                   <button
                     id="logout-btn"
@@ -498,5 +532,5 @@ export default function Topbar({ siteId, sites = [], onMenuClick }) {
         )}
       </header>
     </>
-   );
+  );
 }
