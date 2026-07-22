@@ -33,6 +33,7 @@ export async function GET(req) {
 
     const data = quizzes.map((q) => ({
       ...q,
+      category: q.category || "general-wellness",
       playCount: countMap[q.id] ?? 0,
       options: (() => {
         try {

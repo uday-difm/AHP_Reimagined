@@ -16,6 +16,18 @@ function proxyUrl(url) {
   }
   return url;
 }
+
+function stripHtml(html) {
+  if (!html) return '';
+  return html
+    .replace(/<[^>]*>/g, '') // Remove HTML tags
+    .replace(/&nbsp;/g, ' ') // Replace non-breaking spaces
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'");
+}
 import ScrollReveal from '@/components/ScrollReveal';
 import BackdropBlobs from '@/components/BackdropBlobs';
 // lucide-react social imports removed
@@ -289,9 +301,10 @@ export default function PublicationPage() {
                   {latestIssue.title}
                 </h1>
 
-                <p className="text-secondary text-[15px] md:text-base leading-relaxed mb-6 max-w-md">
-                  {latestIssue.description}
-                </p>
+                <div 
+                  className="text-secondary text-[15px] md:text-base leading-relaxed mb-6 max-w-md"
+                  dangerouslySetInnerHTML={{ __html: latestIssue.description || "" }}
+                />
 
                 {latestIssue.publisherSocials && Object.values(latestIssue.publisherSocials).some(link => link) && (
                   <div className="flex items-center gap-3 mb-10">
@@ -474,7 +487,7 @@ export default function PublicationPage() {
                                 <span className="text-[11px] text-white/50 font-bold uppercase tracking-[1px] block">Inside:</span>
                                 {issue.description ? (
                                   <p className="text-[12px] leading-relaxed text-white/90 font-medium line-clamp-6 overflow-hidden text-ellipsis">
-                                    {issue.description}
+                                    {stripHtml(issue.description)}
                                   </p>
                                 ) : (
                                   <ul className="text-[12px] md:text-[13.5px] leading-relaxed text-white/90 list-disc pl-4 space-y-1.5 font-medium">

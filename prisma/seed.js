@@ -33,8 +33,26 @@ async function main() {
   console.log("📧 admin@example.com");
   console.log("🔑 Admin@123");
 
-  const MAIN_NAVIGATION = [];
-  const FOOTER_NAVIGATION = [];
+  const MAIN_NAVIGATION = [
+    { label: "Home", url: "/", type: "internal", children: [] },
+    { label: "Resources", url: "#", type: "internal", children: [] },
+    { label: "Services", url: "/services", type: "internal", children: [] },
+    {
+      label: "About",
+      url: "#",
+      type: "internal",
+      children: [
+        { label: "About Us", url: "/about", type: "internal" },
+        { label: "Contact", url: "/contact", type: "internal" }
+      ]
+    }
+  ];
+  const FOOTER_NAVIGATION = [
+    { label: "Home", url: "/", type: "internal" },
+    { label: "Publications", url: "/publication", type: "internal" },
+    { label: "Blogs", url: "/blogs", type: "internal" },
+    { label: "Services", url: "/services", type: "internal" }
+  ];
   const DEFAULT_SITE_ID = "unnamed-site";
 
   console.log(`  ⚠️ No sites found. Creating default '${DEFAULT_SITE_ID}' site settings...`);

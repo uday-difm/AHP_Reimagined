@@ -31,8 +31,12 @@ export default function HomeQuizWidget() {
   const [selected, setSelected] = useState(null);
   const [animating, setAnimating] = useState(false);
   const [showGate, setShowGate] = useState(false);
+  const [completed, setCompleted] = useState(false);
   const [answers, setAnswers] = useState([]);
   const [dbQuestions, setDbQuestions] = useState(null);
+  const [dynamicQuiz, setDynamicQuiz] = useState(null);
+
+  const quiz = dynamicQuiz || quizzes[FEATURED_QUIZ_INDEX];
 
   useEffect(() => {
     fetch('/api/quizess/quiz?category=home-page')
@@ -41,6 +45,7 @@ export default function HomeQuizWidget() {
         if (data && data.length > 0) {
           const formatted = data.map((q) => ({
             id: q._id,
+            category: q.category || 'general-wellness',
             text: q.question,
             options: q.options.map((opt, idx) => ({
               label: opt,
@@ -50,6 +55,23 @@ export default function HomeQuizWidget() {
             explanation: q.explanation || "",
           }));
           setDbQuestions(formatted);
+
+          // Fetch active quiz types to match the category details
+          const firstCat = formatted[0].category;
+          fetch('/api/quizzes/types')
+            .then((res) => (res.ok ? res.json() : []))
+            .then((types) => {
+              const matched = types.find((t) => t.slug === firstCat);
+              if (matched) {
+                setDynamicQuiz({
+                  slug: matched.slug,
+                  title: matched.title,
+                  description: matched.description || matched.subtitle || "",
+                  icon: matched.icon || "📋",
+                });
+              }
+            })
+            .catch(() => {});
         } else {
           setDbQuestions([]);
         }
@@ -60,13 +82,27 @@ export default function HomeQuizWidget() {
       });
   }, []);
 
-  if (dbQuestions === null) return null;
-  if (dbQuestions.length === 0) return null;
+  // Restore progress from sessionStorage after returning from login
+  useEffect(() => {
+    if (quiz?.slug && isAuthenticated) {
+      const saved = sessionStorage.getItem(`quiz-progress-${quiz.slug}`);
+      if (saved) {
+        try {
+          const { savedIndex, savedAnswers } = JSON.parse(saved);
+          if (savedAnswers && savedAnswers.length > 0) {
+            setAnswers(savedAnswers);
+            setCurrentIndex(savedIndex);
+            setShowGate(false);
+            sessionStorage.removeItem(`quiz-progress-${quiz.slug}`);
+          }
+        } catch { /* ignore */ }
+      }
+    }
+  }, [isAuthenticated, quiz?.slug]);
 
-  const quiz = quizzes[FEATURED_QUIZ_INDEX];
-  const questions = dbQuestions;
-  const currentQ = questions[currentIndex];
-  const isLastQuestion = currentIndex === questions.length - 1;
+  const questions = dbQuestions || [];
+  const currentQ = questions[currentIndex] || null;
+  const isLastQuestion = questions.length > 0 && currentIndex === questions.length - 1;
 
   const handleSelect = (optIdx) => {
     if (animating || showGate) return;
@@ -74,13 +110,13 @@ export default function HomeQuizWidget() {
   };
 
   const handleNext = useCallback(() => {
-    if (selected === null || animating || showGate) return;
+    if (!currentQ || selected === null || animating || showGate) return;
     const option = currentQ.options[selected];
     const newAnswers = [...answers, { questionId: currentQ.id, optionIndex: selected, score: option.score }];
     setAnswers(newAnswers);
 
     const nextIndex = currentIndex + 1;
-    const nextIsLocked = nextIndex >= FREE_QUESTION_LIMIT;
+    const nextIsLocked = nextIndex >= FREE_QUESTION_LIMIT && !isAuthenticated;
 
     setAnimating(true);
     setTimeout(() => {
@@ -93,13 +129,29 @@ export default function HomeQuizWidget() {
           );
         } catch { /* ignore */ }
         setShowGate(true);
+      } else if (isLastQuestion) {
+        // Save results to localStorage
+        const totalScore = newAnswers.reduce((sum, a) => sum + (a.score || 0), 0);
+        const result = {
+          slug: quiz.slug,
+          title: quiz.title,
+          score: totalScore,
+          answers: newAnswers,
+          completedAt: new Date().toISOString(),
+        };
+        try {
+          const existing = JSON.parse(localStorage.getItem('quiz-results') || '[]');
+          const filtered = existing.filter(r => r.slug !== quiz.slug);
+          localStorage.setItem('quiz-results', JSON.stringify([result, ...filtered]));
+        } catch { /* ignore */ }
+        setCompleted(true);
       } else {
         setCurrentIndex(nextIndex);
         setSelected(null);
       }
       setAnimating(false);
     }, 300);
-  }, [selected, animating, showGate, currentQ, answers, currentIndex, quiz.slug]);
+  }, [selected, animating, showGate, currentQ, answers, currentIndex, quiz.slug, isAuthenticated, isLastQuestion]);
 
   const handleBack = () => {
     if (currentIndex === 0) { setStarted(false); return; }
@@ -115,9 +167,11 @@ export default function HomeQuizWidget() {
   };
 
   const handleLoginRedirect = () => {
-    const callbackUrl = encodeURIComponent(`/quizzes/${quiz.slug}`);
+    const callbackUrl = encodeURIComponent('/');
     router.push(`/login?callbackUrl=${callbackUrl}`);
   };
+
+  if (dbQuestions === null || dbQuestions.length === 0) return null;
 
   return (
     <section className="pt-20 pb-10 px-4 bg-[#f8fafc] border-t border-slate-200/40">
@@ -161,7 +215,7 @@ export default function HomeQuizWidget() {
           )}
 
           {/* ACTIVE QUESTION */}
-          {started && !showGate && (
+          {started && !showGate && !completed && (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
 
               {/* Left Column: Question Card */}
@@ -252,8 +306,28 @@ export default function HomeQuizWidget() {
             </div>
           )}
 
+          {/* COMPLETED SCREEN */}
+          {completed && (
+            <div className="bg-white border border-slate-200/60 rounded-[24px] overflow-hidden p-8 md:p-12 text-center shadow-sm max-w-2xl mx-auto">
+              <div className="text-[52px] mb-4">🎉</div>
+              <h3 className="font-heading font-extrabold text-xl text-primary mb-2">Quiz Complete!</h3>
+              <p className="text-secondary text-sm mb-6">{quiz.title}</p>
+              <div className="text-[48px] font-extrabold text-[#0f7c85] mb-8">
+                {answers.reduce((sum, a) => sum + (a.score || 0), 0)} <span className="text-[20px] text-slate-400">/{questions.length * 3}</span>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-md mx-auto">
+                <Link href="/quizzes/dashboard" className="bg-[#0f7c85] hover:bg-[#0c6b73] text-white px-8 py-3 rounded-full font-bold text-sm no-underline text-center transition-colors">
+                  View Dashboard
+                </Link>
+                <Link href="/quizzes" className="border border-slate-200 hover:bg-slate-50 text-slate-600 px-8 py-3 rounded-full font-bold text-sm no-underline text-center transition-colors">
+                  More Quizzes
+                </Link>
+              </div>
+            </div>
+          )}
+
           {/* GATED LOCK VIEW */}
-          {showGate && (
+          {showGate && !completed && (
             <div className="relative bg-white border border-slate-200/60 rounded-[24px] overflow-hidden p-8 md:p-12 text-center shadow-sm min-h-[380px] flex flex-col items-center justify-center max-w-2xl mx-auto">
               <div className="w-14 h-14 rounded-full flex items-center justify-center mb-4 bg-[#0f7c85]/10 text-[#0f7c85]">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">

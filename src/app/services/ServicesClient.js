@@ -18,6 +18,18 @@ function proxyUrl(url) {
   return url;
 }
 
+function stripHtml(html) {
+  if (!html) return '';
+  return html
+    .replace(/<[^>]*>/g, '') // Remove HTML tags
+    .replace(/&nbsp;/g, ' ') // Replace non-breaking spaces
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'");
+}
+
 function slugifyServiceTitle(title) {
   if (!title) return '';
   return title
@@ -162,7 +174,7 @@ export default function ServicesClient({ initialServices = [] }) {
                           </h3>
                         </Link>
                         <p className="text-[12.5px] text-secondary leading-relaxed line-clamp-3">
-                          {service.description}
+                          {stripHtml(service.description)}
                         </p>
                       </div>
                     </div>

@@ -208,9 +208,14 @@ export default function Header() {
       .then(data => {
         if (data?.success && Array.isArray(data.data?.items)) {
           setNavItems(data.data.items);
+        } else {
+          setNavItems([]);
         }
       })
-      .catch(err => console.error(`Error fetching navigation for ${menuType}:`, err));
+      .catch(err => {
+        console.error(`Error fetching navigation for ${menuType}:`, err);
+        setNavItems([]);
+      });
   }, [menuType]);
 
   // Body and HTML scroll locking when menu is open
@@ -231,7 +236,6 @@ export default function Header() {
   const defaultItems = [
     { label: "Home", url: "/", children: [] },
     { label: "Resources", url: "#", children: [] },
-    { label: "Services", url: "/services", children: [] },
     {
       label: "About",
       url: "#",

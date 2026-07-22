@@ -4,6 +4,33 @@ import { requireAuth } from "@/lib/requireAuth";
 
 export const dynamic = "force-dynamic";
 
+async function getHomePageQuizIds() {
+  const settings = await prisma.globalSettings.findFirst({
+    select: { websiteSettings: true }
+  });
+  const websiteSettings = settings?.websiteSettings || {};
+  return Array.isArray(websiteSettings.homePageQuizIds) 
+    ? websiteSettings.homePageQuizIds.map(Number) 
+    : [];
+}
+
+async function saveHomePageQuizIds(ids) {
+  const settings = await prisma.globalSettings.findFirst({
+    select: { siteId: true, websiteSettings: true }
+  });
+  const siteId = settings?.siteId || "unnamed-site";
+  const websiteSettings = settings?.websiteSettings || {};
+  const updatedSettings = {
+    ...websiteSettings,
+    homePageQuizIds: ids
+  };
+  await prisma.globalSettings.upsert({
+    where: { siteId },
+    update: { websiteSettings: updatedSettings },
+    create: { siteId, websiteSettings: updatedSettings }
+  });
+}
+
 /**
  * GET  /api/dashboard/quizzes/home-page  — list all questions tagged home-page
  * POST /api/dashboard/quizzes/home-page  — replace the home-page question set
@@ -14,13 +41,15 @@ export async function GET() {
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   try {
+    const ids = await getHomePageQuizIds();
     const rows = await prisma.quiz.findMany({
-      where: { category: "home-page" },
+      where: { id: { in: ids } },
       orderBy: { id: "asc" },
     });
 
     const data = rows.map((q) => ({
       ...q,
+      category: "home-page", // override dynamically so client UI renders correctly
       options: (() => {
         try {
           const p = JSON.parse(q.options);
@@ -45,45 +74,15 @@ export async function POST(req) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   try {
-    const { questionIds, sourceCategories } = await req.json();
+    const { questionIds } = await req.json();
 
     if (!Array.isArray(questionIds))
       return NextResponse.json({ error: "questionIds must be an array" }, { status: 400 });
 
-    // We keep a map of what each question's ORIGINAL category was (passed from client)
-    // so we can restore it when unchecked
-    const sourceCatMap = sourceCategories || {};
+    const newIds = questionIds.map(Number);
+    await saveHomePageQuizIds(newIds);
 
-    // 1. Get all currently-tagged home-page questions
-    const current = await prisma.quiz.findMany({
-      where: { category: "home-page" },
-      select: { id: true },
-    });
-    const currentIds = new Set(current.map((q) => q.id));
-    const newIds = new Set(questionIds.map(Number));
-
-    // 2. Questions to ADD to home-page (not currently tagged)
-    const toAdd = [...newIds].filter((id) => !currentIds.has(id));
-
-    // 3. Questions to REMOVE from home-page (currently tagged but not in new list)
-    const toRemove = [...currentIds].filter((id) => !newIds.has(id));
-
-    // Process in transaction
-    await prisma.$transaction([
-      // Add: set category to "home-page"
-      ...toAdd.map((id) =>
-        prisma.quiz.update({ where: { id }, data: { category: "home-page" } })
-      ),
-      // Remove: restore to the original category (from sourceCategories map) or general-wellness
-      ...toRemove.map((id) => {
-        const original = sourceCatMap[String(id)] || "general-wellness";
-        // Don't restore to home-page (safety check)
-        const restoreTo = original === "home-page" ? "general-wellness" : original;
-        return prisma.quiz.update({ where: { id }, data: { category: restoreTo } });
-      }),
-    ]);
-
-    return NextResponse.json({ success: true, added: toAdd.length, removed: toRemove.length });
+    return NextResponse.json({ success: true, added: newIds.length, removed: 0 });
   } catch (err) {
     console.error("POST /api/dashboard/quizzes/home-page error:", err);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

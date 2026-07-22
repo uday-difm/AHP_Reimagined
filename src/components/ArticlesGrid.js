@@ -206,9 +206,18 @@ export default function ArticlesGrid() {
 
                 <div className="flex flex-col gap-3">
                   <span className="text-secondary font-bold text-sm">Dear Readers,</span>
-                  <p className="text-secondary text-sm leading-relaxed">
-                    {latestIssue ? (latestIssue.introduction || latestIssue.description || `Welcome to the ${latestIssue.season} Edition of A Health Place Magazine.`) : "Welcome to the Spring 2024 Edition of A Health Place Magazine. This issue explores the powerful somatic resets, circadian sleep guidelines, and neuroscience-backed habits designed to quiet stress loops and ground your mental clarity."}
-                  </p>
+                  {latestIssue ? (
+                    <div 
+                      className="text-secondary text-sm leading-relaxed"
+                      dangerouslySetInnerHTML={{ 
+                        __html: latestIssue.introduction || latestIssue.description || `Welcome to the ${latestIssue.season} Edition of A Health Place Magazine.` 
+                      }}
+                    />
+                  ) : (
+                    <p className="text-secondary text-sm leading-relaxed">
+                      Welcome to the Spring 2024 Edition of A Health Place Magazine. This issue explores the powerful somatic resets, circadian sleep guidelines, and neuroscience-backed habits designed to quiet stress loops and ground your mental clarity.
+                    </p>
+                  )}
                 </div>
               </div>
 

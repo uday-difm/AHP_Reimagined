@@ -8,10 +8,21 @@ export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
     const categoryFilter = searchParams.get("category") || "general-wellness";
-
-    const where = categoryFilter === "general-wellness"
-      ? { OR: [{ category: "general-wellness" }, { category: null }] }
-      : { category: categoryFilter };
+    let where;
+    if (categoryFilter === "home-page") {
+      const settings = await prisma.globalSettings.findFirst({
+        select: { websiteSettings: true }
+      });
+      const websiteSettings = settings?.websiteSettings || {};
+      const ids = Array.isArray(websiteSettings.homePageQuizIds)
+        ? websiteSettings.homePageQuizIds.map(Number)
+        : [];
+      where = { id: { in: ids } };
+    } else if (categoryFilter === "general-wellness") {
+      where = { OR: [{ category: "general-wellness" }, { category: null }] };
+    } else {
+      where = { category: categoryFilter };
+    }
 
     let quizzes = await prisma.quiz.findMany({
       where
@@ -60,6 +71,7 @@ export async function GET(req) {
 
       return {
         _id: q.id,
+        category: q.category,
         question: q.question,
         options: parsedOptions,
         correctAnswer: corrAnswerIndex,
