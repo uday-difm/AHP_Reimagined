@@ -133,41 +133,24 @@ export const authOptions = {
           writeLog(`[Auth] Authentication successful for: ${credentials.email}. User ID: ${user?.id}`);
           return user;
         } catch (err) {
-          writeLog(`[Auth] Admin authentication failed, trying frontend auth table for: ${credentials.email}`);
-
-          try {
-            const shasum = crypto.createHash("sha256");
-            shasum.update(credentials.password);
-            const hashedPassword = shasum.digest("hex");
-
-            const frontendUser = await prisma.auth.findFirst({
-              where: {
-                OR: [
-                  { email: credentials.email },
-                  { username: credentials.email }
-                ]
-              }
-            });
-
-            if (frontendUser && frontendUser.password === hashedPassword) {
-              writeLog(`[Auth] Frontend user authenticated successfully: ${frontendUser.email}`);
-              return {
-                id: String(frontendUser.id),
-                email: frontendUser.email,
-                name: frontendUser.name,
-                globalRole: "USER"
-              };
-            }
-          } catch (frontendErr) {
-            writeLog(`[Auth] Frontend authentication error: ${frontendErr.message}`);
-          }
-
-          writeLog(`[Auth] All authentication methods failed for: ${credentials.email}`);
+          writeLog(`[Auth] Admin authentication failed for: ${credentials.email}`);
           throw new Error(err.message || "Invalid credentials");
         }
       },
     }),
   ],
+
+  cookies: {
+    sessionToken: {
+      name: process.env.NODE_ENV === "production" ? "__Secure-dashboard-session-token" : "dashboard-session-token",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: process.env.NODE_ENV === "production"
+      }
+    }
+  },
 
   callbacks: {
     async jwt({ token, user }) {

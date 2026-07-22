@@ -13,6 +13,10 @@ export const requireAuth = cache(async () => {
     return null;
   }
 
+  if (session.user.globalRole === "USER" || session.user.globalRole === "VISITOR" || !session.user.globalRole) {
+    return null;
+  }
+
   try {
     const now = Date.now();
     const cached = userCache.get(session.user.id);
