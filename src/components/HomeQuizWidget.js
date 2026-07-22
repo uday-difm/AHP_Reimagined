@@ -35,6 +35,18 @@ export default function HomeQuizWidget() {
   const [answers, setAnswers] = useState([]);
   const [dbQuestions, setDbQuestions] = useState(null);
   const [dynamicQuiz, setDynamicQuiz] = useState(null);
+  const [localResults, setLocalResults] = useState([]);
+  const [typesCount, setTypesCount] = useState(0);
+
+  // Load results from localStorage on mount and when completed state changes
+  useEffect(() => {
+    try {
+      const stored = JSON.parse(localStorage.getItem('quiz-results') || '[]');
+      setLocalResults(stored);
+    } catch {
+      setLocalResults([]);
+    }
+  }, [completed]);
 
   const quiz = dynamicQuiz || quizzes[FEATURED_QUIZ_INDEX];
 
@@ -61,6 +73,7 @@ export default function HomeQuizWidget() {
           fetch('/api/quizzes/types')
             .then((res) => (res.ok ? res.json() : []))
             .then((types) => {
+              setTypesCount(types.length);
               const matched = types.find((t) => t.slug === firstCat);
               if (matched) {
                 setDynamicQuiz({
@@ -169,6 +182,52 @@ export default function HomeQuizWidget() {
   const handleLoginRedirect = () => {
     const callbackUrl = encodeURIComponent('/');
     router.push(`/login?callbackUrl=${callbackUrl}`);
+  };
+
+  const calculateStreak = (results) => {
+    if (!results || results.length === 0) return 0;
+    const dates = results
+      .map(r => {
+        try {
+          return new Date(r.completedAt).toISOString().split('T')[0];
+        } catch {
+          return null;
+        }
+      })
+      .filter(Boolean);
+    const uniqueDates = [...new Set(dates)].sort((a, b) => new Date(b) - new Date(a));
+    if (uniqueDates.length === 0) return 0;
+    const todayStr = new Date().toISOString().split('T')[0];
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayStr = yesterday.toISOString().split('T')[0];
+    if (uniqueDates[0] !== todayStr && uniqueDates[0] !== yesterdayStr) return 0;
+    
+    let streak = 1;
+    for (let i = 0; i < uniqueDates.length - 1; i++) {
+      const d1 = new Date(uniqueDates[i]);
+      const d2 = new Date(uniqueDates[i+1]);
+      const diffTime = Math.abs(d1 - d2);
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      if (diffDays === 1) {
+        streak++;
+      } else if (diffDays > 1) {
+        break;
+      }
+    }
+    return streak;
+  };
+
+  const getCompletedStats = (results) => {
+    let totalCorrect = 0;
+    let totalQuestions = 0;
+    results.forEach(r => {
+      const qCount = r.answers ? r.answers.length : 0;
+      const cCount = r.answers ? r.answers.filter(a => a.score > 1).length : 0;
+      totalCorrect += cCount;
+      totalQuestions += qCount;
+    });
+    return { totalCorrect, totalQuestions };
   };
 
   if (dbQuestions === null || dbQuestions.length === 0) return null;
@@ -411,9 +470,30 @@ export default function HomeQuizWidget() {
               <h2 className="text-center font-heading font-extrabold text-2xl mb-8 text-primary">Track Your Score</h2>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
                 {[
-                  { l: 'Correct Answers', v: answers.length > 0 ? `${answers.filter(a => a.score > 1).length}/${answers.length}` : '3/3' },
-                  { l: 'Daily Streak', v: '3 Days' },
-                  { l: 'Completion Rate', v: '100%' },
+                  {
+                    l: 'Correct Answers',
+                    v: answers.length > 0
+                      ? `${answers.filter(a => a.score > 1).length}/${answers.length}`
+                      : (() => {
+                          const { totalCorrect, totalQuestions } = getCompletedStats(localResults);
+                          return totalQuestions > 0 ? `${totalCorrect}/${totalQuestions}` : '0/0';
+                        })()
+                  },
+                  {
+                    l: 'Daily Streak',
+                    v: (() => {
+                      const streak = calculateStreak(localResults);
+                      return `${streak} Day${streak !== 1 ? 's' : ''}`;
+                    })()
+                  },
+                  {
+                    l: 'Completion Rate',
+                    v: (() => {
+                      const total = typesCount || quizzes.length || 1;
+                      const rate = Math.min(100, Math.round((localResults.length / total) * 100));
+                      return `${rate}%`;
+                    })()
+                  },
                 ].map((stat, i) => (
                   <div key={i} className="bg-white rounded-[20px] p-6 border border-slate-200/60 text-center shadow-sm">
                     <span className="text-2xl font-extrabold block text-[#0f7c85] mb-1">{stat.v}</span>
