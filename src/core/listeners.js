@@ -62,6 +62,14 @@ EventBus.on("lead.created", async ({ siteId, data }) => {
   } catch (err) {
     console.error("❌ [EventBus] Failed to notify new lead:", err);
   }
+
+  // Automatically send welcome confirmation email to lead
+  try {
+    await emailService.sendLeadWelcomeEmail(siteId, data);
+    console.log("✅ [EventBus] Lead welcome email triggered successfully.");
+  } catch (err) {
+    console.error("❌ [EventBus] Failed to send welcome email to lead:", err);
+  }
 });
 
 EventBus.on("form.failed", async ({ siteId, data }) => {
@@ -87,6 +95,14 @@ EventBus.on("newsletter.subscribed", async ({ siteId, data }) => {
     console.log("✅ [EventBus] NotificationAlert created in DB for newsletter.");
   } catch (err) {
     console.error("❌ [EventBus] Failed to create dashboard NotificationAlert for newsletter:", err);
+  }
+
+  // Automatically send welcome email to newsletter subscriber
+  try {
+    await emailService.sendNewsletterWelcomeEmail(siteId, data.email);
+    console.log("✅ [EventBus] Newsletter welcome email triggered successfully.");
+  } catch (err) {
+    console.error("❌ [EventBus] Failed to send welcome email to newsletter subscriber:", err);
   }
 });
 

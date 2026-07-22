@@ -26,6 +26,7 @@ function QuizCard({ quiz }) {
   return (
     <Link
       href={`/quizzes/${quiz.slug}`}
+      target="_blank"
       className="group block no-underline h-full"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}

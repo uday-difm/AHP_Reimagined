@@ -405,7 +405,7 @@ export default function Header() {
                               <ul className="space-y-3 mb-4 flex-1">
                                 {dynamicQuizzes.slice(0, 4).map((quiz) => (
                                   <li key={quiz.slug}>
-                                    <Link href={`/quizzes/${quiz.slug}`} className="text-sm text-[#374151] hover:text-[#0F766E] hover:font-medium transition-colors block line-clamp-1" title={quiz.title}>
+                                    <Link href={`/quizzes/${quiz.slug}`} target="_blank" className="text-sm text-[#374151] hover:text-[#0F766E] hover:font-medium transition-colors block line-clamp-1" title={quiz.title}>
                                       {quiz.title}
                                     </Link>
                                   </li>

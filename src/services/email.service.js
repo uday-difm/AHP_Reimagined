@@ -157,43 +157,60 @@ export class EmailService extends BaseService {
     const { transporter, fromEmail, config } = await this.getTransporterForSite(
       site.id,
     );
-    const { autoReplyTemplate, adminAlerts } = config;
-
-    if (autoReplyTemplate?.enabled !== false) {
-      const replySubject = (
-        autoReplyTemplate?.subject || "Thanks for reaching out, {name}!"
-      ).replace("{name}", submission.name);
-      const replyBody = (
-        autoReplyTemplate?.body ||
-        "Hi {name},\n\nThank you for contacting us. We'll get back to you within 24 hours.\n\nBest regards,\n{siteName}"
-      )
-        .replace("{name}", submission.name)
-        .replace("{siteName}", site.name);
-
-      try {
-        await transporter.sendMail({
-          from: fromEmail,
-          replyTo: fromEmail,
-          to: submission.email,
-          subject: replySubject,
-          text: replyBody,
-        });
-      } catch (err) {
-        console.error("Auto-reply email failed:", err);
-      }
-    }
+    const { adminAlerts } = config;
 
     if (adminAlerts?.enabled !== false) {
       const adminEmail =
         config.recipientOverride || adminAlerts?.email || fromEmail;
+      
       try {
+        // Search database for custom admin notification template
+        const template = await prisma.emailTemplate.findFirst({
+          where: {
+            siteId: site.id,
+            name: {
+              contains: "admin"
+            },
+          },
+        });
+
+        if (!template) {
+          throw new Error("Admin Lead Alert Template not found in the database. Please create one in the Email Templates section.");
+        }
+
+        const name = submission.name || "there";
+        const email = submission.email || "";
+        const phone = submission.phone || "N/A";
+        const message = submission.message || "";
+        const serviceInterest = lead?.serviceInterest || "General Inquiry";
+        const siteName = site.name || "A Health Place";
+
+        const subject = (template.subject || `New Lead / Contact Submission: ${name}`)
+          .replaceAll("{name}", name)
+          .replaceAll("{email}", email)
+          .replaceAll("{phone}", phone)
+          .replaceAll("{message}", message)
+          .replaceAll("{query}", message)
+          .replaceAll("{serviceInterest}", serviceInterest)
+          .replaceAll("{siteName}", siteName);
+
+        const html = template.htmlContent
+          .replaceAll("{name}", name)
+          .replaceAll("{email}", email)
+          .replaceAll("{phone}", phone)
+          .replaceAll("{message}", message)
+          .replaceAll("{query}", message)
+          .replaceAll("{serviceInterest}", serviceInterest)
+          .replaceAll("{siteName}", siteName);
+
         await transporter.sendMail({
           from: fromEmail,
-          replyTo: fromEmail,
+          replyTo: email, 
           to: adminEmail,
-          subject: `[${site.name}] New Lead / Contact Submission: ${submission.name}`,
-          text: `New contact form submission:\n\nName: ${submission.name}\nEmail: ${submission.email}\nPhone: ${submission.phone || "N/A"}\nMessage:\n${submission.message}\n\nView in CMS dashboard under Leads.`,
+          subject,
+          html,
         });
+        console.log(`[EmailService] Admin notification email sent successfully to ${adminEmail}`);
       } catch (err) {
         console.error("Admin notification email failed:", err);
         await this.logEmailFailure(site.id, err.message, {
@@ -296,6 +313,97 @@ export class EmailService extends BaseService {
       });
     } catch (e) {
       console.error("Failed to write failed email log to DB:", e);
+    }
+  }
+
+  async sendNewsletterWelcomeEmail(siteId, email) {
+    try {
+      const site = await prisma.site.findUnique({ where: { id: siteId } });
+      const siteName = site?.name || "A Health Place";
+
+      const template = await prisma.emailTemplate.findFirst({
+        where: {
+          siteId,
+          name: {
+            contains: "newsletter"
+          },
+        },
+      });
+
+      if (!template) {
+        throw new Error("Newsletter Welcome Template not found in the database. Please create one in the Email Templates section.");
+      }
+
+      const subject = (template.subject || "Welcome to the family! 🎉")
+        .replaceAll("{email}", email)
+        .replaceAll("{siteName}", siteName);
+
+      const html = template.htmlContent
+        .replaceAll("{email}", email)
+        .replaceAll("{siteName}", siteName);
+
+      const { transporter, fromEmail } = await this.getTransporterForSite(siteId);
+      await transporter.sendMail({
+        from: fromEmail,
+        to: email,
+        subject,
+        html,
+      });
+      console.log(`[EmailService] Newsletter welcome email sent successfully to ${email}`);
+    } catch (err) {
+      console.error("[EmailService] Failed to send newsletter welcome email:", err);
+      await this.logEmailFailure(siteId, err.message, { context: "newsletter-welcome", recipient: email });
+    }
+  }
+
+  async sendLeadWelcomeEmail(siteId, lead) {
+    try {
+      const site = await prisma.site.findUnique({ where: { id: siteId } });
+      const siteName = site?.name || "A Health Place";
+
+      const template = await prisma.emailTemplate.findFirst({
+        where: {
+          siteId,
+          name: {
+            contains: "lead"
+          },
+        },
+      });
+
+      if (!template) {
+        throw new Error("Lead Welcome Template not found in the database. Please create one in the Email Templates section.");
+      }
+
+      const name = lead.name || "there";
+      const email = lead.email;
+      const phone = lead.phone || "N/A";
+      const serviceInterest = lead.serviceInterest || "General Inquiry";
+
+      const subject = (template.subject || "Thanks for reaching out! 👋")
+        .replaceAll("{name}", name)
+        .replaceAll("{email}", email)
+        .replaceAll("{phone}", phone)
+        .replaceAll("{serviceInterest}", serviceInterest)
+        .replaceAll("{siteName}", siteName);
+
+      const html = template.htmlContent
+        .replaceAll("{name}", name)
+        .replaceAll("{email}", email)
+        .replaceAll("{phone}", phone)
+        .replaceAll("{serviceInterest}", serviceInterest)
+        .replaceAll("{siteName}", siteName);
+
+      const { transporter, fromEmail } = await this.getTransporterForSite(siteId);
+      await transporter.sendMail({
+        from: fromEmail,
+        to: email,
+        subject,
+        html,
+      });
+      console.log(`[EmailService] Lead welcome email sent successfully to ${email}`);
+    } catch (err) {
+      console.error("[EmailService] Failed to send lead welcome email:", err);
+      await this.logEmailFailure(siteId, err.message, { context: "lead-welcome", recipient: lead.email });
     }
   }
 }
