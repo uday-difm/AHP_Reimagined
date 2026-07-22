@@ -3,6 +3,7 @@ import ThemeProvider from "@/components/providers/ThemeProvider";
 import SessionTimeoutHandler from "@/components/utils/SessionTimeoutHandler";
 import { Toaster } from "sonner";
 import "@/core/listeners";
+import { headers } from "next/headers";
 
 import { Inter, Outfit, Playfair_Display } from "next/font/google";
 import "./globals.css";
@@ -44,6 +45,11 @@ export async function generateMetadata() {
 
 export default async function RootLayout({ children }) {
   const layout = await getLayoutData();
+  
+  const headersList = await headers();
+  const pathname = headersList.get("x-pathname") || "/";
+  const isDashboard = pathname.startsWith("/dashboard") || pathname.startsWith("/crm") || pathname.startsWith("/preview");
+  const basePath = isDashboard ? "/api/auth" : "/api/auth/frontend";
 
   const compliance = layout?.rawSettings?.compliance || {};
   const complianceSettings = {
@@ -81,7 +87,7 @@ export default async function RootLayout({ children }) {
       </head>
       <body>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <AuthProvider>
+          <AuthProvider basePath={basePath}>
             <SessionTimeoutHandler timeoutMinutes={30} />
             <ClientLayoutHelpers layout={layout} complianceSettings={complianceSettings}>
               {children}

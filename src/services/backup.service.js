@@ -362,6 +362,12 @@ export class BackupService extends BaseService {
     return devTools.backupHistory || [];
   }
 
+  async getLastBackupTimestamp(siteId, type) {
+    const history = await this.getBackupHistory(siteId);
+    const recent = history.find(b => b.type === type);
+    return recent ? recent.timestamp : null;
+  }
+
   async logBackupHistory(siteId, type, size, fileUrl = null) {
     const settings = await prisma.globalSettings.findUnique({
       where: { siteId },

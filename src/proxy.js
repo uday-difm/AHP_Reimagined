@@ -105,14 +105,24 @@ export async function proxy(request) {
     process.env.NEXT_PUBLIC_SITE_ID ||
     "infinium";
 
-  // --------------- Admin/CRM Auth Guard ---------------
+// --------------- Admin/CRM Auth Guard ---------------
   const ADMIN_PATHS = ["/dashboard", "/crm", "/preview"];
   const isDashboardPath = ADMIN_PATHS.some((p) => pathname.startsWith(p)) && !pathname.startsWith("/dashboard/login");
   if (isDashboardPath) {
-    const hasSession =
-      request.cookies.has("next-auth.session-token") ||
-      request.cookies.has("__Secure-next-auth.session-token");
-    if (!hasSession) {
+    let token = null;
+    try {
+      const { getToken } = await import("next-auth/jwt");
+      token = await getToken({ 
+        req: request, 
+        secret: process.env.NEXTAUTH_SECRET,
+        cookieName: process.env.NODE_ENV === "production" ? "__Secure-dashboard-session-token" : "dashboard-session-token",
+        secureCookie: process.env.NODE_ENV === "production"
+      });
+    } catch (err) {
+      console.error("[Middleware] JWT verification error:", err);
+    }
+
+    if (!token || token.globalRole === "USER" || token.globalRole === "VISITOR" || !token.globalRole) {
       const loginUrl = new URL("/dashboard/login", url);
       loginUrl.searchParams.set("callbackUrl", pathname);
       return NextResponse.redirect(loginUrl);

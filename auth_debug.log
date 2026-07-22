@@ -474,6 +474,12 @@
 [2026-07-21T12:02:17.845Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
 [2026-07-21T12:02:17.849Z] [Auth] Authenticating against authService for: admin@example.com
 [2026-07-21T12:02:18.440Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh
+[2026-07-21T12:06:28.896Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-21T12:06:28.898Z] [Auth] Request Host: dyslexia-recital-area.ngrok-free.dev
+[2026-07-21T12:06:28.899Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
+[2026-07-21T12:06:28.899Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-21T12:06:28.900Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-21T12:06:29.398Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh
 [2026-07-22T03:03:50.232Z] [Auth] Attempt started. Email: manish.yadav@difm.tech
 [2026-07-22T03:03:50.234Z] [Auth] Request Host: localhost:3000
 [2026-07-22T03:03:50.235Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
@@ -500,6 +506,12 @@
 [2026-07-22T03:09:45.448Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
 [2026-07-22T03:09:45.452Z] [Auth] Authenticating against authService for: admin@example.com
 [2026-07-22T03:09:45.929Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh
+[2026-07-22T04:27:54.654Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-22T04:27:54.655Z] [Auth] Request Host: localhost:3000
+[2026-07-22T04:27:54.655Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
+[2026-07-22T04:27:54.655Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-22T04:27:54.656Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-22T04:27:55.346Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrvk5h4m0000uhc4xpgo0tkd
 [2026-07-22T04:33:04.116Z] [Auth] Attempt started. Email: admin@example.com
 [2026-07-22T04:33:04.117Z] [Auth] Request Host: localhost:3000
 [2026-07-22T04:33:04.118Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.

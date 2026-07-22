@@ -39,6 +39,17 @@ async function main() {
 
   console.log(`  ⚠️ No sites found. Creating default '${DEFAULT_SITE_ID}' site settings...`);
 
+  // Ensure a Site exists for the GlobalSettings foreign key
+  await prisma.site.upsert({
+    where: { id: DEFAULT_SITE_ID },
+    update: {},
+    create: {
+      id: DEFAULT_SITE_ID,
+      name: "Unnamed Site",
+      isActive: true,
+    },
+  });
+
   await prisma.globalSettings.upsert({
     where: { siteId: DEFAULT_SITE_ID },
     update: {
