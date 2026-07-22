@@ -530,10 +530,10 @@ export default function AdsPage() {
           </div>
           <div>
             <h1 className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-white flex items-center gap-1.5">
-              Advertisement Center
+              Ads Manager
             </h1>
             <p className="text-slate-500 dark:text-slate-400 text-xs mt-0.5">
-              Deploy, rotate, target and monitor campaign zones across all layout layers
+              Create and manage the advertisements shown on your website — no technical knowledge needed.
             </p>
           </div>
         </div>
@@ -547,7 +547,7 @@ export default function AdsPage() {
             onClick={openCompose}
             className="flex items-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold transition shadow-sm"
           >
-            <Plus size={14} /> Deploy Ad
+            <Plus size={14} /> + Create New Ad
           </button>
         </div>
       </div>
@@ -555,11 +555,11 @@ export default function AdsPage() {
       {/* Tab Navigation */}
       <div className="flex flex-wrap items-center gap-1 bg-slate-100 dark:bg-slate-800/60 p-1 rounded-xl w-full lg:w-fit">
         {[
-          { key: "overview", label: "Overview", icon: BarChart3 },
-          { key: "ads", label: "Advertisements", icon: FileText },
-          { key: "campaigns", label: "Campaign Groups", icon: Briefcase },
+          { key: "overview", label: "Dashboard", icon: BarChart3 },
+          { key: "ads", label: "My Ads", icon: FileText },
+          { key: "campaigns", label: "Campaigns", icon: Briefcase },
           { key: "advertisers", label: "Advertisers", icon: Users },
-          { key: "zones", label: "Placement Settings", icon: Settings },
+          { key: "zones", label: "Ad Locations", icon: Settings },
         ].map(t => (
           <button
             key={t.key}
@@ -579,6 +579,31 @@ export default function AdsPage() {
       {/* --- OVERVIEW TAB --- */}
       {activeTab === "overview" && (
         <div className="space-y-6">
+
+          {/* Quick Start Guide */}
+          <div className="bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-indigo-950/30 dark:to-blue-950/20 border border-indigo-100 dark:border-indigo-900/40 rounded-2xl p-5">
+            <h2 className="text-sm font-extrabold text-indigo-900 dark:text-indigo-200 mb-1 flex items-center gap-2"><Sparkles size={15} className="text-indigo-500" /> How Ads Work — 3 Simple Steps</h2>
+            <p className="text-xs text-indigo-700/80 dark:text-indigo-300/70 mb-4">Follow these steps to get your first ad showing on the website.</p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              {[
+                { step: "1", title: "Set an Ad Location", desc: "Go to \"Ad Locations\" tab and create a spot — e.g. \"Top of Homepage\". Think of it like choosing where on the page your ad will appear.", icon: Target, color: "text-violet-600", bg: "bg-violet-50 dark:bg-violet-950/30" },
+                { step: "2", title: "Add Your Advertiser (Optional)", desc: "Go to \"Advertisers\" tab to register the company whose ad you're running. This helps you keep track of who placed each ad.", icon: Users, color: "text-sky-600", bg: "bg-sky-50 dark:bg-sky-950/30" },
+                { step: "3", title: "Create the Ad", desc: "Click \"+ Create New Ad\", upload your image or paste ad code, pick the location you set up, then click Save. Your ad will appear on the site immediately.", icon: ImageIcon, color: "text-emerald-600", bg: "bg-emerald-50 dark:bg-emerald-950/30" },
+              ].map(item => (
+                <div key={item.step} className="flex gap-3 bg-white/70 dark:bg-slate-900/50 rounded-xl p-3.5 border border-white dark:border-slate-800">
+                  <div className={`w-8 h-8 rounded-full ${item.bg} flex items-center justify-center shrink-0`}>
+                    <item.icon size={15} className={item.color} />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-wider mb-0.5">Step {item.step}</p>
+                    <p className="text-xs font-bold text-slate-800 dark:text-slate-200">{item.title}</p>
+                    <p className="text-[10.5px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">{item.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
           {/* Dashboard Cards */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="bg-white dark:bg-slate-800 border dark:border-slate-700 p-4 rounded-2xl flex items-center gap-3">
@@ -688,13 +713,21 @@ export default function AdsPage() {
       {/* --- ADVERTISEMENTS TAB --- */}
       {activeTab === "ads" && (
         <div className="space-y-4">
+          {/* Help Banner */}
+          <div className="bg-sky-50 dark:bg-sky-950/20 border border-sky-200 dark:border-sky-900/40 rounded-xl px-4 py-3 flex items-start gap-3">
+            <Sparkles size={14} className="text-sky-500 mt-0.5 shrink-0" />
+            <p className="text-xs text-sky-700 dark:text-sky-300">
+              <strong>Tip:</strong> Each row below is an advertisement. Click <strong>Edit</strong> to change an ad&apos;s image or link. Toggle the <strong>Active/Paused</strong> button to instantly show or hide an ad on your website.
+            </p>
+          </div>
+
           {/* Controls Bar */}
           <div className="bg-white dark:bg-slate-800 border dark:border-slate-700 p-4 rounded-xl flex flex-wrap items-center justify-between gap-3 shadow-sm">
             <div className="flex items-center gap-2 flex-1 min-w-[240px]">
               <Search size={14} className="text-slate-450 shrink-0" />
               <input
                 type="text"
-                placeholder="Search ad titles, advertisers, campaign tags..."
+                placeholder="Search by ad name, advertiser, or campaign..."
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
                 className="w-full bg-transparent border-0 outline-none text-xs text-slate-850 dark:text-slate-250"
@@ -719,7 +752,7 @@ export default function AdsPage() {
                 onChange={e => setZoneFilter(e.target.value)}
                 className="p-1.5 border rounded-lg text-[10.5px] font-bold dark:bg-slate-900 outline-none max-w-[150px]"
               >
-                <option value="all">All Placement Zones</option>
+                <option value="all">All Ad Locations</option>
                 {zones.map(z => <option key={z.id} value={z.id}>{z.name}</option>)}
               </select>
 
@@ -736,23 +769,30 @@ export default function AdsPage() {
           <div className="bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm">
             {loading ? (
               <div className="p-20 text-center text-xs text-slate-400 flex items-center justify-center gap-1.5">
-                <RefreshCw size={16} className="animate-spin text-indigo-500" /> Syncing list...
+                <RefreshCw size={16} className="animate-spin text-indigo-500" /> Loading your ads...
               </div>
             ) : filteredAds.length === 0 ? (
-              <div className="p-20 text-center text-xs text-slate-400">
-                No campaign ads found matching active criteria. Click "Deploy Ad" to create one.
+              <div className="p-16 text-center space-y-3">
+                <div className="w-12 h-12 bg-indigo-50 dark:bg-indigo-950/40 rounded-2xl flex items-center justify-center mx-auto">
+                  <ImageIcon size={22} className="text-indigo-400" />
+                </div>
+                <p className="text-sm font-bold text-slate-700 dark:text-slate-300">No ads yet</p>
+                <p className="text-xs text-slate-400">Click <strong>&quot;+ Create New Ad&quot;</strong> at the top to add your first advertisement.</p>
+                <button onClick={openCompose} className="inline-flex items-center gap-1.5 px-4 py-2 bg-indigo-600 text-white rounded-lg text-xs font-bold mt-1">
+                  <Plus size={13} /> + Create New Ad
+                </button>
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="bg-slate-50/50 dark:bg-slate-900/30 border-b dark:border-slate-700 text-[10px] font-bold uppercase tracking-wider text-slate-500">
-                      <th className="p-4">Deployment</th>
-                      <th className="p-4">Placement Zone</th>
+                      <th className="p-4">Ad Name</th>
+                      <th className="p-4">Where it shows</th>
                       <th className="p-4">Advertiser / Campaign</th>
                       <th className="p-4 text-center">Priority</th>
-                      <th className="p-4 text-center">Live Status</th>
-                      <th className="p-4 text-center">Performance (CTR)</th>
+                      <th className="p-4 text-center">Live?</th>
+                      <th className="p-4 text-center">Performance</th>
                       <th className="p-4 text-right">Actions</th>
                     </tr>
                   </thead>
@@ -836,9 +876,17 @@ export default function AdsPage() {
       {activeTab === "campaigns" && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-4">
+            {/* Help Banner */}
+            <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/40 rounded-xl px-4 py-3 flex items-start gap-3">
+              <Briefcase size={14} className="text-amber-500 mt-0.5 shrink-0" />
+              <p className="text-xs text-amber-700 dark:text-amber-300">
+                <strong>What is a Campaign?</strong> A campaign groups multiple ads together under one budget and date range. For example: <em>&quot;Summer Promotions&quot;</em> — then link all summer ads to it for easy tracking.
+              </p>
+            </div>
             {campaigns.length === 0 ? (
-              <div className="bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-2xl p-12 text-center text-xs text-slate-450">
-                No active campaign groups defined. Use the creation board to define one.
+              <div className="bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-2xl p-12 text-center space-y-2">
+                <p className="text-sm font-bold text-slate-600 dark:text-slate-400">No campaigns yet</p>
+                <p className="text-xs text-slate-400">Use the form on the right to create your first campaign group.</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -869,7 +917,7 @@ export default function AdsPage() {
                         </div>
                         {totalBudget > 0 && (
                           <div className="w-full bg-slate-100 dark:bg-slate-700 h-1.5 rounded-full overflow-hidden">
-                            <div className="bg-indigo-600 h-full rounded-full w-[45%]" /> {/* Static indicator for budget progress representation */}
+                            <div className="bg-indigo-600 h-full rounded-full w-[45%]" />
                           </div>
                         )}
                         <div className="flex justify-end gap-2 mt-3">
@@ -892,34 +940,34 @@ export default function AdsPage() {
           <div className="bg-white dark:bg-slate-800 border dark:border-slate-700 p-5 rounded-2xl space-y-4 shadow-sm h-fit">
             <div>
               <h3 className="text-xs font-bold text-slate-700 dark:text-slate-350 flex items-center gap-1.5">
-                <Briefcase size={14} className="text-indigo-500" /> Define Campaign Group
+                <Briefcase size={14} className="text-indigo-500" /> Create a Campaign
               </h3>
-              <p className="text-[9.5px] text-slate-450 mt-0.5">Collectively align budgets, schedules, and metrics across targeted ads</p>
+              <p className="text-[9.5px] text-slate-450 mt-0.5">Group your ads under a shared budget and date range</p>
             </div>
             
             <form onSubmit={handleCreateCampaign} className="space-y-3.5">
               <div>
-                <label className="text-[9.5px] font-bold text-slate-450 uppercase block mb-1">Campaign Title *</label>
+                <label className="text-[9.5px] font-bold text-slate-450 uppercase block mb-1">Campaign Name *</label>
                 <input
-                  type="text" required placeholder="Summer Flash Specials"
+                  type="text" required placeholder="e.g. Summer Wellness Promotions"
                   value={newCampaign.name}
                   onChange={e => setNewCampaign({ ...newCampaign, name: e.target.value })}
                   className="w-full p-2.5 border rounded-lg text-xs dark:bg-slate-900 outline-none"
                 />
               </div>
               <div>
-                <label className="text-[9.5px] font-bold text-slate-450 uppercase block mb-1">Description</label>
+                <label className="text-[9.5px] font-bold text-slate-450 uppercase block mb-1">Description <span className="font-normal normal-case">(optional)</span></label>
                 <textarea
-                  rows={2} placeholder="Brief details about targets and goals..."
+                  rows={2} placeholder="Brief notes about what this campaign is for..."
                   value={newCampaign.description}
                   onChange={e => setNewCampaign({ ...newCampaign, description: e.target.value })}
                   className="w-full p-2.5 border rounded-lg text-xs dark:bg-slate-900 outline-none resize-none"
                 />
               </div>
               <div>
-                <label className="text-[9.5px] font-bold text-slate-450 uppercase block mb-1">Budget Allocation ($)</label>
+                <label className="text-[9.5px] font-bold text-slate-450 uppercase block mb-1">Budget ($) <span className="font-normal normal-case">(optional — leave blank for unlimited)</span></label>
                 <input
-                  type="number" placeholder="Leave empty for unlimited"
+                  type="number" placeholder="e.g. 500"
                   value={newCampaign.budget}
                   onChange={e => setNewCampaign({ ...newCampaign, budget: e.target.value })}
                   className="w-full p-2.5 border rounded-lg text-xs dark:bg-slate-900 outline-none"
@@ -950,7 +998,7 @@ export default function AdsPage() {
                 type="submit"
                 className="w-full py-2 bg-indigo-600 hover:bg-indigo-750 text-white rounded-lg text-xs font-bold transition mt-2 shadow-sm"
               >
-                Create Campaign
+                Save Campaign
               </button>
             </form>
           </div>
@@ -961,9 +1009,17 @@ export default function AdsPage() {
       {activeTab === "advertisers" && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-4">
+            {/* Help Banner */}
+            <div className="bg-violet-50 dark:bg-violet-950/20 border border-violet-200 dark:border-violet-900/40 rounded-xl px-4 py-3 flex items-start gap-3">
+              <Users size={14} className="text-violet-500 mt-0.5 shrink-0" />
+              <p className="text-xs text-violet-700 dark:text-violet-300">
+                <strong>What is an Advertiser?</strong> An advertiser is the company or person who placed the ad. Adding them here lets you track which ads belong to which client or brand. This step is optional.
+              </p>
+            </div>
             {advertisers.length === 0 ? (
-              <div className="bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-2xl p-12 text-center text-xs text-slate-450">
-                No registered advertisers profiles on file. Use the setup sheet to add one.
+              <div className="bg-white dark:bg-slate-800 border dark:border-slate-700 rounded-2xl p-12 text-center space-y-2">
+                <p className="text-sm font-bold text-slate-600 dark:text-slate-400">No advertisers yet</p>
+                <p className="text-xs text-slate-400">Use the form on the right to add the first advertiser.</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1329,9 +1385,9 @@ export default function AdsPage() {
             <div className="border-b px-6 py-4 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50">
               <div>
                 <h2 className="text-sm font-black text-slate-900 dark:text-white">
-                  {editingAdId ? "Configure Ad Deployment" : "Deploy Ad Campaign"}
+                  {editingAdId ? "Edit Ad" : "Create New Ad"}
                 </h2>
-                <p className="text-[10px] text-slate-550 dark:text-slate-400 mt-0.5">Setup targeting criteria, schedule, and content formatting</p>
+                <p className="text-[10px] text-slate-550 dark:text-slate-400 mt-0.5">Fill in the details below — the only required fields are the ad name, location, and content (image or code).</p>
               </div>
               <button
                 onClick={() => setPanelOpen(false)}
@@ -1347,46 +1403,49 @@ export default function AdsPage() {
                 
                 {/* Content type */}
                 <div className="space-y-3">
-                  <h3 className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 flex items-center gap-1.5"><FileText size={12} /> Campaign Metadata</h3>
+                  <h3 className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 flex items-center gap-1.5"><FileText size={12} /> Basic Info</h3>
                   <div>
-                    <label className="text-[9.5px] font-bold text-slate-450 uppercase block mb-1">Ad Unit Title *</label>
+                    <label className="text-[9.5px] font-bold text-slate-450 uppercase block mb-1">Ad Name *</label>
                     <input
-                      type="text" required placeholder="Ex: Health & Wellness Banner"
+                      type="text" required placeholder="e.g. Summer Sale Banner"
                       value={formAd.name}
                       onChange={e => setFormAd({ ...formAd, name: e.target.value })}
                       className="w-full p-2 border rounded-lg text-xs dark:bg-slate-900 outline-none"
                     />
+                    <p className="text-[9px] text-slate-400 mt-1">A label for your own reference — visitors won&apos;t see this.</p>
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     <div>
-                      <label className="text-[9.5px] font-bold text-slate-450 uppercase block mb-1">Placement Spot *</label>
+                      <label className="text-[9.5px] font-bold text-slate-450 uppercase block mb-1">Where to show this ad *</label>
                       <select
                         required value={formAd.zoneId}
                         onChange={e => setFormAd({ ...formAd, zoneId: e.target.value })}
                         className="w-full p-2 border rounded-lg text-xs dark:bg-slate-900 outline-none"
                       >
-                        <option value="">Select Zone</option>
+                        <option value="">Select a location...</option>
                         {zones.map(z => <option key={z.id} value={z.id}>{z.name}</option>)}
                       </select>
+                      <p className="text-[9px] text-slate-400 mt-1">Choose a page location. Create locations first in the <strong>Ad Locations</strong> tab.</p>
                     </div>
                     <div>
-                      <label className="text-[9.5px] font-bold text-slate-450 uppercase block mb-1">Priority Weights</label>
+                      <label className="text-[9.5px] font-bold text-slate-450 uppercase block mb-1">Display Priority</label>
                       <select
                         value={formAd.priority}
                         onChange={e => setFormAd({ ...formAd, priority: Number(e.target.value) })}
                         className="w-full p-2 border rounded-lg text-xs dark:bg-slate-900 outline-none"
                       >
-                        <option value="100">100 (Highest)</option>
-                        <option value="80">80 (High)</option>
-                        <option value="50">50 (Normal)</option>
-                        <option value="20">20 (Low)</option>
+                        <option value="100">Highest — show this ad first</option>
+                        <option value="80">High — show often</option>
+                        <option value="50">Normal — show equally</option>
+                        <option value="20">Low — show less often</option>
                       </select>
+                      <p className="text-[9px] text-slate-400 mt-1">If multiple ads share a location, higher priority ads show first.</p>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-2 gap-2">
                     <div>
-                      <label className="text-[9.5px] font-bold text-slate-450 uppercase block mb-1">Advertiser Profile</label>
+                      <label className="text-[9.5px] font-bold text-slate-450 uppercase block mb-1">Advertiser <span className="normal-case font-normal">(optional)</span></label>
                       <select
                         value={formAd.advertiserId}
                         onChange={e => setFormAd({ ...formAd, advertiserId: e.target.value })}
@@ -1397,7 +1456,7 @@ export default function AdsPage() {
                       </select>
                     </div>
                     <div>
-                      <label className="text-[9.5px] font-bold text-slate-450 uppercase block mb-1">Campaign Link</label>
+                      <label className="text-[9.5px] font-bold text-slate-450 uppercase block mb-1">Campaign <span className="normal-case font-normal">(optional)</span></label>
                       <select
                         value={formAd.campaignId}
                         onChange={e => setFormAd({ ...formAd, campaignId: e.target.value })}
@@ -1412,31 +1471,25 @@ export default function AdsPage() {
 
                 {/* Ad Content Format */}
                 <div className="space-y-3 pt-3 border-t dark:border-slate-800">
-                  <h3 className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 flex items-center gap-1.5"><Code size={12} /> Format &amp; Design</h3>
+                  <h3 className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 flex items-center gap-1.5"><Code size={12} /> Ad Content</h3>
                   <div>
-                    <label className="text-[9.5px] font-bold text-slate-450 uppercase block mb-1.5">Creative Format</label>
+                    <label className="text-[9.5px] font-bold text-slate-450 uppercase block mb-1.5">What type of ad is this?</label>
                     <div className="flex gap-2">
                       <button
                         type="button"
                         onClick={() => setFormAd({ ...formAd, type: "banner" })}
-                        className={`flex-1 py-1.5 rounded-lg text-xs font-bold border transition-colors ${
-                          formAd.type === "banner"
-                            ? "bg-indigo-50 border-indigo-200 text-indigo-600 dark:bg-indigo-950/20"
-                            : "border-slate-200 text-slate-400 dark:border-slate-700"
-                        }`}
+                        className={`flex-1 py-2 rounded-lg text-xs font-bold border transition-colors ${formAd.type === "banner" ? "bg-indigo-50 border-indigo-200 text-indigo-600 dark:bg-indigo-950/20" : "border-slate-200 text-slate-400 dark:border-slate-700"}`}
                       >
-                        Image Banner
+                        🖼 Image Banner
+                        <p className="font-normal text-[9px] mt-0.5 opacity-70">Upload an image and a link</p>
                       </button>
                       <button
                         type="button"
                         onClick={() => setFormAd({ ...formAd, type: "adsense" })}
-                        className={`flex-1 py-1.5 rounded-lg text-xs font-bold border transition-colors ${
-                          formAd.type === "adsense"
-                            ? "bg-indigo-50 border-indigo-200 text-indigo-600 dark:bg-indigo-950/20"
-                            : "border-slate-200 text-slate-400 dark:border-slate-700"
-                        }`}
+                        className={`flex-1 py-2 rounded-lg text-xs font-bold border transition-colors ${formAd.type === "adsense" ? "bg-indigo-50 border-indigo-200 text-indigo-600 dark:bg-indigo-950/20" : "border-slate-200 text-slate-400 dark:border-slate-700"}`}
                       >
-                        HTML Code / Script
+                        {"</>"} Embed Code
+                        <p className="font-normal text-[9px] mt-0.5 opacity-70">Paste HTML code from partner</p>
                       </button>
                     </div>
                   </div>
@@ -1445,41 +1498,43 @@ export default function AdsPage() {
                     <div className="space-y-3 pt-1">
                       <div>
                         <div className="flex justify-between items-center mb-1">
-                          <label className="text-[9.5px] font-bold text-slate-400 uppercase block">Banner Image URL *</label>
+                          <label className="text-[9.5px] font-bold text-slate-400 uppercase block">Ad Image *</label>
                           <button
                             type="button"
                             onClick={() => openMediaPicker("adImageUrl")}
                             className="text-[9px] font-extrabold text-indigo-600 hover:text-indigo-800 transition dark:text-indigo-400 dark:hover:text-indigo-300 cursor-pointer"
                           >
-                            Choose from Media
+                            Choose from Media Library
                           </button>
                         </div>
                         <input
-                          type="text" required={formAd.type === "banner"} placeholder="https://example.com/creative.png"
+                          type="text" required={formAd.type === "banner"} placeholder="Paste image URL or use button above to select from library"
                           value={formAd.imageUrl}
                           onChange={e => setFormAd({ ...formAd, imageUrl: e.target.value })}
                           className="w-full p-2 border rounded-lg text-xs dark:bg-slate-900 outline-none"
                         />
                       </div>
                       <div>
-                        <label className="text-[9.5px] font-bold text-slate-400 uppercase block mb-1">Target Click Destination *</label>
+                        <label className="text-[9.5px] font-bold text-slate-400 uppercase block mb-1">Where the ad should link to *</label>
                         <input
-                          type="text" required={formAd.type === "banner"} placeholder="https://advertiser-site.com/landing"
+                          type="text" required={formAd.type === "banner"} placeholder="e.g. https://yourpartner.com/offer"
                           value={formAd.targetUrl}
                           onChange={e => setFormAd({ ...formAd, targetUrl: e.target.value })}
                           className="w-full p-2 border rounded-lg text-xs dark:bg-slate-900 outline-none"
                         />
+                        <p className="text-[9px] text-slate-400 mt-1">When visitors click the ad, they&apos;ll be taken to this web page.</p>
                       </div>
                     </div>
                   ) : (
                     <div className="space-y-1">
-                      <label className="text-[9.5px] font-bold text-slate-400 uppercase block mb-1">HTML Code Snippet / Third-party Script *</label>
+                      <label className="text-[9.5px] font-bold text-slate-400 uppercase block mb-1">Ad Code / HTML Snippet *</label>
                       <textarea
-                        rows={4} required={formAd.type === "adsense"} placeholder='<ins class="adsbygoogle" ...></ins>'
+                        rows={4} required={formAd.type === "adsense"} placeholder={"Paste the HTML or script code provided by the advertiser here..."}
                         value={formAd.code}
                         onChange={e => setFormAd({ ...formAd, code: e.target.value })}
                         className="w-full p-2 border rounded-lg text-xs dark:bg-slate-900 outline-none font-mono"
                       />
+                      <p className="text-[9px] text-slate-400 mt-1">Your advertiser will send you this code snippet. Just paste it in as-is.</p>
                     </div>
                   )}
                 </div>
@@ -1730,7 +1785,7 @@ export default function AdsPage() {
                 className="px-5 py-2 bg-indigo-600 hover:bg-indigo-750 disabled:opacity-50 text-white font-bold rounded-lg text-xs transition flex items-center gap-1.5"
               >
                 {actionLoading.adform ? <RefreshCw size={13} className="animate-spin" /> : <CheckCircle2 size={13} />}
-                {editingAdId ? "Update Campaign" : "Deploy Campaign"}
+                {editingAdId ? "Save Changes" : "Publish Ad"}
               </button>
             </div>
           </div>

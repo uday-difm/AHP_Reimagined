@@ -145,12 +145,14 @@ export default function QuizClient({ quiz }) {
     }, 250);
   }, [currentIndex, animating, answers]);
 
-  function saveResults(finalAnswers) {
+  async function saveResults(finalAnswers) {
     const totalScore = computeScore(finalAnswers);
+    const maxScore = (questions?.length || 10) * 3;
     const result = {
       slug: quiz.slug,
       title: quiz.title,
       score: totalScore,
+      maxScore,
       answers: finalAnswers,
       completedAt: new Date().toISOString(),
     };
@@ -159,6 +161,23 @@ export default function QuizClient({ quiz }) {
       const filtered = existing.filter(r => r.slug !== quiz.slug);
       localStorage.setItem('quiz-results', JSON.stringify([result, ...filtered]));
     } catch { /* ignore */ }
+
+    // Save result to backend database dynamically
+    try {
+      await fetch('/api/quizess/user-results', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          slug: quiz.slug,
+          title: quiz.title,
+          score: totalScore,
+          maxScore,
+          quizId: quiz.id || 1,
+        }),
+      });
+    } catch (err) {
+      console.error('Failed to post quiz results to backend:', err);
+    }
   }
 
   function computeScore(finalAnswers) {

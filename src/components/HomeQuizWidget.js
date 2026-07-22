@@ -180,6 +180,22 @@ export default function HomeQuizWidget() {
           const filtered = existing.filter(r => r.slug !== quiz.slug);
           localStorage.setItem('quiz-results', JSON.stringify([result, ...filtered]));
         } catch { /* ignore */ }
+
+        // Save result to backend database dynamically
+        try {
+          fetch('/api/quizess/user-results', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              slug: quiz.slug,
+              title: quiz.title,
+              score: totalScore,
+              maxScore: (quiz.questions?.length || 10) * 3,
+              quizId: quiz.id || 1,
+            }),
+          }).catch(() => {});
+        } catch { /* ignore */ }
+
         setCompleted(true);
       } else {
         setCurrentIndex(nextIndex);
