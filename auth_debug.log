@@ -468,3 +468,35 @@
 [2026-07-21T08:06:56.053Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
 [2026-07-21T08:06:56.054Z] [Auth] Authenticating against authService for: admin@example.com
 [2026-07-21T08:06:56.550Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh
+[2026-07-21T12:02:17.842Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-21T12:02:17.843Z] [Auth] Request Host: localhost:3000
+[2026-07-21T12:02:17.844Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
+[2026-07-21T12:02:17.845Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-21T12:02:17.849Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-21T12:02:18.440Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh
+[2026-07-22T03:03:50.232Z] [Auth] Attempt started. Email: manish.yadav@difm.tech
+[2026-07-22T03:03:50.234Z] [Auth] Request Host: localhost:3000
+[2026-07-22T03:03:50.235Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
+[2026-07-22T03:03:50.236Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-22T03:03:50.237Z] [Auth] Authenticating against authService for: manish.yadav@difm.tech
+[2026-07-22T03:03:50.334Z] [Auth] Admin authentication failed, trying frontend auth table for: manish.yadav@difm.tech
+[2026-07-22T03:03:50.438Z] [Auth] All authentication methods failed for: manish.yadav@difm.tech
+[2026-07-22T03:03:55.039Z] [Auth] Attempt started. Email: manish.yadav@difm.tech
+[2026-07-22T03:03:55.042Z] [Auth] Request Host: localhost:3000
+[2026-07-22T03:03:55.044Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
+[2026-07-22T03:03:55.045Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-22T03:03:55.048Z] [Auth] Authenticating against authService for: manish.yadav@difm.tech
+[2026-07-22T03:03:55.100Z] [Auth] Admin authentication failed, trying frontend auth table for: manish.yadav@difm.tech
+[2026-07-22T03:03:55.151Z] [Auth] All authentication methods failed for: manish.yadav@difm.tech
+[2026-07-22T03:04:17.854Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-22T03:04:17.859Z] [Auth] Request Host: localhost:3000
+[2026-07-22T03:04:17.861Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
+[2026-07-22T03:04:17.866Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-22T03:04:17.868Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-22T03:04:18.313Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh
+[2026-07-22T03:09:45.443Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-22T03:09:45.445Z] [Auth] Request Host: localhost:3000
+[2026-07-22T03:09:45.446Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
+[2026-07-22T03:09:45.448Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-22T03:09:45.452Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-22T03:09:45.929Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrk7qnf80001uhjktfi634qh

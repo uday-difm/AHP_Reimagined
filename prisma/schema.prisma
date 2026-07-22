@@ -482,8 +482,8 @@ model Post {
   title       String
   slug        String @db.VarChar(50)
   content     Json?
-  contentJson String?
-  excerpt     String?
+  contentJson String?    @db.LongText
+  excerpt     String?    @db.Text
   status      PostStatus @default(DRAFT)
 
   authorId String?
@@ -529,7 +529,7 @@ model Service {
   site   Site   @relation(fields: [siteId], references: [id], onDelete: Cascade)
 
   title         String
-  description   String?
+  description   String?    @db.Text
   price         String?
   ctaButtonText String?
   ctaButtonLink String?
@@ -561,7 +561,7 @@ model Testimonial {
   clientName  String
   clientImage String?
   rating      Int       @default(5)
-  content     String
+  content     String    @db.Text
   showHide    Boolean   @default(true)
   sortOrder   Int       @default(0)
   createdAt   DateTime  @default(now())
@@ -577,7 +577,7 @@ model Faq {
   siteId       String
   site         Site      @relation(fields: [siteId], references: [id], onDelete: Cascade)
   question     String
-  answer       String
+  answer       String    @db.Text
   pageId       String?
   page         Page?     @relation(fields: [pageId], references: [id], onDelete: SetNull)
   sortOrder    Int       @default(0)
@@ -599,7 +599,7 @@ model TeamMember {
   name        String
   role        String
   photo       String?
-  bio         String?
+  bio         String?   @db.Text
   socialLinks Json?
   sortOrder   Int       @default(0)
   createdAt   DateTime  @default(now())
