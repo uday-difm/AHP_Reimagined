@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import QuizIcon from '@/components/quiz/QuizIcon';
+import SaveRecipeButton from '@/components/recipes/SaveRecipeButton';
 
 const getQuizEmoji = (slug = "") => {
   const s = String(slug).toLowerCase();
@@ -183,7 +184,10 @@ export default function WellnessShowcase({ content }) {
     ...content,
     quickCards: content?.quickCards?.length > 0 ? content.quickCards : DEFAULT_CONTENT.quickCards,
     snapshot: { ...DEFAULT_CONTENT.snapshot, ...content?.snapshot },
-    healthyBite: content?.healthyBite?.recipeName ? content.healthyBite : latestRecipe ? {
+    healthyBite: content?.healthyBite?.recipeName ? {
+      ...content.healthyBite,
+      id: content.healthyBite.id || (content.healthyBite.recipeLink ? content.healthyBite.recipeLink.split('/').pop() : null)
+    } : latestRecipe ? {
       title: 'Healthy Bite of the Day',
       recipeName: latestRecipe.title,
       image: latestRecipe.imageUrl || DEFAULT_CONTENT.healthyBite.image,
@@ -191,6 +195,7 @@ export default function WellnessShowcase({ content }) {
       recipeLink: `/recipes/${latestRecipe.id}`,
       time: latestRecipe.cookingTime ? `${latestRecipe.cookingTime} mins` : '15 mins',
       calories: latestRecipe.calories ? `${latestRecipe.calories} kcal` : '320 kcal',
+      id: latestRecipe.id,
     } : DEFAULT_CONTENT.healthyBite,
     wellnessTip: { ...DEFAULT_CONTENT.wellnessTip, ...content?.wellnessTip },
     popularQuizzes: displayQuizzes,
@@ -343,15 +348,17 @@ export default function WellnessShowcase({ content }) {
                 </div>
 
                 {/* Top right floating button */}
-                <div className="absolute top-6 right-6 w-10 h-10 bg-white rounded-full flex items-center justify-center border border-slate-200 shadow-sm z-20 hover:scale-110 transition-transform cursor-pointer group-hover:border-[#ff7373]/30">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#0f7c85]" />
-                </div>
+                {c.healthyBite.id && (
+                  <div className="absolute top-6 right-6 z-20">
+                    <SaveRecipeButton recipeId={c.healthyBite.id} className="w-10 h-10 rounded-full" />
+                  </div>
+                )}
               </div>
 
               {/* View More Recipes Dropdown Column */}
               <div className="flex flex-col justify-start reveal-slide min-w-0 h-full">
                 <div className="bg-white rounded-[24px] border border-slate-100 p-5 shadow-[0_8px_30px_rgb(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] transition-all">
-                  <button 
+                  <button
                     onClick={() => setShowMoreRecipes(!showMoreRecipes)}
                     className="w-full flex items-center justify-between gap-4 text-left group"
                   >
@@ -398,10 +405,10 @@ export default function WellnessShowcase({ content }) {
                           </div>
                         </Link>
                       )) : (
-                         <div className="text-sm font-medium text-slate-500 p-6 text-center bg-slate-50 rounded-xl border border-slate-100 border-dashed">
-                            More recipes coming soon!<br/>
-                            <span className="text-[11px] text-slate-400 mt-1 block">Share yours today!</span>
-                         </div>
+                        <div className="text-sm font-medium text-slate-500 p-6 text-center bg-slate-50 rounded-xl border border-slate-100 border-dashed">
+                          More recipes coming soon!<br />
+                          <span className="text-[11px] text-slate-400 mt-1 block">Share yours today!</span>
+                        </div>
                       )}
                     </div>
                   </div>
@@ -410,7 +417,7 @@ export default function WellnessShowcase({ content }) {
                 {/* Quote Block below recipes */}
                 <div className="mt-4 flex-1 bg-gradient-to-br from-emerald-500/10 to-teal-500/10 border border-emerald-500/20 rounded-[24px] p-6 shadow-sm relative overflow-hidden flex flex-col justify-center">
                   <div className="absolute top-0 right-0 p-4 opacity-10">
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor"><path d="M14.017 21v-7.391c0-5.714 4.076-7.857 7.747-8.109l.236 1.45c-2.333.256-4.664 2.15-5.042 5.05H22V21h-7.983zm-11 0v-7.391c0-5.714 4.076-7.857 7.747-8.109l.236 1.45c-2.333.256-4.665 2.15-5.042 5.05H11V21H3.017z"/></svg>
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor"><path d="M14.017 21v-7.391c0-5.714 4.076-7.857 7.747-8.109l.236 1.45c-2.333.256-4.664 2.15-5.042 5.05H22V21h-7.983zm-11 0v-7.391c0-5.714 4.076-7.857 7.747-8.109l.236 1.45c-2.333.256-4.665 2.15-5.042 5.05H11V21H3.017z" /></svg>
                   </div>
                   <div className="relative z-10">
                     <h4 className="text-emerald-600 font-extrabold text-[10px] uppercase tracking-widest mb-3 flex items-center gap-2">

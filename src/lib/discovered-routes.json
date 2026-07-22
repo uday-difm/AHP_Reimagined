@@ -10,6 +10,11 @@
     "isDynamic": false
   },
   {
+    "slug": "/account",
+    "title": "Account",
+    "isDynamic": false
+  },
+  {
     "slug": "/blogs",
     "title": "Blogs",
     "isDynamic": false

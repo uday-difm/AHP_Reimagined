@@ -7,6 +7,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import DynamicScene from "@/components/DynamicScene";
 import { Pin } from "lucide-react";
+import RecentViewTracker from "@/components/RecentViewTracker";
 
 // TikTok doesn't have a native Lucide icon sometimes, but we can use a custom SVG or just use the Link icon or skip it.
 // Wait, Lucide usually doesn't have TikTok or Pinterest. Let's check what icons are available or use standard SVGs.
@@ -80,6 +81,15 @@ export default async function MagazineIssuePage({ params }) {
   return (
     <div className="min-h-screen bg-bg-light relative">
       <Header />
+      <RecentViewTracker 
+        item={{
+          id: mag.id,
+          title: mag.title,
+          image: proxyUrl(mag.coverImage),
+          type: "Publication",
+          url: `/magazine/${mag.slug}`
+        }}
+      />
 
       <main className="pt-[140px] pb-20">
         <div className="container mx-auto px-4">

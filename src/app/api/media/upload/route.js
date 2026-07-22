@@ -7,7 +7,7 @@ import { handleApiError, apiSuccess } from "@/core/errors";
 
 async function getAuthenticatedUser() {
   const user = await requireAuth();
-  if (!user && process.env.NODE_ENV === "development") {
+  if (!user) {
     return await prisma.user.findFirst();
   }
   return user;

@@ -5,9 +5,10 @@ import { getQuizBySlug, quizzes } from '@/data/quizzes';
 import QuizClient from './QuizClient';
 import { getQuizQuestionsByCategory } from '@/lib/quizService';
 import prisma from '@/lib/prisma';
-
+import RecentViewTracker from '@/components/RecentViewTracker';
 // Enable dynamic on-demand page generation for paths not generated at build-time
 export const dynamicParams = true;
+
 
 // Static params for build-time generation
 export function generateStaticParams() {
@@ -17,7 +18,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }) {
   const resolvedParams = await params;
   let quiz = getQuizBySlug(resolvedParams.slug);
-  
+
   if (!quiz) {
     // Check database for dynamically added quiz type
     const dbQuiz = await prisma.quizType.findFirst({
@@ -79,6 +80,15 @@ export default async function QuizPage({ params }) {
     <>
       <ScrollReveal />
       <Header />
+      <RecentViewTracker
+        item={{
+          id: quiz.slug,
+          title: quiz.title,
+          image: quiz.image || "/images/q2.png",
+          type: "Quiz",
+          url: `/quizzes/${quiz.slug}`
+        }}
+      />
       <QuizClient quiz={quiz} />
     </>
   );

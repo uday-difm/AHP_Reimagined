@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, use } from "react";
 import Link from "next/link";
+import RecentViewTracker from "@/components/RecentViewTracker";
 import { ArrowLeft, Clock, Flame, Tag as TagIcon, Loader2, Heart, Share2, ChefHat, CheckCircle2 } from "lucide-react";
 
 export default function RecipeDetail({ params }) {
@@ -73,6 +74,15 @@ export default function RecipeDetail({ params }) {
 
   return (
     <main className="min-h-screen bg-[#f9f9f9] pt-24 pb-20 font-sans">
+      <RecentViewTracker 
+        item={{
+          id: recipe.id,
+          title: recipe.title,
+          image: recipe.imageUrl,
+          type: "Recipe",
+          url: `/recipes/${recipe.id}`
+        }}
+      />
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
 
         {/* Top Nav */}
