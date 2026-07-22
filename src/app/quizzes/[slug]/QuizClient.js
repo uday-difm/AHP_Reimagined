@@ -7,6 +7,7 @@ import Link from 'next/link';
 import ProgressBar from '@/components/quiz/ProgressBar';
 import QuizIcon from '@/components/quiz/QuizIcon';
 import { FREE_QUESTION_LIMIT } from '@/data/quizzes';
+import QuizFeedbackModal from '@/components/quiz/QuizFeedbackModal';
 
 /**
  * QuizClient — redesigned to match the Earth By Humans quiz interface.
@@ -28,6 +29,12 @@ export default function QuizClient({ quiz }) {
   const [animating, setAnimating] = useState(false);
   const [completed, setCompleted] = useState(false);
   const [showGate, setShowGate] = useState(status === 'unauthenticated');
+  const [feedback, setFeedback] = useState({
+    isOpen: false,
+    isCorrect: false,
+    correctOption: null,
+    explanation: '',
+  });
 
   const questions = quiz?.questions ?? [];
   const currentQ = questions[currentIndex] ?? null;
@@ -79,6 +86,21 @@ export default function QuizClient({ quiz }) {
     if (selected === null || animating || showGate) return;
 
     const option = currentQ.options[selected];
+    const isCorrect = option.score > 0 || (currentQ.correctAnswer !== undefined && selected === currentQ.correctAnswer);
+    const correctOpt = currentQ.options[currentQ.correctAnswer ?? 0] || currentQ.options.find(o => o.score > 0) || currentQ.options[0];
+
+    setFeedback({
+      isOpen: true,
+      isCorrect,
+      correctOption: correctOpt,
+      explanation: currentQ.explanation || '',
+    });
+  }, [selected, animating, showGate, currentQ]);
+
+  const handleFeedbackContinue = useCallback(() => {
+    setFeedback(prev => ({ ...prev, isOpen: false }));
+
+    const option = currentQ.options[selected];
     const newAnswers = [
       ...answers,
       { questionId: currentQ.id, optionIndex: selected, score: option.score },
@@ -107,7 +129,7 @@ export default function QuizClient({ quiz }) {
       }
       setAnimating(false);
     }, 300);
-  }, [selected, animating, showGate, currentQ, answers, currentIndex, firstLockedIndex, isAuthenticated, isLastQuestion, quiz.slug]);
+  }, [selected, answers, currentQ, currentIndex, firstLockedIndex, isAuthenticated, isLastQuestion, quiz.slug]);
 
   const handleBack = useCallback(() => {
     if (currentIndex === 0 || animating) return;
@@ -419,6 +441,14 @@ export default function QuizClient({ quiz }) {
           )
         )}
       </div>
+
+      <QuizFeedbackModal
+        isOpen={feedback.isOpen}
+        isCorrect={feedback.isCorrect}
+        correctOption={feedback.correctOption}
+        explanation={feedback.explanation}
+        onContinue={handleFeedbackContinue}
+      />
     </div>
   );
 }

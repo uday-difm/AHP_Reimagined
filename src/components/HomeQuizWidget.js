@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { quizzes, FREE_QUESTION_LIMIT } from '@/data/quizzes';
 import QuizIcon from '@/components/quiz/QuizIcon';
 import AdSlot from '@/components/AdSlot';
+import QuizFeedbackModal from '@/components/quiz/QuizFeedbackModal';
 
 /**
  * HomeQuizWidget
@@ -37,6 +38,12 @@ export default function HomeQuizWidget() {
   const [dynamicQuiz, setDynamicQuiz] = useState(null);
   const [localResults, setLocalResults] = useState([]);
   const [typesCount, setTypesCount] = useState(0);
+  const [feedback, setFeedback] = useState({
+    isOpen: false,
+    isCorrect: false,
+    correctOption: null,
+    explanation: '',
+  });
 
   // Load results from localStorage on mount and when completed state changes
   useEffect(() => {
@@ -124,6 +131,22 @@ export default function HomeQuizWidget() {
 
   const handleNext = useCallback(() => {
     if (!currentQ || selected === null || animating || showGate) return;
+
+    const option = currentQ.options[selected];
+    const isCorrect = option.score > 0 || (currentQ.correctAnswer !== undefined && selected === currentQ.correctAnswer);
+    const correctOpt = currentQ.options[currentQ.correctAnswer ?? 0] || currentQ.options.find(o => o.score > 0) || currentQ.options[0];
+
+    setFeedback({
+      isOpen: true,
+      isCorrect,
+      correctOption: correctOpt,
+      explanation: currentQ.explanation || '',
+    });
+  }, [selected, animating, showGate, currentQ]);
+
+  const handleFeedbackContinue = useCallback(() => {
+    setFeedback(prev => ({ ...prev, isOpen: false }));
+
     const option = currentQ.options[selected];
     const newAnswers = [...answers, { questionId: currentQ.id, optionIndex: selected, score: option.score }];
     setAnswers(newAnswers);
@@ -164,7 +187,7 @@ export default function HomeQuizWidget() {
       }
       setAnimating(false);
     }, 300);
-  }, [selected, animating, showGate, currentQ, answers, currentIndex, quiz.slug, isAuthenticated, isLastQuestion]);
+  }, [selected, currentQ, answers, currentIndex, isAuthenticated, isLastQuestion, quiz.slug]);
 
   const handleBack = () => {
     if (currentIndex === 0) { setStarted(false); return; }
@@ -520,6 +543,14 @@ export default function HomeQuizWidget() {
         )}
 
       </div>
+
+      <QuizFeedbackModal
+        isOpen={feedback.isOpen}
+        isCorrect={feedback.isCorrect}
+        correctOption={feedback.correctOption}
+        explanation={feedback.explanation}
+        onContinue={handleFeedbackContinue}
+      />
     </section>
   );
 }

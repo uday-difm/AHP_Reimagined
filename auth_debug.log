@@ -568,3 +568,15 @@
 [2026-07-22T07:52:43.891Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrvk5h4m0000uhc4xpgo0tkd
 [2026-07-22T08:18:00.036Z] [Frontend Auth] Attempt started. Email: manish.yadav@difm.tech
 [2026-07-22T08:18:00.188Z] [Frontend Auth] Frontend user authenticated successfully: manish.yadav@difm.tech
+[2026-07-22T09:08:33.548Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-22T09:08:33.550Z] [Auth] Request Host: tasting-panther-detonator.ngrok-free.dev
+[2026-07-22T09:08:33.551Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
+[2026-07-22T09:08:33.552Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-22T09:08:33.561Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-22T09:08:34.311Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrvk5h4m0000uhc4xpgo0tkd
+[2026-07-22T09:08:49.509Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-22T09:08:49.511Z] [Auth] Request Host: localhost:3000
+[2026-07-22T09:08:49.512Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
+[2026-07-22T09:08:49.513Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-22T09:08:49.514Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-22T09:08:50.241Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrvk5h4m0000uhc4xpgo0tkd
