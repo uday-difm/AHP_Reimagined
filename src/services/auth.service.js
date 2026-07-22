@@ -29,6 +29,11 @@ export class AuthService extends BaseService {
       throw new UnauthorizedError("Invalid credentials");
     }
 
+    // Block frontend (VISITOR) accounts from accessing the dashboard
+    if (user.globalRole === "VISITOR") {
+      throw new UnauthorizedError("Invalid credentials");
+    }
+
     const ip =
       reqHeaders["x-forwarded-for"] || reqHeaders["x-real-ip"] || "unknown";
     const agent = reqHeaders["user-agent"] || "unknown";

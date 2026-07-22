@@ -88,6 +88,8 @@ model User {
   bio                  String?
   image                String?
   passwordHash         String
+  legacyPasswordHash   String?
+  socialLinks          Json?
   webhookSubscriptions WebhookSubscription[]
   globalRole           GlobalRole            @default(VIEWER)
 
@@ -112,7 +114,8 @@ model User {
   recipeRatings  RecipeRating[]
   recipeComments RecipeComment[]
   recipeLikes    RecipeLike[]
-  savedArticles  SavedArticle[]
+  savedArticles    SavedArticle[]
+  recentlyViewed   RecentlyViewed[]
 
   @@index([email])
   @@index([isActive])
@@ -1285,4 +1288,16 @@ model SavedArticle {
   createdAt DateTime @default(now())
 
   @@unique([postId, userId])
+}
+
+model RecentlyViewed {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contentType String
+  contentId   String
+  viewedAt    DateTime @default(now())
+
+  @@unique([userId, contentType, contentId])
+  @@index([userId, viewedAt])
 }

@@ -2,7 +2,7 @@ import Credentials from "next-auth/providers/credentials";
 import fs from "fs";
 import path from "path";
 import crypto from "crypto";
-
+import bcrypt from "bcryptjs";
 import prisma from "@/lib/prisma";
 
 export const frontendAuthOptions = {
@@ -48,27 +48,53 @@ export const frontendAuthOptions = {
         }
 
         try {
-          const shasum = crypto.createHash("sha256");
-          shasum.update(credentials.password);
-          const hashedPassword = shasum.digest("hex");
-
-          const frontendUser = await prisma.auth.findFirst({
+          // Query User table for VISITOR-role accounts
+          const frontendUser = await prisma.user.findFirst({
             where: {
-              OR: [
-                { email: credentials.email },
-                { username: credentials.email }
-              ]
+              email: credentials.email,
+              globalRole: "VISITOR",
+              isActive: true,
             }
           });
 
-          if (frontendUser && frontendUser.password === hashedPassword) {
-            writeLog(`[Frontend Auth] Frontend user authenticated successfully: ${frontendUser.email}`);
-            return {
-              id: String(frontendUser.id),
-              email: frontendUser.email,
-              name: frontendUser.name,
-              globalRole: "USER"
-            };
+          if (frontendUser) {
+            let authenticated = false;
+
+            // 1. Try bcrypt (new accounts or already upgraded)
+            if (frontendUser.passwordHash) {
+              try {
+                authenticated = await bcrypt.compare(credentials.password, frontendUser.passwordHash);
+              } catch { /* bad hash format - fall through to legacy check */ }
+            }
+
+            // 2. Fall back to legacy SHA-256 hash (migrated accounts)
+            if (!authenticated && frontendUser.legacyPasswordHash) {
+              const sha256 = crypto.createHash("sha256").update(credentials.password).digest("hex");
+              if (sha256 === frontendUser.legacyPasswordHash) {
+                authenticated = true;
+                // Transparently upgrade to bcrypt and clear legacy hash
+                try {
+                  const newHash = await bcrypt.hash(credentials.password, 10);
+                  await prisma.user.update({
+                    where: { id: frontendUser.id },
+                    data: { passwordHash: newHash, legacyPasswordHash: null },
+                  });
+                  writeLog(`[Frontend Auth] Upgraded password hash to bcrypt for: ${frontendUser.email}`);
+                } catch (upgradeErr) {
+                  writeLog(`[Frontend Auth] Failed to upgrade password hash: ${upgradeErr.message}`);
+                }
+              }
+            }
+
+            if (authenticated) {
+              writeLog(`[Frontend Auth] Frontend user authenticated successfully: ${frontendUser.email}`);
+              return {
+                id: String(frontendUser.id),
+                email: frontendUser.email,
+                name: frontendUser.name,
+                globalRole: "VISITOR"
+              };
+            }
           }
         } catch (frontendErr) {
           writeLog(`[Frontend Auth] Frontend authentication error: ${frontendErr.message}`);
