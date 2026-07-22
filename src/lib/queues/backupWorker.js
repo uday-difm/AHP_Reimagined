@@ -52,6 +52,22 @@ export function startBackupWorker() {
       const { siteId, type } = job.data;
       console.log(`🔄 [BackupWorker] Starting ${type} backup for site: ${siteId}`);
 
+      // Dedupe automated backups to prevent duplicate runs on restarts
+      if (type === "daily" || type === "weekly") {
+        const lastTs = await backupService.getLastBackupTimestamp(siteId, type);
+        if (lastTs) {
+          const hoursSinceLast = (Date.now() - new Date(lastTs).getTime()) / (1000 * 60 * 60);
+          
+          const isSkippingDaily = type === "daily" && hoursSinceLast < 20;
+          const isSkippingWeekly = type === "weekly" && hoursSinceLast < (24 * 6);
+          
+          if (isSkippingDaily || isSkippingWeekly) {
+            console.log(`⏭️ [BackupWorker] Skipping ${type} backup for site ${siteId} — one already completed at ${lastTs}`);
+            return { skipped: true, reason: "Recently completed", lastBackupAt: lastTs };
+          }
+        }
+      }
+
       // 1. Create the Prisma snapshot
       const backupData = await backupService.createBackup(siteId);
 
