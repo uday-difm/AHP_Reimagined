@@ -57,6 +57,7 @@ model Site {
   visitorLogs          VisitorLog[]
   contactSubmissions   ContactFormSubmission[]
   leads                Lead[]
+  communityEvents      CommunityEvent[]
   apiKeys              ApiKey[]
   media                Media[]
   mediaFolders         MediaFolder[]
@@ -1019,6 +1020,9 @@ model Ad {
   code         String?      @db.Text
   imageUrl     String?
   targetUrl    String?
+  headline     String?
+  description  String?      @db.Text
+  ctaText      String?
   isActive     Boolean      @default(true)
   status       String       @default("draft") // draft, active, scheduled, expired
   startDate    DateTime?
@@ -1028,6 +1032,7 @@ model Ad {
   scheduling   String?      @db.Text    // JSON for time limits, days of week
   impressions  Int          @default(0)
   clicks       Int          @default(0)
+  maxClicks    Int?
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
   analytics    AdAnalytic[]
@@ -1300,4 +1305,28 @@ model RecentlyViewed {
 
   @@unique([userId, contentType, contentId])
   @@index([userId, viewedAt])
+}
+
+model CommunityEvent {
+  id            String    @id @default(cuid())
+  siteId        String
+  title         String
+  category      String    @default("MINDFULNESS WALK")
+  description   String    @db.Text
+  imageUrl      String?
+  eventDate     String?   @default("Sat, 27 July 2024")
+  eventTime     String?   @default("9:00 AM – 11:30 AM")
+  location      String?   @default("City Nature Park")
+  tags          String?   @default("Mindfulness, Outdoor, Beginner Friendly")
+  reservedSeats Int       @default(45)
+  totalSeats    Int       @default(60)
+  isFeatured    Boolean   @default(true)
+  status        String    @default("active")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  site Site @relation(fields: [siteId], references: [id], onDelete: Cascade)
+
+  @@index([siteId, isFeatured])
+  @@map("community_events")
 }

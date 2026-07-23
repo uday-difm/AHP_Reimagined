@@ -31,6 +31,7 @@ import {
   Filter,
   SlidersHorizontal,
   Mail,
+  Sparkles,
 } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 
@@ -188,10 +189,68 @@ function ComposePanel({ open, onClose, onSaved, editingId, siteId, emailCampaign
     setError(null);
   }, [editingId, open, siteId]);
 
+  const [loadingLatestBlog, setLoadingLatestBlog] = useState(false);
+
+  const autoFillFromLatestBlog = async () => {
+    setLoadingLatestBlog(true);
+    try {
+      const res = await fetch("/api/posts?limit=1");
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && data.data?.posts && data.data.posts.length > 0) {
+          const post = data.data.posts[0];
+          setForm(prev => ({
+            ...prev,
+            title: post.title ? `New Article: ${post.title}`.slice(0, 95) : "New Article Released 📖",
+            message: post.excerpt || "Read our latest health insights on A Health Place!",
+            url: `/blogs/${post.slug}`,
+            imageUrl: post.featuredImage?.url || post.featuredImage?.secureUrl || "",
+          }));
+        }
+      }
+    } catch (e) {
+      console.error("Auto-fill latest blog error:", e);
+    } finally {
+      setLoadingLatestBlog(false);
+    }
+  };
+
+  const applyPresetTemplate = (presetType) => {
+    if (presetType === 'blog') {
+      setForm(prev => ({
+        ...prev,
+        title: "New Health Article Released 📖",
+        message: "Discover trusted health advice and expert wellness tips on A Health Place.",
+        url: "/blogs",
+      }));
+    } else if (presetType === 'tip') {
+      setForm(prev => ({
+        ...prev,
+        title: "Daily Wellness Tip 🌅",
+        message: "A 10-minute walk after meals improves digestion and boosts energy levels!",
+        url: "/blogs",
+      }));
+    } else if (presetType === 'quiz') {
+      setForm(prev => ({
+        ...prev,
+        title: "Test Your Health IQ 📋",
+        message: "Take our 2-minute assessment to discover personalized insights about your sleep, stress & gut health.",
+        url: "/quizzes",
+      }));
+    } else if (presetType === 'announcement') {
+      setForm(prev => ({
+        ...prev,
+        title: "New Features & Guides Live 🎉",
+        message: "Explore our updated health guides, interactive quizzes, and community recipes today!",
+        url: "/",
+      }));
+    }
+  };
+
   const set = (field, val) => setForm(prev => ({ ...prev, [field]: val }));
 
-  const handleSave = async (e) => {
-    e.preventDefault();
+  const handleSave = async (e, sendNow = false) => {
+    if (e) e.preventDefault();
     setSaving(true);
     setError(null);
     try {
@@ -217,7 +276,19 @@ function ComposePanel({ open, onClose, onSaved, editingId, siteId, emailCampaign
       }
       const data = await res.json();
       if (!res.ok || !data.success) throw new Error(data.error || "Failed to save notification");
-      onSaved(data.data.notification, !!editingId);
+
+      const savedNotif = data.data.notification;
+
+      if (sendNow && savedNotif?.id) {
+        const sendRes = await fetch(`/api/crm/push/${savedNotif.id}/send`, {
+          method: "POST",
+          headers: { "x-site-id": siteId },
+        });
+        const sendData = await sendRes.json();
+        onSaved(sendData.data?.notification || savedNotif, !!editingId, true);
+      } else {
+        onSaved(savedNotif, !!editingId, false);
+      }
       onClose();
     } catch (err) {
       setError(err.message);
@@ -264,6 +335,54 @@ function ComposePanel({ open, onClose, onSaved, editingId, siteId, emailCampaign
                   <AlertCircle size={14} className="shrink-0" /> {error}
                 </div>
               )}
+
+              {/* Quick Fill Templates Bar */}
+              <div className="bg-gradient-to-br from-indigo-50/80 to-blue-50/60 dark:from-indigo-950/40 dark:to-blue-950/30 p-3.5 rounded-xl border border-indigo-100 dark:border-indigo-900/40 space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-indigo-700 dark:text-indigo-300 flex items-center gap-1.5">
+                    <Sparkles size={12} className="text-indigo-500" /> Fast 1-Click Templates
+                  </span>
+                  <button
+                    type="button"
+                    onClick={autoFillFromLatestBlog}
+                    disabled={loadingLatestBlog}
+                    className="text-[10px] font-extrabold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-200 flex items-center gap-1 transition cursor-pointer"
+                  >
+                    <Zap size={11} className="text-amber-500 fill-amber-500" />
+                    {loadingLatestBlog ? "Auto-Filling..." : "✨ Auto-Fill Latest Blog Post"}
+                  </button>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => applyPresetTemplate('blog')}
+                    className="px-2.5 py-1.5 bg-white dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-lg text-[10.5px] font-bold text-slate-700 dark:text-slate-200 transition text-center shadow-xs cursor-pointer"
+                  >
+                    📖 Article Alert
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => applyPresetTemplate('tip')}
+                    className="px-2.5 py-1.5 bg-white dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-lg text-[10.5px] font-bold text-slate-700 dark:text-slate-200 transition text-center shadow-xs cursor-pointer"
+                  >
+                    🌅 Daily Tip
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => applyPresetTemplate('quiz')}
+                    className="px-2.5 py-1.5 bg-white dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-lg text-[10.5px] font-bold text-slate-700 dark:text-slate-200 transition text-center shadow-xs cursor-pointer"
+                  >
+                    📋 Health Quiz
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => applyPresetTemplate('announcement')}
+                    className="px-2.5 py-1.5 bg-white dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-lg text-[10.5px] font-bold text-slate-700 dark:text-slate-200 transition text-center shadow-xs cursor-pointer"
+                  >
+                    🎉 Site Update
+                  </button>
+                </div>
+              </div>
 
               {/* Content Section */}
               <div className="space-y-3">
@@ -562,19 +681,30 @@ function ComposePanel({ open, onClose, onSaved, editingId, siteId, emailCampaign
         </div>
 
         {/* Footer */}
-        <div className="border-t border-slate-200 dark:border-slate-700 px-6 py-4 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50">
+        <div className="border-t border-slate-200 dark:border-slate-700 px-6 py-4 flex flex-wrap items-center justify-between gap-3 bg-slate-50/50 dark:bg-slate-900/50">
           <button type="button" onClick={onClose} className="px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-white dark:hover:bg-slate-800 transition">
             Cancel
           </button>
-          <button
-            form="compose-form"
-            type="submit"
-            disabled={saving}
-            className="flex items-center gap-2 px-5 py-2 text-xs font-bold bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg disabled:opacity-50 transition"
-          >
-            {saving ? <RefreshCw size={13} className="animate-spin" /> : <CheckCircle2 size={13} />}
-            {saving ? "Saving..." : (editingId ? "Update Draft" : "Save Draft")}
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              form="compose-form"
+              type="submit"
+              disabled={saving}
+              className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 hover:bg-slate-50 rounded-lg disabled:opacity-50 transition cursor-pointer"
+            >
+              {saving ? <RefreshCw size={13} className="animate-spin" /> : <CheckCircle2 size={13} />}
+              {saving ? "Saving..." : "Save Draft"}
+            </button>
+            <button
+              type="button"
+              onClick={(e) => handleSave(e, true)}
+              disabled={saving}
+              className="flex items-center gap-1.5 px-5 py-2 text-xs font-bold bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg disabled:opacity-50 transition shadow-sm cursor-pointer"
+            >
+              {saving ? <RefreshCw size={13} className="animate-spin" /> : <Zap size={13} className="text-amber-300 fill-amber-300" />}
+              {saving ? "Publishing..." : "⚡ Send & Publish Now"}
+            </button>
+          </div>
         </div>
       </div>
     </>
@@ -796,8 +926,11 @@ export default function PushPage() {
     }
   };
 
-  const handlePanelSaved = (notification, isEdit) => {
-    if (isEdit) {
+  const handlePanelSaved = (notification, isEdit, wasSentNow = false) => {
+    if (wasSentNow) {
+      setNotifications(prev => [notification, ...prev.filter(n => n.id !== notification.id)]);
+      showToast("⚡ Push notification published & sent successfully!");
+    } else if (isEdit) {
       setNotifications(prev => prev.map(n => n.id === notification.id ? notification : n));
       showToast("Notification updated.");
     } else {

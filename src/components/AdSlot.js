@@ -11,47 +11,59 @@ import { useState, useEffect, useRef } from 'react';
 const ZONE_DIMENSIONS = {
   'homepage-hero-bottom': {
     desktop: { width: 728, height: 90 },
-    mobile: { width: 300, height: 50 }
+    mobile: { width: 320, height: 50 }
+  },
+  'homepage-articles-sidebar': {
+    desktop: { width: 300, height: 600 },
+    mobile: { width: 300, height: 250 }
+  },
+  'homepage-blog-card': {
+    desktop: { width: 300, height: 250 },
+    mobile: { width: 300, height: 250 }
+  },
+  'homepage-quiz-card': {
+    desktop: { width: 300, height: 250 },
+    mobile: { width: 300, height: 250 }
   },
   'homepage-articles-bottom': {
     desktop: { width: 970, height: 90 },
-    mobile: { width: 300, height: 100 }
+    mobile: { width: 320, height: 100 }
   },
   'homepage-about-bottom': {
     desktop: { width: 728, height: 90 },
-    mobile: { width: 300, height: 50 }
+    mobile: { width: 320, height: 50 }
   },
   'homepage-events-bottom': {
     desktop: { width: 728, height: 90 },
-    mobile: { width: 300, height: 50 }
+    mobile: { width: 320, height: 50 }
   },
   'hero-sidebar-bottom': {
     desktop: { width: 300, height: 250 },
-    mobile: { width: 250, height: 250 }
+    mobile: { width: 300, height: 250 }
   },
   'services-top': {
     desktop: { width: 728, height: 90 },
-    mobile: { width: 300, height: 50 }
+    mobile: { width: 320, height: 50 }
   },
   'article-body-top': {
     desktop: { width: 728, height: 90 },
-    mobile: { width: 300, height: 50 }
+    mobile: { width: 320, height: 50 }
   },
   'article-body-inline': {
     desktop: { width: 300, height: 250 },
-    mobile: { width: 250, height: 250 }
+    mobile: { width: 300, height: 250 }
   },
   'article-body-bottom': {
     desktop: { width: 728, height: 90 },
-    mobile: { width: 300, height: 50 }
+    mobile: { width: 320, height: 50 }
   },
   'about-hero-bottom': {
     desktop: { width: 728, height: 90 },
-    mobile: { width: 300, height: 50 }
+    mobile: { width: 320, height: 50 }
   },
   'about-mission-bottom': {
     desktop: { width: 970, height: 90 },
-    mobile: { width: 300, height: 100 }
+    mobile: { width: 320, height: 100 }
   }
 };
 
@@ -173,7 +185,7 @@ export default function AdSlot({ zone, placement, layout = 'strip', width, heigh
                   Sponsored
                 </span>
               </div>
-              <div className="flex-1 flex items-center justify-center overflow-hidden rounded-xl border border-slate-100 bg-slate-50 min-h-[120px] my-3">
+              <div className="flex-1 flex flex-col justify-between overflow-hidden rounded-xl border border-slate-100 bg-slate-50 min-h-[120px] my-3 p-2">
                 {ads.map((ad) => {
                   if (isCodeType(ad)) {
                     return (
@@ -181,12 +193,26 @@ export default function AdSlot({ zone, placement, layout = 'strip', width, heigh
                     );
                   }
                   if (isImageType(ad) && ad.imageUrl) {
+                    const hasText = ad.headline || ad.description || ad.ctaText;
                     return (
                       <a key={ad.id} href={ad.targetUrl || '#'} target="_blank" rel="noopener noreferrer"
                         onClick={() => handleAdClick(ad.id)}
-                        className="block w-full h-full hover:opacity-90 transition-opacity">
-                        <img src={ad.imageUrl} alt={ad.name || 'Ad'}
-                          className="w-full h-full object-cover" />
+                        className="flex flex-col justify-between w-full h-full hover:opacity-95 transition-opacity overflow-hidden no-underline">
+                        <div className="flex justify-center items-center overflow-hidden max-h-[120px] w-full">
+                          <img src={ad.imageUrl} alt={ad.headline || ad.name || 'Ad'}
+                            className="max-w-full max-h-[120px] w-auto h-auto object-contain rounded-lg" />
+                        </div>
+                        {hasText && (
+                          <div className="flex flex-col gap-1 mt-2 text-center">
+                            {ad.headline && <h5 className="font-bold text-sm text-slate-800 line-clamp-1">{ad.headline}</h5>}
+                            {ad.description && <p className="text-[11px] text-slate-600 line-clamp-2">{ad.description}</p>}
+                            {ad.ctaText && (
+                              <span className="mt-1 inline-block bg-teal-600 text-white font-extrabold text-[10.5px] py-1.5 px-4 rounded-full uppercase tracking-wider">
+                                {ad.ctaText}
+                              </span>
+                            )}
+                          </div>
+                        )}
                       </a>
                     );
                   }
@@ -205,11 +231,14 @@ export default function AdSlot({ zone, placement, layout = 'strip', width, heigh
     }
 
     if (layout === 'card') {
+      const cardW = w || activeDimensions?.width || 300;
+      const cardH = h || activeDimensions?.height || 600;
       return (
-        <div className={`w-full h-full flex flex-col items-center justify-center ${className || ''}`}>
+        <div className={`w-full flex flex-col items-center justify-center ${className || ''}`}>
           <span className="block text-xs font-semibold text-muted uppercase tracking-[1.5px] mb-1.5 text-center font-body">Ad</span>
           <div 
-            className="flex justify-center items-center overflow-hidden rounded-[32px] bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800/80 shadow-[0_2px_12px_rgba(0,0,0,0.03)] w-full h-full min-h-[300px]"
+            style={{ width: `${cardW}px`, height: `${cardH}px`, maxWidth: '100%', flexShrink: 0 }}
+            className="flex justify-center items-center overflow-hidden rounded-[32px] bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800/80 shadow-[0_4px_20px_rgba(0,0,0,0.03)] p-4"
           >
             {ads.map((ad) => {
               if (isCodeType(ad)) {
@@ -218,12 +247,37 @@ export default function AdSlot({ zone, placement, layout = 'strip', width, heigh
                 );
               }
               if (isImageType(ad) && ad.imageUrl) {
+                const hasText = ad.headline || ad.description || ad.ctaText;
                 return (
                   <a key={ad.id} href={ad.targetUrl || '#'} target="_blank" rel="noopener noreferrer"
                     onClick={() => handleAdClick(ad.id)}
-                    className="block w-full h-full hover:opacity-90 transition-opacity">
-                    <img src={ad.imageUrl} alt={ad.name || 'Ad'}
-                      className="w-full h-full object-cover" />
+                    className="flex flex-col items-center justify-center w-full h-full hover:opacity-95 transition-opacity overflow-hidden no-underline">
+                    {hasText ? (
+                      <div className="flex flex-col items-center justify-between h-full w-full p-4 text-center gap-3">
+                        {ad.imageUrl && (
+                          <div className="relative w-full max-h-[220px] overflow-hidden rounded-2xl flex justify-center items-center">
+                            <img src={ad.imageUrl} alt={ad.headline || ad.name || 'Ad'} className="max-w-full max-h-[220px] w-auto h-auto object-contain rounded-2xl" />
+                          </div>
+                        )}
+                        {ad.headline && (
+                          <h4 className="font-heading font-extrabold text-slate-900 dark:text-white text-base md:text-xl leading-tight">
+                            {ad.headline}
+                          </h4>
+                        )}
+                        {ad.description && (
+                          <p className="text-xs md:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium line-clamp-3">
+                            {ad.description}
+                          </p>
+                        )}
+                        {ad.ctaText && (
+                          <span className="inline-block bg-teal-600 hover:bg-teal-700 text-white font-heading font-extrabold text-xs py-2.5 px-6 rounded-full shadow-md transition-all duration-300 hover:scale-105 mt-1">
+                            {ad.ctaText}
+                          </span>
+                        )}
+                      </div>
+                    ) : (
+                      <img src={ad.imageUrl} alt={ad.name || 'Ad'} className="max-w-full max-h-full w-auto h-auto object-contain" />
+                    )}
                   </a>
                 );
               }
@@ -240,16 +294,16 @@ export default function AdSlot({ zone, placement, layout = 'strip', width, heigh
 
     const containerStyle = w && h ? {
       width: `${w}px`,
+      height: `${h}px`,
       maxWidth: '100%',
-      aspectRatio: `${w} / ${h}`,
-      height: 'auto',
+      flexShrink: 0,
     } : {};
 
     return (
       <div className={wrapClass}>
         <span className="block text-xs font-semibold text-muted uppercase tracking-[1.5px] mb-1.5 text-center font-body">Ad</span>
         <div 
-          className="flex justify-center items-center overflow-hidden rounded-lg bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800/80 shadow-[0_2px_12px_rgba(0,0,0,0.03)]" 
+          className="flex justify-center items-center overflow-hidden rounded-lg bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800/80 shadow-[0_2px_12px_rgba(0,0,0,0.03)] p-1" 
           style={containerStyle}
         >
           {ads.map((ad) => {
@@ -262,9 +316,9 @@ export default function AdSlot({ zone, placement, layout = 'strip', width, heigh
               return (
                 <a key={ad.id} href={ad.targetUrl || '#'} target="_blank" rel="noopener noreferrer"
                   onClick={() => handleAdClick(ad.id)}
-                  className="block w-full h-full hover:opacity-90 transition-opacity">
+                  className="flex items-center justify-center w-full h-full hover:opacity-90 transition-opacity overflow-hidden">
                   <img src={ad.imageUrl} alt={ad.name || 'Ad'}
-                    className="w-full h-full object-cover" />
+                    className="max-w-full max-h-full w-auto h-auto object-contain" />
                 </a>
               );
             }
@@ -309,26 +363,34 @@ export default function AdSlot({ zone, placement, layout = 'strip', width, heigh
   }
 
   if (layout === 'card') {
+    const cardW = w || activeDimensions?.width || 300;
+    const cardH = h || activeDimensions?.height || 600;
+
     const cardContent = (
-      <div className="flex flex-col items-center justify-center text-center p-6 gap-4 h-full w-full">
-        <span className="text-xs font-bold text-teal-600 dark:text-teal-400 uppercase tracking-widest">Partner Spot</span>
-        <div className="flex flex-col gap-2">
-          <h5 className="text-base font-extrabold text-slate-800 dark:text-white leading-snug">Want to get featured here?</h5>
-          <p className="text-xs text-slate-600 dark:text-slate-200 leading-relaxed max-w-[200px] mx-auto font-medium">
-            Align your brand with medically verified health guides.
+      <div className="flex flex-col items-center justify-center text-center p-8 md:p-10 gap-5 h-full w-full">
+        <span className="text-xs font-extrabold text-teal-600 dark:text-teal-400 uppercase tracking-[2px] bg-teal-50 dark:bg-teal-950/40 px-3 py-1 rounded-full">
+          Partner Spot
+        </span>
+        <div className="flex flex-col gap-2.5">
+          <h4 className="text-xl md:text-2xl font-heading font-extrabold text-slate-800 dark:text-white leading-snug">
+            Want to get featured here?
+          </h4>
+          <p className="text-xs md:text-sm text-slate-600 dark:text-slate-300 leading-relaxed max-w-xs mx-auto font-medium">
+            Align your brand with medically verified health guides. Reach over 100,000+ readers.
           </p>
         </div>
-        <span className="bg-teal-600 hover:bg-teal-700 dark:bg-teal-500 text-white font-heading font-extrabold text-xs py-2 px-5 rounded-full shadow-sm tracking-wider uppercase transition-all duration-300 hover:scale-105 mt-2">
+        <span className="bg-teal-600 hover:bg-teal-700 dark:bg-teal-500 text-white font-heading font-extrabold text-xs md:text-sm py-3.5 px-8 rounded-full shadow-md tracking-wider uppercase transition-all duration-300 hover:scale-105 mt-3">
           Advertise with us →
         </span>
       </div>
     );
 
     return (
-      <div className={`w-full h-full flex ${className || ''}`}>
+      <div className={`w-full flex justify-center items-center ${className || ''}`}>
         <a 
           href="/info?tab=support"
-          className="flex flex-col justify-center items-center overflow-hidden rounded-[32px] bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900 border border-slate-200/60 dark:border-slate-700 hover:border-teal-500/40 dark:hover:border-teal-500/60 hover:shadow-[0_8px_30px_rgba(15,124,133,0.06)] dark:hover:shadow-[0_8px_30px_rgba(20,184,166,0.15)] transition-all duration-500 group cursor-pointer no-underline select-none w-full h-full min-h-[300px]"
+          style={{ width: `${cardW}px`, height: `${cardH}px`, maxWidth: '100%', flexShrink: 0 }}
+          className="flex flex-col justify-center items-center overflow-hidden rounded-[32px] bg-gradient-to-br from-slate-50 via-slate-100/60 to-slate-100 dark:from-slate-800 dark:to-slate-900 border border-slate-200/80 dark:border-slate-700 hover:border-teal-500/50 hover:shadow-[0_12px_40px_rgba(15,124,133,0.1)] transition-all duration-500 group cursor-pointer no-underline select-none"
         >
           {cardContent}
         </a>
@@ -344,9 +406,9 @@ export default function AdSlot({ zone, placement, layout = 'strip', width, heigh
 
     const containerStyle = {
       width: `${w}px`,
+      height: `${h}px`,
       maxWidth: '100%',
-      aspectRatio: `${w} / ${h}`,
-      height: 'auto',
+      flexShrink: 0,
     };
 
     // Determine content based on aspect ratio

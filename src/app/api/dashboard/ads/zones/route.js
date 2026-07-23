@@ -32,29 +32,35 @@ export async function GET(req) {
       orderBy: { name: 'asc' },
     });
 
-    if (zones.length === 0) {
-      const DEFAULT_ZONES = [
-        { name: 'Home Hero Bottom', slug: 'homepage-hero-bottom', width: 728, height: 90 },
-        { name: 'Home Articles Bottom', slug: 'homepage-articles-bottom', width: 970, height: 90 },
-        { name: 'Home About Bottom', slug: 'homepage-about-bottom', width: 728, height: 90 },
-        { name: 'Home Events Bottom', slug: 'homepage-events-bottom', width: 728, height: 90 },
-        { name: 'Sidebar Ad Banner', slug: 'hero-sidebar-bottom', width: 300, height: 250 },
-        { name: 'Services Top banner', slug: 'services-top', width: 728, height: 90 },
-        { name: 'Article Body Top', slug: 'article-body-top', width: 728, height: 90 },
-        { name: 'Article Body Inline', slug: 'article-body-inline', width: 300, height: 250 },
-        { name: 'Article Body Bottom', slug: 'article-body-bottom', width: 728, height: 90 },
-        { name: 'About Hero Bottom', slug: 'about-hero-bottom', width: 728, height: 90 },
-        { name: 'About Mission Bottom', slug: 'about-mission-bottom', width: 970, height: 90 },
-      ];
+    const REQUIRED_ZONES = [
+      { name: 'Homepage Blog Card Ad (300x250)', slug: 'homepage-blog-card', width: 300, height: 250 },
+      { name: 'Homepage Quiz Card Ad (300x250)', slug: 'homepage-quiz-card', width: 300, height: 250 },
+      { name: 'Homepage Articles Sidebar Skyscraper (300x600)', slug: 'homepage-articles-sidebar', width: 300, height: 600 },
+      { name: 'Home Articles Bottom (970x90)', slug: 'homepage-articles-bottom', width: 970, height: 90 },
+      { name: 'Home About Bottom (728x90)', slug: 'homepage-about-bottom', width: 728, height: 90 },
+      { name: 'Home Events Bottom (728x90)', slug: 'homepage-events-bottom', width: 728, height: 90 },
+      { name: 'Sidebar Ad Banner (300x250)', slug: 'hero-sidebar-bottom', width: 300, height: 250 },
+      { name: 'Services Top banner (728x90)', slug: 'services-top', width: 728, height: 90 },
+      { name: 'Article Body Top (728x90)', slug: 'article-body-top', width: 728, height: 90 },
+      { name: 'Article Body Inline (300x250)', slug: 'article-body-inline', width: 300, height: 250 },
+      { name: 'Article Body Bottom (728x90)', slug: 'article-body-bottom', width: 728, height: 90 },
+      { name: 'About Hero Bottom (728x90)', slug: 'about-hero-bottom', width: 728, height: 90 },
+      { name: 'About Mission Bottom (970x90)', slug: 'about-mission-bottom', width: 970, height: 90 },
+    ];
 
+    const existingSlugs = new Set(zones.map(z => z.slug));
+    const missingZones = REQUIRED_ZONES.filter(rz => !existingSlugs.has(rz.slug));
+
+    if (missingZones.length > 0) {
       await prisma.adZone.createMany({
-        data: DEFAULT_ZONES.map(z => ({
+        data: missingZones.map(z => ({
           siteId: auth.siteId,
           name: z.name,
           slug: z.slug,
           width: z.width,
           height: z.height,
         })),
+        skipDuplicates: true
       });
 
       zones = await prisma.adZone.findMany({

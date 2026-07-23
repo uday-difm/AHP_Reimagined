@@ -32,7 +32,14 @@ export default async function LeadsPage({ searchParams: rawSearchParams }) {
   
   const query = searchParams?.q || "";
   const subWhere = { siteId: site.id, deletedAt: null };
-  const leadWhere = { siteId: site.id, deletedAt: null };
+  const leadWhere = { 
+    siteId: site.id, 
+    deletedAt: null,
+    NOT: [
+      { serviceInterest: "Contact Form Submission" },
+      { sourcePage: "Contact Page" }
+    ]
+  };
 
   if (query) {
     subWhere.OR = [
@@ -40,10 +47,14 @@ export default async function LeadsPage({ searchParams: rawSearchParams }) {
       { email: { contains: query } },
       { message: { contains: query } },
     ];
-    leadWhere.OR = [
-      { name: { contains: query } },
-      { email: { contains: query } },
-      { notes: { contains: query } },
+    leadWhere.AND = [
+      {
+        OR: [
+          { name: { contains: query } },
+          { email: { contains: query } },
+          { notes: { contains: query } },
+        ]
+      }
     ];
   }
 

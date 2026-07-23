@@ -87,9 +87,10 @@ export default function AdsPage() {
 
   const [formAd, setFormAd] = useState({
     zoneId: "", name: "", type: "banner", code: "", imageUrl: "", targetUrl: "",
+    headline: "", description: "", ctaText: "",
     advertiserId: "", campaignId: "", priority: 50, isActive: true, status: "active",
     targetDevice: "all", targetCountry: "all", targetRoutes: "",
-    schedTimezone: "UTC", schedTimeStart: "", schedTimeEnd: "", schedDays: []
+    schedTimezone: "UTC", schedTimeStart: "", schedTimeEnd: "", schedDays: [], maxClicks: ""
   });
 
   const showToast = useCallback((msg, type = "success") => {
@@ -255,28 +256,47 @@ export default function AdsPage() {
       });
       const data = await res.json();
       if (data.success) {
-        showToast("Placement zone created successfully!");
+        showToast("Placement Zone registered!");
         setNewZone({ name: "", width: "", height: "" });
         fetchData();
       } else {
-        showToast(data.error || "Failed to create ad zone", "error");
+        showToast(data.error || "Failed to create zone", "error");
       }
     } catch (err) {
-      showToast("Error creating placement zone", "error");
+      showToast("Error creating zone", "error");
     }
   };
 
   // --- Ad CRUD Handlers ---
-  const openCompose = () => {
+  const openNewAd = () => {
     setEditingAdId(null);
     setFormAd({
-      zoneId: "", name: "", type: "banner", code: "", imageUrl: "", targetUrl: "",
-      advertiserId: "", campaignId: "", priority: 50, isActive: true, status: "active",
-      targetDevice: "all", targetCountry: "all", targetRoutes: "",
-      schedTimezone: "UTC", schedTimeStart: "", schedTimeEnd: "", schedDays: []
+      zoneId: zones[0]?.id || "",
+      name: "",
+      type: "banner",
+      code: "",
+      imageUrl: "",
+      targetUrl: "",
+      headline: "",
+      description: "",
+      ctaText: "",
+      advertiserId: "",
+      campaignId: "",
+      priority: 50,
+      isActive: true,
+      status: "active",
+      targetDevice: "all",
+      targetCountry: "all",
+      targetRoutes: "",
+      schedTimezone: "UTC",
+      schedTimeStart: "",
+      schedTimeEnd: "",
+      schedDays: [],
+      maxClicks: ""
     });
     setPanelOpen(true);
   };
+  const openCompose = openNewAd;
 
   const openEditAd = (ad) => {
     setEditingAdId(ad.id);
@@ -317,6 +337,9 @@ export default function AdsPage() {
       code: ad.code || "",
       imageUrl: ad.imageUrl || "",
       targetUrl: ad.targetUrl || "",
+      headline: ad.headline || "",
+      description: ad.description || "",
+      ctaText: ad.ctaText || "",
       advertiserId: ad.advertiserId || "",
       campaignId: ad.campaignId || "",
       priority: ad.priority,
@@ -328,7 +351,8 @@ export default function AdsPage() {
       schedTimezone,
       schedTimeStart,
       schedTimeEnd,
-      schedDays
+      schedDays,
+      maxClicks: ad.maxClicks !== null && ad.maxClicks !== undefined ? String(ad.maxClicks) : ""
     });
     setPanelOpen(true);
   };
@@ -357,13 +381,17 @@ export default function AdsPage() {
       code: formAd.code || null,
       imageUrl: formAd.imageUrl || null,
       targetUrl: formAd.targetUrl || null,
+      headline: formAd.headline || null,
+      description: formAd.description || null,
+      ctaText: formAd.ctaText || null,
       advertiserId: formAd.advertiserId || null,
       campaignId: formAd.campaignId || null,
       priority: Number(formAd.priority),
       isActive: formAd.isActive,
       status: formAd.status,
       targeting: JSON.stringify(targetingObj),
-      scheduling: JSON.stringify(schedulingObj)
+      scheduling: JSON.stringify(schedulingObj),
+      maxClicks: formAd.maxClicks !== "" && formAd.maxClicks !== null ? Number(formAd.maxClicks) : null
     };
 
     try {
@@ -544,7 +572,7 @@ export default function AdsPage() {
             </div>
           )}
           <button
-            onClick={openCompose}
+            onClick={openNewAd}
             className="flex items-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold transition shadow-sm"
           >
             <Plus size={14} /> + Create New Ad
@@ -778,7 +806,7 @@ export default function AdsPage() {
                 </div>
                 <p className="text-sm font-bold text-slate-700 dark:text-slate-300">No ads yet</p>
                 <p className="text-xs text-slate-400">Click <strong>&quot;+ Create New Ad&quot;</strong> at the top to add your first advertisement.</p>
-                <button onClick={openCompose} className="inline-flex items-center gap-1.5 px-4 py-2 bg-indigo-600 text-white rounded-lg text-xs font-bold mt-1">
+                <button onClick={openNewAd} className="inline-flex items-center gap-1.5 px-4 py-2 bg-indigo-600 text-white rounded-lg text-xs font-bold mt-1">
                   <Plus size={13} /> + Create New Ad
                 </button>
               </div>
@@ -827,21 +855,29 @@ export default function AdsPage() {
                             </span>
                           </td>
                           <td className="p-4 text-center">
-                            <button
-                              onClick={() => toggleAdActive(ad)}
-                              className={`inline-flex items-center gap-1 px-2.5 py-0.5 text-[9.5px] font-bold rounded-full border transition-all ${
-                                ad.isActive
-                                  ? "bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100"
-                                  : "bg-slate-50 text-slate-400 border-slate-200 hover:bg-slate-100 dark:bg-slate-800 dark:text-slate-500"
-                              }`}
-                            >
-                              {ad.isActive ? <Play size={8} /> : <Pause size={8} />}
-                              {ad.isActive ? "Active" : "Paused"}
-                            </button>
+                            {ad.maxClicks !== null && ad.maxClicks !== undefined && ad.clicks >= ad.maxClicks ? (
+                              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 text-[9.5px] font-bold rounded-full border bg-amber-50 text-amber-700 border-amber-200" title="Click limit reached — auto deactivated">
+                                🛑 Limit Met
+                              </span>
+                            ) : (
+                              <button
+                                onClick={() => toggleAdActive(ad)}
+                                className={`inline-flex items-center gap-1 px-2.5 py-0.5 text-[9.5px] font-bold rounded-full border transition-all ${
+                                  ad.isActive
+                                    ? "bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100"
+                                    : "bg-slate-50 text-slate-400 border-slate-200 hover:bg-slate-100 dark:bg-slate-800 dark:text-slate-500"
+                                }`}
+                              >
+                                {ad.isActive ? <Play size={8} /> : <Pause size={8} />}
+                                {ad.isActive ? "Active" : "Paused"}
+                              </button>
+                            )}
                           </td>
                           <td className="p-4 text-center whitespace-nowrap">
-                            <div className="font-bold text-indigo-600 dark:text-indigo-400">{ctr}%</div>
-                            <div className="text-[9.5px] text-slate-400 mt-0.5">{ad.clicks} clicks / {ad.impressions} imps</div>
+                            <div className="font-bold text-indigo-600 dark:text-indigo-400">{ctr}% CTR</div>
+                            <div className="text-[9.5px] text-slate-400 mt-0.5">
+                              {ad.clicks} {ad.maxClicks ? `/ ${ad.maxClicks}` : ""} clicks • {ad.impressions} imps
+                            </div>
                           </td>
                           <td className="p-4 text-right">
                             <div className="flex items-center justify-end gap-1.5">
@@ -1414,33 +1450,17 @@ export default function AdsPage() {
                     />
                     <p className="text-[9px] text-slate-400 mt-1">A label for your own reference — visitors won&apos;t see this.</p>
                   </div>
-                  <div className="grid grid-cols-2 gap-2">
-                    <div>
-                      <label className="text-[9.5px] font-bold text-slate-450 uppercase block mb-1">Where to show this ad *</label>
-                      <select
-                        required value={formAd.zoneId}
-                        onChange={e => setFormAd({ ...formAd, zoneId: e.target.value })}
-                        className="w-full p-2 border rounded-lg text-xs dark:bg-slate-900 outline-none"
-                      >
-                        <option value="">Select a location...</option>
-                        {zones.map(z => <option key={z.id} value={z.id}>{z.name}</option>)}
-                      </select>
-                      <p className="text-[9px] text-slate-400 mt-1">Choose a page location. Create locations first in the <strong>Ad Locations</strong> tab.</p>
-                    </div>
-                    <div>
-                      <label className="text-[9.5px] font-bold text-slate-450 uppercase block mb-1">Display Priority</label>
-                      <select
-                        value={formAd.priority}
-                        onChange={e => setFormAd({ ...formAd, priority: Number(e.target.value) })}
-                        className="w-full p-2 border rounded-lg text-xs dark:bg-slate-900 outline-none"
-                      >
-                        <option value="100">Highest — show this ad first</option>
-                        <option value="80">High — show often</option>
-                        <option value="50">Normal — show equally</option>
-                        <option value="20">Low — show less often</option>
-                      </select>
-                      <p className="text-[9px] text-slate-400 mt-1">If multiple ads share a location, higher priority ads show first.</p>
-                    </div>
+                  <div>
+                    <label className="text-[9.5px] font-bold text-slate-450 uppercase block mb-1">Where to show this ad *</label>
+                    <select
+                      required value={formAd.zoneId}
+                      onChange={e => setFormAd({ ...formAd, zoneId: e.target.value })}
+                      className="w-full p-2 border rounded-lg text-xs dark:bg-slate-900 outline-none"
+                    >
+                      <option value="">Select a location...</option>
+                      {zones.map(z => <option key={z.id} value={z.id}>{z.name}</option>)}
+                    </select>
+                    <p className="text-[9px] text-slate-400 mt-1">Choose a page location. Create locations first in the <strong>Ad Locations</strong> tab.</p>
                   </div>
 
                   <div className="grid grid-cols-2 gap-2">
@@ -1524,6 +1544,40 @@ export default function AdsPage() {
                         />
                         <p className="text-[9px] text-slate-400 mt-1">When visitors click the ad, they&apos;ll be taken to this web page.</p>
                       </div>
+
+                      {/* Optional Text Overlay / Native Card Fields */}
+                      <div className="pt-2 border-t border-slate-100 dark:border-slate-800 space-y-3">
+                        <span className="text-[9.5px] font-extrabold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider block">
+                          Optional Text Display
+                        </span>
+                        <div>
+                          <label className="text-[9.5px] font-bold text-slate-400 uppercase block mb-1">Ad Headline / Title <span className="normal-case font-normal">(optional)</span></label>
+                          <input
+                            type="text" placeholder="e.g. 20% Off Wellness Supplements"
+                            value={formAd.headline || ""}
+                            onChange={e => setFormAd({ ...formAd, headline: e.target.value })}
+                            className="w-full p-2 border rounded-lg text-xs dark:bg-slate-900 outline-none"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-[9.5px] font-bold text-slate-400 uppercase block mb-1">Ad Subtitle / Description <span className="normal-case font-normal">(optional)</span></label>
+                          <textarea
+                            rows={2} placeholder="e.g. Align your health with certified organic nutrition."
+                            value={formAd.description || ""}
+                            onChange={e => setFormAd({ ...formAd, description: e.target.value })}
+                            className="w-full p-2 border rounded-lg text-xs dark:bg-slate-900 outline-none"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-[9.5px] font-bold text-slate-400 uppercase block mb-1">Button CTA Text <span className="normal-case font-normal">(optional)</span></label>
+                          <input
+                            type="text" placeholder="e.g. Shop Now → or Learn More →"
+                            value={formAd.ctaText || ""}
+                            onChange={e => setFormAd({ ...formAd, ctaText: e.target.value })}
+                            className="w-full p-2 border rounded-lg text-xs dark:bg-slate-900 outline-none"
+                          />
+                        </div>
+                      </div>
                     </div>
                   ) : (
                     <div className="space-y-1">
@@ -1542,29 +1596,6 @@ export default function AdsPage() {
                 {/* Targeting and delivery checks */}
                 <div className="space-y-3 pt-3 border-t dark:border-slate-800">
                   <h3 className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 flex items-center gap-1.5"><Target size={12} /> Target Context</h3>
-                  <div className="grid grid-cols-2 gap-2">
-                    <div>
-                      <label className="text-[9.5px] font-bold text-slate-450 block mb-1">Device targeting</label>
-                      <select
-                        value={formAd.targetDevice}
-                        onChange={e => setFormAd({ ...formAd, targetDevice: e.target.value })}
-                        className="w-full p-1.5 border rounded-lg text-xs dark:bg-slate-900 outline-none"
-                      >
-                        <option value="all">All Devices</option>
-                        <option value="desktop">Desktop Only</option>
-                        <option value="mobile">Mobile Only</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="text-[9.5px] font-bold text-slate-450 block mb-1">Country ISO Code</label>
-                      <input
-                        type="text" placeholder="US, IN, or 'all'"
-                        value={formAd.targetCountry}
-                        onChange={e => setFormAd({ ...formAd, targetCountry: e.target.value })}
-                        className="w-full p-1.5 border rounded-lg text-xs dark:bg-slate-900 outline-none"
-                      />
-                    </div>
-                  </div>
                   <div>
                     {(() => {
                       const isTargetingAll = !formAd.targetRoutes || formAd.targetRoutes.trim() === "" || formAd.targetRoutes.trim() === "all";
@@ -1664,7 +1695,7 @@ export default function AdsPage() {
                 {/* Day/Time Scheduling details */}
                 <div className="space-y-3 pt-3 border-t dark:border-slate-800">
                   <h3 className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 flex items-center gap-1.5"><Clock size={12} /> Scheduling Limits</h3>
-                  <div className="grid grid-cols-3 gap-1.5">
+                  <div className="grid grid-cols-2 gap-2">
                     <div>
                       <label className="text-[9px] font-bold text-slate-450 block mb-1">Start Hour</label>
                       <input
@@ -1682,18 +1713,6 @@ export default function AdsPage() {
                         onChange={e => setFormAd({ ...formAd, schedTimeEnd: e.target.value })}
                         className="w-full p-1.5 border rounded-lg text-xs dark:bg-slate-900 outline-none"
                       />
-                    </div>
-                    <div>
-                      <label className="text-[9px] font-bold text-slate-450 block mb-1">Timezone</label>
-                      <select
-                        value={formAd.schedTimezone}
-                        onChange={e => setFormAd({ ...formAd, schedTimezone: e.target.value })}
-                        className="w-full p-1.5 border rounded-lg text-xs dark:bg-slate-900 outline-none"
-                      >
-                        <option value="UTC">UTC</option>
-                        <option value="Asia/Kolkata">Asia/Kolkata</option>
-                        <option value="America/New_York">America/New_York</option>
-                      </select>
                     </div>
                   </div>
 
@@ -1724,6 +1743,19 @@ export default function AdsPage() {
                         );
                       })}
                     </div>
+                  </div>
+
+                  <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
+                    <label className="text-[9.5px] font-bold text-slate-450 uppercase block mb-1">Max Click Limit (Auto Turn-Off) <span className="normal-case font-normal text-slate-400">(optional)</span></label>
+                    <input
+                      type="number" min="1" placeholder="e.g. 50 (Leave blank for unlimited clicks)"
+                      value={formAd.maxClicks || ""}
+                      onChange={e => setFormAd({ ...formAd, maxClicks: e.target.value })}
+                      className="w-full p-2 border rounded-lg text-xs dark:bg-slate-900 outline-none"
+                    />
+                    <p className="text-[9px] text-slate-400 mt-1">
+                      ⚡ <strong>Auto-Deactivate:</strong> The ad will automatically turn off and stop appearing on the website once it receives this number of clicks.
+                    </p>
                   </div>
                 </div>
               </form>
@@ -1762,8 +1794,6 @@ export default function AdsPage() {
 
                 <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border dark:border-slate-800 space-y-2 text-[10px]">
                   <span className="font-bold text-[9px] uppercase block mb-1 text-slate-400">Target Settings Config</span>
-                  <div className="flex justify-between border-b dark:border-slate-800 pb-1.5"><span className="text-slate-450">Active Device:</span> <span className="font-bold capitalize">{formAd.targetDevice}</span></div>
-                  <div className="flex justify-between border-b dark:border-slate-800 pb-1.5"><span className="text-slate-450">Target Country:</span> <span className="font-bold uppercase">{formAd.targetCountry}</span></div>
                   <div className="flex justify-between border-b dark:border-slate-800 pb-1.5"><span className="text-slate-450">Allowed Routes:</span> <span className="font-bold truncate max-w-[120px]">{formAd.targetRoutes || "All Pages"}</span></div>
                   <div className="flex justify-between"><span className="text-slate-450">Schedules:</span> <span className="font-bold">{formAd.schedTimeStart && formAd.schedTimeEnd ? `${formAd.schedTimeStart}-${formAd.schedTimeEnd}` : "All Day"}</span></div>
                 </div>

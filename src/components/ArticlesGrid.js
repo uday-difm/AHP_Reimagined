@@ -275,9 +275,9 @@ export default function ArticlesGrid() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
-            className="lg:col-span-3 h-full flex flex-col justify-stretch"
+            className="lg:col-span-3 flex justify-center items-center h-full w-full"
           >
-            <AdSlot zone="homepage-hero-bottom" layout="card" />
+            <AdSlot zone="homepage-articles-sidebar" layout="card" />
           </motion.div>
 
         </div>

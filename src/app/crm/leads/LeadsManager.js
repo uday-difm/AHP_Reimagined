@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import {
   Download, Edit2, Trash2, X, Search, Filter, Mail,
   ShieldCheck, Eye, MessageSquare, Save, AlertCircle, CheckCircle,
-  RefreshCw, TestTube, ChevronDown
+  RefreshCw, TestTube, ChevronDown, Target
 } from "lucide-react";
 
 const SUBMISSION_STATUSES = ["new", "read", "spam", "archived"];
@@ -124,6 +124,28 @@ function SubmissionsTab({ siteId, submissions, setSubmissions, total }) {
 
   return (
     <div className="space-y-4">
+      {/* Type Differentiation Banner */}
+      <div className="bg-sky-50/80 dark:bg-sky-950/30 border border-sky-200 dark:border-sky-800/40 rounded-xl p-3.5 flex items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-sky-100 dark:bg-sky-900/50 text-sky-600 rounded-lg shrink-0">
+            <MessageSquare size={16} />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-black text-sky-900 dark:text-sky-200 uppercase tracking-wide">
+                Contact Form Submissions
+              </span>
+              <span className="px-2 py-0.5 rounded-md bg-sky-200/80 text-sky-800 font-extrabold text-[9.5px] uppercase border border-sky-300">
+                📩 Website Form Entry
+              </span>
+            </div>
+            <p className="text-[11px] text-sky-700 dark:text-sky-300 mt-0.5 font-medium">
+              Direct messages & general inquiries submitted by site visitors via your website&apos;s <strong>Contact Us page</strong> (/contact).
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* Toolbar */}
       <div className="flex flex-wrap gap-3 items-center justify-between">
         <div className="flex gap-2 items-center flex-wrap">
@@ -167,6 +189,7 @@ function SubmissionsTab({ siteId, submissions, setSubmissions, total }) {
             <table className="w-full text-left text-sm">
               <thead className="bg-slate-50 border-b border-slate-200">
                 <tr>
+                  <th className="px-5 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Form Category</th>
                   <th className="px-5 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Contact</th>
                   <th className="px-5 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Message</th>
                   <th className="px-5 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th>
@@ -177,6 +200,11 @@ function SubmissionsTab({ siteId, submissions, setSubmissions, total }) {
               <tbody className="divide-y divide-slate-100">
                 {filtered.map((sub) => (
                   <tr key={sub.id} className="hover:bg-slate-50/50 transition-colors">
+                    <td className="px-5 py-3.5 whitespace-nowrap">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[10px] font-extrabold uppercase bg-sky-50 text-sky-700 border border-sky-200">
+                        📩 Contact Form
+                      </span>
+                    </td>
                     <td className="px-5 py-3.5">
                       <div className="font-semibold text-slate-900 text-sm">{sub.name}</div>
                       <div className="text-xs text-slate-500">{sub.email}</div>
@@ -403,6 +431,28 @@ function LeadsTab({ siteId, leads, setLeads, total }) {
 
   return (
     <div className="space-y-4">
+      {/* Type Differentiation Banner */}
+      <div className="bg-purple-50/80 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800/40 rounded-xl p-3.5 flex items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-purple-100 dark:bg-purple-900/50 text-purple-600 rounded-lg shrink-0">
+            <Target size={16} />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-black text-purple-900 dark:text-purple-200 uppercase tracking-wide">
+                Sales Leads & Opportunity Pipeline
+              </span>
+              <span className="px-2 py-0.5 rounded-md bg-purple-200/80 text-purple-800 font-extrabold text-[9.5px] uppercase border border-purple-300">
+                🎯 CRM Sales Prospect
+              </span>
+            </div>
+            <p className="text-[11px] text-purple-700 dark:text-purple-300 mt-0.5 font-medium">
+              Qualified business leads, service booking prospects, and sales deals tracked through pipeline stages (New, Contacted, Qualified, Closed).
+            </p>
+          </div>
+        </div>
+      </div>
+
       <div className="flex flex-wrap gap-3 items-center justify-between">
         <div className="flex gap-2 items-center flex-wrap">
           <div className="relative">
@@ -444,6 +494,7 @@ function LeadsTab({ siteId, leads, setLeads, total }) {
             <table className="w-full text-left text-sm">
               <thead className="bg-slate-50 border-b border-slate-200">
                 <tr>
+                  <th className="px-5 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Lead Type</th>
                   <th className="px-5 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Lead</th>
                   <th className="px-5 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Interest / Source</th>
                   <th className="px-5 py-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Notes</th>
@@ -455,6 +506,11 @@ function LeadsTab({ siteId, leads, setLeads, total }) {
               <tbody className="divide-y divide-slate-100">
                 {filtered.map((lead) => (
                   <tr key={lead.id} className="hover:bg-slate-50/50 transition-colors">
+                    <td className="px-5 py-3.5 whitespace-nowrap">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[10px] font-extrabold uppercase bg-purple-50 text-purple-700 border border-purple-200">
+                        🎯 Sales Lead
+                      </span>
+                    </td>
                     <td className="px-5 py-3.5">
                       <div className="font-semibold text-slate-900 text-sm">{lead.name}</div>
                       <div className="text-xs text-slate-500">{lead.email}</div>
@@ -682,9 +738,9 @@ function SpamTab({ siteId, initialConfig }) {
 
 // ─── Root Component ───────────────────────────────────────────────────────────
 const TABS = [
-  { key: "submissions", label: "Contact Submissions", icon: MessageSquare },
-  { key: "leads", label: "Leads CRM", icon: Filter },
-  { key: "spam", label: "Spam Protection", icon: ShieldCheck },
+  { key: "submissions", label: "📩 Contact Form Submissions", icon: MessageSquare },
+  { key: "leads", label: "🎯 Sales Leads & Pipeline", icon: Target },
+  { key: "spam", label: "🛡️ Spam Protection", icon: ShieldCheck },
 ];
 
 export default function LeadsManager({ siteId, initialSubmissions, initialLeads, initialConfig, submissionsTotal, leadsTotal }) {

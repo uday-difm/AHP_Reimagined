@@ -145,18 +145,28 @@ export async function GET(req) {
         code: true,
         imageUrl: true,
         targetUrl: true,
+        headline: true,
+        description: true,
+        ctaText: true,
         priority: true,
         targeting: true,
         scheduling: true,
         impressions: true,
+        clicks: true,
+        maxClicks: true,
       }
     });
 
-    // 1. Evaluate Targeting and Scheduling rules
-    const matchingAds = allAds.filter(ad => 
-      evaluateTargeting(ad, userAgent, route, country) && 
-      evaluateScheduling(ad)
-    );
+    // 1. Evaluate Targeting, Scheduling, and Max Click rules
+    const matchingAds = allAds.filter(ad => {
+      if (ad.maxClicks !== null && ad.maxClicks !== undefined && ad.clicks >= ad.maxClicks) {
+        return false;
+      }
+      return (
+        evaluateTargeting(ad, userAgent, route, country) && 
+        evaluateScheduling(ad)
+      );
+    });
 
     if (matchingAds.length === 0) {
       return NextResponse.json(apiSuccess({ ads: [] }));
@@ -178,7 +188,10 @@ export async function GET(req) {
       type: selectedAd.type,
       code: selectedAd.code,
       imageUrl: selectedAd.imageUrl,
-      targetUrl: selectedAd.targetUrl
+      targetUrl: selectedAd.targetUrl,
+      headline: selectedAd.headline,
+      description: selectedAd.description,
+      ctaText: selectedAd.ctaText
     };
 
     return NextResponse.json(apiSuccess({ ads: [responseAd] }));

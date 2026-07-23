@@ -18,12 +18,17 @@ export async function POST(req) {
     }
     const ipAddress = req.headers.get('x-forwarded-for') || req.ip || null;
     const userAgent = req.headers.get('user-agent') || null;
+
+    const willExceedClicks = type === 'click' && ad.maxClicks !== null && ad.maxClicks !== undefined && (ad.clicks + 1) >= ad.maxClicks;
+
     await prisma.$transaction([
       prisma.ad.update({
         where: { id: adId },
         data: {
           impressions: type === 'impression' ? { increment: 1 } : undefined,
           clicks: type === 'click' ? { increment: 1 } : undefined,
+          isActive: willExceedClicks ? false : undefined,
+          status: willExceedClicks ? 'expired' : undefined,
         }
       }),
       prisma.adAnalytic.create({
@@ -35,7 +40,7 @@ export async function POST(req) {
         }
       })
     ]);
-    return NextResponse.json(apiSuccess({ success: true }));
+    return NextResponse.json(apiSuccess({ success: true, autoDeactivated: willExceedClicks }));
   } catch (err) {
     console.error('Ad tracking error:', err);
     return NextResponse.json({ error: 'Internal Server Error', message: err.message }, { status: 500 });

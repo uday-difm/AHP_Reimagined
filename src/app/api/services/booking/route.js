@@ -44,19 +44,7 @@ Desired Timeline: ${timeline}
 About Story / Brand Mission: ${story}
     `;
 
-    // 1. Create ContactFormSubmission
-    const submission = await prisma.contactFormSubmission.create({
-      data: {
-        siteId,
-        name: fullName,
-        email,
-        phone: phone || '',
-        message: `MEDIA PACKAGE BOOKING REQUEST:\n${messageText}`,
-        status: 'new'
-      }
-    });
-
-    // 2. Create Lead for CRM tracking — use consistent sourcePage for CRM filter
+    // Create Lead for CRM tracking — Service Booking Prospect
     const lead = await prisma.lead.create({
       data: {
         siteId,

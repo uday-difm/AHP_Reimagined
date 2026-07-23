@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import AdSlot from '@/components/AdSlot';
 import Button from '@/components/Button';
 
 const trendingArticles = [

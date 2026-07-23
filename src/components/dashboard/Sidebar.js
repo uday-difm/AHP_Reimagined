@@ -35,9 +35,9 @@ import {
   Terminal,
   ChevronDown,
   ChevronRight,
-  Globe,
   Package,
   Utensils,
+  Calendar,
 } from "lucide-react";
 
 const ROLE_LEVEL = {
@@ -72,7 +72,7 @@ const crmSections = [
       },
       {
         href: "/crm/leads",
-        label: "Leads CRM",
+        label: "Leads & Contact Forms",
         icon: Inbox,
         minRole: "EDITOR",
       },
@@ -80,6 +80,12 @@ const crmSections = [
         href: "/crm/services",
         label: "Service Bookings",
         icon: Package,
+        minRole: "EDITOR",
+      },
+      {
+        href: "/crm/events",
+        label: "Events & Community",
+        icon: Calendar,
         minRole: "EDITOR",
       },
       {

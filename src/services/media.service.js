@@ -14,12 +14,23 @@ export class MediaService extends BaseService {
   }
 
   async uploadMedia(siteId, buffer, fileName, mimeType, folderId = null) {
-    const folderIdVal = (folderId === "root" || folderId === "null" || !folderId) ? null : folderId;
+    let targetSiteId = siteId || process.env.NEXT_PUBLIC_SITE_ID || "AHP";
+    const siteObj = await prisma.site.findUnique({ where: { id: targetSiteId } });
+    if (!siteObj) {
+      const fallbackSite = await prisma.site.findFirst();
+      if (fallbackSite) {
+        targetSiteId = fallbackSite.id;
+      }
+    }
+
+    let folderIdVal = (folderId === "root" || folderId === "null" || folderId === "undefined" || folderId === "none" || !folderId) ? null : folderId;
 
     if (folderIdVal) {
-      const folder = await mediaFolderRepository.findUnique(siteId, folderIdVal);
+      const folder = await prisma.mediaFolder.findFirst({
+        where: { id: folderIdVal, siteId: targetSiteId, deletedAt: null }
+      });
       if (!folder) {
-        throw new ValidationError("Target folder not found on this site");
+        folderIdVal = null;
       }
     }
 
@@ -76,7 +87,7 @@ export class MediaService extends BaseService {
       }
     }
 
-    const media = await mediaRepository.create(siteId, {
+    const media = await mediaRepository.create(targetSiteId, {
       fileName: finalFileName,
       originalName: fileName,
       publicId: key,
@@ -94,7 +105,7 @@ export class MediaService extends BaseService {
     });
 
     // Audit log (no userId available at service level for uploads)
-    try { await logAction(siteId, null, "MEDIA_UPLOAD", { fileName: media.fileName, mimeType: media.mimeType, size: media.size }); } catch (e) { console.error("Audit log failed (media upload):", e); }
+    try { await logAction(targetSiteId, null, "MEDIA_UPLOAD", { fileName: media.fileName, mimeType: media.mimeType, size: media.size }); } catch (e) { console.error("Audit log failed (media upload):", e); }
 
     return media;
   }

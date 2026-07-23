@@ -254,21 +254,6 @@ export async function POST(req) {
       data: { siteId, name, email, phone, message, status: "new" },
     });
 
-    let lead = null;
-    // Create a Lead record for every contact form submission so it flows into the CRM Leads dashboard.
-    lead = await prisma.lead.create({
-      data: {
-        siteId,
-        name,
-        email,
-        phone,
-        serviceInterest: "Contact Form Submission",
-        sourcePage: "Contact Page",
-        status: "new",
-        notes: `Form Message: ${message}`,
-      },
-    });
-
     // Sync newsletter subscribers when submission is a newsletter signup
     const isNewsletter =
       message?.toLowerCase().includes("newsletter") ||
@@ -308,10 +293,7 @@ export async function POST(req) {
 
     // ── Emit events for asynchronous processing (emails & dashboard notifications) ──
     try {
-      EventBus.emit("contact_form.submitted", { submission, lead, site });
-      if (lead) {
-        EventBus.emit("lead.created", { siteId, data: lead });
-      }
+      EventBus.emit("contact_form.submitted", { submission, site });
     } catch (err) {
       console.error("Failed to emit submission events:", err);
     }

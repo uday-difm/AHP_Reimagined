@@ -11,6 +11,9 @@ const CreateAdSchema = z.object({
   code: z.string().nullable().optional(),
   imageUrl: z.string().nullable().optional(),
   targetUrl: z.string().nullable().optional(),
+  headline: z.string().nullable().optional(),
+  description: z.string().nullable().optional(),
+  ctaText: z.string().nullable().optional(),
   isActive: z.boolean().default(true),
   status: z.enum(['draft', 'active', 'scheduled', 'expired']).default('draft'),
   startDate: z.string().nullable().optional(),
@@ -20,6 +23,7 @@ const CreateAdSchema = z.object({
   priority: z.number().default(50),
   targeting: z.string().nullable().optional(),
   scheduling: z.string().nullable().optional(),
+  maxClicks: z.number().nullable().optional(),
 });
 
 export async function GET(req) {
@@ -73,6 +77,9 @@ export async function POST(req) {
         code: data.code || null,
         imageUrl: data.imageUrl || null,
         targetUrl: data.targetUrl || null,
+        headline: data.headline || null,
+        description: data.description || null,
+        ctaText: data.ctaText || null,
         isActive: data.isActive,
         status: data.status,
         startDate: data.startDate ? new Date(data.startDate) : null,
@@ -82,6 +89,7 @@ export async function POST(req) {
         priority: data.priority,
         targeting: data.targeting || null,
         scheduling: data.scheduling || null,
+        maxClicks: data.maxClicks ?? null,
       },
       include: {
         zone: true,

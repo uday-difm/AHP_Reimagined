@@ -34,9 +34,9 @@ export default function BlogCategorySlider() {
             
             // Insert Ad slot at index 6 if there are enough blogs
             if (fetchedBlogs.length > 5) {
-              fetchedBlogs.splice(6, 0, { isAd: true, zone: 'homepage-articles-bottom' });
+              fetchedBlogs.splice(6, 0, { isAd: true, zone: 'homepage-blog-card' });
             } else if (fetchedBlogs.length > 0) {
-              fetchedBlogs.push({ isAd: true, zone: 'homepage-articles-bottom' });
+              fetchedBlogs.push({ isAd: true, zone: 'homepage-blog-card' });
             }
             
             setBlogs(fetchedBlogs);

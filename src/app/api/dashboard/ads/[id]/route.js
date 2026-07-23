@@ -10,6 +10,9 @@ const EditAdSchema = z.object({
   code: z.string().nullable().optional(),
   imageUrl: z.string().nullable().optional(),
   targetUrl: z.string().nullable().optional(),
+  headline: z.string().nullable().optional(),
+  description: z.string().nullable().optional(),
+  ctaText: z.string().nullable().optional(),
   isActive: z.boolean().optional(),
   status: z.enum(['draft', 'active', 'scheduled', 'expired']).optional(),
   startDate: z.string().nullable().optional(),
@@ -19,6 +22,7 @@ const EditAdSchema = z.object({
   priority: z.number().optional(),
   targeting: z.string().nullable().optional(),
   scheduling: z.string().nullable().optional(),
+  maxClicks: z.number().nullable().optional(),
 });
 
 export async function PUT(req, { params }) {
@@ -43,6 +47,9 @@ export async function PUT(req, { params }) {
     if (data.code !== undefined) updateData.code = data.code;
     if (data.imageUrl !== undefined) updateData.imageUrl = data.imageUrl;
     if (data.targetUrl !== undefined) updateData.targetUrl = data.targetUrl;
+    if (data.headline !== undefined) updateData.headline = data.headline;
+    if (data.description !== undefined) updateData.description = data.description;
+    if (data.ctaText !== undefined) updateData.ctaText = data.ctaText;
     if (data.isActive !== undefined) updateData.isActive = data.isActive;
     if (data.status !== undefined) updateData.status = data.status;
     if (data.startDate !== undefined) updateData.startDate = data.startDate ? new Date(data.startDate) : null;
@@ -53,6 +60,7 @@ export async function PUT(req, { params }) {
     if (data.priority !== undefined) updateData.priority = data.priority;
     if (data.targeting !== undefined) updateData.targeting = data.targeting || null;
     if (data.scheduling !== undefined) updateData.scheduling = data.scheduling || null;
+    if (data.maxClicks !== undefined) updateData.maxClicks = data.maxClicks ?? null;
 
     const ad = await prisma.ad.update({
       where: { id },
