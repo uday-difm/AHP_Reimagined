@@ -146,9 +146,8 @@ export default function CommunityEvents() {
     <section id="events" className="community-section pt-16 pb-[100px] bg-gradient-to-br from-emerald-50/30 via-white to-teal-50/30 rounded-t-[40px] relative overflow-hidden">
       {/* Toast Alert */}
       {toast && (
-        <div className={`fixed top-6 right-6 z-[100] px-5 py-3 rounded-2xl shadow-2xl text-xs font-bold text-white transition-all flex items-center gap-2 ${
-          toast.type === 'error' ? 'bg-rose-600' : 'bg-[#0f7c85]'
-        }`}>
+        <div className={`fixed top-6 right-6 z-[100] px-5 py-3 rounded-2xl shadow-2xl text-xs font-bold text-white transition-all flex items-center gap-2 ${toast.type === 'error' ? 'bg-rose-600' : 'bg-[#0f7c85]'
+          }`}>
           {toast.msg}
         </div>
       )}
@@ -183,7 +182,7 @@ export default function CommunityEvents() {
         ) : (
           /* Normal 2-column layout when an Event is OPEN & active */
           <div className="community-grid grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-12 lg:gap-16 items-start max-w-6xl mx-auto">
-            
+
             {/* Left Side: Community Info */}
             <div className="community-info flex flex-col items-start reveal-slide">
               <div className="mb-8">
@@ -286,7 +285,7 @@ export default function CommunityEvents() {
                       </div>
                     </div>
                   )}
-                  
+
                   <div className="p-8 pt-4">
                     {event.category && (
                       <span className="text-[11px] font-bold tracking-wider text-[#0f7c85] uppercase mb-2 block">{event.category}</span>
@@ -369,9 +368,8 @@ export default function CommunityEvents() {
                       </button>
                       <button
                         onClick={handleBookmarkToggle}
-                        className={`w-12 h-12 rounded-xl border flex items-center justify-center transition-colors shrink-0 cursor-pointer ${
-                          bookmarked ? 'border-[#0f7c85] text-[#0f7c85] bg-[#0f7c85]/10' : 'border-slate-200 text-slate-400 hover:text-[#0f7c85] hover:border-[#0f7c85]'
-                        }`}
+                        className={`w-12 h-12 rounded-xl border flex items-center justify-center transition-colors shrink-0 cursor-pointer ${bookmarked ? 'border-[#0f7c85] text-[#0f7c85] bg-[#0f7c85]/10' : 'border-slate-200 text-slate-400 hover:text-[#0f7c85] hover:border-[#0f7c85]'
+                          }`}
                         title={bookmarked ? 'Remove Bookmark' : 'Bookmark Event'}
                       >
                         <svg className="w-5 h-5" fill={bookmarked ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">

@@ -22,6 +22,7 @@ import {
   Plus,
   Sparkles,
   ExternalLink,
+  Link as LinkIcon,
   ChevronRight,
 } from "lucide-react";
 
@@ -80,6 +81,16 @@ export default function PostEditor({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
 
+  /* ─────────────── Publisher Social Links ─────────────── */
+  const [publisherSocials, setPublisherSocials] = useState({
+    youtube: "",
+    instagram: "",
+    facebook: "",
+    pinterest: "",
+    linkedin: "",
+    twitter: "",
+  });
+
   /* ─────────────── Autosave state ─────────────── */
   const [autosaveStatus, setAutosaveStatus] = useState("idle"); // "idle" | "saving" | "saved" | "error"
   const [lastSavedAt, setLastSavedAt] = useState(null);
@@ -136,6 +147,17 @@ export default function PostEditor({
       setSeoDescription(post.seoDescription || "");
       setCanonicalUrl(post.canonicalUrl || "");
       setOgImage(post.ogImage || "");
+
+      if (post.publisherSocials) {
+        setPublisherSocials({
+          youtube: post.publisherSocials.youtube || "",
+          instagram: post.publisherSocials.instagram || "",
+          facebook: post.publisherSocials.facebook || "",
+          pinterest: post.publisherSocials.pinterest || "",
+          linkedin: post.publisherSocials.linkedin || "",
+          twitter: post.publisherSocials.twitter || "",
+        });
+      }
 
       if (post.categories) {
         setSelectedCategoryIds(post.categories.map((c) => c.id));
@@ -212,6 +234,7 @@ export default function PostEditor({
     seoDescription,
     selectedCategoryIds,
     selectedTagIds,
+    publisherSocials,
   ]);
 
   async function autosaveDraft() {
@@ -235,6 +258,7 @@ export default function PostEditor({
           categoryIds: selectedCategoryIds,
           tagIds: selectedTagIds,
           authorId: authorId || null,
+          publisherSocials,
           // Never auto-publish — only save as current status
         }),
       });
@@ -398,6 +422,7 @@ export default function PostEditor({
         customPublishDate && publishDate
           ? new Date(publishDate).toISOString()
           : null,
+      publisherSocials,
     };
 
     const url = isEditMode ? `/api/dashboard/posts/${post.id}` : "/api/dashboard/posts";
@@ -764,6 +789,77 @@ export default function PostEditor({
               </div>
             </div>
           </div>
+
+          {/* ── Publisher Social Links ── */}
+          <div className="bg-white border border-slate-100 rounded-2xl p-6 shadow-xs">
+            <h2 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider pb-2 border-b border-slate-100 flex items-center gap-1.5 mb-4">
+              <LinkIcon size={11} />
+              Publisher Social Links
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">YouTube</label>
+                <input
+                  type="url"
+                  value={publisherSocials.youtube}
+                  onChange={(e) => setPublisherSocials({ ...publisherSocials, youtube: e.target.value })}
+                  placeholder="https://youtube.com/..."
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50/30 px-3 py-2 text-xs text-slate-700 outline-none focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all"
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Instagram</label>
+                <input
+                  type="url"
+                  value={publisherSocials.instagram}
+                  onChange={(e) => setPublisherSocials({ ...publisherSocials, instagram: e.target.value })}
+                  placeholder="https://instagram.com/..."
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50/30 px-3 py-2 text-xs text-slate-700 outline-none focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all"
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Facebook</label>
+                <input
+                  type="url"
+                  value={publisherSocials.facebook}
+                  onChange={(e) => setPublisherSocials({ ...publisherSocials, facebook: e.target.value })}
+                  placeholder="https://facebook.com/..."
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50/30 px-3 py-2 text-xs text-slate-700 outline-none focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all"
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Pinterest</label>
+                <input
+                  type="url"
+                  value={publisherSocials.pinterest}
+                  onChange={(e) => setPublisherSocials({ ...publisherSocials, pinterest: e.target.value })}
+                  placeholder="https://pinterest.com/..."
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50/30 px-3 py-2 text-xs text-slate-700 outline-none focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all"
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">LinkedIn</label>
+                <input
+                  type="url"
+                  value={publisherSocials.linkedin}
+                  onChange={(e) => setPublisherSocials({ ...publisherSocials, linkedin: e.target.value })}
+                  placeholder="https://linkedin.com/..."
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50/30 px-3 py-2 text-xs text-slate-700 outline-none focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all"
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Twitter</label>
+                <input
+                  type="url"
+                  value={publisherSocials.twitter}
+                  onChange={(e) => setPublisherSocials({ ...publisherSocials, twitter: e.target.value })}
+                  placeholder="https://twitter.com/..."
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50/30 px-3 py-2 text-xs text-slate-700 outline-none focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all"
+                />
+              </div>
+            </div>
+          </div>
+
         </div>
 
         {/* ── Right Sidebar ── */}

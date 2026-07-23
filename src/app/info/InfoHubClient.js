@@ -252,56 +252,56 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
                 <form onSubmit={handleFormSubmit} className="space-y-5">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1.5">
-                      <label className="text-[11px] text-slate-400 font-bold uppercase tracking-wider">Full Name</label>
+                      <label className="block text-sm font-medium text-slate-400 mb-1">Full Name</label>
                       <input
                         type="text"
                         required
                         value={formValues.name}
                         onChange={(e) => setFormValues({ ...formValues, name: e.target.value })}
                         placeholder="John Doe"
-                        className="w-full px-4.5 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:ring-1 focus:ring-accent focus:bg-white"
+                        className="w-full px-4.5 py-3 bg-slate-50 border border-slate-200 rounded-xl text-base placeholder:text-sm outline-none focus:ring-1 focus:ring-accent focus:bg-white"
                       />
                     </div>
                     <div className="space-y-1.5">
-                      <label className="text-[11px] text-slate-400 font-bold uppercase tracking-wider">Email Address</label>
+                      <label className="block text-sm font-medium text-slate-400 mb-1">Email Address</label>
                       <input
                         type="email"
                         required
                         value={formValues.email}
                         onChange={(e) => setFormValues({ ...formValues, email: e.target.value })}
                         placeholder="john@example.com"
-                        className="w-full px-4.5 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:ring-1 focus:ring-accent focus:bg-white"
+                        className="w-full px-4.5 py-3 bg-slate-50 border border-slate-200 rounded-xl text-base placeholder:text-sm outline-none focus:ring-1 focus:ring-accent focus:bg-white"
                       />
                     </div>
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-[11px] text-slate-400 font-bold uppercase tracking-wider">Subject</label>
+                    <label className="block text-sm font-medium text-slate-400 mb-1">Subject</label>
                     <input
                       type="text"
                       value={formValues.subject}
                       onChange={(e) => setFormValues({ ...formValues, subject: e.target.value })}
                       placeholder="Feedback on Guide / Editorial Support"
-                      className="w-full px-4.5 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:ring-1 focus:ring-accent focus:bg-white"
+                      className="w-full px-4.5 py-3 bg-slate-50 border border-slate-200 rounded-xl text-base placeholder:text-sm outline-none focus:ring-1 focus:ring-accent focus:bg-white"
                     />
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-[11px] text-slate-400 font-bold uppercase tracking-wider">Message</label>
+                    <label className="block text-sm font-medium text-slate-400 mb-1">Message</label>
                     <textarea
                       required
                       rows={5}
                       value={formValues.message}
                       onChange={(e) => setFormValues({ ...formValues, message: e.target.value })}
                       placeholder="Write your query or feedback here..."
-                      className="w-full px-4.5 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:ring-1 focus:ring-accent focus:bg-white resize-none"
+                      className="w-full px-4.5 py-3 bg-slate-50 border border-slate-200 rounded-xl text-base placeholder:text-sm outline-none focus:ring-1 focus:ring-accent focus:bg-white resize-none"
                     />
                   </div>
 
                   <Button
                     type="submit"
                     variant="primary"
-                    className="w-full py-3.5 text-xs rounded-xl shadow-md cursor-pointer"
+                    className="w-full py-3.5 text-sm md:text-base rounded-xl shadow-md cursor-pointer"
                   >
                     Submit Support Ticket
                   </Button>

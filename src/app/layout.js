@@ -5,18 +5,20 @@ import { Toaster } from "sonner";
 import "@/core/listeners";
 import { headers } from "next/headers";
 
-import { Inter, Outfit, Playfair_Display } from "next/font/google";
+import { Poppins, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { getLayoutData } from "@/services/layout.service";
 import ClientLayoutHelpers from "@/components/ClientLayoutHelpers";
 
-const inter = Inter({
+const poppins = Poppins({
   variable: "--font-body",
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
   subsets: ["latin"],
 });
 
-const outfit = Outfit({
+const poppinsHeading = Poppins({
   variable: "--font-heading",
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
   subsets: ["latin"],
 });
 
@@ -64,7 +66,7 @@ export default async function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${outfit.variable} ${playfair.variable}`}
+      className={`${poppins.variable} ${poppinsHeading.variable} ${playfair.variable}`}
       suppressHydrationWarning>
       <head>
         {layout.adSettings?.autoAdsEnabled && layout.adSettings?.adsensePublisherId && (

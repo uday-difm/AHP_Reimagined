@@ -295,48 +295,47 @@ export default function PublicationPage() {
               <div className="flex-grow max-w-xl reveal-slide">
                 <div className="inline-flex items-center gap-2 bg-[#27ae60]/10 border border-[#27ae60]/20 rounded-full px-3.5 py-1.5 mb-6">
                   <span className="w-2 h-2 bg-accent-green rounded-full animate-pulse-slow" />
-                  <span className="text-accent-green text-[10.5px] font-extrabold uppercase tracking-[2px]">LATEST ISSUE • {latestIssue.magazineId || latestIssue.season}</span>
+                  <span className="text-accent-green text-sm font-extrabold uppercase tracking-[2px]">LATEST ISSUE • {latestIssue.magazineId || latestIssue.season}</span>
                 </div>
 
-                <h1 className="text-primary font-heading font-extrabold text-4xl md:text-5xl leading-tight mb-5 tracking-[-1.5px]">
+                <h1 className="text-primary font-heading font-bold text-3xl md:text-4xl leading-tight mb-5 tracking-[-1.5px]">
                   {latestIssue.title}
                 </h1>
 
-                <div 
-                  className="text-secondary text-[15px] md:text-base leading-relaxed mb-6 max-w-md"
-                  dangerouslySetInnerHTML={{ __html: latestIssue.description || "" }}
-                />
+                <p className="text-secondary text-base leading-relaxed mb-6 max-w-md">
+                  {latestIssue.description}
+                </p>
 
                 {latestIssue.publisherSocials && Object.values(latestIssue.publisherSocials).some(link => link) && (
                   <div className="flex items-center gap-3 mb-10">
                     {latestIssue.publisherSocials.youtube && (
                       <a href={latestIssue.publisherSocials.youtube} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-[#FF0000] transition-colors" title="YouTube">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" /></svg>
                       </a>
                     )}
                     {latestIssue.publisherSocials.instagram && (
                       <a href={latestIssue.publisherSocials.instagram} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-[#E1306C] transition-colors" title="Instagram">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" /></svg>
                       </a>
                     )}
                     {latestIssue.publisherSocials.facebook && (
                       <a href={latestIssue.publisherSocials.facebook} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-[#1877F2] transition-colors" title="Facebook">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" /></svg>
                       </a>
                     )}
                     {latestIssue.publisherSocials.pinterest && (
                       <a href={latestIssue.publisherSocials.pinterest} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-[#E60023] transition-colors" title="Pinterest">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.367 18.592 0 12.017 0z"/></svg>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.367 18.592 0 12.017 0z" /></svg>
                       </a>
                     )}
                     {latestIssue.publisherSocials.linkedin && (
                       <a href={latestIssue.publisherSocials.linkedin} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-[#0A66C2] transition-colors" title="LinkedIn">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>
                       </a>
                     )}
                     {latestIssue.publisherSocials.twitter && (
                       <a href={latestIssue.publisherSocials.twitter} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-[#1DA1F2] transition-colors" title="Twitter">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" /></svg>
                       </a>
                     )}
                   </div>
@@ -355,7 +354,7 @@ export default function PublicationPage() {
                   {stats.map((s, i) => (
                     <div key={i} className="flex flex-col">
                       <span className="text-primary font-heading font-extrabold text-lg leading-tight">{s.value}</span>
-                      <span className="text-muted text-[11px] font-semibold uppercase tracking-wider mt-1">{s.label}</span>
+                      <span className="text-muted text-sm font-semibold uppercase tracking-wider mt-1">{s.label}</span>
                     </div>
                   ))}
                 </div>
@@ -363,15 +362,36 @@ export default function PublicationPage() {
 
               {/* Right Column — Partner Ad/Promo Card */}
               <div className="hidden lg:block lg:w-[280px] flex-shrink-0 self-stretch reveal-scale">
-                <AdSlot
-                  zone="publication-hero-sidebar"
-                  badgeText="Partner Highlight"
-                  fallbackTitle="Personalized Health Plans"
-                  fallbackDescription="Unlock tailored nutrition, circadian alignment, and somatic reset coaching from certified wellness experts."
-                  fallbackCta="Book Free Consultation"
-                  fallbackUrl="/services"
-                  className="h-full"
-                />
+                <div className="bg-white/70 backdrop-blur-md rounded-[32px] p-5 border border-white/60 shadow-[0_12px_32px_rgba(0,0,0,0.03)] h-full flex flex-col justify-between">
+                  <div>
+                    <span className="inline-block bg-[#27ae60]/10 border border-[#27ae60]/20 text-[#27ae60] font-bold text-[9px] uppercase tracking-[1.5px] px-2.5 py-1 rounded-full mb-3.5">
+                      Partner Highlight
+                    </span>
+
+                    <div className="relative w-full h-[120px] rounded-2xl overflow-hidden mb-4 border border-slate-100 shadow-sm bg-slate-50">
+                      <Image
+                        src="/images/service_partner_roundup_mockup.png"
+                        alt="Wellness Consultation Partner"
+                        fill
+                        className="object-cover animate-pulse-slow"
+                      />
+                    </div>
+
+                    <h3 className="font-heading font-extrabold text-[14px] text-primary leading-tight mb-2">
+                      Personalized Health Plans
+                    </h3>
+                    <p className="text-secondary text-[12px] leading-relaxed mb-4">
+                      Unlock tailored nutrition, circadian alignment, and somatic reset coaching from certified wellness experts.
+                    </p>
+                  </div>
+
+                  <a
+                    href="/services"
+                    className="w-full text-center bg-[#0f7c85] hover:bg-[#0c646b] text-white font-extrabold text-[12px] py-3 px-4 rounded-xl transition-all duration-300 no-underline block shadow-sm hover:shadow-[0_6px_20px_rgba(15,124,133,0.3)] hover:-translate-y-0.5 transform"
+                  >
+                    Book Free Consultation
+                  </a>
+                </div>
               </div>
 
             </div>
@@ -385,7 +405,7 @@ export default function PublicationPage() {
           <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16">
             {trustBadges.map((b, i) => (
               <div key={i} className="flex items-center gap-2.5">
-                <span className="text-[#2a5a52] text-[11px] font-bold uppercase tracking-wider">{b.label}</span>
+                <span className="text-[#2a5a52] text-sm font-bold uppercase tracking-wider">{b.label}</span>
               </div>
             ))}
           </div>
@@ -396,7 +416,7 @@ export default function PublicationPage() {
       <section id="recent-issues" className="py-20 bg-white rounded-t-[40px] shadow-[0_-20px_40px_rgba(0,0,0,0.01)] relative">
         <div className="container">
           <div className="flex flex-col items-center text-center max-w-xl mx-auto mb-14 reveal-slide">
-            <span className="section-tag text-[10px] font-extrabold tracking-[3px] text-accent uppercase mb-2 bg-[#0f7c85]/10 px-3.5 py-1.5 rounded-full">
+            <span className="section-tag text-sm font-extrabold tracking-[3px] text-accent uppercase mb-2 bg-[#0f7c85]/10 px-3.5 py-1.5 rounded-full">
               BACK JOURNAL
             </span>
             <h2 className="text-primary font-heading font-extrabold text-3xl md:text-4xl tracking-[-0.5px] mt-2 mb-3">
@@ -450,8 +470,8 @@ export default function PublicationPage() {
                               />
                             </div>
                             <div className="flex flex-col gap-1 mt-auto">
-                              <p className="text-accent text-[11px] font-extrabold uppercase tracking-[1.5px] mb-1">{issue.magazineId || issue.season}</p>
-                              <p className="text-primary font-heading font-extrabold text-[15px] leading-snug tracking-[-0.3px] group-hover:text-accent transition-colors duration-300">{issue.title}</p>
+                              <p className="text-accent text-sm font-extrabold uppercase tracking-[1.5px] mb-1">{issue.magazineId || issue.season}</p>
+                              <p className="text-primary font-heading font-semibold text-xl leading-snug tracking-[-0.3px] group-hover:text-accent transition-colors duration-300">{issue.title}</p>
                             </div>
                           </div>
 
@@ -459,15 +479,15 @@ export default function PublicationPage() {
                           <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)] bg-[#0f7c85] rounded-2xl p-6 text-white flex flex-col justify-between shadow-2xl border border-white/20 select-none">
                             <div className="flex flex-col gap-4.5 text-left">
                               <div className="border-b border-white/20 pb-3">
-                                <span className="text-[10px] font-extrabold text-[#4FC0C3] uppercase tracking-[1.5px] block mb-0.5">{issue.magazineId || issue.season}</span>
-                                <h4 className="font-heading font-extrabold text-[15px] md:text-[17px] text-white leading-tight tracking-tight">{issue.title}</h4>
+                                <span className="text-sm font-extrabold text-[#4FC0C3] uppercase tracking-[1.5px] block mb-0.5">{issue.magazineId || issue.season}</span>
+                                <h4 className="font-heading font-semibold text-xl text-white leading-tight tracking-tight">{issue.title}</h4>
                               </div>
 
                               <div className="flex flex-col gap-2.5">
-                                <span className="text-[11px] text-white/50 font-bold uppercase tracking-[1px] block">Inside:</span>
+                                <span className="text-sm text-white/50 font-bold uppercase tracking-[1px] block">Inside:</span>
                                 {issue.description ? (
                                   <p className="text-[12px] leading-relaxed text-white/90 font-medium line-clamp-6 overflow-hidden text-ellipsis">
-                                    {stripHtml(issue.description)}
+                                    {issue.description}
                                   </p>
                                 ) : (
                                   <ul className="text-[12px] md:text-[13.5px] leading-relaxed text-white/90 list-disc pl-4 space-y-1.5 font-medium">
@@ -600,7 +620,7 @@ export default function PublicationPage() {
                     )}
                   </form>
                 )}
-                <p className="text-[#3a2520]/60 text-[11px] mt-3">
+                <p className="text-[#3a2520]/60 text-sm mt-3">
                   By subscribing, you agree to our{' '}
                   <Link href="/info?tab=legal&doc=privacy" className="underline hover:text-primary">Privacy Policy</Link>.
                 </p>
@@ -621,7 +641,7 @@ export default function PublicationPage() {
                   </div>
                   <div className="flex-1 flex flex-col justify-center py-2 text-center">
                     <span className="text-lg block mb-1">🌿</span>
-                    <h5 className="text-[10px] font-heading font-extrabold text-primary leading-tight tracking-tight mb-1">Mindful Space</h5>
+                    <h5 className="text-sm font-heading font-extrabold text-primary leading-tight tracking-tight mb-1">Mindful Space</h5>
                     <p className="text-[6.5px] text-secondary leading-snug">Tap into curated micro-meditation audio tracks every week.</p>
                   </div>
                   <button className="w-full text-center bg-[#0f7c85] text-white font-extrabold text-[8px] py-1.5 rounded-lg border-none shadow-sm cursor-pointer">

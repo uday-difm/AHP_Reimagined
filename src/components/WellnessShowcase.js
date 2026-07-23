@@ -243,7 +243,7 @@ export default function WellnessShowcase({ content }) {
 
           {/* Foreground text content */}
           <div className="relative z-10 px-8 py-16 md:px-12 lg:px-16 md:py-20 max-w-2xl space-y-6 reveal-slide">
-            <h2 className="font-heading font-extrabold text-3xl md:text-5xl text-primary tracking-[-1.5px] leading-[1.1] mb-2">
+            <h2 className="main-heading text-primary mb-2">
               {headlineLines.map((line, i) => (
                 <span key={i}>
                   {line}
@@ -251,7 +251,7 @@ export default function WellnessShowcase({ content }) {
                 </span>
               ))}
             </h2>
-            <p className="text-secondary text-sm md:text-base leading-relaxed max-w-lg">
+            <p className="description text-secondary max-w-lg">
               {c.subtext}
             </p>
 
@@ -281,160 +281,158 @@ export default function WellnessShowcase({ content }) {
           </div>
         </div>
 
-        {hasRecipeData && (
-          <>
-            {/* ── ROW 1: Hero Quiz & 3 Quick Cards ────────────────────── */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6 mt-12 gap-4">
-              <div>
-                <h3 className="text-2xl font-extrabold text-[#1a1c29] tracking-tight">Community Kitchen</h3>
-                <p className="text-sm text-slate-500 mt-1">Discover, share, and enjoy healthy recipes from the community.</p>
-              </div>
-              <Link href="/recipes/submit" className="bg-[#ff3b6a] hover:bg-[#e02d58] text-white font-bold text-sm py-2.5 px-6 rounded-full transition-all shadow-md flex items-center gap-2 hover:-translate-y-0.5">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
-                Add Your Recipe
-              </Link>
+        {/* ── ROW 1: Hero Quiz & 3 Quick Cards ────────────────────── */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6 mt-12 gap-4">
+          <div>
+            <h3 className="section-heading text-[#1a1c29]">Community Kitchen</h3>
+            <p className="description text-slate-500 mt-1">Discover, share, and enjoy healthy recipes from the community.</p>
+          </div>
+          <Link href="/recipes/submit" className="bg-[#ff3b6a] hover:bg-[#e02d58] text-white font-bold text-sm md:text-base py-2.5 px-6 rounded-full transition-all shadow-md flex items-center gap-2 hover:-translate-y-0.5">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+            Add Your Recipe
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+
+          {/* Healthy Bite Hero Card (2 cols) */}
+          <div
+            className="lg:col-span-2 rounded-[32px] p-0 flex flex-col md:flex-row relative overflow-hidden h-auto md:h-[360px] bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] group transition-all duration-300 hover:-translate-y-1"
+          >
+            {/* Image side */}
+            <div className="relative w-full md:w-1/2 h-56 md:h-full bg-slate-100 overflow-hidden shrink-0">
+              {c.healthyBite.image && (
+                <img
+                  src={c.healthyBite.image}
+                  alt={c.healthyBite.recipeName}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  onError={(e) => { e.target.style.display = 'none'; }}
+                />
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:to-white/90" />
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+            {/* Content side */}
+            <div className="p-8 md:p-10 flex-1 flex flex-col justify-center z-10 bg-white">
+              <span className="text-[#0f7c85] font-extrabold text-xs uppercase tracking-[2px] mb-3 flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#ff7373] animate-pulse inline-block" />
+                {c.healthyBite.title}
+              </span>
+              <h3 className="text-primary font-heading font-extrabold text-2xl md:text-3xl leading-tight tracking-tight mb-4 group-hover:text-[#0f7c85] transition-colors">
+                {c.healthyBite.recipeName}
+              </h3>
 
-              {/* Healthy Bite Hero Card (2 cols) */}
-              <div
-                className="lg:col-span-2 rounded-[32px] p-0 flex flex-col md:flex-row relative overflow-hidden h-auto md:h-[360px] bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] group transition-all duration-300 hover:-translate-y-1"
-              >
-                {/* Image side */}
-                <div className="relative w-full md:w-1/2 h-56 md:h-full bg-slate-100 overflow-hidden shrink-0">
-                  {c.healthyBite.image && (
-                    <img
-                      src={c.healthyBite.image}
-                      alt={c.healthyBite.recipeName}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                      onError={(e) => { e.target.style.display = 'none'; }}
-                    />
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:to-white/90" />
-                </div>
-
-                {/* Content side */}
-                <div className="p-8 md:p-10 flex-1 flex flex-col justify-center z-10 bg-white">
-                  <span className="text-[#0f7c85] font-extrabold text-xs uppercase tracking-[2px] mb-3 flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#ff7373] animate-pulse inline-block" />
-                    {c.healthyBite.title}
+              <div className="flex flex-wrap gap-2 mb-6">
+                {(Array.isArray(c.healthyBite.points) ? c.healthyBite.points : typeof c.healthyBite.points === 'string' ? c.healthyBite.points.split(',').map(p => p.trim()) : []).map((pt, i) => (
+                  <span key={i} className="inline-flex items-center gap-1.5 bg-[#0f7c85]/10 text-[#0f7c85] text-[11px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                    {pt}
                   </span>
-                  <h3 className="text-primary font-heading font-extrabold text-2xl md:text-3xl leading-tight tracking-tight mb-4 group-hover:text-[#0f7c85] transition-colors">
-                    {c.healthyBite.recipeName}
-                  </h3>
-
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {(Array.isArray(c.healthyBite.points) ? c.healthyBite.points : typeof c.healthyBite.points === 'string' ? c.healthyBite.points.split(',').map(p => p.trim()) : []).map((pt, i) => (
-                      <span key={i} className="inline-flex items-center gap-1.5 bg-[#0f7c85]/10 text-[#0f7c85] text-[11px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">
-                        <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"></path></svg>
-                        {pt}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="flex flex-col sm:flex-row gap-4 items-center mt-auto">
-                    <Link
-                      href={c.healthyBite.recipeLink}
-                      className="bg-[#0f7c85] hover:bg-[#0c646b] text-white font-bold text-xs py-3 px-6 rounded-[12px] transition-all duration-300 no-underline shadow-sm w-full sm:w-auto text-center flex items-center justify-center gap-2"
-                    >
-                      View Recipe <span className="text-lg leading-none">→</span>
-                    </Link>
-                    <div className="flex items-center justify-center gap-4 text-xs font-bold text-slate-500">
-                      <span className="flex items-center gap-1.5"><QuizIcon name="⏱️" className="w-4 h-4 opacity-70" /> {c.healthyBite.time}</span>
-                      <span className="flex items-center gap-1.5"><QuizIcon name="🔥" className="w-4 h-4 opacity-70" /> {c.healthyBite.calories}</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Top right floating button */}
-                {c.healthyBite.id && (
-                  <div className="absolute top-6 right-6 z-20">
-                    <SaveRecipeButton recipeId={c.healthyBite.id} className="w-10 h-10 rounded-full" />
-                  </div>
-                )}
+                ))}
               </div>
 
-              {/* View More Recipes Dropdown Column */}
-              <div className="flex flex-col justify-start reveal-slide min-w-0 h-full">
-                <div className="bg-white rounded-[24px] border border-slate-100 p-5 shadow-[0_8px_30px_rgb(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] transition-all">
-                  <button
-                    onClick={() => setShowMoreRecipes(!showMoreRecipes)}
-                    className="w-full flex items-center justify-between gap-4 text-left group"
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-[16px] bg-gradient-to-br from-[#ffe8ef] to-[#ffd1de] text-[#ff3b6a] flex items-center justify-center shrink-0 shadow-inner group-hover:scale-110 transition-transform duration-300">
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg>
-                      </div>
-                      <div>
-                        <h4 className="text-slate-800 font-heading font-extrabold text-[16px] leading-snug group-hover:text-[#ff3b6a] transition-colors">View More Recipes</h4>
-                        <p className="text-[#ff3b6a] font-extrabold text-[10px] uppercase tracking-widest mt-0.5">Community Approved</p>
-                      </div>
-                    </div>
-                    <div className={`w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 transition-transform duration-300 ${showMoreRecipes ? 'rotate-180 bg-[#ff3b6a]/10 text-[#ff3b6a]' : 'group-hover:bg-slate-100'}`}>
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
-                    </div>
-                  </button>
-
-                  {/* Dropdown Content */}
-                  <div className={`transition-all duration-300 ease-in-out overflow-hidden ${showMoreRecipes ? 'max-h-[300px] mt-4 opacity-100' : 'max-h-0 opacity-0'}`}>
-                    <div className="pt-3 border-t border-slate-100 flex flex-col gap-2 overflow-y-auto max-h-[250px] pr-2 scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent">
-                      {approvedRecipes.slice(1).length > 0 ? approvedRecipes.slice(1).map((recipe, idx) => (
-                        <Link
-                          key={idx}
-                          href={`/recipes/${recipe.id}`}
-                          className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-100 transition-all group/item"
-                        >
-                          <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-slate-100 shadow-inner">
-                            {recipe.imageUrl ? (
-                              <img src={recipe.imageUrl} alt={recipe.title} className="w-full h-full object-cover group-hover/item:scale-110 transition-transform duration-500" />
-                            ) : (
-                              <div className="w-full h-full flex items-center justify-center text-slate-400">🍲</div>
-                            )}
-                          </div>
-                          <div className="flex flex-col min-w-0 justify-center">
-                            <span className="text-sm font-bold text-slate-800 truncate group-hover/item:text-[#0f7c85] transition-colors">{recipe.title}</span>
-                            <div className="flex items-center gap-2 mt-0.5">
-                              <span className="text-[10px] font-bold text-slate-400 uppercase flex items-center gap-1"><QuizIcon name="⏱️" className="w-3 h-3" /> {recipe.cookingTime}m</span>
-                              <span className="text-[10px] text-slate-300">•</span>
-                              <span className="text-[10px] font-bold text-slate-400 uppercase">{recipe.difficulty}</span>
-                            </div>
-                          </div>
-                          <div className="ml-auto opacity-0 group-hover/item:opacity-100 transition-opacity -translate-x-2 group-hover/item:translate-x-0 duration-300">
-                            <svg className="w-4 h-4 text-[#0f7c85]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
-                          </div>
-                        </Link>
-                      )) : (
-                        <div className="text-sm font-medium text-slate-500 p-6 text-center bg-slate-50 rounded-xl border border-slate-100 border-dashed">
-                          More recipes coming soon!<br />
-                          <span className="text-[11px] text-slate-400 mt-1 block">Share yours today!</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
+              <div className="flex flex-col sm:flex-row gap-4 items-center mt-auto">
+                <Link
+                  href={c.healthyBite.recipeLink}
+                  className="bg-[#0f7c85] hover:bg-[#0c646b] text-white font-bold text-xs py-3 px-6 rounded-[12px] transition-all duration-300 no-underline shadow-sm w-full sm:w-auto text-center flex items-center justify-center gap-2"
+                >
+                  View Recipe <span className="text-lg leading-none">→</span>
+                </Link>
+                <div className="flex items-center justify-center gap-4 text-xs font-bold text-slate-500">
+                  <span className="flex items-center gap-1.5"><QuizIcon name="⏱️" className="w-4 h-4 opacity-70" /> {c.healthyBite.time}</span>
+                  <span className="flex items-center gap-1.5"><QuizIcon name="🔥" className="w-4 h-4 opacity-70" /> {c.healthyBite.calories}</span>
                 </div>
-
-                {/* Quote Block below recipes */}
-                <div className="mt-4 flex-1 bg-gradient-to-br from-emerald-500/10 to-teal-500/10 border border-emerald-500/20 rounded-[24px] p-6 shadow-sm relative overflow-hidden flex flex-col justify-center">
-                  <div className="absolute top-0 right-0 p-4 opacity-10">
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor"><path d="M14.017 21v-7.391c0-5.714 4.076-7.857 7.747-8.109l.236 1.45c-2.333.256-4.664 2.15-5.042 5.05H22V21h-7.983zm-11 0v-7.391c0-5.714 4.076-7.857 7.747-8.109l.236 1.45c-2.333.256-4.665 2.15-5.042 5.05H11V21H3.017z" /></svg>
-                  </div>
-                  <div className="relative z-10">
-                    <h4 className="text-emerald-600 font-extrabold text-[10px] uppercase tracking-widest mb-3 flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Healthy Inspiration
-                    </h4>
-                    <p className="text-slate-700 italic font-medium text-[14px] leading-relaxed mb-3">&quot;{quote.text}&quot;</p>
-                    <p className="text-emerald-700/80 font-bold text-xs">— {quote.author || "Unknown"}</p>
-                  </div>
-                </div>
-
               </div>
-
             </div>
-          </>
+
+            {/* Top right floating button */}
+            {c.healthyBite.id && (
+              <div className="absolute top-6 right-6 z-20">
+                <SaveRecipeButton recipeId={c.healthyBite.id} className="w-10 h-10 rounded-full" />
+              </div>
+            )}
+          </div>
+
+          {/* View More Recipes Dropdown Column */}
+          <div className="flex flex-col justify-start reveal-slide min-w-0 h-full">
+            <div className="bg-white rounded-[24px] border border-slate-100 p-5 shadow-[0_8px_30px_rgb(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] transition-all">
+              <button
+                onClick={() => setShowMoreRecipes(!showMoreRecipes)}
+                className="w-full flex items-center justify-between gap-4 text-left group"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-[16px] bg-gradient-to-br from-[#ffe8ef] to-[#ffd1de] text-[#ff3b6a] flex items-center justify-center shrink-0 shadow-inner group-hover:scale-110 transition-transform duration-300">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg>
+                  </div>
+                  <div>
+                    <h4 className="text-slate-800 font-heading font-extrabold text-[16px] leading-snug group-hover:text-[#ff3b6a] transition-colors">View More Recipes</h4>
+                    <p className="text-[#ff3b6a] font-extrabold text-[10px] uppercase tracking-widest mt-0.5">Community Approved</p>
+                  </div>
+                </div>
+                <div className={`w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 transition-transform duration-300 ${showMoreRecipes ? 'rotate-180 bg-[#ff3b6a]/10 text-[#ff3b6a]' : 'group-hover:bg-slate-100'}`}>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+                </div>
+              </button>
+
+              {/* Dropdown Content */}
+              <div className={`transition-all duration-300 ease-in-out overflow-hidden ${showMoreRecipes ? 'max-h-[300px] mt-4 opacity-100' : 'max-h-0 opacity-0'}`}>
+                <div className="pt-3 border-t border-slate-100 flex flex-col gap-2 overflow-y-auto max-h-[250px] pr-2 scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent">
+                  {approvedRecipes.slice(1).length > 0 ? approvedRecipes.slice(1).map((recipe, idx) => (
+                    <Link
+                      key={idx}
+                      href={`/recipes/${recipe.id}`}
+                      className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-100 transition-all group/item"
+                    >
+                      <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-slate-100 shadow-inner">
+                        {recipe.imageUrl ? (
+                          <img src={recipe.imageUrl} alt={recipe.title} className="w-full h-full object-cover group-hover/item:scale-110 transition-transform duration-500" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-slate-400">🍲</div>
+                        )}
+                      </div>
+                      <div className="flex flex-col min-w-0 justify-center">
+                        <span className="text-sm font-bold text-slate-800 truncate group-hover/item:text-[#0f7c85] transition-colors">{recipe.title}</span>
+                        <div className="flex items-center gap-2 mt-0.5">
+                          <span className="text-[10px] font-bold text-slate-400 uppercase flex items-center gap-1"><QuizIcon name="⏱️" className="w-3 h-3" /> {recipe.cookingTime}m</span>
+                          <span className="text-[10px] text-slate-300">•</span>
+                          <span className="text-[10px] font-bold text-slate-400 uppercase">{recipe.difficulty}</span>
+                        </div>
+                      </div>
+                      <div className="ml-auto opacity-0 group-hover/item:opacity-100 transition-opacity -translate-x-2 group-hover/item:translate-x-0 duration-300">
+                        <svg className="w-4 h-4 text-[#0f7c85]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+                      </div>
+                    </Link>
+                  )) : (
+                    <div className="text-sm font-medium text-slate-500 p-6 text-center bg-slate-50 rounded-xl border border-slate-100 border-dashed">
+                      More recipes coming soon!<br />
+                      <span className="text-[11px] text-slate-400 mt-1 block">Share yours today!</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Quote Block below recipes */}
+            <div className="mt-4 flex-1 bg-gradient-to-br from-emerald-500/10 to-teal-500/10 border border-emerald-500/20 rounded-[24px] p-6 shadow-sm relative overflow-hidden flex flex-col justify-center">
+              <div className="absolute top-0 right-0 p-4 opacity-10">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor"><path d="M14.017 21v-7.391c0-5.714 4.076-7.857 7.747-8.109l.236 1.45c-2.333.256-4.664 2.15-5.042 5.05H22V21h-7.983zm-11 0v-7.391c0-5.714 4.076-7.857 7.747-8.109l.236 1.45c-2.333.256-4.665 2.15-5.042 5.05H11V21H3.017z" /></svg>
+              </div>
+              <div className="relative z-10">
+                <h4 className="text-emerald-600 font-extrabold text-[10px] uppercase tracking-widest mb-3 flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Healthy Inspiration
+                </h4>
+                <p className="text-slate-700 italic font-medium text-[14px] leading-relaxed mb-3">&quot;{quote.text}&quot;</p>
+                <p className="text-emerald-700/80 font-bold text-xs">— {quote.author || "Unknown"}</p>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </>
         )}
 
-      </div>
-    </section>
+    </div>
+    </section >
   );
 }

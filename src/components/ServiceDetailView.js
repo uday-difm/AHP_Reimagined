@@ -176,7 +176,7 @@ export default function ServiceDetailView({ service }) {
                 </div>
 
                 <div className="flex flex-col gap-3">
-                  <h1 className="font-heading font-extrabold text-[32px] md:text-[42px] text-primary tracking-tight leading-tight">
+                  <h1 className="main-heading text-primary tracking-tight">
                     {service.title}
                   </h1>
                   <div className="flex items-center gap-2 mt-2">
@@ -185,7 +185,7 @@ export default function ServiceDetailView({ service }) {
                   </div>
                 </div>
 
-                <div className="text-[15px] md:text-[16px] text-secondary leading-relaxed bg-[#f8fafc] border border-slate-100 p-6 md:p-8 rounded-3xl" dangerouslySetInnerHTML={{ __html: service.description }} />
+                <div className="description text-secondary bg-[#f8fafc] border border-slate-100 p-6 md:p-8 rounded-3xl" dangerouslySetInnerHTML={{ __html: service.description }} />
 
                 {/* What's Included */}
                 {includes.length > 0 && (
@@ -195,7 +195,7 @@ export default function ServiceDetailView({ service }) {
                     </span>
                     <ul className="list-none flex flex-col gap-3 pl-0 my-0">
                       {includes.map((inc, index) => (
-                        <li key={index} className="text-[14px] md:text-[15px] text-secondary leading-relaxed flex gap-3 items-start">
+                        <li key={index} className="description text-secondary flex gap-3 items-start">
                           <span className="text-accent-green shrink-0 mt-1 font-bold">✓</span>
                           <span>{inc}</span>
                         </li>
@@ -213,8 +213,8 @@ export default function ServiceDetailView({ service }) {
                     <div className="flex flex-col gap-4">
                       {faqs.map((faq, i) => (
                         <div key={i} className="border-b border-slate-100 pb-4 last:border-b-0 last:pb-0">
-                          <h4 className="font-heading font-bold text-[15px] text-primary mb-2">{faq.question}</h4>
-                          <p className="text-[14px] text-secondary leading-relaxed bg-slate-50/50 p-4 rounded-xl border border-slate-100/50">{faq.answer}</p>
+                          <h4 className="text-base font-bold text-primary mb-2">{faq.question}</h4>
+                          <p className="text-sm text-secondary bg-slate-50/50 p-4 rounded-xl border border-slate-100/50">{faq.answer}</p>
                         </div>
                       ))}
                     </div>
@@ -244,10 +244,10 @@ export default function ServiceDetailView({ service }) {
                 </button>
 
                 <div>
-                  <h2 className="font-heading font-extrabold text-[28px] md:text-[32px] text-primary tracking-tight mb-3">
+                  <h2 className="section-heading text-primary tracking-tight mb-3">
                     Reserve {service.title}
                   </h2>
-                  <p className="text-[14px] md:text-[15px] text-secondary leading-relaxed">
+                  <p className="description text-secondary">
                     Enter your contact details below to proceed with online payment or submit an editorial inquiry.
                   </p>
                 </div>
@@ -392,10 +392,10 @@ export default function ServiceDetailView({ service }) {
                 <div className="w-20 h-20 bg-[#e8f8f0] text-accent-green rounded-full flex items-center justify-center mb-8 shadow-sm">
                   <CheckCircle size={40} />
                 </div>
-                <h2 className="font-heading font-extrabold text-[28px] md:text-[32px] text-primary tracking-tight mb-4">
+                <h2 className="section-heading text-primary tracking-tight mb-4">
                   Payment / Inquiry Successful
                 </h2>
-                <p className="text-[15px] md:text-[16px] text-secondary leading-relaxed max-w-lg mb-10">
+                <p className="description text-secondary max-w-lg mb-10">
                   Thank you! Your request and payment details for <strong>{service.title}</strong> have been securely recorded. Our PR & Editorial team will contact you shortly.
                 </p>
                 

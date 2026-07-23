@@ -72,10 +72,10 @@ function ResetPasswordForm() {
         <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-bold text-white text-xl mx-auto shadow-lg shadow-indigo-500/25">
           GB
         </div>
-        <h1 className="mt-6 text-2xl font-black text-white tracking-tight">
+        <h1 className="main-heading text-white mt-6 tracking-tight">
           Create New Password
         </h1>
-        <p className="mt-2 text-xs text-slate-400">
+        <p className="description text-slate-400 mt-2">
           Enter a secure new password for your account
         </p>
       </div>
@@ -109,7 +109,7 @@ function ResetPasswordForm() {
         <form onSubmit={handleSubmit} className="mt-8 space-y-4" noValidate>
           {/* Password */}
           <div>
-            <label htmlFor="password" className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">
+            <label htmlFor="password" className="block text-sm font-bold text-slate-400 uppercase tracking-wider mb-1.5">
               New Password
             </label>
             <div className="relative">
@@ -123,7 +123,7 @@ function ResetPasswordForm() {
                   setError("");
                 }}
                 placeholder="••••••••"
-                className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 pr-11 text-xs text-white outline-none hover:border-slate-700 focus:bg-slate-950 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all duration-200"
+                className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 pr-11 text-sm text-white outline-none hover:border-slate-700 focus:bg-slate-950 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all duration-200"
               />
               <button
                 type="button"
@@ -138,7 +138,7 @@ function ResetPasswordForm() {
 
           {/* Confirm Password */}
           <div>
-            <label htmlFor="confirmPassword" className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">
+            <label htmlFor="confirmPassword" className="block text-sm font-bold text-slate-400 uppercase tracking-wider mb-1.5">
               Confirm New Password
             </label>
             <input
@@ -151,7 +151,7 @@ function ResetPasswordForm() {
                 setError("");
               }}
               placeholder="••••••••"
-              className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-xs text-white outline-none hover:border-slate-700 focus:bg-slate-950 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all duration-200"
+              className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-white outline-none hover:border-slate-700 focus:bg-slate-950 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all duration-200"
             />
           </div>
 
@@ -167,7 +167,7 @@ function ResetPasswordForm() {
             <button
               type="submit"
               disabled={loading || !token}
-              className="w-full flex items-center justify-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-3 text-xs font-bold shadow-lg shadow-indigo-600/20 hover:shadow-indigo-500/30 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed hover:-translate-y-0.5"
+              className="w-full flex items-center justify-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-3 text-sm md:text-base font-bold shadow-lg shadow-indigo-600/20 hover:shadow-indigo-500/30 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed hover:-translate-y-0.5"
             >
               {loading ? (
                 <>
@@ -181,7 +181,7 @@ function ResetPasswordForm() {
 
             <Link
               href="/login"
-              className="w-full flex items-center justify-center gap-2 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-400 hover:text-white px-4 py-3 text-xs font-bold transition-all duration-200"
+              className="w-full flex items-center justify-center gap-2 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-400 hover:text-white px-4 py-3 text-sm md:text-base font-bold transition-all duration-200"
             >
               Back to Sign In
             </Link>

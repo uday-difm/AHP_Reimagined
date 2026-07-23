@@ -68,11 +68,11 @@ export default function Hero() {
                 </svg>
                 Your Health, Our Priority
               </div>
-              <h1 className="font-heading font-extrabold text-4xl md:text-5xl lg:text-6xl leading-[1.1] tracking-[-1.5px] mb-6 capitalize">
+              <h1 className="hero-title mb-6 capitalize">
                 <span className="text-[#1e2a35] block">Your Daily Guide To</span>
                 <span className="text-[#0f7c85] block">Health &amp; Wellness</span>
               </h1>
-              <p className="text-[#1e2a35] font-semibold text-base md:text-xl leading-relaxed max-w-xl mb-8">
+              <p className="description text-[#1e2a35] max-w-xl mb-8">
                 Discover trusted health blogs, expert magazines, disease awareness,
                 nutrition tips, mental wellness, and practical lifestyle guidance
                 everything you need to make informed decisions for a healthier life.

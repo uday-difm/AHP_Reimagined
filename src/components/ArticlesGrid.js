@@ -10,22 +10,22 @@ import Book from './Book';
 import Scene from './Scene';
 
 class SceneErrorBoundary extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = { hasError: false };
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
+  componentDidCatch(error, errorInfo) {
+    console.error("3D Scene Error:", error, errorInfo);
+  }
+  render() {
+    if (this.state.hasError) {
+      return <div className="w-[200px] h-[300px] bg-slate-100 rounded-lg flex items-center justify-center text-slate-400 text-sm p-4 text-center border border-slate-200">Interactive 3D cover unavailable</div>;
     }
-    static getDerivedStateFromError(error) {
-        return { hasError: true };
-    }
-    componentDidCatch(error, errorInfo) {
-        console.error("3D Scene Error:", error, errorInfo);
-    }
-    render() {
-        if (this.state.hasError) {
-            return <div className="w-[200px] h-[300px] bg-slate-100 rounded-lg flex items-center justify-center text-slate-400 text-sm p-4 text-center border border-slate-200">Interactive 3D cover unavailable</div>;
-        }
-        return this.props.children;
-    }
+    return this.props.children;
+  }
 }
 
 function proxyUrl(url) {
@@ -128,7 +128,7 @@ export default function ArticlesGrid() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch">
 
           {/* Left Column — 3D Book & Title (4 cols) */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-100px" }}
@@ -138,10 +138,10 @@ export default function ArticlesGrid() {
             <span className="section-tag text-xs font-extrabold tracking-[3px] text-accent uppercase mb-2 bg-[#0f7c85]/10 px-3.5 py-1.5 rounded-full w-max">
               DIGITAL ISSUES
             </span>
-            <h2 className="font-heading font-extrabold text-3xl md:text-5xl text-primary tracking-[-1px] leading-[1.15] mb-4">
+            <h2 className="main-heading text-primary mb-4">
               Latest Magazine
             </h2>
-            <p className="text-secondary text-base md:text-lg leading-relaxed max-w-sm mb-8">
+            <p className="description text-secondary max-w-sm mb-8">
               Step into our latest featured edition containing clinically reviewed blueprints, expert columns, and mindfulness guides.
             </p>
 
@@ -177,7 +177,7 @@ export default function ArticlesGrid() {
           </motion.div>
 
           {/* Middle Column — Editorial Greeting & Spread Stack (5 cols) */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
@@ -191,7 +191,7 @@ export default function ArticlesGrid() {
                 <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200/50 pb-5">
                   <div>
                     <span className="text-xs font-extrabold text-[#0f7c85] uppercase tracking-[1.5px] block mb-1">FEATURED EDITION</span>
-                    <h3 className="font-heading font-extrabold text-2xl text-primary tracking-tight">
+                    <h3 className="section-heading text-primary">
                       {latestIssue ? (latestIssue.magazineId || latestIssue.season) : "Spring 2024 Issue"}
                     </h3>
                   </div>
@@ -207,10 +207,10 @@ export default function ArticlesGrid() {
                 <div className="flex flex-col gap-3">
                   <span className="text-secondary font-bold text-sm">Dear Readers,</span>
                   {latestIssue ? (
-                    <div 
+                    <div
                       className="text-secondary text-sm leading-relaxed"
-                      dangerouslySetInnerHTML={{ 
-                        __html: latestIssue.introduction || latestIssue.description || `Welcome to the ${latestIssue.season} Edition of A Health Place Magazine.` 
+                      dangerouslySetInnerHTML={{
+                        __html: latestIssue.introduction || latestIssue.description || `Welcome to the ${latestIssue.season} Edition of A Health Place Magazine.`
                       }}
                     />
                   ) : (
@@ -270,7 +270,7 @@ export default function ArticlesGrid() {
           </motion.div>
 
           {/* Right Column — Ad Card (3 cols) */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-100px" }}

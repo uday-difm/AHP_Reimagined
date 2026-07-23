@@ -67,8 +67,8 @@ export default function BlogCategorySlider() {
         {/* Section Title */}
         <div className="section-title-center text-center max-w-[600px] mx-auto mb-16 reveal-slide">
 
-          <h2 className="section-title font-heading font-extrabold text-3xl md:text-5xl text-primary tracking-[-1px] leading-[1.15] mb-4">Latest Blogs</h2>
-          <p className="text-secondary text-base md:text-lg leading-relaxed">Browse our articles by topic to find medically verified guides and insights.</p>
+          <h2 className="section-heading text-primary mb-4">Latest Blogs</h2>
+          <p className="description text-secondary">Browse our articles by topic to find medically verified guides and insights.</p>
         </div>
 
         {/* Swiper Slider Wrapper with side paddings for arrows */}
@@ -120,8 +120,8 @@ export default function BlogCategorySlider() {
                       <div className="flex justify-between items-center border-b border-slate-100 pb-3">
                         <span className={`text-[9.5px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider ${cat.badgeClass}`}>{cat.tag}</span>
                       </div>
-                      <h4 className="font-heading font-bold text-lg text-primary group-hover:text-accent transition-colors mt-2 line-clamp-2">{cat.title}</h4>
-                      <p className="text-[12.5px] text-secondary leading-relaxed mt-1 line-clamp-3">{cat.desc}</p>
+                      <h4 className="card-title text-primary group-hover:text-accent transition-colors mt-2 line-clamp-2">{cat.title}</h4>
+                      <p className="text-sm text-secondary mt-1 line-clamp-3">{cat.desc}</p>
                     </div>
 
                     <div className="relative mt-6 h-[120px] w-full rounded-xl overflow-hidden shadow-sm">

@@ -283,10 +283,10 @@ export default function Search() {
                           </span>
                         )}
                       </div>
-                      <h4 className="font-heading font-bold text-base text-primary truncate group-hover:text-accent transition-colors leading-snug">
+                      <h4 className="font-heading font-bold text-base text-primary group-hover:text-accent transition-colors leading-snug">
                         {renderHighlighted(art.highlightedTitle)}
                       </h4>
-                      <p className="text-xs text-secondary truncate mt-0.5">
+                      <p className="text-xs text-secondary line-clamp-2 mt-0.5">
                         {renderHighlighted(art.highlightedSummary)}
                       </p>
                     </div>
