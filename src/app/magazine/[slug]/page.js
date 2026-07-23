@@ -91,7 +91,7 @@ export default async function MagazineIssuePage({ params }) {
         }}
       />
 
-      <main className="pt-[140px] pb-20">
+      <main className="pt-35 pb-20">
         <div className="container mx-auto px-4">
           {/* Breadcrumb */}
           <div className="breadcrumb flex items-center gap-2 text-[12px] text-muted font-semibold uppercase tracking-[1px] mb-8">
@@ -107,7 +107,7 @@ export default async function MagazineIssuePage({ params }) {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             {/* Left Column: 3D Book Viewer / Fallback Image */}
             <div className="lg:col-span-5 flex flex-col items-center gap-6">
-              <div className={`w-full max-w-[320px] aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl bg-white/40 p-4 border border-white/60 relative ${!isFeatured ? 'flex items-center justify-center p-0' : ''}`}>
+              <div className={`w-full max-w-[320px] aspect-3/4 rounded-2xl overflow-hidden shadow-2xl bg-white/40 p-4 border border-white/60 relative ${!isFeatured ? 'flex items-center justify-center p-0' : ''}`}>
                 {isFeatured ? (
                   <DynamicScene
                     frontUrl={mag.coverImage ? proxyUrl(mag.coverImage) : ""}

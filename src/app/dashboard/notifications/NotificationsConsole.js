@@ -419,7 +419,7 @@ export default function NotificationsConsole({
 
             {/* Filter toolbar */}
             <div className="border-b border-gray-150 dark:border-slate-700 px-6 py-3 flex flex-wrap gap-3 items-center">
-              <div className="relative flex-1 min-w-[200px]">
+              <div className="relative flex-1 min-w-50">
                 <Search
                   size={14}
                   className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400"
@@ -458,7 +458,7 @@ export default function NotificationsConsole({
             </div>
 
             {/* Alerts list */}
-            <div className="divide-y divide-gray-100 dark:divide-slate-700 max-h-[500px] overflow-y-auto">
+            <div className="divide-y divide-gray-100 dark:divide-slate-700 max-h-125 overflow-y-auto">
               {filteredAlerts.map((alert) => (
                 <div
                   key={alert.id}

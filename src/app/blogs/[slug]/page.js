@@ -116,7 +116,7 @@ export default async function ArticlePage({ params }) {
         }}
       />
 
-      <main className="pt-[140px] pb-20">
+      <main className="pt-35 pb-20">
         <div className="container mx-auto px-4">
           {/* Breadcrumb */}
           <div className="breadcrumb flex items-center gap-2 text-[12px] text-muted font-semibold uppercase tracking-[1px] mb-6">
@@ -197,7 +197,7 @@ export default async function ArticlePage({ params }) {
           </div>
 
           {/* Featured Image */}
-          <div className="article-image-wrapper relative w-full h-[260px] sm:h-[450px] rounded-[32px] overflow-hidden shadow-[0_20px_48px_rgba(0,0,0,0.06)] border border-white/60 mb-12">
+          <div className="article-image-wrapper relative w-full h-65 sm:h-112.5 rounded-4xl overflow-hidden shadow-[0_20px_48px_rgba(0,0,0,0.06)] border border-white/60 mb-12">
             <Image
               src={featuredImgUrl}
               alt={post.featuredImage?.altText || post.title}
@@ -269,7 +269,7 @@ export default async function ArticlePage({ params }) {
                     href={`/blogs/${item.slug}`}
                     className="group cursor-pointer flex flex-col bg-white rounded-2xl overflow-hidden border border-slate-100 p-4 shadow-[0_4px_16px_rgba(0,0,0,0.01)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_16px_32px_rgba(0,0,0,0.03)]"
                   >
-                    <div className="relative w-full h-[140px] rounded-xl overflow-hidden mb-4">
+                    <div className="relative w-full h-35 rounded-xl overflow-hidden mb-4">
                       <Image
                         src={itemImg}
                         alt={item.title}

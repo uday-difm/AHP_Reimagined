@@ -105,9 +105,9 @@ export default function AboutPage() {
 
       <main className="w-full">
 
-        <section className="relative overflow-hidden bg-gradient-to-br from-[#f0fafa] via-[#f8fafc] to-[#eaf7f7] pt-[140px] pb-24 md:pb-32 rounded-b-[40px] border-b border-slate-200/20">
-          <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-accent/10 rounded-full blur-[120px] pointer-events-none -translate-y-1/3 translate-x-1/4" />
-          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#27ae60]/8 rounded-full blur-[100px] pointer-events-none translate-y-1/3 -translate-x-1/4" />
+        <section className="relative overflow-hidden bg-linear-to-br from-[#f0fafa] via-bg-light to-[#eaf7f7] pt-35 pb-24 md:pb-32 rounded-b-[40px] border-b border-slate-200/20">
+          <div className="absolute top-0 right-0 w-150 h-150 bg-accent/10 rounded-full blur-[120px] pointer-events-none -translate-y-1/3 translate-x-1/4" />
+          <div className="absolute bottom-0 left-0 w-100 h-100 bg-[#27ae60]/8 rounded-full blur-[100px] pointer-events-none translate-y-1/3 -translate-x-1/4" />
           <div className="container relative z-10">
             <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
 
@@ -123,20 +123,20 @@ export default function AboutPage() {
                   and actionable health guidance. No gatekeeping, no scare tactics, just science-backed clarity.
                 </p>
                 <div className="flex flex-wrap gap-4">
-                  <Button href="/blogs" variant="primary" className="!text-[13px] !py-3.5 !px-7 font-bold shadow-[0_8px_24px_rgba(79,192,195,0.35)] hover:shadow-[0_12px_32px_rgba(79,192,195,0.45)]">
+                  <Button href="/blogs" variant="primary" className="text-[13px]! py-3.5! px-7! font-bold shadow-[0_8px_24px_rgba(79,192,195,0.35)] hover:shadow-[0_12px_32px_rgba(79,192,195,0.45)]">
                     Explore Articles
                   </Button>
-                  <Button href="/about#values" variant="outline" className="!text-[13px] !py-3.5 !px-7">
+                  <Button href="/about#values" variant="outline" className="text-[13px]! py-3.5! px-7!">
                     Our Values
                   </Button>
                 </div>
               </div>
 
               {/* Right — Visual card */}
-              <div className="flex-shrink-0 w-full lg:w-[440px] reveal-scale">
-                <div className="relative min-h-[360px] md:min-h-[420px] h-auto">
-                  <div className="absolute top-6 right-6 w-full h-full bg-[#dceeed]/60 rounded-[32px] border border-slate-200/40 rotate-2" />
-                  <div className="relative z-10 w-full h-full min-h-[360px] md:min-h-[420px] bg-[#1c7b80] rounded-[32px] overflow-hidden flex flex-col justify-between p-8 md:p-10 shadow-[0_24px_60px_rgba(28,123,128,0.25)]">
+              <div className="shrink-0 w-full lg:w-110 reveal-scale">
+                <div className="relative min-h-90 md:min-h-105 h-auto">
+                  <div className="absolute top-6 right-6 w-full h-full bg-[#dceeed]/60 rounded-4xl border border-slate-200/40 rotate-2" />
+                  <div className="relative z-10 w-full h-full min-h-90 md:min-h-105 bg-[#1c7b80] rounded-4xl overflow-hidden flex flex-col justify-between p-8 md:p-10 shadow-[0_24px_60px_rgba(28,123,128,0.25)]">
                     <div>
                       <span className="text-white/70 font-bold text-[10px] uppercase tracking-[2.5px]">Medically Verified</span>
                       <h3 className="card-title text-white mt-3">
@@ -151,8 +151,8 @@ export default function AboutPage() {
                         <span key={i} className="bg-white/15 text-white/90 text-[11px] font-bold px-3 py-1.5 rounded-full border border-white/20">{t}</span>
                       ))}
                     </div>
-                    <div className="absolute bottom-[-80px] right-[-60px] w-[240px] h-[240px] rounded-full bg-white/5 border border-white/10 pointer-events-none" />
-                    <div className="absolute bottom-[-40px] right-[-20px] w-[160px] h-[160px] rounded-full bg-white/5 border border-white/10 pointer-events-none" />
+                    <div className="absolute -bottom-20 -right-15 w-60 h-60 rounded-full bg-white/5 border border-white/10 pointer-events-none" />
+                    <div className="absolute -bottom-10 -right-5 w-40 h-40 rounded-full bg-white/5 border border-white/10 pointer-events-none" />
                   </div>
                 </div>
               </div>
@@ -200,9 +200,9 @@ export default function AboutPage() {
               </div>
 
               {/* Visual card */}
-              <div className="relative h-[420px] md:h-[480px] reveal-scale">
-                <div className="absolute top-8 right-8 w-full h-full bg-[#dceeed]/60 rounded-[32px] border border-slate-200/40 rotate-2" />
-                <div className="relative z-10 w-full h-full bg-[#1c7b80] rounded-[32px] overflow-hidden flex flex-col justify-between p-8 md:p-10 shadow-[0_24px_60px_rgba(28,123,128,0.25)]">
+              <div className="relative h-105 md:h-120 reveal-scale">
+                <div className="absolute top-8 right-8 w-full h-full bg-[#dceeed]/60 rounded-4xl border border-slate-200/40 rotate-2" />
+                <div className="relative z-10 w-full h-full bg-[#1c7b80] rounded-4xl overflow-hidden flex flex-col justify-between p-8 md:p-10 shadow-[0_24px_60px_rgba(28,123,128,0.25)]">
                   <div>
                     <span className="text-white/70 font-bold text-[10px] uppercase tracking-[2.5px]">Medically Verified</span>
                     <h3 className="card-title text-white mt-3">
@@ -217,8 +217,8 @@ export default function AboutPage() {
                       <span key={i} className="bg-white/15 text-white/90 text-[11px] font-bold px-3 py-1.5 rounded-full border border-white/20">{t}</span>
                     ))}
                   </div>
-                  <div className="absolute bottom-[-80px] right-[-60px] w-[240px] h-[240px] rounded-full bg-white/5 border border-white/10 pointer-events-none" />
-                  <div className="absolute bottom-[-40px] right-[-20px] w-[160px] h-[160px] rounded-full bg-white/5 border border-white/10 pointer-events-none" />
+                  <div className="absolute -bottom-20 -right-15 w-60 h-60 rounded-full bg-white/5 border border-white/10 pointer-events-none" />
+                  <div className="absolute -bottom-10 -right-5 w-40 h-40 rounded-full bg-white/5 border border-white/10 pointer-events-none" />
                 </div>
               </div>
             </div>
@@ -231,9 +231,9 @@ export default function AboutPage() {
         </div>
 
         {/* Values */}
-        <section id="values" className="py-24 md:py-32 bg-[#f8fafc]">
+        <section id="values" className="py-24 md:py-32 bg-bg-light">
           <div className="container">
-            <div className="text-center max-w-[560px] mx-auto mb-16 reveal-slide">
+            <div className="text-center max-w-140 mx-auto mb-16 reveal-slide">
               <span className="text-[11px] font-bold tracking-[3px] uppercase text-accent mb-4 block">What We Stand For</span>
               <h2 className="main-heading text-primary">
                 Six principles that guide everything we do
@@ -241,7 +241,7 @@ export default function AboutPage() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {values.map((v, i) => (
-                <div key={i} className="bg-white rounded-[24px] p-7 border border-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_40px_rgba(79,192,195,0.08)] hover:-translate-y-1 transition-all duration-300 reveal-slide">
+                <div key={i} className="bg-white rounded-3xl p-7 border border-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_40px_rgba(79,192,195,0.08)] hover:-translate-y-1 transition-all duration-300 reveal-slide">
                   <div className={`w-11 h-11 rounded-xl flex items-center justify-center mb-5 ${v.color}`}>
                     {v.icon}
                   </div>
@@ -266,7 +266,7 @@ export default function AboutPage() {
                   From everyday nutrition questions to navigating complex insurance codes — our library covers the full
                   arc of human health so you always find what you need.
                 </p>
-                <Button href="/blogs" variant="primary" className="!bg-primary hover:!bg-[#16162a] !text-[13px] !py-3.5 !px-7 font-bold shadow-sm inline-flex items-center gap-2">
+                <Button href="/blogs" variant="primary" className="bg-primary! hover:bg-[#16162a]! text-[13px]! py-3.5! px-7! font-bold shadow-sm inline-flex items-center gap-2">
                   Browse All Articles
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
@@ -287,10 +287,10 @@ export default function AboutPage() {
         </section>
 
         {/* CTA */}
-        <section className="py-24 md:py-32 bg-gradient-to-br from-[#1c7b80] via-[#1a1a2e] to-[#1a1a2e] relative overflow-hidden">
+        <section className="py-24 md:py-32 bg-linear-to-br from-[#1c7b80] via-primary to-primary relative overflow-hidden">
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-accent/10 rounded-full blur-[120px] pointer-events-none" />
           <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[#27ae60]/10 rounded-full blur-[100px] pointer-events-none" />
-          <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-accent/40 to-transparent pointer-events-none" />
+          <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-linear-to-r from-transparent via-accent/40 to-transparent pointer-events-none" />
           <div className="container relative z-10 text-center">
             <span className="inline-block text-[11px] font-bold tracking-[3px] uppercase text-accent mb-5 reveal-slide">Start Your Journey</span>
             <h2 className="main-heading text-white mb-6 max-w-2xl mx-auto reveal-slide">

@@ -639,7 +639,7 @@ export default function FooterEditor({
             </span>
           </div>
 
-          <div className="rounded-xl border border-slate-800 bg-slate-900 shadow-xl overflow-hidden min-h-[280px] flex flex-col justify-between p-8 font-sans">
+          <div className="rounded-xl border border-slate-800 bg-slate-900 shadow-xl overflow-hidden min-h-70 flex flex-col justify-between p-8 font-sans">
             {/* Grid Columns */}
             <div
               className={

@@ -94,7 +94,7 @@ function NotificationPreview({ form }) {
         {form.iconUrl ? (
           <img src={form.iconUrl} alt="icon" className="w-10 h-10 rounded-lg object-cover shrink-0 bg-slate-700" onError={(e) => e.target.style.display="none"} />
         ) : (
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-lg bg-linear-to-br from-indigo-500 to-violet-600 flex items-center justify-center shrink-0">
             <Bell size={20} className="text-white" />
           </div>
         )}
@@ -836,7 +836,7 @@ export default function PushPage() {
     <div className="space-y-6 w-full relative">
       {/* Toast */}
       {toast && (
-        <div className={`fixed top-5 right-5 z-[100] flex items-center gap-3 px-5 py-3.5 rounded-xl shadow-2xl text-sm font-semibold text-white transition-all ${
+        <div className={`fixed top-5 right-5 z-100 flex items-center gap-3 px-5 py-3.5 rounded-xl shadow-2xl text-sm font-semibold text-white transition-all ${
           toast.type === "error" ? "bg-red-600" :
           toast.type === "warning" ? "bg-amber-500" :
           "bg-emerald-600"
@@ -934,7 +934,7 @@ export default function PushPage() {
           {/* Filter Bar */}
           <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden shadow-sm">
             <div className="border-b border-slate-200 dark:border-slate-700 px-4 py-3 flex flex-wrap gap-3 items-center justify-between">
-              <div className="relative flex-1 min-w-[180px]">
+              <div className="relative flex-1 min-w-45">
                 <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
                   type="text"
@@ -998,7 +998,7 @@ export default function PushPage() {
               </div>
             ) : (
               <div className="overflow-x-auto">
-                <table className="w-full text-left min-w-[700px]">
+                <table className="w-full text-left min-w-175">
                   <thead>
                     <tr className="border-b border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/30">
                       {["Campaign", "Segment", "Status", "Sent", "Clicked", "CTR", "Date", "Actions"].map(h => (
@@ -1012,18 +1012,18 @@ export default function PushPage() {
                       const ctr = item.sentCount > 0 ? ((item.clickedCount / item.sentCount) * 100).toFixed(1) : "—";
                       return (
                         <tr key={item.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition">
-                          <td className="px-4 py-3 max-w-[220px]">
+                          <td className="px-4 py-3 max-w-55">
                             <div className="flex items-center gap-2.5">
                               {item.iconUrl ? (
                                 <img src={item.iconUrl} alt="" className="w-8 h-8 rounded-lg object-cover shrink-0 bg-slate-100" onError={e => e.target.style.display="none"} />
                               ) : (
-                                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-100 to-violet-100 dark:from-indigo-950/40 dark:to-violet-950/40 flex items-center justify-center shrink-0">
+                                <div className="w-8 h-8 rounded-lg bg-linear-to-br from-indigo-100 to-violet-100 dark:from-indigo-950/40 dark:to-violet-950/40 flex items-center justify-center shrink-0">
                                   <Bell size={13} className="text-indigo-500" />
                                 </div>
                               )}
                               <div className="min-w-0">
-                                <p className="font-semibold text-slate-900 dark:text-white text-xs truncate max-w-[150px]">{item.title}</p>
-                                <p className="text-[10px] text-slate-400 truncate max-w-[150px]">{item.message}</p>
+                                <p className="font-semibold text-slate-900 dark:text-white text-xs truncate max-w-37.5">{item.title}</p>
+                                <p className="text-[10px] text-slate-400 truncate max-w-37.5">{item.message}</p>
                                 <div className="flex gap-1.5 mt-1.5 flex-wrap">
                                   {item.sendToWebsite !== false && (
                                     <span className="text-[8px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:bg-emerald-950/20 dark:text-emerald-400">Website</span>
@@ -1175,7 +1175,7 @@ export default function PushPage() {
                             <div className="mt-1.5 flex items-center gap-2">
                               <div className="flex-1 bg-slate-100 dark:bg-slate-700 rounded-full h-1.5 overflow-hidden">
                                 <div
-                                  className="h-full bg-gradient-to-r from-indigo-500 to-violet-500 rounded-full transition-all"
+                                  className="h-full bg-linear-to-r from-indigo-500 to-violet-500 rounded-full transition-all"
                                   style={{ width: `${width}%` }}
                                 />
                               </div>
@@ -1352,7 +1352,7 @@ export default function PushPage() {
           </div>
 
           {/* Supported Features */}
-          <div className="bg-gradient-to-br from-indigo-50 to-violet-50 dark:from-indigo-950/20 dark:to-violet-950/20 border border-indigo-100 dark:border-indigo-900/30 rounded-xl p-5">
+          <div className="bg-linear-to-br from-indigo-50 to-violet-50 dark:from-indigo-950/20 dark:to-violet-950/20 border border-indigo-100 dark:border-indigo-900/30 rounded-xl p-5">
             <h4 className="text-xs font-bold text-indigo-700 dark:text-indigo-400 mb-3 uppercase tracking-wider">Supported Features</h4>
             <div className="grid grid-cols-2 gap-2">
               {[

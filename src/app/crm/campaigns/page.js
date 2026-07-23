@@ -402,7 +402,7 @@ function CampaignWizard({ onClose, onSaved, lists, templates, siteId, editData }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-      <div className="w-full max-w-2xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl flex flex-col overflow-hidden h-[90vh] md:h-[700px]">
+      <div className="w-full max-w-2xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl flex flex-col overflow-hidden h-[90vh] md:h-175">
 
         {/* Wizard header */}
         <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between shrink-0">
@@ -582,7 +582,7 @@ function CampaignWizard({ onClose, onSaved, lists, templates, siteId, editData }
                       onChange={e => { up("body", e.target.value); up("templateId", ""); }}
                       rows={16}
                       placeholder={"<h1>Hello {{first_name}},</h1>\n<p>Your email content here...</p>"}
-                      className="w-full px-3 py-2 text-xs border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none h-[400px]"
+                      className="w-full px-3 py-2 text-xs border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none h-100"
                     />
                   </div>
 
@@ -591,7 +591,7 @@ function CampaignWizard({ onClose, onSaved, lists, templates, siteId, editData }
                       <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Live Visual Preview</label>
                       {isPreviewLoading && <span className="text-[9px] text-indigo-500 font-bold animate-pulse">Syncing preview...</span>}
                     </div>
-                    <div className="border border-slate-200 dark:border-slate-700 rounded-lg bg-white overflow-hidden shadow-xs h-[400px]">
+                    <div className="border border-slate-200 dark:border-slate-700 rounded-lg bg-white overflow-hidden shadow-xs h-100">
                       <iframe
                         srcDoc={debouncedBody || "<div style='font-family: sans-serif; color: #94a3b8; padding: 20px; text-align: center; font-size: 12px;'>Write some HTML markup or select a template above to see the campaign body live.</div>"}
                         title="Visual Preview"
@@ -1024,7 +1024,7 @@ export default function CampaignsPage() {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left min-w-[800px]">
+            <table className="w-full text-left min-w-200">
               <thead className="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700">
                 <tr>
                   {["Campaign", "Subject", "Audience", "Status", "Date", "Analytics", ""].map(h => (
@@ -1041,7 +1041,7 @@ export default function CampaignsPage() {
                       <div className="font-semibold text-slate-900 dark:text-white">{c.name}</div>
                       <TypeBadge type={c.type} />
                     </td>
-                    <td className="px-4 py-3 text-slate-500 dark:text-slate-400 max-w-[200px]">
+                    <td className="px-4 py-3 text-slate-500 dark:text-slate-400 max-w-50">
                       <span className="italic truncate block">"{c.subject}"</span>
                     </td>
                     <td className="px-4 py-3 text-slate-600 dark:text-slate-400">

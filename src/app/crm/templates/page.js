@@ -225,7 +225,7 @@ export default function TemplatesPage() {
               <label className="block text-xs font-semibold text-slate-650 dark:text-slate-400">Template HTML Markup *</label>
               <textarea placeholder="Template HTML Markup" rows={18} required value={newTemplate.htmlContent}
                 onChange={(e) => setNewTemplate({ ...newTemplate, htmlContent: e.target.value })}
-                className="p-3 border rounded-xl text-xs dark:bg-slate-900 w-full font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none h-[420px]" />
+                className="p-3 border rounded-xl text-xs dark:bg-slate-900 w-full font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none h-105" />
             </div>
 
             <div className="space-y-1.5">
@@ -233,7 +233,7 @@ export default function TemplatesPage() {
                 <label className="block text-xs font-semibold text-slate-650 dark:text-slate-400">Live Visual Preview</label>
                 {isPreviewLoading && <span className="text-[10px] text-indigo-500 font-bold animate-pulse">Syncing preview...</span>}
               </div>
-              <div className="border rounded-xl bg-white dark:bg-white overflow-hidden shadow-xs h-[420px] relative">
+              <div className="border rounded-xl bg-white dark:bg-white overflow-hidden shadow-xs h-105 relative">
                 <iframe
                   srcDoc={debouncedHtml || "<div style='font-family: sans-serif; color: #94a3b8; padding: 20px; text-align: center; font-size: 12px;'>Write some HTML markup or apply a preset template above to see the live preview.</div>"}
                   title="Template Preview"
@@ -299,8 +299,8 @@ export default function TemplatesPage() {
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
                     {selected.has(tpl.id)
-                      ? <CheckSquare size={13} className="text-indigo-600 flex-shrink-0" />
-                      : <Square size={13} className="text-slate-300 flex-shrink-0" />}
+                      ? <CheckSquare size={13} className="text-indigo-600 shrink-0" />
+                      : <Square size={13} className="text-slate-300 shrink-0" />}
                     <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100">{tpl.name}</h3>
                   </div>
                   <div className="flex p-1 bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 rounded">
@@ -367,7 +367,7 @@ export default function TemplatesPage() {
               <iframe
                 srcDoc={previewTemplate.htmlContent || "<p class='p-4 text-xs text-center text-slate-400'>This template has no layout HTML content.</p>"}
                 title="Visual Preview"
-                className="w-full flex-1 border border-slate-200 dark:border-slate-700 rounded-xl bg-white min-h-[400px]"
+                className="w-full flex-1 border border-slate-200 dark:border-slate-700 rounded-xl bg-white min-h-100"
                 sandbox="allow-same-origin"
               />
             </div>

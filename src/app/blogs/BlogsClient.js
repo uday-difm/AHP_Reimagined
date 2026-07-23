@@ -138,7 +138,7 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
       <Header />
 
       {/* Hero Title Section */}
-      <section className="bg-[#f0f6f3]/60 pt-[140px] pb-8 rounded-b-[40px] border-b border-slate-200/20 text-center relative overflow-hidden">
+      <section className="bg-[#f0f6f3]/60 pt-35 pb-8 rounded-b-[40px] border-b border-slate-200/20 text-center relative overflow-hidden">
         <div className="container">
           <span className="text-accent text-[11px] font-bold uppercase tracking-[2px] mb-3 block reveal-slide">WELLNESS LIBRARY</span>
           <h1 className="main-heading text-primary tracking-[-1.5px] mb-4 reveal-slide">
@@ -156,7 +156,7 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
                 key={cat}
                 onClick={() => handleCategoryFilter(cat)}
                 className={`px-5 py-3.5 rounded-xl font-bold text-sm transition-all cursor-pointer whitespace-nowrap ${categoryFilter === cat
-                  ? 'bg-[#0f7c85] text-white shadow-sm font-extrabold'
+                  ? 'bg-accent text-white shadow-sm font-extrabold'
                   : 'bg-white text-secondary hover:bg-slate-100 border border-slate-200/60'
                   }`}
               >
@@ -176,7 +176,7 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
                     }
                   }}
                   className={`appearance-none bg-white text-secondary font-bold text-sm px-5 py-3.5 pr-10 rounded-xl border focus:outline-none focus:ring-2 focus:ring-accent/50 cursor-pointer shadow-sm hover:bg-slate-100/50 transition-all ${!primaryCategories.includes(categoryFilter)
-                    ? 'border-[#0f7c85] bg-[#0f7c85]/5 text-[#0f7c85] font-extrabold'
+                    ? 'border-accent bg-accent/5 text-accent font-extrabold'
                     : 'border-slate-200/60'
                     }`}
                 >
@@ -187,7 +187,7 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
                     </option>
                   ))}
                 </select>
-                <div className={`absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none ${!primaryCategories.includes(categoryFilter) ? 'text-[#0f7c85]' : 'text-slate-400'
+                <div className={`absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none ${!primaryCategories.includes(categoryFilter) ? 'text-accent' : 'text-slate-400'
                   }`}>
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -200,7 +200,7 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
       </section>
 
       {/* Articles Main View */}
-      <main id="blogs-main" className="container py-5 min-h-[500px]">
+      <main id="blogs-main" className="container py-5 min-h-125">
         <div className="space-y-10 reveal-fade">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-slate-200">
             <div className="flex flex-col gap-1 text-center md:text-left">
@@ -229,12 +229,12 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
 
           {/* Active Tag filter indicator */}
           {tagFilter && (
-            <div className="flex items-center gap-2 bg-[#e8f4ff] border border-blue-200/30 text-[#0f7c85] px-3.5 py-1.5 rounded-xl text-xs font-semibold w-fit mb-4">
+            <div className="flex items-center gap-2 bg-badge-blue-bg border border-blue-200/30 text-accent px-3.5 py-1.5 rounded-xl text-xs font-semibold w-fit mb-4">
               <span>Filtering by Tag: <strong>{tagFilter}</strong></span>
               <button
                 type="button"
                 onClick={() => handleTagFilter(null)}
-                className="hover:text-rose-650 transition-colors ml-1 font-bold font-sans cursor-pointer bg-transparent border-0 text-xs text-[#0f7c85]"
+                className="hover:text-rose-650 transition-colors ml-1 font-bold font-sans cursor-pointer bg-transparent border-0 text-xs text-accent"
               >
                 ✕
               </button>
@@ -251,10 +251,10 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
               {displayedArticles.map((art) => {
                 if (art.isAd) {
                   return (
-                    <div key="ad-card-slot" className="bg-gradient-to-br from-[#f0f9fa] via-[#f7fdfd] to-[#eef9fa] rounded-[24px] p-8 border border-[#0f7c85]/20 flex flex-col justify-between text-center min-h-[380px] shadow-sm hover:shadow-md transition-all duration-300 group hover:border-[#0f7c85]/40">
+                    <div key="ad-card-slot" className="bg-linear-to-br from-[#f0f9fa] via-[#f7fdfd] to-[#eef9fa] rounded-3xl p-8 border border-accent/20 flex flex-col justify-between text-center min-h-95 shadow-sm hover:shadow-md transition-all duration-300 group hover:border-accent/40">
                       <div className="flex flex-col items-center">
-                        <div className="w-14 h-14 bg-[#0f7c85]/10 rounded-full flex items-center justify-center mb-6 shadow-sm">
-                          <svg className="w-6 h-6 text-[#0f7c85]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="w-14 h-14 bg-accent/10 rounded-full flex items-center justify-center mb-6 shadow-sm">
+                          <svg className="w-6 h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
                           </svg>
                         </div>
@@ -267,7 +267,7 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
                       </div>
                       <Link
                         href="/info?tab=contact"
-                        className="w-max mx-auto bg-[#0f7c85] hover:bg-[#0c646b] text-white font-extrabold text-sm py-3.5 px-8 rounded-full transition-all duration-300 no-underline shadow-sm hover:shadow-[0_6px_20px_rgba(15,124,133,0.3)] hover:-translate-y-0.5 transform inline-flex items-center gap-1.5"
+                        className="w-max mx-auto bg-accent hover:bg-[#0c646b] text-white font-extrabold text-sm py-3.5 px-8 rounded-full transition-all duration-300 no-underline shadow-sm hover:shadow-[0_6px_20px_rgba(15,124,133,0.3)] hover:-translate-y-0.5 transform inline-flex items-center gap-1.5"
                       >
                         Get Started →
                       </Link>
@@ -280,9 +280,9 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
                   <Link
                     key={art.id}
                     href={`/blogs/${slug}`}
-                    className="group bg-white rounded-[24px] overflow-hidden border border-slate-200 transition-all duration-300 hover:shadow-lg hover:border-[#0f7c85]/30 flex flex-col h-full no-underline"
+                    className="group bg-white rounded-3xl overflow-hidden border border-slate-200 transition-all duration-300 hover:shadow-lg hover:border-accent/30 flex flex-col h-full no-underline"
                   >
-                    <div className="relative w-full h-[200px] overflow-hidden">
+                    <div className="relative w-full h-50 overflow-hidden">
                       <Image
                         src={art.img}
                         alt={art.title}
@@ -290,12 +290,12 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                         unoptimized={true}
                       />
-                      <span className="absolute top-4 left-4 z-10 bg-[#e8f4ff] text-[#0f7c85] px-3 py-1.5 rounded-full text-sm font-bold uppercase tracking-[0.5px]">
+                      <span className="absolute top-4 left-4 z-10 bg-badge-blue-bg text-accent px-3 py-1.5 rounded-full text-sm font-bold uppercase tracking-[0.5px]">
                         {art.category}
                       </span>
                       <SaveArticleButton postId={art.id} />
                     </div>
-                    <div className="p-6 flex flex-col gap-2 flex-grow">
+                    <div className="p-6 flex flex-col gap-2 grow">
                       <h3 className="card-title text-primary group-hover:text-accent transition-colors">
                         {art.title}
                       </h3>
@@ -313,7 +313,7 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
                                 e.stopPropagation();
                                 handleTagFilter(t.slug || t.name);
                               }}
-                              className="text-sm font-bold bg-[#e8f4ff] hover:bg-[#d4eaff] text-[#0f7c85] px-2 py-0.5 rounded-md uppercase tracking-[0.3px] transition cursor-pointer border-0"
+                              className="text-sm font-bold bg-badge-blue-bg hover:bg-[#d4eaff] text-accent px-2 py-0.5 rounded-md uppercase tracking-[0.3px] transition cursor-pointer border-0"
                             >
                               #{t.name}
                             </button>
@@ -380,9 +380,9 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
       {/* Lower Page Banner — Advertise With Us */}
       <section className="bg-white py-16 border-t border-slate-200/50">
         <div className="container mx-auto px-4 reveal-slide">
-          <div className="bg-gradient-to-br from-[#0f7c85]/5 via-white to-[#0f7c85]/10 rounded-[32px] p-8 md:p-12 border border-[#0f7c85]/10 shadow-[0_10px_30px_rgba(0,0,0,0.01)] flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="bg-linear-to-br from-accent/5 via-white to-accent/10 rounded-4xl p-8 md:p-12 border border-accent/10 shadow-[0_10px_30px_rgba(0,0,0,0.01)] flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="text-center md:text-left">
-              <span className="inline-block bg-[#0f7c85]/10 text-[#0f7c85] font-extrabold text-[10px] uppercase tracking-[2px] px-3.5 py-1.5 rounded-full mb-3">
+              <span className="inline-block bg-accent/10 text-accent font-extrabold text-[10px] uppercase tracking-[2px] px-3.5 py-1.5 rounded-full mb-3">
                 PARTNERSHIPS
               </span>
               <h2 className="section-heading text-primary mb-3">
@@ -394,7 +394,7 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
             </div>
             <Link
               href="/info?tab=contact"
-              className="bg-[#0f7c85] hover:bg-[#0c646b] text-white font-extrabold text-xs py-3.5 px-8 rounded-full transition-all duration-300 no-underline shadow-md hover:shadow-[0_8px_24px_rgba(15,124,133,0.3)] hover:-translate-y-0.5 transform whitespace-nowrap"
+              className="bg-accent hover:bg-[#0c646b] text-white font-extrabold text-xs py-3.5 px-8 rounded-full transition-all duration-300 no-underline shadow-md hover:shadow-[0_8px_24px_rgba(15,124,133,0.3)] hover:-translate-y-0.5 transform whitespace-nowrap"
             >
               Contact Us
             </Link>

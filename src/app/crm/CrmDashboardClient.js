@@ -417,7 +417,7 @@ export default function CrmDashboardClient({
       {activeTab === "ads" && (
         <div className="space-y-6 animate-in fade-in duration-200">
           <div className="flex flex-wrap justify-between items-start sm:items-center gap-4">
-            <div className="flex-1 min-w-[200px]">
+            <div className="flex-1 min-w-50">
               <h2 className="text-base font-bold text-gray-900">Campaigns & Display Banners</h2>
               <p className="text-xs text-gray-500 mt-1">Configure visual banner spots or integrate responsive Google AdSense scripts.</p>
             </div>
@@ -504,7 +504,7 @@ export default function CrmDashboardClient({
             <div className="py-12 text-center text-xs text-gray-400 border border-dashed rounded-xl bg-slate-50">No ads configured. Click "New Ad Campaign" to get started.</div>
           ) : (
             <div className="border rounded-xl bg-white overflow-hidden shadow-sm overflow-x-auto">
-              <table className="w-full text-left border-collapse min-w-[600px]">
+              <table className="w-full text-left border-collapse min-w-150">
                 <thead>
                   <tr className="bg-gray-50 border-b text-[10px] font-bold text-gray-400 uppercase tracking-wider">
                     <th className="px-5 py-3">Ad Name</th>
@@ -612,7 +612,7 @@ export default function CrmDashboardClient({
 
               {reportType === "traffic" && Array.isArray(reportResults.data) && (
                 <div className="border rounded-xl bg-white overflow-hidden max-h-96 overflow-y-auto overflow-x-auto">
-                  <table className="w-full text-left border-collapse min-w-[500px]">
+                  <table className="w-full text-left border-collapse min-w-125">
                     <thead>
                       <tr className="bg-gray-50 border-b text-[10px] font-bold text-gray-400 uppercase tracking-wider">
                         <th className="px-4 py-3">Timestamp</th>

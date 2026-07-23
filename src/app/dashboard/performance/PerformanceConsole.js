@@ -295,7 +295,7 @@ export default function PerformanceConsole({ siteId, user }) {
       </div>
 
       {/* Contents */}
-      <div className="lg:col-span-3 bg-white border border-gray-200 rounded-xl p-6 shadow-sm min-h-[400px]">
+      <div className="lg:col-span-3 bg-white border border-gray-200 rounded-xl p-6 shadow-sm min-h-100">
         {/* Tab 1: Diagnostics Health */}
         {activeTab === "health" && (
           <div className="space-y-6">

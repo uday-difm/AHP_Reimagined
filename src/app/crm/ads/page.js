@@ -514,7 +514,7 @@ export default function AdsPage() {
     <div className="space-y-6 w-full relative">
       {/* Toast Alert */}
       {toast && (
-        <div className={`fixed top-5 right-5 z-[100] flex items-center gap-3 px-5 py-3 rounded-xl shadow-xl text-sm font-semibold text-white transition-all ${
+        <div className={`fixed top-5 right-5 z-100 flex items-center gap-3 px-5 py-3 rounded-xl shadow-xl text-sm font-semibold text-white transition-all ${
           toast.type === "error" ? "bg-rose-600" : "bg-emerald-600"
         }`}>
           {toast.type === "error" ? <AlertTriangle size={15} /> : <CheckCircle2 size={15} />}
@@ -690,7 +690,7 @@ export default function AdsPage() {
         <div className="space-y-4">
           {/* Controls Bar */}
           <div className="bg-white dark:bg-slate-800 border dark:border-slate-700 p-4 rounded-xl flex flex-wrap items-center justify-between gap-3 shadow-sm">
-            <div className="flex items-center gap-2 flex-1 min-w-[240px]">
+            <div className="flex items-center gap-2 flex-1 min-w-60">
               <Search size={14} className="text-slate-450 shrink-0" />
               <input
                 type="text"
@@ -717,7 +717,7 @@ export default function AdsPage() {
               <select
                 value={zoneFilter}
                 onChange={e => setZoneFilter(e.target.value)}
-                className="p-1.5 border rounded-lg text-[10.5px] font-bold dark:bg-slate-900 outline-none max-w-[150px]"
+                className="p-1.5 border rounded-lg text-[10.5px] font-bold dark:bg-slate-900 outline-none max-w-37.5"
               >
                 <option value="all">All Placement Zones</option>
                 {zones.map(z => <option key={z.id} value={z.id}>{z.name}</option>)}
@@ -1626,7 +1626,7 @@ export default function AdsPage() {
                   <div className="border border-slate-250 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 rounded-xl space-y-3">
                     <span className="text-[9px] font-bold text-slate-400 uppercase">Banner Preview Mock</span>
                     {formAd.imageUrl ? (
-                      <div className="w-full border rounded overflow-hidden shadow-sm bg-slate-100 min-h-[120px] flex items-center justify-center">
+                      <div className="w-full border rounded overflow-hidden shadow-sm bg-slate-100 min-h-30 flex items-center justify-center">
                         <img src={formAd.imageUrl} alt="creative ad view" className="w-full h-auto object-cover" onError={e => e.target.style.display="none"} />
                       </div>
                     ) : (
@@ -1644,7 +1644,7 @@ export default function AdsPage() {
                 ) : (
                   <div className="border border-slate-250 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 rounded-xl space-y-2">
                     <span className="text-[9px] font-bold text-slate-400 uppercase">HTML script code mockup</span>
-                    <div className="bg-slate-900 text-slate-350 p-3 rounded font-mono text-[9px] overflow-hidden whitespace-pre-wrap break-all min-h-[100px]">
+                    <div className="bg-slate-900 text-slate-350 p-3 rounded font-mono text-[9px] overflow-hidden whitespace-pre-wrap break-all min-h-25">
                       {formAd.code || "<!-- ad creative code display -->"}
                     </div>
                   </div>
@@ -1654,7 +1654,7 @@ export default function AdsPage() {
                   <span className="font-bold text-[9px] uppercase block mb-1 text-slate-400">Target Settings Config</span>
                   <div className="flex justify-between border-b dark:border-slate-800 pb-1.5"><span className="text-slate-450">Active Device:</span> <span className="font-bold capitalize">{formAd.targetDevice}</span></div>
                   <div className="flex justify-between border-b dark:border-slate-800 pb-1.5"><span className="text-slate-450">Target Country:</span> <span className="font-bold uppercase">{formAd.targetCountry}</span></div>
-                  <div className="flex justify-between border-b dark:border-slate-800 pb-1.5"><span className="text-slate-450">Allowed Routes:</span> <span className="font-bold truncate max-w-[120px]">{formAd.targetRoutes || "All Pages"}</span></div>
+                  <div className="flex justify-between border-b dark:border-slate-800 pb-1.5"><span className="text-slate-450">Allowed Routes:</span> <span className="font-bold truncate max-w-30">{formAd.targetRoutes || "All Pages"}</span></div>
                   <div className="flex justify-between"><span className="text-slate-450">Schedules:</span> <span className="font-bold">{formAd.schedTimeStart && formAd.schedTimeEnd ? `${formAd.schedTimeStart}-${formAd.schedTimeEnd}` : "All Day"}</span></div>
                 </div>
               </div>

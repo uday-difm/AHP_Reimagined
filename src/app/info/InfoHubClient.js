@@ -159,7 +159,7 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
       <Header />
 
       {/* Hero Header */}
-      <section className="bg-[#f0f6f3]/60 pt-[140px] pb-16 rounded-b-[40px] border-b border-slate-200/20 text-center relative overflow-hidden">
+      <section className="bg-[#f0f6f3]/60 pt-35 pb-16 rounded-b-[40px] border-b border-slate-200/20 text-center relative overflow-hidden">
         <div className="container max-w-4xl">
           <span className="text-accent text-[11px] font-bold uppercase tracking-[2px] mb-3 block reveal-slide">A HEALTH PLACE INFO HUB</span>
           <h1 className="text-primary font-heading font-extrabold text-4xl md:text-5xl tracking-[-1.5px] leading-tight mb-4 reveal-slide">
@@ -174,7 +174,7 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
             <Button
               onClick={() => handleTabChange('support')}
               variant={activeTab === 'support' ? 'primary' : 'white'}
-              className="flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-[13px] !shadow-none border-none cursor-pointer"
+              className="flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-[13px] shadow-none! border-none cursor-pointer"
             >
               <HelpCircle size={16} />
               Contact Support
@@ -182,7 +182,7 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
             <Button
               onClick={() => handleTabChange('legal')}
               variant={activeTab === 'legal' ? 'primary' : 'white'}
-              className="flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-[13px] !shadow-none border-none cursor-pointer"
+              className="flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-[13px] shadow-none! border-none cursor-pointer"
             >
               <ShieldAlert size={16} />
               Legal & Policies
@@ -192,7 +192,7 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
       </section>
 
       {/* Main Tab Content */}
-      <main className="container py-16 max-w-6xl min-h-[500px]">
+      <main className="container py-16 max-w-6xl min-h-125">
 
 
         {/* Tab 3: Contact & Support */}
@@ -327,7 +327,7 @@ export default function InfoHubClient({ initialLegalPages = [] }) {
                   key={doc.key}
                   onClick={() => handleLegalDocToggle(doc.key)}
                   variant={activeLegalDoc === doc.key ? 'primary' : 'white'}
-                  className="flex items-center gap-2.5 px-4.5 py-3 rounded-xl justify-start text-[12.5px] text-left md:w-full whitespace-nowrap cursor-pointer !shadow-none border-none shrink-0"
+                  className="flex items-center gap-2.5 px-4.5 py-3 rounded-xl justify-start text-[12.5px] text-left md:w-full whitespace-nowrap cursor-pointer shadow-none! border-none shrink-0"
                 >
                   <FileText size={15} />
                   {doc.label}

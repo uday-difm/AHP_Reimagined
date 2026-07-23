@@ -158,16 +158,16 @@ export default function QuizClient({ quiz }) {
     return (
       <div className="min-h-screen bg-bg-light flex flex-col items-center justify-center px-4 py-24">
         <div className="w-full max-w-lg bg-white rounded-[28px] overflow-hidden border border-slate-200/60 shadow-lg">
-          <div className="h-1.5 w-full bg-[#0f7c85]" />
+          <div className="h-1.5 w-full bg-accent" />
           <div className="px-8 py-10 text-center">
             <div className="text-[52px] mb-4">🎉</div>
             <h2 className="font-heading text-lg font-medium text-primary tracking-tight mb-2">Quiz Complete!</h2>
             <p className="text-secondary text-xl font-semibold mb-8">{quiz.title}</p>
-            <div className="text-xl font-bold text-[#0f7c85] mb-8">
+            <div className="text-xl font-bold text-accent mb-8">
               {totalScore} <span className="text-lg text-slate-400">/{maxPossible}</span>
             </div>
             <div className="flex flex-col sm:flex-row gap-3">
-              <Link href="/quizzes/dashboard" className="flex-1 py-3 rounded-full text-sm md:text-base text-white text-center no-underline bg-[#0f7c85] hover:bg-[#0c6b73] transition-colors">
+              <Link href="/quizzes/dashboard" className="flex-1 py-3 rounded-full text-sm md:text-base text-white text-center no-underline bg-accent hover:bg-[#0c6b73] transition-colors">
                 View Dashboard
               </Link>
               <Link href="/quizzes" className="flex-1 py-3 rounded-full text-sm md:text-base text-center no-underline border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors">
@@ -197,14 +197,14 @@ export default function QuizClient({ quiz }) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch mb-16">
           {showGate ? (
             /* Locked Gate Screen */
-            <div className="col-span-2 relative bg-white border border-slate-200/60 rounded-[24px] overflow-hidden p-8 md:p-12 text-center shadow-sm min-h-[380px] flex flex-col items-center justify-center">
-              <div className="w-14 h-14 rounded-full flex items-center justify-center mb-4 bg-[#0f7c85]/10 text-[#0f7c85]">
+            <div className="col-span-2 relative bg-white border border-slate-200/60 rounded-3xl overflow-hidden p-8 md:p-12 text-center shadow-sm min-h-95 flex flex-col items-center justify-center">
+              <div className="w-14 h-14 rounded-full flex items-center justify-center mb-4 bg-accent/10 text-accent">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
                   <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
                   <path strokeLinecap="round" d="M7 11V7a5 5 0 0110 0v4" />
                 </svg>
               </div>
-              <span className="text-[10px] font-extrabold uppercase tracking-[2px] text-[#0f7c85] mb-2">
+              <span className="text-[10px] font-extrabold uppercase tracking-[2px] text-accent mb-2">
                 Question {currentIndex + 1} is locked
               </span>
               <h3 className="font-heading font-extrabold text-[22px] text-primary mb-2">Sign in to continue</h3>
@@ -214,7 +214,7 @@ export default function QuizClient({ quiz }) {
               <div className="flex flex-col sm:flex-row gap-3 w-full max-w-xs justify-center">
                 <button
                   onClick={handleLoginRedirect}
-                  className="bg-[#0f7c85] hover:bg-[#0c6b73] text-white px-8 py-3 rounded-full text-sm md:text-base transition-colors cursor-pointer"
+                  className="bg-accent hover:bg-[#0c6b73] text-white px-8 py-3 rounded-full text-sm md:text-base transition-colors cursor-pointer"
                 >
                   Sign In
                 </button>
@@ -230,7 +230,7 @@ export default function QuizClient({ quiz }) {
             <>
               {/* Left Column: Question Card */}
               <div
-                className="bg-[#f3f4f6] rounded-[24px] p-6 flex flex-col justify-between border border-slate-200/50 shadow-sm transition-all duration-300"
+                className="bg-[#f3f4f6] rounded-3xl p-6 flex flex-col justify-between border border-slate-200/50 shadow-sm transition-all duration-300"
                 style={{
                   opacity: animating ? 0 : 1,
                   transform: animating ? 'translateX(-10px)' : 'translateX(0)',
@@ -240,7 +240,7 @@ export default function QuizClient({ quiz }) {
                   <h4 className="text-[12px] font-extrabold text-slate-500 uppercase tracking-wider mb-8">
                     Question:
                   </h4>
-                  <div className="bg-white rounded-[16px] p-6 border border-slate-200/40 shadow-sm">
+                  <div className="bg-white rounded-2xl p-6 border border-slate-200/40 shadow-sm">
                     <p className="text-base text-primary">
                       {currentQ.text}
                     </p>
@@ -254,7 +254,7 @@ export default function QuizClient({ quiz }) {
 
               {/* Right Column: Options & Submit */}
               <div
-                className="bg-white border border-slate-200/60 rounded-[24px] p-6 flex flex-col justify-between shadow-sm transition-all duration-300"
+                className="bg-white border border-slate-200/60 rounded-3xl p-6 flex flex-col justify-between shadow-sm transition-all duration-300"
                 style={{
                   opacity: animating ? 0 : 1,
                   transform: animating ? 'translateX(10px)' : 'translateX(0)',
@@ -268,7 +268,7 @@ export default function QuizClient({ quiz }) {
                       <button
                         key={idx}
                         onClick={() => handleSelect(idx)}
-                        className="w-full text-left px-5 py-4 rounded-[16px] text-[13.5px] transition-all duration-150 border flex items-center gap-4.5 cursor-pointer bg-white"
+                        className="w-full text-left px-5 py-4 rounded-2xl text-[13.5px] transition-all duration-150 border flex items-center gap-4.5 cursor-pointer bg-white"
                         style={{
                           borderColor: isSelected ? '#0f7c85' : '#e2e8f0',
                           boxShadow: isSelected ? '0 4px 12px rgba(15, 124, 133, 0.05)' : 'none',
@@ -306,7 +306,7 @@ export default function QuizClient({ quiz }) {
                   <button
                     onClick={handleNext}
                     disabled={selected === null}
-                    className="bg-[#0f7c85] hover:bg-[#0c6b73] disabled:opacity-50 text-white text-sm md:text-base px-8 py-2.5 rounded-full transition-all cursor-pointer shadow-sm"
+                    className="bg-accent hover:bg-[#0c6b73] disabled:opacity-50 text-white text-sm md:text-base px-8 py-2.5 rounded-full transition-all cursor-pointer shadow-sm"
                   >
                     {isLastQuestion ? 'Finish Quiz' : 'Next'}
                   </button>
@@ -335,7 +335,7 @@ export default function QuizClient({ quiz }) {
                     </div>
                   ))}
                 </div>
-                <div className="bg-white h-48 rounded-[24px] border border-slate-200/60 p-6 flex flex-col justify-end">
+                <div className="bg-white h-48 rounded-3xl border border-slate-200/60 p-6 flex flex-col justify-end">
                   <div className="h-1 bg-slate-100 w-full rounded-full" />
                 </div>
               </div>
@@ -347,9 +347,9 @@ export default function QuizClient({ quiz }) {
 
               {/* Centered Login Required Modal */}
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-full max-w-sm">
-                <div className="bg-white border border-slate-200/60 rounded-[24px] p-8 text-center shadow-lg">
+                <div className="bg-white border border-slate-200/60 rounded-3xl p-8 text-center shadow-lg">
                   {/* Green lock circle icon */}
-                  <div className="w-12 h-12 rounded-full border border-[#0f7c85] flex items-center justify-center mx-auto mb-4 text-[#0f7c85]">
+                  <div className="w-12 h-12 rounded-full border border-accent flex items-center justify-center mx-auto mb-4 text-accent">
                     <svg className="w-5.5 h-5.5" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
                       <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
                       <path strokeLinecap="round" d="M7 11V7a5 5 0 0110 0v4" />
@@ -363,7 +363,7 @@ export default function QuizClient({ quiz }) {
 
                   <button
                     onClick={handleLoginRedirect}
-                    className="bg-[#0f7c85] hover:bg-[#0c6b73] text-white px-8 py-2.5 rounded-full text-sm md:text-base transition-colors cursor-pointer w-full"
+                    className="bg-accent hover:bg-[#0c6b73] text-white px-8 py-2.5 rounded-full text-sm md:text-base transition-colors cursor-pointer w-full"
                   >
                     Login
                   </button>
@@ -373,8 +373,8 @@ export default function QuizClient({ quiz }) {
           ) : (
             /* Unlocked Scoreboard / Dashboard link */
             <div className="mt-14 max-w-4xl mx-auto">
-              <div className="bg-[#0f7c85] text-white rounded-[24px] p-8 md:p-10 shadow-md relative overflow-hidden">
-                <div className="absolute right-[-40px] bottom-[-40px] w-64 h-64 rounded-full bg-white/5 pointer-events-none" />
+              <div className="bg-accent text-white rounded-3xl p-8 md:p-10 shadow-md relative overflow-hidden">
+                <div className="absolute -right-10 -bottom-10 w-64 h-64 rounded-full bg-white/5 pointer-events-none" />
                 <div className="relative z-10 max-w-2xl mx-auto text-center flex flex-col items-center">
                   <span className="text-[10px] font-extrabold uppercase tracking-[2px] text-white/70 mb-2">YOUR WELLNESS JOURNEY</span>
                   <h2 className="main-heading mb-3">
@@ -402,7 +402,7 @@ export default function QuizClient({ quiz }) {
                   <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto px-4 sm:px-0">
                     <Link
                       href="/quizzes/dashboard"
-                      className="bg-white text-[#0f7c85] hover:bg-slate-100 px-6 py-3 sm:py-2.5 rounded-full text-sm md:text-base no-underline transition-all shadow-sm w-full sm:w-auto text-center"
+                      className="bg-white text-accent hover:bg-slate-100 px-6 py-3 sm:py-2.5 rounded-full text-sm md:text-base no-underline transition-all shadow-sm w-full sm:w-auto text-center"
                     >
                       My Dashboard
                     </Link>

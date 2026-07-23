@@ -291,7 +291,7 @@ export default function EmailEditor({ siteId, initialEmailSettings }) {
       )}
 
       {/* Main Configurations Card */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden min-h-[460px] flex flex-col justify-between">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden min-h-115 flex flex-col justify-between">
         {/* Navigation Tabs */}
         <div className="flex flex-wrap border-b border-gray-200 bg-gray-50/50">
           <button
@@ -612,7 +612,7 @@ export default function EmailEditor({ siteId, initialEmailSettings }) {
                       onChange={(e) => setAutoReplyEnabled(e.target.checked)}
                       className="sr-only peer"
                     />
-                    <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                    <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
                   </label>
                 </div>
 
@@ -683,7 +683,7 @@ export default function EmailEditor({ siteId, initialEmailSettings }) {
                       onChange={(e) => setAdminAlertsEnabled(e.target.checked)}
                       className="sr-only peer"
                     />
-                    <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                    <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
                   </label>
                 </div>
 
@@ -729,7 +729,7 @@ export default function EmailEditor({ siteId, initialEmailSettings }) {
                       onChange={(e) => setPrAlertsEnabled(e.target.checked)}
                       className="sr-only peer"
                     />
-                    <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                    <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
                   </label>
                 </div>
 
@@ -784,8 +784,8 @@ export default function EmailEditor({ siteId, initialEmailSettings }) {
               </div>
 
               {/* Logs Content list */}
-              <div className="border border-gray-200 rounded-xl bg-gray-50/20 max-h-[360px] overflow-auto">
-                <table className="w-full min-w-[500px] text-left border-collapse text-xs">
+              <div className="border border-gray-200 rounded-xl bg-gray-50/20 max-h-90 overflow-auto">
+                <table className="w-full min-w-125 text-left border-collapse text-xs">
                   <thead className="bg-gray-100 text-gray-500 font-bold uppercase tracking-wider text-[9px] border-b">
                     <tr>
                       <th className="p-3">Timestamp</th>

@@ -31,7 +31,7 @@ function QuizCard({ quiz }) {
       onMouseLeave={() => setHovered(false)}
     >
       <div
-        className="h-full bg-white rounded-[24px] overflow-hidden border border-slate-200/50 flex flex-col transition-all duration-500"
+        className="h-full bg-white rounded-3xl overflow-hidden border border-slate-200/50 flex flex-col transition-all duration-500"
         style={{
           boxShadow: hovered
             ? '0 20px 35px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.03)'
@@ -40,7 +40,7 @@ function QuizCard({ quiz }) {
         }}
       >
         {/* Cover Image */}
-        <div className="relative h-[220px] w-full overflow-hidden bg-slate-100">
+        <div className="relative h-55 w-full overflow-hidden bg-slate-100">
           {hasImage ? (
             <Image
               src={quiz.imageUrl}
@@ -59,7 +59,7 @@ function QuizCard({ quiz }) {
               {quiz.icon || '📋'}
             </div>
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-80" />
+          <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent opacity-80" />
 
           {/* Category badge */}
           <div className="absolute top-4 left-4 z-10">
@@ -80,7 +80,7 @@ function QuizCard({ quiz }) {
 
         {/* Body */}
         <div className="p-6 flex flex-col flex-1">
-          <h3 className="card-title text-[#1a2a35] mb-3 transition-colors duration-300 group-hover:text-[#0f7c85]">
+          <h3 className="card-title text-[#1a2a35] mb-3 transition-colors duration-300 group-hover:text-accent">
             {quiz.title}
           </h3>
           <p className="description text-secondary mb-6 flex-1">
@@ -97,7 +97,7 @@ function QuizCard({ quiz }) {
                 {quiz.questionCount} Questions
               </span>
             </div>
-            <div className="flex items-center gap-1 text-[#0f7c85] font-extrabold text-[12.5px] uppercase tracking-wider transition-all duration-300">
+            <div className="flex items-center gap-1 text-accent font-extrabold text-[12.5px] uppercase tracking-wider transition-all duration-300">
               <span className="group-hover:mr-1 transition-all">Play Quiz</span>
               <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300"
                 style={{ backgroundColor: hovered ? '#0f7c85' : '#f0fdfd', color: hovered ? '#fff' : '#0f7c85' }}>
@@ -148,7 +148,7 @@ export default function QuizzesPage() {
       <BackdropBlobs />
       <Header />
 
-      <main className="min-h-screen bg-[#f8fafc] relative">
+      <main className="min-h-screen bg-bg-light relative">
         {/* ── HERO ── */}
         <section
           className="pt-[140px] pb-12 border-b border-slate-200/20 text-center relative overflow-hidden"

@@ -330,7 +330,7 @@ export default function SeoDashboardClient({ siteId, initialPages, initialPosts 
                   {/* Right Column: SEO Status Check */}
                   <div className="border dark:border-slate-750 rounded-xl p-5 bg-white dark:bg-slate-800 space-y-3">
                     <h4 className="font-bold text-sm text-gray-800 dark:text-slate-200 border-b dark:border-slate-750 pb-2">Page-by-Page SEO Audits</h4>
-                    <div className="space-y-3 max-h-[500px] overflow-y-auto pr-1">
+                    <div className="space-y-3 max-h-125 overflow-y-auto pr-1">
                       {reviewResults.seoScan?.map((scan) => (
                         <div key={scan.id} className="p-3.5 border dark:border-slate-750 rounded-lg space-y-2">
                           <div className="flex justify-between items-center">
