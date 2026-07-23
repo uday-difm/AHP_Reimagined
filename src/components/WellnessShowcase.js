@@ -429,10 +429,7 @@ export default function WellnessShowcase({ content }) {
           </div>
 
         </div>
-      </>
-        )}
-
-    </div>
-    </section >
+      </div>
+    </section>
   );
 }
