@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { X, Upload, Folder, Home, ArrowLeft, Search, Image as ImageIcon, FileIcon, CheckCircle } from "lucide-react";
+import { X, Upload, Folder, Home, ArrowLeft, Search, Image as ImageIcon, FileIcon, CheckCircle, Sparkles } from "lucide-react";
 
 function getThumbnailUrl(url) {
   if (!url) return url;
@@ -14,16 +14,16 @@ function getThumbnailUrl(url) {
   return `/api/media/proxy?url=${encodeURIComponent(url)}`;
 }
 
-/**
- * MediaPickerModal
- * 
- * Props:
- *  - onSelect(mediaObj)  — called when user clicks a media item
- *  - onClose()           — called to close the modal
- *  - title               — optional heading text
- *  - filter              — "images" | "all" (default "images")
- */
+const PRESET_SAMPLE_IMAGES = [
+  { id: "sample-1", fileName: "Nature & Exercise", url: "/images/hero_exercise.png", mimeType: "image/png" },
+  { id: "sample-2", fileName: "Ayurveda Wellness", url: "/images/ayurveda.png", mimeType: "image/png" },
+  { id: "sample-3", fileName: "ISSN Publication", url: "/images/ISSN_BARCODE.png", mimeType: "image/png" },
+  { id: "sample-4", fileName: "AHP Brand Logo", url: "/images/AHP_LOGOV3.png", mimeType: "image/png" },
+];
+
 export default function MediaPickerModal({ onSelect, onClose, title = "Select from Media Library", filter = "images", siteId }) {
+  const effectiveSiteId = siteId || (typeof window !== "undefined" ? localStorage.getItem("x-site-id") : "") || process.env.NEXT_PUBLIC_SITE_ID || "AHP";
+  
   const [currentFolderId, setCurrentFolderId] = useState("root");
   const [folderHistory, setFolderHistory] = useState([{ id: "root", name: "Media Library" }]);
 
@@ -45,7 +45,7 @@ export default function MediaPickerModal({ onSelect, onClose, title = "Select fr
       const fetchPromises = [
         fetch(`/api/media?folderId=${currentFolderId}&limit=50&page=${pageNum}`, {
           headers: {
-            "x-site-id": siteId,
+            "x-site-id": effectiveSiteId,
           },
         }),
       ];
@@ -54,7 +54,7 @@ export default function MediaPickerModal({ onSelect, onClose, title = "Select fr
         fetchPromises.push(
           fetch(`/api/media/folders?parentId=${currentFolderId}`, {
             headers: {
-              "x-site-id": siteId,
+              "x-site-id": effectiveSiteId,
             },
           })
         );
@@ -69,7 +69,6 @@ export default function MediaPickerModal({ onSelect, onClose, title = "Select fr
 
       let items = mediaData.data ?? (Array.isArray(mediaData) ? mediaData : []);
 
-      // Apply filter
       if (filter === "images") {
         items = items.filter((m) => m.mimeType?.startsWith("image/"));
       }
@@ -88,10 +87,9 @@ export default function MediaPickerModal({ onSelect, onClose, title = "Select fr
     } finally {
       if (pageNum === 1) setLoading(false);
     }
-  }, [currentFolderId, filter]);
+  }, [currentFolderId, filter, effectiveSiteId]);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setPage(1);
     loadContents(1);
   }, [loadContents]);
@@ -102,7 +100,6 @@ export default function MediaPickerModal({ onSelect, onClose, title = "Select fr
     loadContents(nextPage);
   };
 
-  // Folder navigation
   const navigateToFolder = (folder) => {
     setCurrentFolderId(folder.id);
     setFolderHistory((prev) => [...prev, { id: folder.id, name: folder.name }]);
@@ -119,7 +116,6 @@ export default function MediaPickerModal({ onSelect, onClose, title = "Select fr
     navigateToBreadcrumb(folderHistory.length - 2);
   };
 
-  // Multi-file upload
   const handleUpload = async (e) => {
     const files = Array.from(e.target.files || []);
     if (!files.length) return;
@@ -143,7 +139,7 @@ export default function MediaPickerModal({ onSelect, onClose, title = "Select fr
         const res = await fetch("/api/media/upload", {
           method: "POST",
           headers: {
-            "x-site-id": siteId,
+            "x-site-id": effectiveSiteId,
           },
           body: formData,
         });
@@ -162,46 +158,39 @@ export default function MediaPickerModal({ onSelect, onClose, title = "Select fr
     e.target.value = "";
     setUploading(false);
     setUploadProgress([]);
-    await loadContents();
+    await loadContents(1);
   };
 
-  // Filtered display
   const filteredMedia = media.filter((m) =>
     !search.trim() || m.fileName?.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Backdrop */}
       <div className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" onClick={onClose} />
 
-      <div className="relative bg-white rounded-xl shadow-2xl border border-slate-200 max-w-3xl w-full max-h-[88vh] flex flex-col z-10 overflow-hidden">
-
+      <div className="relative bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-3xl w-full max-h-[88vh] flex flex-col z-10 overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-3 border-b bg-slate-50 shrink-0">
-          <div className="flex items-center gap-2">
-            <ImageIcon className="h-4 w-4 text-blue-600" />
-            <h3 className="text-sm font-bold text-slate-900">{title}</h3>
+        <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+          <div className="flex items-center gap-2.5">
+            <ImageIcon size={18} className="text-[#0f7c85]" />
+            <h3 className="text-sm font-extrabold text-slate-800">{title}</h3>
           </div>
+
           <div className="flex items-center gap-3">
-            {/* Upload button */}
-            <label
-              htmlFor="picker-upload"
-              className={`inline-flex cursor-pointer items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold border border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors ${uploading ? "opacity-60 cursor-not-allowed" : ""}`}
-            >
-              <Upload size={13} className={uploading ? "animate-bounce" : ""} />
-              {uploading ? "Uploading..." : "Upload"}
+            <label className="flex items-center gap-1.5 px-3.5 py-1.5 bg-[#0f7c85] hover:bg-[#0c6b73] text-white text-xs font-extrabold rounded-xl transition cursor-pointer shadow-sm">
+              <Upload size={14} />
+              <span>{uploading ? "Uploading..." : "Upload New Image"}</span>
+              <input
+                type="file"
+                multiple
+                accept="image/*"
+                className="hidden"
+                onChange={handleUpload}
+                disabled={uploading}
+              />
             </label>
-            <input
-              id="picker-upload"
-              type="file"
-              multiple
-              accept={filter === "images" ? "image/*" : "*"}
-              className="hidden"
-              onChange={handleUpload}
-              disabled={uploading}
-            />
-            <button onClick={onClose} className="p-1 text-slate-400 hover:text-slate-900 rounded-md transition-colors">
+            <button onClick={onClose} className="p-1.5 text-slate-400 hover:text-slate-900 rounded-xl transition-colors">
               <X size={18} />
             </button>
           </div>
@@ -209,12 +198,12 @@ export default function MediaPickerModal({ onSelect, onClose, title = "Select fr
 
         {/* Upload progress strip */}
         {uploadProgress.length > 0 && (
-          <div className="px-5 py-2 bg-blue-50 border-b border-blue-100 flex gap-3 flex-wrap shrink-0">
+          <div className="px-5 py-2 bg-teal-50 border-b border-teal-100 flex gap-3 flex-wrap shrink-0">
             {uploadProgress.map((p, i) => (
               <span key={i} className={`text-2xs font-semibold px-2 py-0.5 rounded-full border ${
-                p.status === "done" ? "bg-green-50 text-green-700 border-green-200" :
-                p.status === "error" ? "bg-red-50 text-red-700 border-red-200" :
-                p.status === "uploading" ? "bg-blue-100 text-blue-700 border-blue-300 animate-pulse" :
+                p.status === "done" ? "bg-emerald-50 text-emerald-700 border-emerald-200" :
+                p.status === "error" ? "bg-rose-50 text-rose-700 border-rose-200" :
+                p.status === "uploading" ? "bg-teal-100 text-teal-700 border-teal-300 animate-pulse" :
                 "bg-slate-100 text-slate-500 border-slate-200"
               }`}>
                 {p.status === "done" ? "✓ " : p.status === "error" ? "✗ " : ""}{p.name}
@@ -224,66 +213,81 @@ export default function MediaPickerModal({ onSelect, onClose, title = "Select fr
         )}
 
         {/* Breadcrumb + Search bar */}
-        <div className="px-5 py-2 flex items-center gap-3 border-b bg-white shrink-0">
-          {/* Back arrow */}
+        <div className="px-5 py-2.5 flex items-center gap-3 border-b bg-white shrink-0">
           {currentFolderId !== "root" && (
-            <button onClick={navigateBack} className="p-1 hover:bg-slate-100 rounded text-slate-500 transition-colors">
+            <button onClick={navigateBack} className="p-1 hover:bg-slate-100 rounded-lg text-slate-500 transition-colors">
               <ArrowLeft size={14} />
             </button>
           )}
 
-          {/* Breadcrumbs */}
           <div className="flex items-center gap-1 flex-wrap text-xs min-w-0 flex-1">
             {folderHistory.map((f, idx) => (
               <span key={f.id} className="flex items-center gap-1">
                 {idx > 0 && <span className="text-slate-300">/</span>}
                 <button
                   onClick={() => navigateToBreadcrumb(idx)}
-                  className={`font-semibold hover:text-blue-600 transition-colors ${
+                  className={`font-bold hover:text-[#0f7c85] transition-colors ${
                     idx === folderHistory.length - 1 ? "text-slate-800 pointer-events-none" : "text-slate-400"
                   }`}
                 >
-                  {f.id === "root" ? <span className="flex items-center gap-0.5"><Home size={11} /> Root</span> : f.name}
+                  {f.id === "root" ? <span className="flex items-center gap-1"><Home size={12} /> Root</span> : f.name}
                 </button>
               </span>
             ))}
           </div>
 
-          {/* Search */}
           <div className="relative shrink-0">
-            <Search size={12} className="absolute left-2 top-1/2 -translate-y-1/2 text-slate-400" />
+            <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search files..."
-              className="pl-6 pr-2 py-1 text-xs border border-slate-200 rounded-md bg-slate-50 focus:outline-none focus:ring-1 focus:ring-blue-500 w-36"
+              placeholder="Search images..."
+              className="pl-7 pr-3 py-1.5 text-xs border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:ring-1 focus:ring-[#0f7c85] w-40"
             />
+          </div>
+        </div>
+
+        {/* Stock Sample Presets Bar */}
+        <div className="px-5 py-2.5 bg-slate-100/70 border-b border-slate-200 flex items-center gap-3 overflow-x-auto shrink-0">
+          <span className="text-[10px] font-extrabold text-[#0f7c85] uppercase tracking-wider whitespace-nowrap flex items-center gap-1">
+            <Sparkles size={12} /> Stock Banner Presets:
+          </span>
+          <div className="flex items-center gap-2">
+            {PRESET_SAMPLE_IMAGES.map((preset) => (
+              <button
+                key={preset.id}
+                type="button"
+                onClick={() => onSelect(preset)}
+                className="px-2.5 py-1 bg-white hover:bg-[#0f7c85] hover:text-white border border-slate-200 text-slate-700 text-[11px] font-bold rounded-lg transition-all shadow-2xs whitespace-nowrap flex items-center gap-1.5 cursor-pointer"
+              >
+                <img src={preset.url} alt={preset.fileName} className="w-4 h-4 rounded object-cover" />
+                {preset.fileName}
+              </button>
+            ))}
           </div>
         </div>
 
         {/* Body */}
         <div className="flex-1 overflow-y-auto p-5 bg-slate-50">
           {loading ? (
-            <div className="py-20 text-center text-sm text-slate-400">Loading media library...</div>
+            <div className="py-20 text-center text-xs font-bold text-slate-400">Loading media library...</div>
           ) : (
             <div className="space-y-6">
-
-              {/* Folders */}
               {folders.length > 0 && !search && (
                 <div className="space-y-2">
-                  <p className="text-2xs font-bold text-slate-400 uppercase tracking-wider">Folders</p>
+                  <p className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Folders</p>
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
                     {folders.map((f) => (
                       <button
                         key={f.id}
                         onClick={() => navigateToFolder(f)}
-                        className="flex items-center gap-2 p-2.5 bg-white border border-slate-200 rounded-lg hover:border-blue-300 hover:shadow-sm text-left transition-all group"
+                        className="flex items-center gap-2 p-2.5 bg-white border border-slate-200 rounded-xl hover:border-[#0f7c85] hover:shadow-xs text-left transition-all group"
                       >
-                        <Folder className="h-7 w-7 text-amber-500 fill-amber-400 shrink-0" />
+                        <Folder className="h-6 w-6 text-amber-500 fill-amber-400 shrink-0" />
                         <div className="min-w-0">
-                          <span className="block text-xs font-semibold text-slate-800 truncate">{f.name}</span>
-                          <span className="block text-2xs text-slate-400">{f._count?.media || 0} files</span>
+                          <span className="block text-xs font-extrabold text-slate-800 truncate">{f.name}</span>
+                          <span className="block text-[10px] text-slate-400">{f._count?.media || 0} files</span>
                         </div>
                       </button>
                     ))}
@@ -291,14 +295,15 @@ export default function MediaPickerModal({ onSelect, onClose, title = "Select fr
                 </div>
               )}
 
-              {/* Media files */}
+              {/* Media Grid */}
               <div className="space-y-2">
                 {folders.length > 0 && !search && (
-                  <p className="text-2xs font-bold text-slate-400 uppercase tracking-wider">Files</p>
+                  <p className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Files</p>
                 )}
                 {filteredMedia.length === 0 ? (
-                  <div className="py-16 text-center text-xs text-slate-400 border-2 border-dashed border-slate-200 rounded-lg bg-white">
-                    {search ? `No files matching "${search}"` : "No files in this folder. Upload some above!"}
+                  <div className="py-12 text-center text-xs text-slate-500 border-2 border-dashed border-slate-200 rounded-2xl bg-white space-y-3">
+                    <p className="font-bold">No custom uploads found in this folder.</p>
+                    <p className="text-[11px] text-slate-400">Click <strong>&quot;Upload New Image&quot;</strong> above or select one of the Stock Banner Presets.</p>
                   </div>
                 ) : (
                   <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
@@ -311,7 +316,7 @@ export default function MediaPickerModal({ onSelect, onClose, title = "Select fr
                           onClick={() => onSelect(m)}
                           onMouseEnter={() => setHoveredId(m.id)}
                           onMouseLeave={() => setHoveredId(null)}
-                          className="group relative aspect-square rounded-lg overflow-hidden border-2 border-slate-200 hover:border-blue-500 bg-white transition-all hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="group relative aspect-square rounded-2xl overflow-hidden border-2 border-slate-200 hover:border-[#0f7c85] bg-white transition-all hover:shadow-md focus:outline-none cursor-pointer"
                           title={m.fileName}
                         >
                           {isImage ? (
@@ -326,15 +331,13 @@ export default function MediaPickerModal({ onSelect, onClose, title = "Select fr
                             </div>
                           )}
 
-                          {/* Hover overlay */}
-                          <div className={`absolute inset-0 bg-blue-600/70 flex flex-col items-center justify-center transition-opacity ${isHovered ? "opacity-100" : "opacity-0"}`}>
-                            <CheckCircle className="h-5 w-5 text-white mb-1" />
-                            <span className="text-2xs text-white font-bold">Select</span>
+                          <div className={`absolute inset-0 bg-[#0f7c85]/80 flex flex-col items-center justify-center transition-opacity ${isHovered ? "opacity-100" : "opacity-0"}`}>
+                            <CheckCircle className="h-6 w-6 text-white mb-1" />
+                            <span className="text-[10px] text-white font-extrabold uppercase">Select</span>
                           </div>
 
-                          {/* Filename strip */}
-                          <div className="absolute bottom-0 left-0 right-0 bg-black/50 px-1.5 py-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <span className="block text-2xs text-white truncate">{m.fileName}</span>
+                          <div className="absolute bottom-0 left-0 right-0 bg-black/60 px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <span className="block text-[10px] text-white truncate font-medium">{m.fileName}</span>
                           </div>
                         </button>
                       );
@@ -342,30 +345,29 @@ export default function MediaPickerModal({ onSelect, onClose, title = "Select fr
                   </div>
                 )}
 
-                  {/* Load More Button */}
-                  {media.length < totalMedia && !loading && !search && (
-                    <div className="mt-6 flex justify-center pb-4">
-                      <button
-                        onClick={loadMore}
-                        className="rounded-full bg-slate-900 px-6 py-2.5 text-xs font-bold text-white shadow-md hover:bg-slate-800 transition-all hover:scale-105 active:scale-95"
-                      >
-                        Load More Items
-                      </button>
-                    </div>
-                  )}
-                </div>
+                {media.length < totalMedia && !loading && !search && (
+                  <div className="mt-6 flex justify-center pb-4">
+                    <button
+                      onClick={loadMore}
+                      className="rounded-full bg-[#0f7c85] px-6 py-2.5 text-xs font-extrabold text-white shadow-md hover:bg-[#0c6b73] transition-all cursor-pointer"
+                    >
+                      Load More Items
+                    </button>
+                  </div>
+                )}
               </div>
+            </div>
           )}
         </div>
 
         {/* Footer */}
         <div className="px-5 py-3 border-t bg-white flex items-center justify-between shrink-0">
-          <p className="text-2xs text-slate-400">
-            {filteredMedia.length} {filter === "images" ? "image" : "file"}{filteredMedia.length !== 1 ? "s" : ""} in this folder
+          <p className="text-[11px] font-bold text-slate-400">
+            {filteredMedia.length} {filter === "images" ? "image" : "file"}{filteredMedia.length !== 1 ? "s" : ""} available
           </p>
           <button
             onClick={onClose}
-            className="px-4 py-1.5 text-xs font-semibold border border-slate-200 rounded-md hover:bg-slate-50 text-slate-700 transition-colors"
+            className="px-4 py-1.5 text-xs font-extrabold border border-slate-200 rounded-xl hover:bg-slate-50 text-slate-700 transition-colors cursor-pointer"
           >
             Cancel
           </button>

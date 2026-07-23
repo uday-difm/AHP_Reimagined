@@ -36,15 +36,15 @@ export async function POST(req) {
     const event = await prisma.communityEvent.create({
       data: {
         siteId: auth.siteId,
-        title: body.title || 'Restorative Walk: Managing Stress in Nature',
-        category: body.category || 'MINDFULNESS WALK',
+        title: body.title || 'Sunrise Nature Walk & Mindful Meditation',
+        category: body.category || 'OUTDOOR WELLNESS',
         description: body.description || '',
         imageUrl: body.imageUrl || '/images/hero_exercise.png',
-        eventDate: body.eventDate || 'Sat, 27 July 2024',
-        eventTime: body.eventTime || '9:00 AM – 11:30 AM',
-        location: body.location || 'City Nature Park',
-        tags: body.tags || 'Mindfulness, Outdoor, Beginner Friendly',
-        reservedSeats: body.reservedSeats ? Number(body.reservedSeats) : 45,
+        eventDate: body.eventDate || 'Saturday, 15 Aug 2026',
+        eventTime: body.eventTime || '7:30 AM – 9:30 AM',
+        location: body.location || 'Botanical Nature Park, West Trailhead',
+        tags: body.tags || 'Mindfulness, Fresh Air, Group Walk',
+        reservedSeats: body.reservedSeats ? Number(body.reservedSeats) : 0,
         totalSeats: body.totalSeats ? Number(body.totalSeats) : 60,
         isFeatured: body.isFeatured ?? true,
         status: body.status || 'active'

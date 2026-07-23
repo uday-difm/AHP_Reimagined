@@ -7,14 +7,32 @@ export async function GET(request) {
   try {
     const siteId = getSiteId(request);
     const { searchParams } = new URL(request.url);
-    const folderId = searchParams.get("folderId") || "root";
+    const folderId = searchParams.get("folderId");
     
     const page = parseInt(searchParams.get("page") || "1", 10);
     const limit = parseInt(searchParams.get("limit") || "60", 10);
-    const [media, total] = await Promise.all([
-      mediaService.repository.findByFolder(siteId, folderId, { take: limit, skip: (page - 1) * limit }),
-      mediaService.repository.countByFolder(siteId, folderId),
-    ]);
+
+    let media, total;
+    if (!folderId || folderId === "all") {
+      [media, total] = await Promise.all([
+        mediaService.repository.findMany(siteId, { orderBy: { createdAt: "desc" }, take: limit, skip: (page - 1) * limit }),
+        mediaService.repository.count(siteId, {}),
+      ]);
+    } else {
+      [media, total] = await Promise.all([
+        mediaService.repository.findByFolder(siteId, folderId, { take: limit, skip: (page - 1) * limit }),
+        mediaService.repository.countByFolder(siteId, folderId),
+      ]);
+
+      // Fallback: If folder search returned 0 items, fetch all media for siteId
+      if (total === 0) {
+        [media, total] = await Promise.all([
+          mediaService.repository.findMany(siteId, { orderBy: { createdAt: "desc" }, take: limit, skip: (page - 1) * limit }),
+          mediaService.repository.count(siteId, {}),
+        ]);
+      }
+    }
+
     return NextResponse.json({ data: media, total, page, limit });
   } catch (err) {
     return handleApiError(err);
