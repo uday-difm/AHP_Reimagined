@@ -45,15 +45,44 @@ export default function HomeQuizWidget() {
     explanation: '',
   });
 
-  // Load results from localStorage on mount and when completed state changes
+  // Load results from backend API + localStorage fallback on mount and when completed state changes
   useEffect(() => {
-    try {
-      const stored = JSON.parse(localStorage.getItem('quiz-results') || '[]');
-      setLocalResults(stored);
-    } catch {
-      setLocalResults([]);
+    async function fetchUserResults() {
+      let merged = [];
+      try {
+        const stored = JSON.parse(localStorage.getItem('quiz-results') || '[]');
+        if (Array.isArray(stored)) merged = [...stored];
+      } catch {
+        merged = [];
+      }
+
+      if (isAuthenticated) {
+        try {
+          const res = await fetch('/api/quizess/user-results');
+          if (res.ok) {
+            const data = await res.json();
+            if (Array.isArray(data.results) && data.results.length > 0) {
+              const backendResults = data.results;
+              backendResults.forEach((br) => {
+                const exists = merged.some(
+                  (mr) => (mr.id && String(mr.id) === String(br.id)) || (mr.slug && mr.slug === br.slug)
+                );
+                if (!exists) {
+                  merged.push(br);
+                }
+              });
+            }
+          }
+        } catch (err) {
+          console.error("Failed to load user quiz results:", err);
+        }
+      }
+
+      setLocalResults(merged);
     }
-  }, [completed]);
+
+    fetchUserResults();
+  }, [completed, isAuthenticated]);
 
   const quiz = dynamicQuiz || quizzes[FEATURED_QUIZ_INDEX];
 
@@ -157,32 +186,31 @@ export default function HomeQuizWidget() {
     setAnimating(true);
     setTimeout(() => {
       if (nextIsLocked) {
-        // Save progress to restore after login
-        try {
-          sessionStorage.setItem(
-            `quiz-progress-${quiz.slug}`,
-            JSON.stringify({ savedIndex: nextIndex, savedAnswers: newAnswers })
-          );
-        } catch { /* ignore */ }
+        sessionStorage.setItem(
+          `quiz-progress-${quiz.slug}`,
+          JSON.stringify({ savedIndex: nextIndex, savedAnswers: newAnswers })
+        );
         setShowGate(true);
       } else if (isLastQuestion) {
-        // Save results to localStorage
+        setCompleted(true);
         const totalScore = newAnswers.reduce((sum, a) => sum + (a.score || 0), 0);
-        const result = {
+        const resultRecord = {
           slug: quiz.slug,
           title: quiz.title,
           score: totalScore,
-          answers: newAnswers,
+          maxScore: questions.length * 3,
           completedAt: new Date().toISOString(),
+          answers: newAnswers,
         };
+
         try {
-          const existing = JSON.parse(localStorage.getItem('quiz-results') || '[]');
-          const filtered = existing.filter(r => r.slug !== quiz.slug);
-          localStorage.setItem('quiz-results', JSON.stringify([result, ...filtered]));
+          const stored = JSON.parse(localStorage.getItem('quiz-results') || '[]');
+          const updated = [resultRecord, ...stored.filter((r) => r.slug !== quiz.slug)];
+          localStorage.setItem('quiz-results', JSON.stringify(updated));
+          setLocalResults(updated);
         } catch { /* ignore */ }
 
-        // Save result to backend database dynamically
-        try {
+        if (isAuthenticated) {
           fetch('/api/quizess/user-results', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -190,20 +218,17 @@ export default function HomeQuizWidget() {
               slug: quiz.slug,
               title: quiz.title,
               score: totalScore,
-              maxScore: (quiz.questions?.length || 10) * 3,
-              quizId: quiz.id || 1,
+              maxScore: questions.length * 3,
             }),
           }).catch(() => {});
-        } catch { /* ignore */ }
-
-        setCompleted(true);
+        }
       } else {
         setCurrentIndex(nextIndex);
         setSelected(null);
       }
       setAnimating(false);
     }, 300);
-  }, [selected, currentQ, answers, currentIndex, isAuthenticated, isLastQuestion, quiz.slug]);
+  }, [selected, currentQ, answers, currentIndex, isAuthenticated, isLastQuestion, quiz.slug, questions.length, quiz.title]);
 
   const handleBack = () => {
     if (currentIndex === 0) { setStarted(false); return; }
@@ -261,10 +286,15 @@ export default function HomeQuizWidget() {
     let totalCorrect = 0;
     let totalQuestions = 0;
     results.forEach(r => {
-      const qCount = r.answers ? r.answers.length : 0;
-      const cCount = r.answers ? r.answers.filter(a => a.score > 1).length : 0;
-      totalCorrect += cCount;
-      totalQuestions += qCount;
+      if (r.answers && Array.isArray(r.answers) && r.answers.length > 0) {
+        totalCorrect += r.answers.filter(a => a.score > 0 || a.isCorrect).length;
+        totalQuestions += r.answers.length;
+      } else {
+        const correctCount = r.score !== undefined ? Number(r.score) : (r.correct !== undefined ? Number(r.correct) : 0);
+        const qCount = r.maxScore !== undefined ? Math.max(1, Number(r.maxScore)) : 10;
+        totalCorrect += correctCount;
+        totalQuestions += qCount;
+      }
     });
     return { totalCorrect, totalQuestions };
   };
@@ -278,188 +308,159 @@ export default function HomeQuizWidget() {
         {/* Header */}
         <div className="text-center mb-12">
           <span className="text-accent text-xs font-extrabold uppercase tracking-[3px] mb-2 block">
-            QUICK WELLNESS CHECK
+            FEATURED WELLNESS QUIZ
           </span>
-          <h2 className="font-heading font-extrabold text-3xl md:text-5xl text-primary tracking-[-1px] leading-[1.15] mb-4">
-            Try a quiz, right here.
+          <h2 className="font-heading font-extrabold text-3xl md:text-4xl text-primary tracking-tight">
+            {quiz.title}
           </h2>
-          <p className="text-secondary text-base md:text-lg leading-relaxed">Test your knowledge and gain valuable insights</p>
+          {quiz.description && (
+            <p className="text-secondary text-sm md:text-base mt-2 max-w-xl mx-auto">
+              {quiz.description}
+            </p>
+          )}
         </div>
 
-        {/* ── CENTRAL SPLIT QUIZ CARD (Image 2 style) ────────────────────── */}
-        <div className="max-w-6xl mx-auto">
+        {/* Quiz Box (Split Layout) */}
+        <div className="bg-white rounded-[24px] border border-slate-200/80 shadow-[0_4px_25px_rgba(0,0,0,0.04)] overflow-hidden max-w-4xl mx-auto">
 
-          {/* NOT STARTED */}
-          {!started && !showGate && (
-            <div
-              className="bg-white rounded-[24px] overflow-hidden border border-slate-200/60 p-8 md:p-12 text-center shadow-sm max-w-2xl mx-auto"
-            >
-              <div className="w-16 h-16 rounded-full bg-[#0f7c85]/10 text-[#0f7c85] flex items-center justify-center mx-auto mb-6">
-                <QuizIcon name={quiz.icon} className="w-8 h-8" />
+          {/* Inline Gate Card */}
+          {showGate ? (
+            <div className="p-8 md:p-12 text-center">
+              <div className="w-14 h-14 rounded-full bg-[#0f7c85]/10 text-[#0f7c85] flex items-center justify-center mx-auto mb-5 font-bold text-xl">
+                🔒
               </div>
-              <h3 className="font-heading font-extrabold text-xl text-primary tracking-tight mb-3">
-                {quiz.title}
+              <span className="text-[10px] font-extrabold uppercase tracking-[2px] text-[#0f7c85] mb-2 block">
+                FREE PREVIEW COMPLETE
+              </span>
+              <h3 className="font-heading font-extrabold text-2xl text-primary mb-3">
+                Sign in to continue this quiz
               </h3>
-              <p className="text-secondary text-sm leading-relaxed max-w-md mx-auto mb-8">
-                {quiz.description}
+              <p className="text-secondary text-sm max-w-md mx-auto mb-8 leading-relaxed">
+                You’ve answered {FREE_QUESTION_LIMIT} free preview questions. Sign in or create a free account to unlock all remaining questions and view your full health score.
               </p>
-              <button
-                onClick={() => setStarted(true)}
-                className="bg-[#0f7c85] hover:bg-[#0c6b73] text-white px-8 py-3.5 rounded-full font-bold text-sm transition-all hover:shadow-lg hover:-translate-y-0.5 cursor-pointer"
-              >
-                Start Quiz
-              </button>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-xs mx-auto">
+                <button
+                  onClick={handleLoginRedirect}
+                  className="bg-[#0f7c85] hover:bg-[#0c6b73] text-white px-8 py-3 rounded-full font-bold text-sm transition-colors cursor-pointer w-full"
+                >
+                  Sign In to Continue
+                </button>
+              </div>
             </div>
-          )}
+          ) : completed ? (
+            /* Completed Screen */
+            <div className="p-8 md:p-12 text-center">
+              <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-5 text-2xl font-bold">
+                ✓
+              </div>
+              <h3 className="font-heading font-extrabold text-2xl text-primary mb-2">
+                Quiz Completed!
+              </h3>
+              <p className="text-secondary text-sm max-w-md mx-auto mb-6">
+                Great job completing the {quiz.title}. Your responses have been saved.
+              </p>
+              <div className="flex flex-wrap justify-center gap-3">
+                <Link
+                  href="/quizzes/dashboard"
+                  className="bg-[#0f7c85] hover:bg-[#0c6b73] text-white px-6 py-3 rounded-full font-bold text-sm no-underline transition-colors"
+                >
+                  View My Dashboard
+                </Link>
+                <Link
+                  href="/quizzes"
+                  className="border border-slate-200 hover:bg-slate-50 text-slate-700 px-6 py-3 rounded-full font-bold text-sm no-underline transition-colors"
+                >
+                  More Quizzes
+                </Link>
+              </div>
+            </div>
+          ) : (
+            /* Active Quiz Question Screen */
+            <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-100">
 
-          {/* ACTIVE QUESTION */}
-          {started && !showGate && !completed && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
-
-              {/* Left Column: Question Card */}
-              <div
-                className="bg-[#f3f4f6] rounded-[24px] p-6 flex flex-col justify-between border border-slate-200/50 shadow-sm transition-all duration-300"
-                style={{
-                  opacity: animating ? 0 : 1,
-                  transform: animating ? 'translateX(-10px)' : 'translateX(0)',
-                }}
-              >
+              {/* Left Column: Question */}
+              <div className="p-8 md:p-10 bg-slate-50/50 flex flex-col justify-between">
                 <div>
-                  <h4 className="text-xs font-extrabold text-slate-500 uppercase tracking-wider mb-8">
-                    Question:
-                  </h4>
-                  <div className="bg-white rounded-[16px] p-6 border border-slate-200/40 shadow-sm">
-                    <p className="font-heading font-bold text-base md:text-lg text-primary leading-relaxed">
-                      {currentQ.text}
-                    </p>
+                  <div className="flex items-center gap-2 mb-6">
+                    <QuizIcon icon={quiz.icon || "📋"} size="sm" />
+                    <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                      Question {currentIndex + 1} of {questions.length}
+                    </span>
+                  </div>
+
+                  <h3 className="font-heading font-extrabold text-xl md:text-2xl text-slate-900 leading-snug">
+                    {currentQ?.text}
+                  </h3>
+                </div>
+
+                <div className="mt-8">
+                  {/* Progress Indicator */}
+                  <div className="flex items-center justify-between text-xs text-slate-400 font-bold mb-2">
+                    <span>PROGRESS</span>
+                    <span>{Math.round(((currentIndex + 1) / questions.length) * 100)}%</span>
+                  </div>
+                  <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-[#0f7c85] transition-all duration-300 rounded-full"
+                      style={{ width: `${((currentIndex + 1) / questions.length) * 100}%` }}
+                    />
                   </div>
                 </div>
-
-                <div className="mt-8 flex items-center justify-between text-xs text-slate-400 font-semibold">
-                  <span>Question {currentIndex + 1} of {questions.length}</span>
-                </div>
               </div>
 
-              {/* Middle Column: Options & Next */}
-              <div
-                className="bg-white border border-slate-200/60 rounded-[24px] p-6 flex flex-col justify-between shadow-sm transition-all duration-300"
-                style={{
-                  opacity: animating ? 0 : 1,
-                  transform: animating ? 'translateX(10px)' : 'translateX(0)',
-                }}
-              >
-                {/* Options List */}
-                <div className="flex flex-col gap-3">
-                  {currentQ.options.map((opt, idx) => {
-                    const isSelected = selected === idx;
+              {/* Right Column: Options & Action */}
+              <div className="p-8 md:p-10 flex flex-col justify-between">
+                <div className="space-y-3">
+                  {currentQ?.options?.map((opt, idx) => {
+                    const isSel = selected === idx;
                     return (
                       <button
                         key={idx}
                         onClick={() => handleSelect(idx)}
-                        className="w-full text-left px-5 py-4 rounded-[16px] text-[13.5px] transition-all duration-150 border flex items-center gap-4.5 cursor-pointer bg-white"
-                        style={{
-                          borderColor: isSelected ? '#0f7c85' : '#e2e8f0',
-                          boxShadow: isSelected ? '0 4px 12px rgba(15, 124, 133, 0.05)' : 'none',
-                        }}
+                        className={`w-full p-4 rounded-2xl border text-left flex items-center gap-3 transition-all cursor-pointer ${
+                          isSel
+                            ? 'border-[#0f7c85] bg-[#0f7c85]/5 shadow-sm text-slate-900 font-bold'
+                            : 'border-slate-200 hover:border-slate-300 bg-white text-slate-700 font-medium'
+                        }`}
                       >
                         <div
-                          className="w-5 h-5 rounded-full border flex items-center justify-center shrink-0 transition-all duration-150"
-                          style={{
-                            borderColor: isSelected ? '#0f7c85' : '#cbd5e1',
-                            borderWidth: isSelected ? '5px' : '1px',
-                          }}
-                        />
-                        <span className="font-medium" style={{ color: isSelected ? '#1a1a2e' : '#4a4a5a' }}>
-                          {opt.label}
-                        </span>
+                          className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 transition-colors ${
+                            isSel ? 'border-[#0f7c85] bg-[#0f7c85] text-white' : 'border-slate-300 bg-white'
+                          }`}
+                        >
+                          {isSel && <div className="w-2 h-2 rounded-full bg-white" />}
+                        </div>
+                        <span className="text-sm leading-relaxed">{opt.label}</span>
                       </button>
                     );
                   })}
                 </div>
 
-                {/* Submit actions */}
-                <div className="mt-8 flex items-center justify-between">
+                {/* Footer Buttons */}
+                <div className="mt-8 flex items-center justify-between gap-4 pt-4 border-t border-slate-100">
                   <button
                     onClick={handleBack}
-                    disabled={currentIndex === 0}
-                    className="text-sm font-bold text-slate-400 hover:text-slate-600 disabled:opacity-30 transition-colors cursor-pointer"
+                    className="border border-slate-200 hover:bg-slate-50 text-slate-600 px-6 py-3 rounded-full font-bold text-sm transition-colors cursor-pointer"
                   >
-                    Back
+                    Go Back
                   </button>
+
                   <button
                     onClick={handleNext}
-                    disabled={selected === null}
-                    className="bg-[#0f7c85] hover:bg-[#0c6b73] disabled:opacity-50 text-white font-bold text-[13.5px] px-8 py-2.5 rounded-full transition-all cursor-pointer shadow-sm"
+                    disabled={selected === null || animating}
+                    className="bg-[#0f7c85] hover:bg-[#0c6b73] disabled:opacity-40 text-white px-8 py-3 rounded-full font-bold text-sm transition-colors cursor-pointer shadow-md disabled:cursor-not-allowed"
                   >
-                    Next
+                    Next Question →
                   </button>
                 </div>
               </div>
 
-              {/* Right Column: Ad Card */}
-              <div className="flex w-full">
-                <AdSlot zone="homepage-quiz-card" layout="blogCard" className="h-full w-full" />
-              </div>
-
-            </div>
-          )}
-
-          {/* COMPLETED SCREEN */}
-          {completed && (
-            <div className="bg-white border border-slate-200/60 rounded-[24px] overflow-hidden p-8 md:p-12 text-center shadow-sm max-w-2xl mx-auto">
-              <div className="text-[52px] mb-4">🎉</div>
-              <h3 className="font-heading font-extrabold text-xl text-primary mb-2">Quiz Complete!</h3>
-              <p className="text-secondary text-sm mb-6">{quiz.title}</p>
-              <div className="text-[48px] font-extrabold text-[#0f7c85] mb-8">
-                {answers.reduce((sum, a) => sum + (a.score || 0), 0)} <span className="text-[20px] text-slate-400">/{questions.length * 3}</span>
-              </div>
-              <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-md mx-auto">
-                <Link href="/quizzes/dashboard" className="bg-[#0f7c85] hover:bg-[#0c6b73] text-white px-8 py-3 rounded-full font-bold text-sm no-underline text-center transition-colors">
-                  View Dashboard
-                </Link>
-                <Link href="/quizzes" className="border border-slate-200 hover:bg-slate-50 text-slate-600 px-8 py-3 rounded-full font-bold text-sm no-underline text-center transition-colors">
-                  More Quizzes
-                </Link>
-              </div>
-            </div>
-          )}
-
-          {/* GATED LOCK VIEW */}
-          {showGate && !completed && (
-            <div className="relative bg-white border border-slate-200/60 rounded-[24px] overflow-hidden p-8 md:p-12 text-center shadow-sm min-h-[380px] flex flex-col items-center justify-center max-w-2xl mx-auto">
-              <div className="w-14 h-14 rounded-full flex items-center justify-center mb-4 bg-[#0f7c85]/10 text-[#0f7c85]">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24">
-                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                  <path strokeLinecap="round" d="M7 11V7a5 5 0 0110 0v4" />
-                </svg>
-              </div>
-              <span className="text-xs font-extrabold uppercase tracking-[2px] text-[#0f7c85] mb-2">
-                Question {currentIndex + 1} is locked
-              </span>
-              <h3 className="font-heading font-extrabold text-xl text-primary mb-2">Sign in to continue</h3>
-              <p className="text-secondary text-[13.5px] max-w-sm mb-6">
-                Please log in to unlock all {questions.length} questions and save your score.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3 w-full max-w-xs justify-center">
-                <button
-                  onClick={handleLoginRedirect}
-                  className="bg-[#0f7c85] hover:bg-[#0c6b73] text-white px-8 py-3 rounded-full font-bold text-sm transition-colors cursor-pointer"
-                >
-                  Sign In
-                </button>
-                <button
-                  onClick={handleBack}
-                  className="border border-slate-200 hover:bg-slate-50 text-slate-600 px-6 py-3 rounded-full font-bold text-sm transition-colors cursor-pointer"
-                >
-                  Go Back
-                </button>
-              </div>
             </div>
           )}
 
         </div>
 
-        {/* ── LOCKED / UNLOCKED SCOREBOARD AREA (Image 2 style) ─────────────────── */}
+        {/* ── LOCKED / UNLOCKED SCOREBOARD AREA ─────────────────── */}
         {!showGate && (
           !isAuthenticated ? (
             <div className="relative border-t border-slate-200/80 pt-16 mt-14 max-w-4xl mx-auto">
@@ -511,12 +512,14 @@ export default function HomeQuizWidget() {
                 {[
                   {
                     l: 'Correct Answers',
-                    v: answers.length > 0
-                      ? `${answers.filter(a => a.score > 1).length}/${answers.length}`
-                      : (() => {
-                          const { totalCorrect, totalQuestions } = getCompletedStats(localResults);
-                          return totalQuestions > 0 ? `${totalCorrect}/${totalQuestions}` : '0/0';
-                        })()
+                    v: (() => {
+                      const { totalCorrect, totalQuestions } = getCompletedStats(localResults);
+                      const activeCorrect = answers.filter(a => a.score > 0).length;
+                      const activeTotal = answers.length;
+                      const finalCorrect = totalCorrect + activeCorrect;
+                      const finalTotal = totalQuestions + activeTotal;
+                      return finalTotal > 0 ? `${finalCorrect}/${finalTotal}` : '0/0';
+                    })()
                   },
                   {
                     l: 'Daily Streak',
