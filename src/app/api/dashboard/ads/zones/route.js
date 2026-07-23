@@ -40,6 +40,7 @@ export async function GET(req) {
       { name: 'Home About Bottom (728x90)', slug: 'homepage-about-bottom', width: 728, height: 90 },
       { name: 'Home Events Bottom (728x90)', slug: 'homepage-events-bottom', width: 728, height: 90 },
       { name: 'Sidebar Ad Banner (300x250)', slug: 'hero-sidebar-bottom', width: 300, height: 250 },
+      { name: 'Publication Hero Sidebar (280x420)', slug: 'publication-hero-sidebar', width: 280, height: 420 },
       { name: 'Services Top banner (728x90)', slug: 'services-top', width: 728, height: 90 },
       { name: 'Article Body Top (728x90)', slug: 'article-body-top', width: 728, height: 90 },
       { name: 'Article Body Inline (300x250)', slug: 'article-body-inline', width: 300, height: 250 },

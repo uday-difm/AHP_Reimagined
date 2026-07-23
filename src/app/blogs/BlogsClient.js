@@ -15,6 +15,7 @@ import {
   ChevronRight
 } from 'lucide-react';
 import SaveArticleButton from '@/components/blogs/SaveArticleButton';
+import AdSlot from '@/components/AdSlot';
 
 
 // Proxy external URLs through the Next.js server to avoid CORS / hostname issues
@@ -251,26 +252,8 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
               {displayedArticles.map((art) => {
                 if (art.isAd) {
                   return (
-                    <div key="ad-card-slot" className="bg-gradient-to-br from-[#f0f9fa] via-[#f7fdfd] to-[#eef9fa] rounded-[24px] p-8 border border-[#0f7c85]/20 flex flex-col justify-between text-center min-h-[380px] shadow-sm hover:shadow-md transition-all duration-300 group hover:border-[#0f7c85]/40">
-                      <div className="flex flex-col items-center">
-                        <div className="w-14 h-14 bg-[#0f7c85]/10 rounded-full flex items-center justify-center mb-6 shadow-sm">
-                          <svg className="w-6 h-6 text-[#0f7c85]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
-                          </svg>
-                        </div>
-                        <h3 className="font-heading font-extrabold text-xl text-primary mb-3">
-                          Advertise With Us
-                        </h3>
-                        <p className="text-secondary font-medium text-[13.5px] leading-relaxed max-w-xs mb-6">
-                          Showcase your brand to our engaged audience of nature enthusiasts and environmental advocates
-                        </p>
-                      </div>
-                      <Link
-                        href="/info?tab=contact"
-                        className="w-max mx-auto bg-[#0f7c85] hover:bg-[#0c646b] text-white font-extrabold text-[12px] py-3.5 px-8 rounded-full transition-all duration-300 no-underline shadow-sm hover:shadow-[0_6px_20px_rgba(15,124,133,0.3)] hover:-translate-y-0.5 transform inline-flex items-center gap-1.5"
-                      >
-                        Get Started →
-                      </Link>
+                    <div key="ad-card-slot" className="h-full">
+                      <AdSlot zone="homepage-blog-card" className="h-full" />
                     </div>
                   );
                 }

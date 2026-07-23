@@ -7,6 +7,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CustomCursor from '@/components/CustomCursor';
 import RecaptchaWidget from '@/components/RecaptchaWidget';
+import AdSlot from '@/components/AdSlot';
 
 // Proxy external URLs through the Next.js server to avoid CORS / hostname issues
 function proxyUrl(url) {
@@ -362,36 +363,15 @@ export default function PublicationPage() {
 
               {/* Right Column — Partner Ad/Promo Card */}
               <div className="hidden lg:block lg:w-[280px] flex-shrink-0 self-stretch reveal-scale">
-                <div className="bg-white/70 backdrop-blur-md rounded-[32px] p-5 border border-white/60 shadow-[0_12px_32px_rgba(0,0,0,0.03)] h-full flex flex-col justify-between">
-                  <div>
-                    <span className="inline-block bg-[#27ae60]/10 border border-[#27ae60]/20 text-[#27ae60] font-bold text-[9px] uppercase tracking-[1.5px] px-2.5 py-1 rounded-full mb-3.5">
-                      Partner Highlight
-                    </span>
-
-                    <div className="relative w-full h-[120px] rounded-2xl overflow-hidden mb-4 border border-slate-100 shadow-sm bg-slate-50">
-                      <Image
-                        src="/images/service_partner_roundup_mockup.png"
-                        alt="Wellness Consultation Partner"
-                        fill
-                        className="object-cover animate-pulse-slow"
-                      />
-                    </div>
-
-                    <h3 className="font-heading font-extrabold text-[14px] text-primary leading-tight mb-2">
-                      Personalized Health Plans
-                    </h3>
-                    <p className="text-secondary text-[12px] leading-relaxed mb-4">
-                      Unlock tailored nutrition, circadian alignment, and somatic reset coaching from certified wellness experts.
-                    </p>
-                  </div>
-
-                  <a
-                    href="/services"
-                    className="w-full text-center bg-[#0f7c85] hover:bg-[#0c646b] text-white font-extrabold text-[12px] py-3 px-4 rounded-xl transition-all duration-300 no-underline block shadow-sm hover:shadow-[0_6px_20px_rgba(15,124,133,0.3)] hover:-translate-y-0.5 transform"
-                  >
-                    Book Free Consultation
-                  </a>
-                </div>
+                <AdSlot
+                  zone="publication-hero-sidebar"
+                  badgeText="Partner Highlight"
+                  fallbackTitle="Personalized Health Plans"
+                  fallbackDescription="Unlock tailored nutrition, circadian alignment, and somatic reset coaching from certified wellness experts."
+                  fallbackCta="Book Free Consultation"
+                  fallbackUrl="/services"
+                  className="h-full"
+                />
               </div>
 
             </div>

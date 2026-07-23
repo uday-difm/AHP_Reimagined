@@ -3,83 +3,53 @@
 import { useState, useEffect, useRef } from 'react';
 
 /**
- * AdSlot — dynamic ad zone component.
- *
- * layout="strip"  → a compact single-line pill between sections (default)
- * layout="float"  → a small card that floats right, text wraps around it
+ * Standard Google AdSense / IAB Fixed Dimensions
  */
-const ZONE_DIMENSIONS = {
-  'homepage-hero-bottom': {
-    desktop: { width: 728, height: 90 },
-    mobile: { width: 320, height: 50 }
-  },
-  'homepage-articles-sidebar': {
-    desktop: { width: 300, height: 600 },
-    mobile: { width: 300, height: 250 }
-  },
-  'homepage-blog-card': {
-    desktop: { width: 300, height: 250 },
-    mobile: { width: 300, height: 250 }
-  },
-  'homepage-quiz-card': {
-    desktop: { width: 300, height: 250 },
-    mobile: { width: 300, height: 250 }
-  },
-  'homepage-articles-bottom': {
-    desktop: { width: 970, height: 90 },
-    mobile: { width: 320, height: 100 }
-  },
-  'homepage-about-bottom': {
-    desktop: { width: 728, height: 90 },
-    mobile: { width: 320, height: 50 }
-  },
-  'homepage-events-bottom': {
-    desktop: { width: 728, height: 90 },
-    mobile: { width: 320, height: 50 }
-  },
-  'hero-sidebar-bottom': {
-    desktop: { width: 300, height: 250 },
-    mobile: { width: 300, height: 250 }
-  },
-  'services-top': {
-    desktop: { width: 728, height: 90 },
-    mobile: { width: 320, height: 50 }
-  },
-  'article-body-top': {
-    desktop: { width: 728, height: 90 },
-    mobile: { width: 320, height: 50 }
-  },
-  'article-body-inline': {
-    desktop: { width: 300, height: 250 },
-    mobile: { width: 300, height: 250 }
-  },
-  'article-body-bottom': {
-    desktop: { width: 728, height: 90 },
-    mobile: { width: 320, height: 50 }
-  },
-  'about-hero-bottom': {
-    desktop: { width: 728, height: 90 },
-    mobile: { width: 320, height: 50 }
-  },
-  'about-mission-bottom': {
-    desktop: { width: 970, height: 90 },
-    mobile: { width: 320, height: 100 }
-  }
+const GOOGLE_AD_DIMENSIONS = {
+  'homepage-blog-card': { width: 300, height: 250 },        // Google Medium Rectangle (300x250)
+  'homepage-quiz-card': { width: 300, height: 250 },        // Google Medium Rectangle (300x250)
+  'homepage-articles-sidebar': { width: 300, height: 600 }, // Google Half-Page / Skyscraper (300x600)
+  'publication-hero-sidebar': { width: 300, height: 600 },  // Google Half-Page / Skyscraper (300x600)
+  'hero-sidebar-bottom': { width: 300, height: 250 },       // Google Medium Rectangle (300x250)
+  'services-top': { width: 728, height: 90 },              // Google Leaderboard (728x90)
+  'article-body-top': { width: 728, height: 90 },           // Google Leaderboard (728x90)
+  'article-body-inline': { width: 300, height: 250 },        // Google Medium Rectangle (300x250)
+  'article-body-bottom': { width: 728, height: 90 },        // Google Leaderboard (728x90)
+  'about-hero-bottom': { width: 728, height: 90 },          // Google Leaderboard (728x90)
+  'about-mission-bottom': { width: 970, height: 90 },       // Google Large Leaderboard (970x90)
+  'homepage-about-bottom': { width: 728, height: 90 },      // Google Leaderboard (728x90)
 };
 
-export default function AdSlot({ zone, placement, layout = 'strip', width, height, className }) {
+/**
+ * Fixed-Size Google AdSlot Component
+ */
+export default function AdSlot({
+  zone,
+  placement,
+  layout,
+  badgeText = 'Partner Highlight',
+  fallbackTitle = 'Advertise With Us',
+  fallbackDescription = 'Showcase your brand to our engaged audience of health and wellness advocates.',
+  fallbackCta = 'Get Started →',
+  fallbackUrl = '/info?tab=contact',
+  fallbackImage,
+  width,
+  height,
+  className = '',
+}) {
   const [ads, setAds] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const trackedImpressions = useRef(new Set());
 
-  const isSpecAd = !!placement;
+  // Determine Google AdSense Fixed Dimensions
+  const defaultDim = GOOGLE_AD_DIMENSIONS[zone] || { width: 300, height: 250 };
+  const fixedWidth = width || defaultDim.width;
+  const fixedHeight = height || defaultDim.height;
 
   useEffect(() => {
     setIsMobile(window.innerWidth < 768);
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -96,412 +66,174 @@ export default function AdSlot({ zone, placement, layout = 'strip', width, heigh
         const device = isMobile ? 'mobile' : 'desktop';
         
         let url;
-        if (isSpecAd) {
+        if (placement) {
           url = `/api/ads/active?placement=${placement}&device=${device}`;
+        } else if (zone) {
+          url = `/api/ads/serve?zone=${encodeURIComponent(zone)}&route=${encodeURIComponent(currentRoute)}`;
         } else {
-          url = `/api/ads/serve?zone=${zone}&route=${encodeURIComponent(currentRoute)}`;
+          setLoading(false);
+          return;
         }
 
-        const res = await fetch(url);
+        const siteId = (typeof window !== 'undefined' && localStorage.getItem('x-site-id')) || process.env.NEXT_PUBLIC_SITE_ID || 'AHP';
+        const res = await fetch(url, { headers: { 'x-site-id': siteId } });
         const data = await res.json();
-        if (data.success && data.data?.ads) {
-          setAds(data.data.ads);
-        }
+        
+        const fetchedAds = data.data?.ads || data.ads || [];
+        setAds(Array.isArray(fetchedAds) ? fetchedAds : []);
       } catch (err) {
-        console.error(`Failed to fetch ads for ${isSpecAd ? 'placement ' + placement : 'zone ' + zone}:`, err);
+        console.error('Failed to fetch ads for zone:', zone, err);
+        setAds([]);
       } finally {
         setLoading(false);
       }
     }
+
     fetchAds();
-  }, [zone, placement, isMobile, isSpecAd]);
+  }, [zone, placement, isMobile]);
 
-  // impression tracking
-  useEffect(() => {
-    if (ads.length > 0) {
-      ads.forEach(ad => {
-        if (!trackedImpressions.current.has(ad.id)) {
-          trackedImpressions.current.add(ad.id);
-          
-          let trackUrl;
-          let trackBody;
-          if (isSpecAd) {
-            trackUrl = `/api/ads/${ad.id}/event`;
-            trackBody = { type: 'impression' };
-          } else {
-            trackUrl = '/api/ads/track';
-            trackBody = { adId: ad.id, type: 'impression' };
-          }
-
-          fetch(trackUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(trackBody)
-          }).catch(err => console.error('Failed to track impression:', err));
-        }
+  const handleAdClick = async (adId) => {
+    try {
+      const siteId = (typeof window !== 'undefined' && localStorage.getItem('x-site-id')) || process.env.NEXT_PUBLIC_SITE_ID || 'AHP';
+      await fetch('/api/ads/analytics', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-site-id': siteId },
+        body: JSON.stringify({ adId, type: 'click' }),
       });
+    } catch (err) {
+      console.error('Failed to record ad click:', err);
     }
-  }, [ads, isSpecAd]);
-
-  const handleAdClick = (adId) => {
-    let trackUrl;
-    let trackBody;
-    if (isSpecAd) {
-      trackUrl = `/api/ads/${adId}/event`;
-      trackBody = { type: 'click' };
-    } else {
-      trackUrl = '/api/ads/track';
-      trackBody = { adId, type: 'click' };
-    }
-
-    fetch(trackUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(trackBody)
-    }).catch(err => console.error('Failed to track click:', err));
   };
 
-  if (loading) return null;
+  const activeAd = ads && ads.length > 0 ? ads[0] : null;
 
-  const zoneConfig = zone ? ZONE_DIMENSIONS[zone] : null;
-  const activeDimensions = zoneConfig ? (isMobile ? (zoneConfig.mobile || zoneConfig.desktop) : zoneConfig.desktop) : null;
-
-  const w = width || activeDimensions?.width;
-  const h = height || activeDimensions?.height;
-
-  // Helper to normalize ad type checks
-  const isCodeType = (ad) => ad.type === 'CODE' || ad.type === 'adsense' || ad.mediaType === 'html' || ad.mediaType === 'video';
-  const isImageType = (ad) => ad.type === 'IMAGE' || ad.type === 'banner' || ad.mediaType === 'image';
-
-  // ── Active ads ──────────────────────────────────────────────
-  if (ads.length > 0) {
-    if (layout === 'blogCard') {
-      return (
-        <div className={`w-full h-full flex ${className || ''}`}>
-          <div className="bg-white rounded-[24px] p-6 shadow-[0_10px_30px_rgba(0,0,0,0.02)] border border-slate-100/50 flex flex-col justify-between hover:shadow-[0_16px_40px_rgba(31,185,251,0.08)] transition-all duration-300 h-full w-full">
-            <div className="flex flex-col gap-3 h-full justify-between">
-              <div className="flex justify-between items-center border-b border-slate-100 pb-3">
-                <span className="text-[9.5px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider bg-teal-50 text-teal-700">
-                  Sponsored
-                </span>
-              </div>
-              <div className="flex-1 flex flex-col justify-between overflow-hidden rounded-xl border border-slate-100 bg-slate-50 min-h-[120px] my-3 p-2">
-                {ads.map((ad) => {
-                  if (isCodeType(ad)) {
-                    return (
-                      <div key={ad.id} onClick={() => handleAdClick(ad.id)} className="w-full h-full flex justify-center items-center" dangerouslySetInnerHTML={{ __html: ad.code }} />
-                    );
-                  }
-                  if (isImageType(ad) && ad.imageUrl) {
-                    const hasText = ad.headline || ad.description || ad.ctaText;
-                    return (
-                      <a key={ad.id} href={ad.targetUrl || '#'} target="_blank" rel="noopener noreferrer"
-                        onClick={() => handleAdClick(ad.id)}
-                        className="flex flex-col justify-between w-full h-full hover:opacity-95 transition-opacity overflow-hidden no-underline">
-                        <div className="flex justify-center items-center overflow-hidden max-h-[120px] w-full">
-                          <img src={ad.imageUrl} alt={ad.headline || ad.name || 'Ad'}
-                            className="max-w-full max-h-[120px] w-auto h-auto object-contain rounded-lg" />
-                        </div>
-                        {hasText && (
-                          <div className="flex flex-col gap-1 mt-2 text-center">
-                            {ad.headline && <h5 className="font-bold text-sm text-slate-800 line-clamp-1">{ad.headline}</h5>}
-                            {ad.description && <p className="text-[11px] text-slate-600 line-clamp-2">{ad.description}</p>}
-                            {ad.ctaText && (
-                              <span className="mt-1 inline-block bg-teal-600 text-white font-extrabold text-[10.5px] py-1.5 px-4 rounded-full uppercase tracking-wider">
-                                {ad.ctaText}
-                              </span>
-                            )}
-                          </div>
-                        )}
-                      </a>
-                    );
-                  }
-                  return null;
-                })}
-              </div>
-              <div>
-                <a href="/info?tab=support" className="text-xs text-muted hover:text-accent font-semibold uppercase tracking-[1.5px] block text-center mt-2 transition-colors">
-                  Advertise with us
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      );
+  // Track impression once
+  useEffect(() => {
+    if (activeAd && activeAd.id && !trackedImpressions.current.has(activeAd.id)) {
+      trackedImpressions.current.add(activeAd.id);
+      const siteId = (typeof window !== 'undefined' && localStorage.getItem('x-site-id')) || process.env.NEXT_PUBLIC_SITE_ID || 'AHP';
+      fetch('/api/ads/analytics', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-site-id': siteId },
+        body: JSON.stringify({ adId: activeAd.id, type: 'impression' }),
+      }).catch(() => {});
     }
+  }, [activeAd]);
 
-    if (layout === 'card') {
-      const cardW = w || activeDimensions?.width || 300;
-      const cardH = h || activeDimensions?.height || 600;
-      return (
-        <div className={`w-full flex flex-col items-center justify-center ${className || ''}`}>
-          <span className="block text-xs font-semibold text-muted uppercase tracking-[1.5px] mb-1.5 text-center font-body">Ad</span>
-          <div 
-            style={{ width: `${cardW}px`, height: `${cardH}px`, maxWidth: '100%', flexShrink: 0 }}
-            className="flex justify-center items-center overflow-hidden rounded-[32px] bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800/80 shadow-[0_4px_20px_rgba(0,0,0,0.03)] p-4"
-          >
-            {ads.map((ad) => {
-              if (isCodeType(ad)) {
-                return (
-                  <div key={ad.id} onClick={() => handleAdClick(ad.id)} className="w-full h-full flex justify-center items-center" dangerouslySetInnerHTML={{ __html: ad.code }} />
-                );
-              }
-              if (isImageType(ad) && ad.imageUrl) {
-                const hasText = ad.headline || ad.description || ad.ctaText;
-                return (
-                  <a key={ad.id} href={ad.targetUrl || '#'} target="_blank" rel="noopener noreferrer"
-                    onClick={() => handleAdClick(ad.id)}
-                    className="flex flex-col items-center justify-center w-full h-full hover:opacity-95 transition-opacity overflow-hidden no-underline">
-                    {hasText ? (
-                      <div className="flex flex-col items-center justify-between h-full w-full p-4 text-center gap-3">
-                        {ad.imageUrl && (
-                          <div className="relative w-full max-h-[220px] overflow-hidden rounded-2xl flex justify-center items-center">
-                            <img src={ad.imageUrl} alt={ad.headline || ad.name || 'Ad'} className="max-w-full max-h-[220px] w-auto h-auto object-contain rounded-2xl" />
-                          </div>
-                        )}
-                        {ad.headline && (
-                          <h4 className="font-heading font-extrabold text-slate-900 dark:text-white text-base md:text-xl leading-tight">
-                            {ad.headline}
-                          </h4>
-                        )}
-                        {ad.description && (
-                          <p className="text-xs md:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium line-clamp-3">
-                            {ad.description}
-                          </p>
-                        )}
-                        {ad.ctaText && (
-                          <span className="inline-block bg-teal-600 hover:bg-teal-700 text-white font-heading font-extrabold text-xs py-2.5 px-6 rounded-full shadow-md transition-all duration-300 hover:scale-105 mt-1">
-                            {ad.ctaText}
-                          </span>
-                        )}
-                      </div>
-                    ) : (
-                      <img src={ad.imageUrl} alt={ad.name || 'Ad'} className="max-w-full max-h-full w-auto h-auto object-contain" />
-                    )}
-                  </a>
-                );
-              }
-              return null;
-            })}
-          </div>
-        </div>
-      );
-    }
+  const fixedStyle = {
+    width: `${fixedWidth}px`,
+    height: `${fixedHeight}px`,
+    maxWidth: '100%',
+    flexShrink: 0,
+  };
 
-    const wrapClass = layout === 'float'
-      ? 'w-full md:w-auto md:float-right md:clear-right md:ml-6 mb-8 md:mb-4 flex flex-col items-center md:items-end'
-      : 'w-full flex flex-col items-center my-3';
-
-    const containerStyle = w && h ? {
-      width: `${w}px`,
-      height: `${h}px`,
-      maxWidth: '100%',
-      flexShrink: 0,
-    } : {};
-
+  // Loading skeleton matching fixed dimensions
+  if (loading) {
     return (
-      <div className={wrapClass}>
-        <span className="block text-xs font-semibold text-muted uppercase tracking-[1.5px] mb-1.5 text-center font-body">Ad</span>
-        <div 
-          className="flex justify-center items-center overflow-hidden rounded-lg bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800/80 shadow-[0_2px_12px_rgba(0,0,0,0.03)] p-1" 
-          style={containerStyle}
+      <div className={`flex items-center justify-center my-4 ${className}`}>
+        <div
+          style={fixedStyle}
+          className="bg-[#f0f9fa]/80 rounded-[20px] p-4 border border-[#0f7c85]/20 flex flex-col items-center justify-center text-center shadow-xs"
         >
-          {ads.map((ad) => {
-            if (isCodeType(ad)) {
-              return (
-                <div key={ad.id} onClick={() => handleAdClick(ad.id)} className="w-full h-full flex justify-center items-center" dangerouslySetInnerHTML={{ __html: ad.code }} />
-              );
-            }
-            if (isImageType(ad) && ad.imageUrl) {
-              return (
-                <a key={ad.id} href={ad.targetUrl || '#'} target="_blank" rel="noopener noreferrer"
-                  onClick={() => handleAdClick(ad.id)}
-                  className="flex items-center justify-center w-full h-full hover:opacity-90 transition-opacity overflow-hidden">
-                  <img src={ad.imageUrl} alt={ad.name || 'Ad'}
-                    className="max-w-full max-h-full w-auto h-auto object-contain" />
-                </a>
-              );
-            }
-            return null;
-          })}
+          <div className="w-5 h-5 rounded-full border-2 border-[#0f7c85] border-t-transparent animate-spin mb-2" />
+          <span className="text-[10px] text-slate-400 font-extrabold uppercase tracking-wider">Loading Ad ({fixedWidth}x{fixedHeight})...</span>
         </div>
       </div>
     );
   }
 
-  // ── No active ads ────────────────────────────────────────────
+  // Active Ad Rendering
+  if (activeAd) {
+    if (activeAd.code) {
+      return (
+        <div className={`flex items-center justify-center my-4 ${className}`}>
+          <div
+            style={fixedStyle}
+            className="bg-white rounded-[20px] p-2 border border-slate-200 flex items-center justify-center overflow-hidden"
+            onClick={() => handleAdClick(activeAd.id)}
+            dangerouslySetInnerHTML={{ __html: activeAd.code }}
+          />
+        </div>
+      );
+    }
 
-  if (layout === 'blogCard') {
     return (
-      <div className={`w-full h-full flex ${className || ''}`}>
-        <a 
-          href="/info?tab=support"
-          className="group bg-white rounded-[24px] p-6 shadow-[0_10px_30px_rgba(0,0,0,0.02)] border border-slate-200/60 flex flex-col justify-between hover:shadow-[0_16px_40px_rgba(31,185,251,0.08)] hover:border-teal-500/40 hover:scale-[1.02] transition-all duration-300 h-full w-full no-underline cursor-pointer select-none"
+      <div className={`flex items-center justify-center my-4 ${className}`}>
+        <div
+          style={fixedStyle}
+          className="bg-gradient-to-br from-[#f0f9fa] via-[#f7fdfd] to-[#eef9fa] rounded-[20px] p-4 border border-[#0f7c85]/20 hover:border-[#0f7c85]/40 transition-all duration-300 shadow-xs flex flex-col justify-between text-center overflow-hidden group cursor-pointer"
         >
-          <div className="flex flex-col gap-3">
-            <div className="flex justify-between items-center border-b border-slate-100 pb-3">
-              <span className="text-[9.5px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider bg-[#0f7c85]/10 text-[#0f7c85]">
-                Partner Spot
-              </span>
-            </div>
-            <h4 className="font-heading font-bold text-lg text-primary group-hover:text-teal-600 transition-colors mt-2">
-              Want to get featured?
-            </h4>
-            <p className="text-[12.5px] text-secondary leading-relaxed mt-1">
-              Place your brand inside our interactive guide slider. Reach health-conscious readers.
-            </p>
-          </div>
-
-          <div className="mt-6">
-            <span className="w-full text-center bg-teal-600 hover:bg-teal-700 text-white font-extrabold text-xs py-2.5 rounded-full shadow-sm tracking-wider uppercase transition-colors block">
-              Advertise with us →
+          <div className="flex flex-col items-center flex-1 justify-center min-h-0">
+            <span className="inline-block bg-[#0f7c85]/10 border border-[#0f7c85]/20 text-[#0f7c85] font-extrabold text-[9px] uppercase tracking-[1.5px] px-2.5 py-0.5 rounded-full mb-2 shrink-0">
+              {badgeText}
             </span>
+
+            {activeAd.imageUrl && (
+              <div className="w-full max-h-[50%] mb-2 overflow-hidden rounded-[14px] flex justify-center items-center bg-white shadow-2xs shrink-0">
+                <img src={activeAd.imageUrl} alt={activeAd.headline || activeAd.name} className="max-w-full max-h-full w-auto h-auto object-cover rounded-[14px]" />
+              </div>
+            )}
+
+            {activeAd.headline && (
+              <h4 className="font-heading font-extrabold text-sm text-slate-900 mb-1 leading-snug line-clamp-2 shrink-0">
+                {activeAd.headline}
+              </h4>
+            )}
+
+            {activeAd.description && (
+              <p className="text-slate-600 font-medium text-[11px] leading-tight max-w-xs mb-2 line-clamp-2 shrink-0">
+                {activeAd.description}
+              </p>
+            )}
           </div>
-        </a>
+
+          <a
+            href={activeAd.targetUrl || fallbackUrl}
+            target={activeAd.targetUrl?.startsWith('http') ? '_blank' : '_self'}
+            rel="noopener noreferrer"
+            onClick={() => handleAdClick(activeAd.id)}
+            className="w-max mx-auto bg-[#0f7c85] hover:bg-[#0c646b] text-white font-extrabold text-[11px] py-2 px-5 rounded-full transition-all duration-300 no-underline shadow-xs inline-flex items-center gap-1 cursor-pointer shrink-0"
+          >
+            {activeAd.ctaText || fallbackCta}
+          </a>
+        </div>
       </div>
     );
   }
 
-  if (layout === 'card') {
-    const cardW = w || activeDimensions?.width || 300;
-    const cardH = h || activeDimensions?.height || 600;
+  // Fallback Card (Google AdSense Fixed Specs)
+  return (
+    <div className={`flex items-center justify-center my-4 ${className}`}>
+      <div
+        style={fixedStyle}
+        className="bg-gradient-to-br from-[#f0f9fa] via-[#f7fdfd] to-[#eef9fa] rounded-[20px] p-4 border border-[#0f7c85]/20 flex flex-col justify-between text-center shadow-xs overflow-hidden group hover:border-[#0f7c85]/40 transition-all duration-300"
+      >
+        <div className="flex flex-col items-center flex-1 justify-center min-h-0">
+          <span className="inline-block bg-[#0f7c85]/10 border border-[#0f7c85]/20 text-[#0f7c85] font-extrabold text-[9px] uppercase tracking-[1.5px] px-2.5 py-0.5 rounded-full mb-2 shrink-0">
+            {badgeText}
+          </span>
 
-    const cardContent = (
-      <div className="flex flex-col items-center justify-center text-center p-8 md:p-10 gap-5 h-full w-full">
-        <span className="text-xs font-extrabold text-teal-600 dark:text-teal-400 uppercase tracking-[2px] bg-teal-50 dark:bg-teal-950/40 px-3 py-1 rounded-full">
-          Partner Spot
-        </span>
-        <div className="flex flex-col gap-2.5">
-          <h4 className="text-xl md:text-2xl font-heading font-extrabold text-slate-800 dark:text-white leading-snug">
-            Want to get featured here?
+          {fallbackImage && (
+            <div className="w-full max-h-[45%] mb-2 overflow-hidden rounded-[14px] flex justify-center items-center bg-white shadow-2xs shrink-0">
+              <img src={fallbackImage} alt={fallbackTitle} className="w-full h-full object-cover rounded-[14px]" />
+            </div>
+          )}
+
+          <h4 className="font-heading font-extrabold text-sm text-slate-900 mb-1 leading-snug line-clamp-2 shrink-0">
+            {fallbackTitle}
           </h4>
-          <p className="text-xs md:text-sm text-slate-600 dark:text-slate-300 leading-relaxed max-w-xs mx-auto font-medium">
-            Align your brand with medically verified health guides. Reach over 100,000+ readers.
+          <p className="text-slate-600 font-medium text-[11px] leading-tight max-w-xs mb-2 line-clamp-2 shrink-0">
+            {fallbackDescription}
           </p>
         </div>
-        <span className="bg-teal-600 hover:bg-teal-700 dark:bg-teal-500 text-white font-heading font-extrabold text-xs md:text-sm py-3.5 px-8 rounded-full shadow-md tracking-wider uppercase transition-all duration-300 hover:scale-105 mt-3">
-          Advertise with us →
-        </span>
-      </div>
-    );
 
-    return (
-      <div className={`w-full flex justify-center items-center ${className || ''}`}>
-        <a 
-          href="/info?tab=support"
-          style={{ width: `${cardW}px`, height: `${cardH}px`, maxWidth: '100%', flexShrink: 0 }}
-          className="flex flex-col justify-center items-center overflow-hidden rounded-[32px] bg-gradient-to-br from-slate-50 via-slate-100/60 to-slate-100 dark:from-slate-800 dark:to-slate-900 border border-slate-200/80 dark:border-slate-700 hover:border-teal-500/50 hover:shadow-[0_12px_40px_rgba(15,124,133,0.1)] transition-all duration-500 group cursor-pointer no-underline select-none"
+        <a
+          href={fallbackUrl}
+          className="w-max mx-auto bg-[#0f7c85] hover:bg-[#0c646b] text-white font-extrabold text-[11px] py-2 px-5 rounded-full transition-all duration-300 no-underline shadow-xs inline-flex items-center gap-1 cursor-pointer shrink-0"
         >
-          {cardContent}
+          {fallbackCta}
         </a>
       </div>
-    );
-  }
-
-  // If size mapping exists, display the clean mockup layout (gray box with attractive CTAs)
-  if (w && h) {
-    const wrapClass = layout === 'float'
-      ? 'w-full md:w-auto md:float-right md:clear-right md:ml-6 mb-8 md:mb-4 flex flex-col items-center md:items-end'
-      : 'w-full flex flex-col items-center my-4';
-
-    const containerStyle = {
-      width: `${w}px`,
-      height: `${h}px`,
-      maxWidth: '100%',
-      flexShrink: 0,
-    };
-
-    // Determine content based on aspect ratio
-    const isWide = w >= 468 && h <= 120;
-    const isTall = w <= 200 && h >= 400;
-    const isSmallStrip = w <= 400 && h <= 100;
-
-    let ctaContent;
-    if (isSmallStrip) {
-      ctaContent = (
-        <div className="flex items-center justify-center w-full h-full px-2">
-          <span className="text-[11px] font-bold text-slate-800 dark:text-white uppercase tracking-wider">
-            Advertise with us →
-          </span>
-        </div>
-      );
-    } else if (isWide) {
-      ctaContent = (
-        <div className="flex items-center justify-between w-full px-6 md:px-10 h-full">
-          <div className="text-left">
-            <span className="text-xs font-bold text-teal-600 dark:text-teal-400 uppercase tracking-widest block">Partner Spot</span>
-            <p className="text-sm md:text-sm font-bold text-slate-800 dark:text-white leading-tight">Want to get featured here?</p>
-          </div>
-          <span className="bg-teal-600 hover:bg-teal-700 dark:bg-teal-500 text-white font-heading font-extrabold text-xs md:text-xs py-1.5 px-4 rounded-full shadow-sm tracking-wider uppercase transition-colors">
-            Advertise with us →
-          </span>
-        </div>
-      );
-    } else if (isTall) {
-      ctaContent = (
-        <div className="flex flex-col items-center justify-center text-center p-4 gap-4 h-full">
-          <span className="text-xs font-bold text-teal-600 dark:text-teal-400 uppercase tracking-widest">Partner Spot</span>
-          <div>
-            <p className="text-sm font-bold text-slate-800 dark:text-white leading-snug">Want to get featured?</p>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Reach 100k+ readers</p>
-          </div>
-          <span className="bg-teal-600 hover:bg-teal-700 dark:bg-teal-500 text-white font-heading font-extrabold text-xs py-1.5 px-3 rounded-full shadow-sm tracking-wider uppercase transition-colors mt-auto mb-2">
-            Advertise →
-          </span>
-        </div>
-      );
-    } else {
-      // Box / Square / Default
-      ctaContent = (
-        <div className="flex flex-col items-center justify-center text-center p-4 gap-2.5 h-full">
-          <span className="text-xs font-bold text-teal-600 dark:text-teal-400 uppercase tracking-widest">Partner Spot</span>
-          <div>
-            <h5 className="text-sm font-bold text-slate-800 dark:text-white leading-tight">Want to get featured here?</h5>
-            <p className="text-xs text-slate-600 dark:text-slate-200 mt-1 max-w-[200px] font-medium">Align your brand with medically verified health guides.</p>
-          </div>
-          <span className="bg-teal-600 hover:bg-teal-700 dark:bg-teal-500 text-white font-heading font-extrabold text-xs py-1.5 px-4 rounded-full shadow-sm tracking-wider uppercase transition-colors mt-1">
-            Advertise with us →
-          </span>
-        </div>
-      );
-    }
-
-    return (
-      <div className={wrapClass}>
-        <a 
-          href="/info?tab=support"
-          className="flex justify-center items-center overflow-hidden rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900 border border-slate-200/50 dark:border-slate-700 hover:border-teal-500/40 dark:hover:border-teal-500/60 hover:shadow-[0_8px_30px_rgba(15,124,133,0.06)] transition-all duration-500 group cursor-pointer no-underline select-none"
-          style={containerStyle}
-        >
-          {ctaContent}
-        </a>
-      </div>
-    );
-  }
-
-
-  // Float variant fallback if no dimensions specified
-  if (layout === 'float') {
-    return (
-      <a href="/info?tab=support"
-        className="float-right clear-right ml-6 mb-4 w-[180px] flex flex-col gap-2 bg-bg-light border border-slate-200/80 rounded-xl p-4 no-underline hover:border-accent/30 hover:shadow-[0_4px_16px_rgba(31,185,251,0.06)] transition-all duration-300 group">
-        <span className="text-xs font-bold text-accent uppercase tracking-[1.5px]">Partner with us</span>
-        <p className="text-xs font-semibold text-primary leading-snug group-hover:text-accent transition-colors">
-          Advertise to our health audience
-        </p>
-        <span className="text-xs text-muted group-hover:text-accent transition-colors">Contact us →</span>
-      </a>
-    );
-  }
-
-  // Strip variant fallback if no dimensions specified
-  return (
-    <div className="w-full flex items-center justify-between px-1 py-2 my-1">
-      <span className="text-xs font-semibold text-slate-300 uppercase tracking-[2px]">Ad space</span>
-      <a href="/info?tab=support"
-        className="text-xs font-semibold text-muted hover:text-accent uppercase tracking-[1px] transition-colors duration-200">
-        Advertise with us →
-      </a>
     </div>
   );
 }
