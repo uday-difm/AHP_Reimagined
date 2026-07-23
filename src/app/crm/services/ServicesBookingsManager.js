@@ -7,8 +7,9 @@ import {
   Phone, Globe, MapPin, Calendar, FileText, Send,
   Download, Star, User, Briefcase, MessageSquare, RefreshCw,
   Package, CreditCard, Bell, Activity,
-  LayoutGrid, List, Check, Plus, Grip,
+  LayoutGrid, List, Check, Plus, Grip, Sparkles,
 } from "lucide-react";
+import ServicesBannerEditorModal from "@/components/ServicesBannerEditorModal";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 const LEAD_STATUSES = ["new", "contacted", "qualified", "won", "closed", "lost"];
@@ -878,6 +879,7 @@ export default function ServicesBookingsManager({ siteId, initialLeads, services
   const [filterStatus, setFilterStatus] = useState("all");
   const [loading, setLoading]       = useState(false);
   const [viewMode, setViewMode]     = useState("list"); // "list" | "kanban"
+  const [bannerEditorOpen, setBannerEditorOpen] = useState(false);
 
   // Bulk selection
   const [selectedIds, setSelectedIds] = useState(new Set());
@@ -1015,6 +1017,12 @@ export default function ServicesBookingsManager({ siteId, initialLeads, services
             className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-slate-200 bg-white text-xs font-semibold text-slate-700 rounded-lg hover:bg-slate-50 transition-colors shadow-sm"
           >
             <RefreshCw size={12} className={loading ? "animate-spin" : ""} /> Refresh
+          </button>
+          <button
+            onClick={() => setBannerEditorOpen(true)}
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#0f7c85] hover:bg-[#0c6b73] text-white text-xs font-extrabold rounded-lg transition-all shadow-sm cursor-pointer"
+          >
+            <Sparkles size={13} /> Customize PR &amp; Editorial Banner Card
           </button>
           <a
             href={`/api/dashboard/leads/export?siteId=${siteId}`}
@@ -1215,6 +1223,13 @@ export default function ServicesBookingsManager({ siteId, initialLeads, services
           onUpdate={handleUpdate}
         />
       )}
+
+      {/* Services Banner Customizer Modal */}
+      <ServicesBannerEditorModal
+        siteId={siteId}
+        isOpen={bannerEditorOpen}
+        onClose={() => setBannerEditorOpen(false)}
+      />
     </div>
   );
 }
