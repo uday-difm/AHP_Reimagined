@@ -87,7 +87,7 @@ export default function RecipeDetail({ params }) {
 
         {/* Top Nav */}
         <div className="mb-6 flex justify-between items-center">
-          <Link href="/recipes" className="inline-flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-[#0f7c85] transition-colors">
+          <Link href="/recipes" className="inline-flex items-center gap-2 text-sm md:text-base font-medium text-slate-500 hover:text-[#0f7c85] transition-colors">
             <ArrowLeft size={16} /> Back to recipes
           </Link>
           <div className="flex gap-2">
@@ -131,19 +131,19 @@ export default function RecipeDetail({ params }) {
               ))}
             </div>
 
-            <h1 className="text-3xl md:text-[42px] font-heading font-extrabold text-[#1a1c29] mb-4 tracking-tight leading-[1.1]">
+            <h1 className="main-heading text-[#1a1c29] mb-4">
               {recipe.title}
             </h1>
 
             <div className="flex items-center gap-3 text-[13px] text-slate-500 mb-6 pb-6 border-b border-slate-100">
               <img src="https://i.pravatar.cc/100?img=4" alt="Contributor" className="w-8 h-8 rounded-full border border-slate-200" />
               <div className="flex flex-col">
-                <span className="font-bold text-slate-800">{recipe.contributor?.name || "Sarah Jenkins"}</span>
+                <span className="text-sm font-bold text-slate-800">{recipe.contributor?.name || "Sarah Jenkins"}</span>
                 <span className="text-[11px] text-slate-400 uppercase tracking-widest font-bold">Community Member</span>
               </div>
             </div>
 
-            <p className="text-[15px] text-slate-600 mb-8 leading-relaxed font-medium">
+            <p className="description text-slate-600 mb-8">
               {recipe.description || "A delicious, healthy, and easy to make recipe that is perfect for any time of the day. Packed with nutrients and flavor."}
             </p>
 
@@ -177,19 +177,19 @@ export default function RecipeDetail({ params }) {
                 Nutrition Facts
               </h3>
               <div className="space-y-4">
-                <div className="flex justify-between items-center text-sm font-bold">
+                <div className="flex justify-between items-center text-sm md:text-base font-medium">
                   <span className="text-slate-500">Protein</span>
                   <span className="text-slate-900 bg-slate-50 px-3 py-1 rounded-md border border-slate-100">24g</span>
                 </div>
-                <div className="flex justify-between items-center text-sm font-bold">
+                <div className="flex justify-between items-center text-sm md:text-base font-medium">
                   <span className="text-slate-500">Carbs</span>
                   <span className="text-slate-900 bg-slate-50 px-3 py-1 rounded-md border border-slate-100">45g</span>
                 </div>
-                <div className="flex justify-between items-center text-sm font-bold">
+                <div className="flex justify-between items-center text-sm md:text-base font-medium">
                   <span className="text-slate-500">Fat</span>
                   <span className="text-slate-900 bg-slate-50 px-3 py-1 rounded-md border border-slate-100">12g</span>
                 </div>
-                <div className="flex justify-between items-center text-sm font-bold">
+                <div className="flex justify-between items-center text-sm md:text-base font-medium">
                   <span className="text-slate-500">Fiber</span>
                   <span className="text-slate-900 bg-slate-50 px-3 py-1 rounded-md border border-slate-100">8g</span>
                 </div>
@@ -208,7 +208,7 @@ export default function RecipeDetail({ params }) {
                     <div className="mt-0.5 w-5 h-5 rounded-full bg-[#e6f2f1] flex items-center justify-center shrink-0 border border-[#0f7c85]/20 group-hover:bg-[#0f7c85] transition-colors">
                       <CheckCircle2 size={12} className="text-[#0f7c85] group-hover:text-white transition-colors" />
                     </div>
-                    <span className="text-[14px] text-slate-700 font-medium leading-tight pt-0.5">
+                    <span className="text-base text-slate-700 leading-relaxed pt-0.5">
                       {typeof ing === 'string' ? ing : `${ing.amount || ''} ${ing.unit || ''} ${ing.name || ''}`}
                     </span>
                   </li>
@@ -239,7 +239,7 @@ export default function RecipeDetail({ params }) {
           {/* Right Column: Steps */}
           <div className="lg:col-span-2">
             <div className="bg-white p-8 md:p-10 rounded-[32px] shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-slate-100">
-              <h3 className="text-xl font-heading font-extrabold text-[#1a1c29] mb-8">
+              <h3 className="section-heading text-[#1a1c29] mb-8">
                 Step-by-Step Instructions
               </h3>
               
@@ -251,7 +251,7 @@ export default function RecipeDetail({ params }) {
                     </div>
                     <div className="flex-1 bg-slate-50/50 rounded-2xl p-5 border border-slate-100">
                       <h4 className="text-[12px] font-extrabold text-slate-400 uppercase tracking-widest mb-1.5">Step {i + 1}</h4>
-                      <p className="text-[15px] text-slate-700 leading-relaxed font-medium">
+                      <p className="text-base text-slate-700 leading-7">
                         {typeof step === 'string' ? step : step.instruction}
                       </p>
                     </div>

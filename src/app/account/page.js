@@ -252,19 +252,19 @@ export default function AccountPage() {
       <Header />
 
       <div className="max-w-5xl mx-auto px-4 py-32 sm:px-6 lg:px-8">
-        <h1 className="text-3xl font-extrabold text-slate-900 mb-8">My Account</h1>
+        <h1 className="main-heading text-slate-900 mb-8">My Account</h1>
 
         <div className="flex flex-col md:flex-row gap-8">
           {/* Sidebar */}
           <div className="w-full md:w-64 shrink-0">
             <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
               <nav className="flex flex-col p-4 gap-1">
-                <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Personal Info</div>
+                <div className="card-title text-slate-800 tracking-tight mb-2">Personal Info</div>
                 <button
                   onClick={() => setActiveTab("profile")}
-                  className={`flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl transition-colors ${activeTab === "profile"
-                      ? "bg-[#0F766E] text-white"
-                      : "text-slate-600 hover:bg-slate-50"
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${activeTab === "profile"
+                      ? "bg-[#0F766E] text-white text-base font-semibold"
+                      : "text-slate-600 hover:bg-slate-50 text-base"
                     }`}
                 >
                   <User className="w-5 h-5" />
@@ -272,9 +272,9 @@ export default function AccountPage() {
                 </button>
                 <button
                   onClick={() => setActiveTab("edit")}
-                  className={`flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl transition-colors ${activeTab === "edit"
-                      ? "bg-[#0F766E] text-white"
-                      : "text-slate-600 hover:bg-slate-50"
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${activeTab === "edit"
+                      ? "bg-[#0F766E] text-white text-base font-semibold"
+                      : "text-slate-600 hover:bg-slate-50 text-base"
                     }`}
                 >
                   <Edit3 className="w-5 h-5" />
@@ -282,21 +282,21 @@ export default function AccountPage() {
                 </button>
                 <button
                   onClick={() => setActiveTab("password")}
-                  className={`flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl transition-colors ${activeTab === "password"
-                      ? "bg-[#0F766E] text-white"
-                      : "text-slate-600 hover:bg-slate-50"
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${activeTab === "password"
+                      ? "bg-[#0F766E] text-white text-base font-semibold"
+                      : "text-slate-600 hover:bg-slate-50 text-base"
                     }`}
                 >
                   <Lock className="w-5 h-5" />
                   Change Password
                 </button>
 
-                <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 mt-4">🍽️ Recipes & Community</div>
+                <div className="card-title text-slate-800 tracking-tight mb-2 mt-4">🍽️ Recipes & Community</div>
                 <button
                   onClick={() => setActiveTab("saved_recipes")}
-                  className={`flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl transition-colors ${activeTab === "saved_recipes"
-                      ? "bg-[#0F766E] text-white"
-                      : "text-slate-600 hover:bg-slate-50"
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${activeTab === "saved_recipes"
+                      ? "bg-[#0F766E] text-white text-base font-semibold"
+                      : "text-slate-600 hover:bg-slate-50 text-base"
                     }`}
                 >
                   <Bookmark className="w-5 h-5" />
@@ -304,21 +304,21 @@ export default function AccountPage() {
                 </button>
                 <button
                   onClick={() => setActiveTab("uploaded_recipes")}
-                  className={`flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl transition-colors ${activeTab === "uploaded_recipes"
-                      ? "bg-[#0F766E] text-white"
-                      : "text-slate-600 hover:bg-slate-50"
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${activeTab === "uploaded_recipes"
+                      ? "bg-[#0F766E] text-white text-base font-semibold"
+                      : "text-slate-600 hover:bg-slate-50 text-base"
                     }`}
                 >
                   <Upload className="w-5 h-5" />
                   My Uploaded Recipes
                 </button>
 
-                <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 mt-4">📚 Content & Learning</div>
+                <div className="card-title text-slate-800 tracking-tight mb-2 mt-4">📚 Content & Learning</div>
                 <button
                   onClick={() => setActiveTab("saved_articles")}
-                  className={`flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl transition-colors ${activeTab === "saved_articles"
-                      ? "bg-[#0F766E] text-white"
-                      : "text-slate-600 hover:bg-slate-50"
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${activeTab === "saved_articles"
+                      ? "bg-[#0F766E] text-white text-base font-semibold"
+                      : "text-slate-600 hover:bg-slate-50 text-base"
                     }`}
                 >
                   <BookOpen className="w-5 h-5" />
@@ -327,9 +327,9 @@ export default function AccountPage() {
 
                 <button
                   onClick={() => setActiveTab("recently_viewed")}
-                  className={`flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl transition-colors ${activeTab === "recently_viewed"
-                      ? "bg-[#0F766E] text-white"
-                      : "text-slate-600 hover:bg-slate-50"
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${activeTab === "recently_viewed"
+                      ? "bg-[#0F766E] text-white text-base font-semibold"
+                      : "text-slate-600 hover:bg-slate-50 text-base"
                     }`}
                 >
                   <Clock className="w-5 h-5" />
@@ -337,10 +337,10 @@ export default function AccountPage() {
                 </button>
 
 
-                <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 mt-4">🚪 Account Actions</div>
+                <div className="card-title text-slate-800 tracking-tight mb-2 mt-4">🚪 Account Actions</div>
                 <button
                   onClick={() => { window.location.href = "/login"; }}
-                  className="flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl transition-colors text-red-600 hover:bg-red-50"
+                  className="flex items-center gap-3 px-4 py-3 text-base rounded-xl transition-colors text-red-600 hover:bg-red-50"
                 >
                   <LogOut className="w-5 h-5" />
                   Logout
@@ -354,7 +354,7 @@ export default function AccountPage() {
             <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8">
               {activeTab === "profile" && (
                 <div>
-                  <h2 className="text-xl font-bold text-slate-900 mb-6 border-b pb-4">My Profile</h2>
+                  <h2 className="section-heading text-slate-900 mb-6 border-b pb-4">My Profile</h2>
 
                   {/* Dashboard shortcut card */}
                   <div className="bg-slate-50 rounded-2xl border border-slate-200 p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm mb-8">
@@ -365,7 +365,7 @@ export default function AccountPage() {
                         <p className="text-slate-500 text-sm mt-0.5">Your scores and personalized profiles are stored in your dashboard.</p>
                       </div>
                     </div>
-                    <Link href="/quizzes/dashboard" className="bg-[#0F766E] hover:bg-[#0d655e] shrink-0 text-white px-6 py-2.5 rounded-full font-bold text-sm transition-all shadow-sm">
+                    <Link href="/quizzes/dashboard" className="bg-[#0F766E] hover:bg-[#0d655e] shrink-0 text-white px-6 py-2.5 rounded-full text-sm md:text-base font-bold transition-all shadow-sm">
                       Go to Dashboard
                     </Link>
                   </div>
@@ -380,16 +380,16 @@ export default function AccountPage() {
                       )}
                     </div>
                     <div className="flex-1 w-full">
-                      <h3 className="text-lg font-bold text-slate-900 mb-2">{user.name || "Add a name"}</h3>
+                      <h3 className="card-title text-slate-900 mb-2">{user.name || "Add a name"}</h3>
                       <p className="text-slate-600 mb-4 whitespace-pre-wrap">{user.bio || "No bio added yet."}</p>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
                         <div>
-                          <p className="text-sm text-slate-500 mb-1">Email Address</p>
-                          <p className="font-medium text-slate-900">{user.email}</p>
+                          <p className="text-sm font-medium text-slate-500 mb-1">Email Address</p>
+                          <p className="text-base text-slate-900">{user.email}</p>
                         </div>
                         <div>
-                          <p className="text-sm text-slate-500 mb-1">Joined Date</p>
-                          <p className="font-medium text-slate-900">
+                          <p className="text-sm font-medium text-slate-500 mb-1">Joined Date</p>
+                          <p className="text-base text-slate-900">
                             {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "Unknown"}
                           </p>
                         </div>
@@ -401,7 +401,7 @@ export default function AccountPage() {
 
               {activeTab === "edit" && (
                 <div>
-                  <h2 className="text-xl font-bold text-slate-900 mb-6 border-b pb-4">Edit Profile</h2>
+                  <h2 className="section-heading text-slate-900 mb-6 border-b pb-4">Edit Profile</h2>
 
                   <div className="mb-6 flex flex-col items-start gap-4">
                     <div className="relative w-24 h-24 shrink-0 bg-slate-200 rounded-full flex items-center justify-center text-slate-400 overflow-hidden border border-slate-300">
@@ -416,7 +416,7 @@ export default function AccountPage() {
                         </div>
                       )}
                     </div>
-                    <label className="cursor-pointer bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-slate-50 transition-colors flex items-center gap-2">
+                    <label className="cursor-pointer bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-lg text-sm md:text-base font-semibold hover:bg-slate-50 transition-colors flex items-center gap-2">
                       <Camera className="w-4 h-4" />
                       {uploadingImage ? "Uploading..." : "Upload Picture"}
                       <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} disabled={uploadingImage} />
@@ -430,7 +430,7 @@ export default function AccountPage() {
                         type="text"
                         value={editForm.name}
                         onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
-                        className="w-full border border-slate-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#0F766E] focus:border-[#0F766E] outline-none transition-all"
+                        className="w-full border border-slate-300 rounded-lg px-4 py-2 text-base placeholder:text-sm focus:ring-2 focus:ring-[#0F766E] focus:border-[#0F766E] outline-none transition-all"
                         placeholder="Your full name"
                       />
                     </div>
@@ -439,7 +439,7 @@ export default function AccountPage() {
                       <textarea
                         value={editForm.bio}
                         onChange={(e) => setEditForm({ ...editForm, bio: e.target.value })}
-                        className="w-full border border-slate-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#0F766E] focus:border-[#0F766E] outline-none transition-all"
+                        className="w-full border border-slate-300 rounded-lg px-4 py-2 text-base placeholder:text-sm focus:ring-2 focus:ring-[#0F766E] focus:border-[#0F766E] outline-none transition-all"
                         rows="4"
                         placeholder="Tell us about yourself..."
                       ></textarea>
@@ -456,7 +456,7 @@ export default function AccountPage() {
                     <button
                       type="submit"
                       disabled={savingProfile}
-                      className="bg-[#0F766E] hover:bg-[#0d655e] disabled:opacity-70 disabled:cursor-not-allowed text-white px-6 py-2 rounded-lg font-semibold transition-colors flex items-center gap-2 mt-4"
+                      className="bg-[#0F766E] hover:bg-[#0d655e] disabled:opacity-70 disabled:cursor-not-allowed text-white px-6 py-2 rounded-lg text-sm md:text-base font-semibold transition-colors flex items-center gap-2 mt-4"
                     >
                       {savingProfile ? "Saving..." : "Save Changes"}
                     </button>
@@ -466,7 +466,7 @@ export default function AccountPage() {
 
               {activeTab === "password" && (
                 <div>
-                  <h2 className="text-xl font-bold text-slate-900 mb-6 border-b pb-4">Change Password</h2>
+                  <h2 className="section-heading text-slate-900 mb-6 border-b pb-4">Change Password</h2>
                   <form onSubmit={handlePasswordSave} className="space-y-4 max-w-md">
                     <div>
                       <label className="block text-sm font-medium text-slate-700 mb-1">Current Password</label>
@@ -475,7 +475,7 @@ export default function AccountPage() {
                         value={passwordForm.currentPassword}
                         onChange={(e) => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })}
                         required
-                        className="w-full border border-slate-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#0F766E] focus:border-[#0F766E] outline-none transition-all"
+                        className="w-full border border-slate-300 rounded-lg px-4 py-2 text-base placeholder:text-sm focus:ring-2 focus:ring-[#0F766E] focus:border-[#0F766E] outline-none transition-all"
                       />
                     </div>
                     <div>
@@ -486,7 +486,7 @@ export default function AccountPage() {
                         onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
                         required
                         minLength={6}
-                        className="w-full border border-slate-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#0F766E] focus:border-[#0F766E] outline-none transition-all"
+                        className="w-full border border-slate-300 rounded-lg px-4 py-2 text-base placeholder:text-sm focus:ring-2 focus:ring-[#0F766E] focus:border-[#0F766E] outline-none transition-all"
                       />
                     </div>
                     <div>
@@ -497,7 +497,7 @@ export default function AccountPage() {
                         onChange={(e) => setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })}
                         required
                         minLength={6}
-                        className="w-full border border-slate-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#0F766E] focus:border-[#0F766E] outline-none transition-all"
+                        className="w-full border border-slate-300 rounded-lg px-4 py-2 text-base placeholder:text-sm focus:ring-2 focus:ring-[#0F766E] focus:border-[#0F766E] outline-none transition-all"
                       />
                     </div>
 
@@ -511,7 +511,7 @@ export default function AccountPage() {
                     <button
                       type="submit"
                       disabled={savingPassword}
-                      className="bg-[#0F766E] hover:bg-[#0d655e] disabled:opacity-70 disabled:cursor-not-allowed text-white px-6 py-2 rounded-lg font-semibold transition-colors mt-4"
+                      className="bg-[#0F766E] hover:bg-[#0d655e] disabled:opacity-70 disabled:cursor-not-allowed text-white px-6 py-2 rounded-lg text-sm md:text-base font-semibold transition-colors mt-4"
                     >
                       {savingPassword ? "Updating..." : "Update Password"}
                     </button>
@@ -521,7 +521,7 @@ export default function AccountPage() {
 
               {activeTab === "saved_recipes" && (
                 <div>
-                  <h2 className="text-xl font-bold text-slate-900 mb-6 border-b pb-4">Saved Recipes</h2>
+                  <h2 className="section-heading text-slate-900 mb-6 border-b pb-4">Saved Recipes</h2>
 
                   {loadingSavedRecipes ? (
                     <div className="flex justify-center py-12"><Loader2 className="w-8 h-8 animate-spin text-[#0F766E]" /></div>
@@ -572,7 +572,7 @@ export default function AccountPage() {
 
               {activeTab === "uploaded_recipes" && (
                 <div>
-                  <h2 className="text-xl font-bold text-slate-900 mb-6 border-b pb-4">My Uploaded Recipes</h2>
+                  <h2 className="section-heading text-slate-900 mb-6 border-b pb-4">My Uploaded Recipes</h2>
 
                   {loadingUploadedRecipes ? (
                     <div className="flex justify-center py-12"><Loader2 className="w-8 h-8 animate-spin text-[#0F766E]" /></div>
@@ -625,7 +625,7 @@ export default function AccountPage() {
 
               {activeTab === "saved_articles" && (
                 <div>
-                  <h2 className="text-xl font-bold text-slate-900 mb-6 border-b pb-4">Saved Articles</h2>
+                  <h2 className="section-heading text-slate-900 mb-6 border-b pb-4">Saved Articles</h2>
 
                   {loadingSavedArticles ? (
                     <div className="flex justify-center py-12"><Loader2 className="w-8 h-8 animate-spin text-[#0F766E]" /></div>
@@ -681,7 +681,7 @@ export default function AccountPage() {
 
               {activeTab === "recently_viewed" && (
                 <div>
-                  <h2 className="text-xl font-bold text-slate-900 mb-6 border-b pb-4">Recently Viewed Content</h2>
+                  <h2 className="section-heading text-slate-900 mb-6 border-b pb-4">Recently Viewed Content</h2>
                   {recentViews.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {recentViews.map((item, idx) => (

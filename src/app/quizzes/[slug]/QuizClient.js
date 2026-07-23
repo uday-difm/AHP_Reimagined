@@ -161,16 +161,16 @@ export default function QuizClient({ quiz }) {
           <div className="h-1.5 w-full bg-[#0f7c85]" />
           <div className="px-8 py-10 text-center">
             <div className="text-[52px] mb-4">🎉</div>
-            <h2 className="font-heading font-extrabold text-[26px] text-primary tracking-tight mb-2">Quiz Complete!</h2>
-            <p className="text-secondary text-[14px] mb-8">{quiz.title}</p>
-            <div className="text-[48px] font-extrabold text-[#0f7c85] mb-8">
-              {totalScore} <span className="text-[20px] text-slate-400">/{maxPossible}</span>
+            <h2 className="font-heading text-lg font-medium text-primary tracking-tight mb-2">Quiz Complete!</h2>
+            <p className="text-secondary text-xl font-semibold mb-8">{quiz.title}</p>
+            <div className="text-xl font-bold text-[#0f7c85] mb-8">
+              {totalScore} <span className="text-lg text-slate-400">/{maxPossible}</span>
             </div>
             <div className="flex flex-col sm:flex-row gap-3">
-              <Link href="/quizzes/dashboard" className="flex-1 py-3 rounded-full font-bold text-[13.5px] text-white text-center no-underline bg-[#0f7c85] hover:bg-[#0c6b73] transition-colors">
+              <Link href="/quizzes/dashboard" className="flex-1 py-3 rounded-full text-sm md:text-base text-white text-center no-underline bg-[#0f7c85] hover:bg-[#0c6b73] transition-colors">
                 View Dashboard
               </Link>
-              <Link href="/quizzes" className="flex-1 py-3 rounded-full font-bold text-[13.5px] text-center no-underline border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors">
+              <Link href="/quizzes" className="flex-1 py-3 rounded-full text-sm md:text-base text-center no-underline border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors">
                 More Quizzes
               </Link>
             </div>
@@ -187,10 +187,10 @@ export default function QuizClient({ quiz }) {
           <span className="text-accent text-[11px] font-extrabold uppercase tracking-[3px] mb-2 block">
             {quiz.category} Quiz
           </span>
-          <h1 className="text-primary font-heading font-extrabold text-2xl md:text-3xl tracking-tight mb-2">
+          <h1 className="main-heading text-primary mb-2">
             {quiz.title}
           </h1>
-          <p className="text-secondary text-[14px]">Test your knowledge and gain valuable insights</p>
+          <p className="description text-secondary">Test your knowledge and gain valuable insights</p>
         </div>
 
         {/* ── INTERACTIVE SPLIT QUIZ CARD ────────────────────────────────── */}
@@ -214,13 +214,13 @@ export default function QuizClient({ quiz }) {
               <div className="flex flex-col sm:flex-row gap-3 w-full max-w-xs justify-center">
                 <button
                   onClick={handleLoginRedirect}
-                  className="bg-[#0f7c85] hover:bg-[#0c6b73] text-white px-8 py-3 rounded-full font-bold text-[14px] transition-colors cursor-pointer"
+                  className="bg-[#0f7c85] hover:bg-[#0c6b73] text-white px-8 py-3 rounded-full text-sm md:text-base transition-colors cursor-pointer"
                 >
                   Sign In
                 </button>
                 <button
                   onClick={handleBack}
-                  className="border border-slate-200 hover:bg-slate-50 text-slate-600 px-6 py-3 rounded-full font-bold text-[13px] transition-colors cursor-pointer"
+                  className="border border-slate-200 hover:bg-slate-50 text-slate-600 px-6 py-3 rounded-full text-sm md:text-base transition-colors cursor-pointer"
                 >
                   Go Back
                 </button>
@@ -241,7 +241,7 @@ export default function QuizClient({ quiz }) {
                     Question:
                   </h4>
                   <div className="bg-white rounded-[16px] p-6 border border-slate-200/40 shadow-sm">
-                    <p className="font-heading font-bold text-[16px] md:text-[18px] text-primary leading-relaxed">
+                    <p className="text-base text-primary">
                       {currentQ.text}
                     </p>
                   </div>
@@ -283,7 +283,7 @@ export default function QuizClient({ quiz }) {
                           }}
                         />
                         <span
-                          className="font-medium"
+                          className="text-base"
                           style={{ color: isSelected ? '#1a1a2e' : '#4a4a5a' }}
                         >
                           {opt.label}
@@ -298,7 +298,7 @@ export default function QuizClient({ quiz }) {
                   <button
                     onClick={handleBack}
                     disabled={currentIndex === 0}
-                    className="text-[13px] font-bold text-slate-400 hover:text-slate-600 disabled:opacity-30 transition-colors cursor-pointer"
+                    className="text-sm md:text-base text-slate-400 hover:text-slate-600 disabled:opacity-30 transition-colors cursor-pointer"
                   >
                     Back
                   </button>
@@ -306,7 +306,7 @@ export default function QuizClient({ quiz }) {
                   <button
                     onClick={handleNext}
                     disabled={selected === null}
-                    className="bg-[#0f7c85] hover:bg-[#0c6b73] disabled:opacity-50 text-white font-bold text-[13.5px] px-8 py-2.5 rounded-full transition-all cursor-pointer shadow-sm"
+                    className="bg-[#0f7c85] hover:bg-[#0c6b73] disabled:opacity-50 text-white text-sm md:text-base px-8 py-2.5 rounded-full transition-all cursor-pointer shadow-sm"
                   >
                     {isLastQuestion ? 'Finish Quiz' : 'Next'}
                   </button>
@@ -356,14 +356,14 @@ export default function QuizClient({ quiz }) {
                     </svg>
                   </div>
 
-                  <h3 className="font-heading font-bold text-[18px] text-primary mb-1">Login Required</h3>
+                  <h3 className="card-title text-primary mb-1">Login Required</h3>
                   <p className="text-secondary text-[13px] leading-relaxed mb-6">
                     You need to log in to view this content and track your quiz score.
                   </p>
 
                   <button
                     onClick={handleLoginRedirect}
-                    className="bg-[#0f7c85] hover:bg-[#0c6b73] text-white px-8 py-2.5 rounded-full font-bold text-[13.5px] transition-colors cursor-pointer w-full"
+                    className="bg-[#0f7c85] hover:bg-[#0c6b73] text-white px-8 py-2.5 rounded-full text-sm md:text-base transition-colors cursor-pointer w-full"
                   >
                     Login
                   </button>
@@ -377,7 +377,7 @@ export default function QuizClient({ quiz }) {
                 <div className="absolute right-[-40px] bottom-[-40px] w-64 h-64 rounded-full bg-white/5 pointer-events-none" />
                 <div className="relative z-10 max-w-2xl mx-auto text-center flex flex-col items-center">
                   <span className="text-[10px] font-extrabold uppercase tracking-[2px] text-white/70 mb-2">YOUR WELLNESS JOURNEY</span>
-                  <h2 className="font-heading font-extrabold text-[24px] md:text-[28px] mb-3 leading-tight">
+                  <h2 className="main-heading mb-3">
                     Track your health over time.
                   </h2>
                   <p className="text-white/85 text-[13.5px] leading-relaxed max-w-md mb-8">
@@ -402,13 +402,13 @@ export default function QuizClient({ quiz }) {
                   <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto px-4 sm:px-0">
                     <Link
                       href="/quizzes/dashboard"
-                      className="bg-white text-[#0f7c85] hover:bg-slate-100 px-6 py-3 sm:py-2.5 rounded-full font-bold text-[13.5px] no-underline transition-all shadow-sm w-full sm:w-auto"
+                      className="bg-white text-[#0f7c85] hover:bg-slate-100 px-6 py-3 sm:py-2.5 rounded-full text-sm md:text-base no-underline transition-all shadow-sm w-full sm:w-auto text-center"
                     >
                       My Dashboard
                     </Link>
                     <Link
                       href="/quizzes"
-                      className="border border-white/20 hover:bg-white/10 text-white px-6 py-3 sm:py-2.5 rounded-full font-bold text-[13.5px] no-underline transition-all w-full sm:w-auto"
+                      className="border border-white/20 hover:bg-white/10 text-white px-6 py-3 sm:py-2.5 rounded-full text-sm md:text-base no-underline transition-all w-full sm:w-auto text-center"
                     >
                       All Quizzes
                     </Link>

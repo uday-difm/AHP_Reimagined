@@ -138,10 +138,10 @@ export default function ArticlesGrid() {
             <span className="section-tag text-xs font-extrabold tracking-[3px] text-accent uppercase mb-2 bg-[#0f7c85]/10 px-3.5 py-1.5 rounded-full w-max">
               DIGITAL ISSUES
             </span>
-            <h2 className="font-heading font-extrabold text-3xl md:text-5xl text-primary tracking-[-1px] leading-[1.15] mb-4">
+            <h2 className="main-heading text-primary mb-4">
               Latest Magazine
             </h2>
-            <p className="text-secondary text-base md:text-lg leading-relaxed max-w-sm mb-8">
+            <p className="description text-secondary max-w-sm mb-8">
               Step into our latest featured edition containing clinically reviewed blueprints, expert columns, and mindfulness guides.
             </p>
 
@@ -191,7 +191,7 @@ export default function ArticlesGrid() {
                 <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200/50 pb-5">
                   <div>
                     <span className="text-xs font-extrabold text-[#0f7c85] uppercase tracking-[1.5px] block mb-1">FEATURED EDITION</span>
-                    <h3 className="font-heading font-extrabold text-2xl text-primary tracking-tight">
+                    <h3 className="section-heading text-primary">
                       {latestIssue ? (latestIssue.magazineId || latestIssue.season) : "Spring 2024 Issue"}
                     </h3>
                   </div>
@@ -206,7 +206,7 @@ export default function ArticlesGrid() {
 
                 <div className="flex flex-col gap-3">
                   <span className="text-secondary font-bold text-sm">Dear Readers,</span>
-                  <p className="text-secondary text-sm leading-relaxed">
+                  <p className="description text-secondary">
                     {latestIssue ? (latestIssue.introduction || latestIssue.description || `Welcome to the ${latestIssue.season} Edition of A Health Place Magazine.`) : "Welcome to the Spring 2024 Edition of A Health Place Magazine. This issue explores the powerful somatic resets, circadian sleep guidelines, and neuroscience-backed habits designed to quiet stress loops and ground your mental clarity."}
                   </p>
                 </div>

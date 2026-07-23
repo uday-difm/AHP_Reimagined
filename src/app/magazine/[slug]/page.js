@@ -130,10 +130,10 @@ export default async function MagazineIssuePage({ params }) {
                     href={mag.magCloudLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full bg-[#d92128] hover:bg-[#b81b21] text-white text-[11px] font-bold py-3.5 px-4 rounded-xl text-center tracking-wide shadow-md transition-all duration-300 block leading-snug no-underline uppercase"
+                    className="w-full bg-[#d92128] hover:bg-[#b81b21] text-white text-sm md:text-base font-medium py-3.5 px-4 rounded-xl text-center tracking-wide shadow-md transition-all duration-300 block leading-snug no-underline uppercase"
                   >
                     Find Out More On
-                    <span className="block text-[14px] font-extrabold mt-0.5">MagCloud</span>
+                    <span className="block font-bold mt-0.5">MagCloud</span>
                   </a>
                 )}
                 {(mag.link || !mag.magCloudLink) && (
@@ -141,7 +141,7 @@ export default async function MagazineIssuePage({ params }) {
                     href={mag.link || "https://heyzine.com/"}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full bg-primary hover:bg-accent text-white text-xs font-bold py-4 px-4 rounded-xl text-center tracking-wide shadow-md transition-all duration-300 block no-underline uppercase"
+                    className="w-full bg-primary hover:bg-accent text-white text-sm md:text-base font-medium py-4 px-4 rounded-xl text-center tracking-wide shadow-md transition-all duration-300 block no-underline uppercase"
                   >
                     Read Full Digital Issue
                   </a>
@@ -155,7 +155,7 @@ export default async function MagazineIssuePage({ params }) {
                 {mag.category || "Digital Journal"}
               </span>
 
-              <h1 className="font-heading font-extrabold text-[36px] md:text-[50px] text-primary leading-[1.1] tracking-[-1.5px] mb-4">
+              <h1 className="font-heading font-bold text-3xl md:text-4xl text-primary leading-[1.1] tracking-[-1.5px] mb-4">
                 {mag.title}
               </h1>
 
@@ -204,11 +204,11 @@ export default async function MagazineIssuePage({ params }) {
               {/* Introduction */}
               {mag.introduction && (
                 <div className="bg-white/40 p-6 md:p-8 rounded-3xl border border-white/60 mb-8">
-                  <h3 className="font-heading font-bold text-primary text-[15px] uppercase tracking-wider mb-3">
+                  <h3 className="font-heading font-semibold text-xl text-primary uppercase tracking-wider mb-3">
                     Dear Readers,
                   </h3>
                   <div 
-                    className="font-serif text-[15px] md:text-[16px] leading-[1.8] text-slate-700 whitespace-pre-line prose"
+                    className="font-serif text-base leading-relaxed text-slate-700 whitespace-pre-line prose"
                     dangerouslySetInnerHTML={{ __html: mag.introduction }}
                   />
                 </div>
@@ -217,11 +217,11 @@ export default async function MagazineIssuePage({ params }) {
               {/* Description / Summary */}
               {mag.description && (
                 <div className="prose prose-slate max-w-none text-slate-600 mb-8">
-                  <h3 className="font-heading font-extrabold text-[20px] text-primary tracking-[-0.5px] mb-3">
+                  <h3 className="font-heading font-semibold text-xl text-primary tracking-[-0.5px] mb-3">
                     Issue Overview
                   </h3>
                   <div 
-                    className="text-[15px] leading-relaxed prose prose-sm max-w-none"
+                    className="text-base leading-relaxed prose prose-sm max-w-none"
                     dangerouslySetInnerHTML={{ __html: mag.description }}
                   />
                 </div>
@@ -234,7 +234,7 @@ export default async function MagazineIssuePage({ params }) {
                   {tagsList.map((tag, idx) => (
                     <span
                       key={idx}
-                      className="text-xs bg-slate-100 text-slate-600 px-3.5 py-2 rounded-md font-medium"
+                      className="text-sm bg-slate-100 text-slate-600 px-3.5 py-2 rounded-md font-medium"
                     >
                       {tag}
                     </span>

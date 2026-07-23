@@ -241,7 +241,7 @@ export default function WellnessShowcase({ content }) {
 
           {/* Foreground text content */}
           <div className="relative z-10 px-8 py-16 md:px-12 lg:px-16 md:py-20 max-w-2xl space-y-6 reveal-slide">
-            <h2 className="font-heading font-extrabold text-3xl md:text-5xl text-primary tracking-[-1.5px] leading-[1.1] mb-2">
+            <h2 className="main-heading text-primary mb-2">
               {headlineLines.map((line, i) => (
                 <span key={i}>
                   {line}
@@ -249,7 +249,7 @@ export default function WellnessShowcase({ content }) {
                 </span>
               ))}
             </h2>
-            <p className="text-secondary text-sm md:text-base leading-relaxed max-w-lg">
+            <p className="description text-secondary max-w-lg">
               {c.subtext}
             </p>
 
@@ -282,10 +282,10 @@ export default function WellnessShowcase({ content }) {
         {/* ── ROW 1: Hero Quiz & 3 Quick Cards ────────────────────── */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6 mt-12 gap-4">
           <div>
-            <h3 className="text-2xl font-extrabold text-[#1a1c29] tracking-tight">Community Kitchen</h3>
-            <p className="text-sm text-slate-500 mt-1">Discover, share, and enjoy healthy recipes from the community.</p>
+            <h3 className="section-heading text-[#1a1c29]">Community Kitchen</h3>
+            <p className="description text-slate-500 mt-1">Discover, share, and enjoy healthy recipes from the community.</p>
           </div>
-          <Link href="/recipes/submit" className="bg-[#ff3b6a] hover:bg-[#e02d58] text-white font-bold text-sm py-2.5 px-6 rounded-full transition-all shadow-md flex items-center gap-2 hover:-translate-y-0.5">
+          <Link href="/recipes/submit" className="bg-[#ff3b6a] hover:bg-[#e02d58] text-white font-bold text-sm md:text-base py-2.5 px-6 rounded-full transition-all shadow-md flex items-center gap-2 hover:-translate-y-0.5">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
             Add Your Recipe
           </Link>
@@ -316,7 +316,7 @@ export default function WellnessShowcase({ content }) {
                 <span className="w-1.5 h-1.5 rounded-full bg-[#ff7373] animate-pulse inline-block" />
                 {c.healthyBite.title}
               </span>
-              <h3 className="text-primary font-heading font-extrabold text-2xl md:text-3xl leading-tight tracking-tight mb-4 group-hover:text-[#0f7c85] transition-colors">
+              <h3 className="card-title text-primary mb-4 group-hover:text-[#0f7c85] transition-colors">
                 {c.healthyBite.recipeName}
               </h3>
 
@@ -332,7 +332,7 @@ export default function WellnessShowcase({ content }) {
               <div className="flex flex-col sm:flex-row gap-4 items-center mt-auto">
                 <Link
                   href={c.healthyBite.recipeLink}
-                  className="bg-[#0f7c85] hover:bg-[#0c646b] text-white font-bold text-xs py-3 px-6 rounded-[12px] transition-all duration-300 no-underline shadow-sm w-full sm:w-auto text-center flex items-center justify-center gap-2"
+                  className="bg-[#0f7c85] hover:bg-[#0c646b] text-white font-bold text-sm md:text-base py-3 px-6 rounded-[12px] transition-all duration-300 no-underline shadow-sm w-full sm:w-auto text-center flex items-center justify-center gap-2"
                 >
                   View Recipe <span className="text-lg leading-none">→</span>
                 </Link>

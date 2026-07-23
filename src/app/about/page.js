@@ -114,11 +114,11 @@ export default function AboutPage() {
               {/* Left — Text */}
               <div className="flex-1 reveal-slide">
                 <span className="inline-block text-[11px] font-bold tracking-[3px] uppercase text-accent mb-5">Our Story</span>
-                <h1 className="font-heading font-extrabold text-[40px] md:text-[64px] lg:text-[72px] text-primary leading-[1.05] tracking-[-2px] mb-7">
+                <h1 className="hero-title text-primary mb-7">
                   Health information<br />
                   <span className="text-accent">you can trust.</span>
                 </h1>
-                <p className="text-[16px] md:text-[18px] text-secondary leading-[1.8] max-w-xl mb-10">
+                <p className="description text-secondary max-w-xl mb-10">
                   A Health Place was founded on a single belief — that every person deserves access to empathetic, accurate,
                   and actionable health guidance. No gatekeeping, no scare tactics, just science-backed clarity.
                 </p>
@@ -139,10 +139,10 @@ export default function AboutPage() {
                   <div className="relative z-10 w-full h-full min-h-[360px] md:min-h-[420px] bg-[#1c7b80] rounded-[32px] overflow-hidden flex flex-col justify-between p-8 md:p-10 shadow-[0_24px_60px_rgba(28,123,128,0.25)]">
                     <div>
                       <span className="text-white/70 font-bold text-[10px] uppercase tracking-[2.5px]">Medically Verified</span>
-                      <h3 className="font-heading font-extrabold text-[26px] md:text-[32px] text-white mt-3 leading-tight tracking-tight">
+                      <h3 className="card-title text-white mt-3">
                         Science-backed.<br />Human-first.
                       </h3>
-                      <p className="text-white/80 text-[14px] leading-relaxed mt-4 max-w-sm">
+                      <p className="description text-white/80 mt-4 max-w-sm">
                         Our review board spans cardiology, psychiatry, Ayurveda, clinical dietetics, and insurance navigation.
                       </p>
                     </div>
@@ -186,14 +186,14 @@ export default function AboutPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
               <div className="reveal-slide">
                 <span className="text-[11px] font-bold tracking-[3px] uppercase text-accent mb-4 block">Our Mission</span>
-                <h2 className="font-heading font-extrabold text-[32px] md:text-[48px] text-primary leading-[1.15] tracking-[-1px] mb-6">
+                <h2 className="main-heading text-primary mb-6">
                   Empathetic, verified,<br />and forward-thinking.
                 </h2>
-                <p className="text-[16px] text-secondary leading-[1.8] mb-5">
+                <p className="description text-secondary mb-5">
                   We believe health information should be transparent and accessible. We work alongside leading physicians,
                   registered dietitians, and clinical advisors to structure guides that promote physical longevity and mental resilience.
                 </p>
-                <p className="text-[16px] text-secondary leading-[1.8] mb-8">
+                <p className="description text-secondary mb-8">
                   Our editorial process is rigorous. Every piece of content is fact-checked against peer-reviewed literature
                   and signed off by at least one qualified medical professional. We never publish anything we would not share with our own families.
                 </p>
@@ -205,10 +205,10 @@ export default function AboutPage() {
                 <div className="relative z-10 w-full h-full bg-[#1c7b80] rounded-[32px] overflow-hidden flex flex-col justify-between p-8 md:p-10 shadow-[0_24px_60px_rgba(28,123,128,0.25)]">
                   <div>
                     <span className="text-white/70 font-bold text-[10px] uppercase tracking-[2.5px]">Medically Verified</span>
-                    <h3 className="font-heading font-extrabold text-[26px] md:text-[32px] text-white mt-3 leading-tight tracking-tight">
+                    <h3 className="card-title text-white mt-3">
                       Science-backed.<br />Human-first.
                     </h3>
-                    <p className="text-white/80 text-[14px] leading-relaxed mt-4 max-w-sm">
+                    <p className="description text-white/80 mt-4 max-w-sm">
                       Our review board spans cardiology, psychiatry, Ayurveda, clinical dietetics, and insurance navigation.
                     </p>
                   </div>
@@ -235,7 +235,7 @@ export default function AboutPage() {
           <div className="container">
             <div className="text-center max-w-[560px] mx-auto mb-16 reveal-slide">
               <span className="text-[11px] font-bold tracking-[3px] uppercase text-accent mb-4 block">What We Stand For</span>
-              <h2 className="font-heading font-extrabold text-[32px] md:text-[44px] text-primary tracking-[-1px] leading-[1.15]">
+              <h2 className="main-heading text-primary">
                 Six principles that guide everything we do
               </h2>
             </div>
@@ -245,8 +245,8 @@ export default function AboutPage() {
                   <div className={`w-11 h-11 rounded-xl flex items-center justify-center mb-5 ${v.color}`}>
                     {v.icon}
                   </div>
-                  <h3 className="font-heading font-bold text-[17px] text-primary mb-2">{v.title}</h3>
-                  <p className="text-[13.5px] text-secondary leading-relaxed">{v.desc}</p>
+                  <h3 className="card-title text-primary mb-2">{v.title}</h3>
+                  <p className="description text-secondary">{v.desc}</p>
                 </div>
               ))}
             </div>
@@ -259,10 +259,10 @@ export default function AboutPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               <div className="reveal-slide">
                 <span className="text-[11px] font-bold tracking-[3px] uppercase text-accent mb-4 block">What We Cover</span>
-                <h2 className="font-heading font-extrabold text-[32px] md:text-[44px] text-primary tracking-[-1px] leading-[1.15] mb-6">
+                <h2 className="main-heading text-primary mb-6">
                   Eight health categories.<br />Thousands of answers.
                 </h2>
-                <p className="text-[16px] text-secondary leading-[1.8] mb-8">
+                <p className="description text-secondary mb-8">
                   From everyday nutrition questions to navigating complex insurance codes — our library covers the full
                   arc of human health so you always find what you need.
                 </p>
@@ -277,8 +277,8 @@ export default function AboutPage() {
                 {categories.map((cat, i) => (
                   <Link key={i} href={`/blogs?filter=${encodeURIComponent(cat.name)}`} className="group bg-[#f0fafa] hover:bg-[#e0f5f5] rounded-[20px] p-5 border border-[#d4eeed] hover:border-accent/40 transition-all duration-300 no-underline hover:-translate-y-0.5">
                     <span className="text-2xl mb-3 block">{cat.icon}</span>
-                    <p className="font-heading font-bold text-[14px] text-primary group-hover:text-accent transition-colors">{cat.name}</p>
-                    <p className="text-[12px] text-secondary mt-0.5">{cat.desc}</p>
+                    <p className="card-title text-primary group-hover:text-accent transition-colors">{cat.name}</p>
+                    <p className="text-sm text-secondary mt-0.5">{cat.desc}</p>
                   </Link>
                 ))}
               </div>
@@ -293,10 +293,10 @@ export default function AboutPage() {
           <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-accent/40 to-transparent pointer-events-none" />
           <div className="container relative z-10 text-center">
             <span className="inline-block text-[11px] font-bold tracking-[3px] uppercase text-accent mb-5 reveal-slide">Start Your Journey</span>
-            <h2 className="font-heading font-extrabold text-[32px] md:text-[52px] text-white leading-[1.1] tracking-[-1.5px] mb-6 max-w-2xl mx-auto reveal-slide">
+            <h2 className="main-heading text-white mb-6 max-w-2xl mx-auto reveal-slide">
               Small changes.<br />Big impact.
             </h2>
-            <p className="text-[16px] text-white/70 leading-[1.8] max-w-lg mx-auto mb-10 reveal-fade">
+            <p className="description text-white/70 max-w-lg mx-auto mb-10 reveal-fade">
               Browse hundreds of clinically reviewed guides — free, forever. Your health journey starts with one article.
             </p>
             <div className="flex flex-wrap gap-4 justify-center reveal-fade">

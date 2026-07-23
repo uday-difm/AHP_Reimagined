@@ -146,8 +146,8 @@ export default function GlobalPopup({ ctaConfig }) {
               <img src={popup.imageUrl} alt={popup.title} className="w-full h-48 object-cover" />
             )}
             <div className="p-10 text-center space-y-4">
-              <h3 className="text-2xl font-black text-slate-900 tracking-tight leading-tight">{popup.title}</h3>
-              <p className="text-slate-500 text-sm leading-relaxed">{popup.body}</p>
+              <h3 className="card-title text-slate-900">{popup.title}</h3>
+              <p className="description text-slate-500">{popup.body}</p>
               {popup.buttonText && popup.buttonLink && (
                 <div className="pt-6">
                   <a

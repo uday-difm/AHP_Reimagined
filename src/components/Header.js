@@ -326,12 +326,12 @@ export default function Header() {
               if (isResources) {
                 return (
                   <div key={index} className="relative group px-2 xl:px-3 py-6 -my-6">
-                    <button className="flex items-center gap-1 text-[15px] font-semibold text-secondary hover:text-[#0F766E] group-hover:text-[#0F766E] py-2 px-3 transition-colors border-none bg-transparent cursor-pointer">
+                    <button className="flex items-center gap-1 text-sm md:text-base font-semibold text-secondary hover:text-[#0F766E] group-hover:text-[#0F766E] py-2 px-3 transition-colors border-none bg-transparent cursor-pointer">
                       {item.label} <ChevronDown className="w-4 h-4 transition-transform duration-300 group-hover:rotate-180" />
                     </button>
 
-                    <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 opacity-0 translate-y-4 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300 z-50">
-                      <div className="bg-white rounded-2xl border border-[#E6EEF0] p-8 w-[850px] shadow-[0_12px_35px_rgba(0,0,0,.08)] flex gap-8">
+                    <div className="absolute top-full left-0 lg:-left-[150px] xl:-left-[200px] pt-2 opacity-0 translate-y-4 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300 z-50">
+                      <div className="bg-white rounded-2xl border border-[#E6EEF0] p-8 w-[95vw] max-w-[1000px] shadow-[0_12px_35px_rgba(0,0,0,.08)] flex gap-8">
                         {/* Featured Publication */}
                         {dynamicPublications.length > 0 && (
                           <div className="w-[30%] bg-slate-50/50 rounded-xl p-4 border border-[#E6EEF0]/80 flex flex-col">
@@ -367,7 +367,7 @@ export default function Header() {
                               <ul className="space-y-3 mb-4 flex-1">
                                 {dynamicPublications.slice(0, 4).map((pub) => (
                                   <li key={pub.id || pub.magazine_slug}>
-                                    <Link href={`/magazine/${pub.magazine_slug}`} className="text-sm text-[#374151] hover:text-[#0F766E] hover:font-medium transition-colors block line-clamp-1" title={pub.magazine_title}>
+                                    <Link href={`/magazine/${pub.magazine_slug}`} className="text-sm text-[#374151] hover:text-[#0F766E] hover:font-medium transition-colors block" title={pub.magazine_title}>
                                       {pub.magazine_title}
                                     </Link>
                                   </li>
@@ -387,7 +387,7 @@ export default function Header() {
                               <ul className="space-y-3 mb-4 flex-1">
                                 {dynamicBlogs.slice(0, 4).map((blog) => (
                                   <li key={blog.id || blog.slug}>
-                                    <Link href={`/blogs/${blog.slug}`} className="text-sm text-[#374151] hover:text-[#0F766E] hover:font-medium transition-colors block line-clamp-1" title={blog.title}>
+                                    <Link href={`/blogs/${blog.slug}`} className="text-sm text-[#374151] hover:text-[#0F766E] hover:font-medium transition-colors block" title={blog.title}>
                                       {blog.title}
                                     </Link>
                                   </li>
@@ -407,7 +407,7 @@ export default function Header() {
                               <ul className="space-y-3 mb-4 flex-1">
                                 {dynamicQuizzes.slice(0, 4).map((quiz) => (
                                   <li key={quiz.slug}>
-                                    <Link href={`/quizzes/${quiz.slug}`} className="text-sm text-[#374151] hover:text-[#0F766E] hover:font-medium transition-colors block line-clamp-1" title={quiz.title}>
+                                    <Link href={`/quizzes/${quiz.slug}`} className="text-sm text-[#374151] hover:text-[#0F766E] hover:font-medium transition-colors block" title={quiz.title}>
                                       {quiz.title}
                                     </Link>
                                   </li>
@@ -429,7 +429,7 @@ export default function Header() {
                   <Link
                     key={index}
                     href={item.url}
-                    className="text-[15px] font-semibold text-secondary hover:text-[#0F766E] py-2 px-3 transition-colors"
+                    className="text-sm md:text-base font-semibold text-secondary hover:text-[#0F766E] py-2 px-3 transition-colors"
                   >
                     {item.label}
                   </Link>
@@ -438,7 +438,7 @@ export default function Header() {
 
               return (
                 <div key={index} className="relative group px-2 xl:px-3 py-6 -my-6">
-                  <button className="flex items-center gap-1 text-[15px] font-semibold text-secondary hover:text-[#0F766E] group-hover:text-[#0F766E] py-2 px-3 transition-colors border-none bg-transparent cursor-pointer">
+                  <button className="flex items-center gap-1 text-sm md:text-base font-semibold text-secondary hover:text-[#0F766E] group-hover:text-[#0F766E] py-2 px-3 transition-colors border-none bg-transparent cursor-pointer">
                     {item.label} <ChevronDown className="w-4 h-4 transition-transform duration-300 group-hover:rotate-180" />
                   </button>
 
@@ -472,19 +472,19 @@ export default function Header() {
             <div className="hidden lg:flex items-center">
               {isAuthenticated ? (
                 <div className="flex items-center gap-3">
-                  <button onClick={() => signOut({ callbackUrl: '/' })} className="text-[13px] font-semibold text-red-500 hover:text-red-600 transition-colors py-2.5 px-2 border-none bg-transparent cursor-pointer">
+                  <button onClick={() => signOut({ callbackUrl: '/' })} className="text-sm md:text-base font-semibold text-red-500 hover:text-red-600 transition-colors py-2.5 px-2 border-none bg-transparent cursor-pointer">
                     Logout
                   </button>
                 </div>
               ) : (
-                <Link href="/login" className="bg-[#0F766E] hover:bg-[#0d655e] text-white px-6 py-2.5 rounded-full text-[13px] font-semibold transition-colors shadow-sm">
+                <Link href="/login" className="bg-[#0F766E] hover:bg-[#0d655e] text-white px-6 py-2.5 rounded-full text-sm md:text-base font-semibold transition-colors shadow-sm">
                   Login
                 </Link>
               )}
               {headerConfig?.ctaText && (
                 <Link
                   href={headerConfig.ctaLink || "/contact"}
-                  className="bg-[#0F766E] hover:bg-[#0d655e] text-white px-5 py-2.5 rounded-full text-[13px] font-semibold transition-colors shadow-sm ml-2"
+                  className="bg-[#0F766E] hover:bg-[#0d655e] text-white px-5 py-2.5 rounded-full text-sm md:text-base font-semibold transition-colors shadow-sm ml-2"
                 >
                   {headerConfig.ctaText}
                 </Link>

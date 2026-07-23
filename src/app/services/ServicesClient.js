@@ -89,10 +89,10 @@ export default function ServicesClient({ initialServices = [] }) {
           <div className="bg-[#f0f6f3]/60 border border-slate-200/40 rounded-[32px] p-8 md:p-12 relative overflow-hidden flex flex-col gap-6 md:flex-row md:items-center justify-between">
             <div className="max-w-[600px] relative z-10 flex flex-col gap-3">
               <span className="text-accent font-extrabold text-[11px] uppercase tracking-[2.5px] block">AHP MEDIA DIRECTORY</span>
-              <h1 className="font-heading font-extrabold text-[32px] md:text-[46px] leading-tight text-primary tracking-tight">
+              <h1 className="main-heading text-primary tracking-tight">
                 Media & PR Partnership Packages
               </h1>
-              <p className="text-secondary text-[14px] md:text-[15px] leading-relaxed">
+              <p className="description text-secondary">
                 Unlock professional authority and reach our health-conscious audience. Explore our cover features, standalone articles, display ads, and custom partnerships.
               </p>
             </div>
@@ -157,11 +157,11 @@ export default function ServicesClient({ initialServices = [] }) {
                       {/* Content block */}
                       <div className="p-6 flex flex-col gap-3">
                         <Link href={`/services/${detailSlug}`}>
-                          <h3 className="font-heading font-extrabold text-[17px] text-primary leading-snug group-hover:text-accent transition-colors">
+                          <h3 className="card-title text-primary group-hover:text-accent transition-colors">
                             {service.title}
                           </h3>
                         </Link>
-                        <p className="text-[12.5px] text-secondary leading-relaxed line-clamp-3">
+                        <p className="text-sm text-secondary line-clamp-3">
                           {service.description}
                         </p>
                       </div>
@@ -196,7 +196,7 @@ export default function ServicesClient({ initialServices = [] }) {
           <div className="max-w-[800px] mx-auto bg-white border border-slate-200/60 rounded-[32px] p-6 md:p-8 shadow-sm">
             <div className="flex items-center gap-2 mb-8 border-b border-slate-100 pb-4">
               <HelpCircle className="text-accent w-5.5 h-5.5" />
-              <h2 className="font-heading font-extrabold text-[18px] text-primary tracking-tight">Partnership Questions & FAQs</h2>
+              <h2 className="section-heading text-primary tracking-tight">Partnership Questions & FAQs</h2>
             </div>
 
             <div className="flex flex-col gap-4">
@@ -206,13 +206,13 @@ export default function ServicesClient({ initialServices = [] }) {
                   <div key={i} className="border-b border-slate-100 pb-4 last:border-b-0 last:pb-0">
                     <button
                       onClick={() => setActiveFaq(isOpen ? null : i)}
-                      className="w-full flex items-center justify-between text-left py-2 font-heading font-bold text-[14.5px] text-primary hover:text-accent transition-colors"
+                      className="w-full flex items-center justify-between text-left py-2 font-bold text-sm md:text-base text-primary hover:text-accent transition-colors"
                     >
                       <span>{faq.q}</span>
                       <span className={`text-[18px] text-slate-400 transition-transform duration-300 ${isOpen ? 'rotate-45' : ''}`}>+</span>
                     </button>
                     <div className={`overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-[200px] mt-2 opacity-100' : 'max-h-0 opacity-0'}`}>
-                      <p className="text-[13px] text-secondary leading-relaxed bg-slate-50/50 p-4 rounded-xl border border-slate-100/50">{faq.a}</p>
+                      <p className="text-sm text-secondary bg-slate-50/50 p-4 rounded-xl border border-slate-100/50">{faq.a}</p>
                     </div>
                   </div>
                 );

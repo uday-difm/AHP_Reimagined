@@ -80,10 +80,10 @@ function QuizCard({ quiz }) {
 
         {/* Body */}
         <div className="p-6 flex flex-col flex-1">
-          <h3 className="font-heading font-extrabold text-[19px] text-[#1a2a35] leading-snug tracking-tight mb-3 transition-colors duration-300 group-hover:text-[#0f7c85]">
+          <h3 className="card-title text-[#1a2a35] mb-3 transition-colors duration-300 group-hover:text-[#0f7c85]">
             {quiz.title}
           </h3>
-          <p className="text-secondary text-[13.5px] leading-relaxed mb-6 flex-1">
+          <p className="description text-secondary mb-6 flex-1">
             {quiz.description}
           </p>
 
@@ -158,11 +158,11 @@ export default function QuizzesPage() {
             <span className="text-[#0f7c85] text-[11px] font-extrabold uppercase tracking-[3px] mb-3 block">
               ✦ Interactive Fun Zone ✦
             </span>
-            <h1 className="text-[#1e2a35] font-heading font-extrabold text-4xl md:text-[54px] tracking-[-1.5px] leading-tight mb-5">
+            <h1 className="main-heading text-[#1e2a35] mb-5">
               Take a Quiz and Test <br />
               <span className="text-[#0f7c85]">Your Wellness Knowledge</span>
             </h1>
-            <p className="text-[#4a4a5a] text-[15px] md:text-[16.5px] leading-relaxed max-w-2xl mx-auto mb-10">
+            <p className="description text-[#4a4a5a] max-w-2xl mx-auto mb-10">
               Pick a category below and discover actionable insights about sleep quality, stress indices, nutrition, gut health, and Ayurvedic dosha mind-body constitution.
             </p>
             <div className="max-w-2xl mx-auto relative mb-6">
@@ -193,11 +193,11 @@ export default function QuizzesPage() {
                   <span className="text-[#0f7c85] text-[11px] font-extrabold uppercase tracking-[3px] bg-[#0f7c85]/10 px-3.5 py-1.5 rounded-full w-max inline-block">
                     Exclusive Member Benefits
                   </span>
-                  <h2 className="font-heading font-extrabold text-3xl md:text-4xl text-[#1e2a35] leading-tight">
+                  <h2 className="main-heading text-[#1e2a35]">
                     Unlock Your Personalized <br />
                     <span className="text-[#0f7c85]">Wellness Dashboard</span>
                   </h2>
-                  <p className="text-secondary text-[15px] leading-relaxed">
+                  <p className="description text-secondary">
                     Take control of your health. Create a free account to access our interactive wellness checks, save your scores, and receive advisor-vetted insights.
                   </p>
                   <div className="space-y-4 pt-2">
@@ -227,8 +227,8 @@ export default function QuizzesPage() {
                     <div className="w-14 h-14 rounded-full bg-[#0f7c85]/10 text-[#0f7c85] flex items-center justify-center mb-6">
                       <QuizIcon name="general-wellness" className="w-7 h-7" />
                     </div>
-                    <h3 className="font-heading font-bold text-[20px] text-primary mb-3">Login Required</h3>
-                    <p className="text-secondary text-[13.5px] leading-relaxed mb-8 max-w-xs mx-auto">
+                    <h3 className="card-title text-primary mb-3">Login Required</h3>
+                    <p className="description text-secondary mb-8 max-w-xs mx-auto">
                       Please sign in to view all wellness quizzes, evaluate your profile, and track your scores.
                     </p>
                     <Link

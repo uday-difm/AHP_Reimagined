@@ -282,14 +282,14 @@ export default function PublicationPage() {
               <div className="flex-grow max-w-xl reveal-slide">
                 <div className="inline-flex items-center gap-2 bg-[#27ae60]/10 border border-[#27ae60]/20 rounded-full px-3.5 py-1.5 mb-6">
                   <span className="w-2 h-2 bg-accent-green rounded-full animate-pulse-slow" />
-                  <span className="text-accent-green text-[10.5px] font-extrabold uppercase tracking-[2px]">LATEST ISSUE • {latestIssue.magazineId || latestIssue.season}</span>
+                  <span className="text-accent-green text-sm font-extrabold uppercase tracking-[2px]">LATEST ISSUE • {latestIssue.magazineId || latestIssue.season}</span>
                 </div>
 
-                <h1 className="text-primary font-heading font-extrabold text-4xl md:text-5xl leading-tight mb-5 tracking-[-1.5px]">
+                <h1 className="text-primary font-heading font-bold text-3xl md:text-4xl leading-tight mb-5 tracking-[-1.5px]">
                   {latestIssue.title}
                 </h1>
 
-                <p className="text-secondary text-[15px] md:text-base leading-relaxed mb-6 max-w-md">
+                <p className="text-secondary text-base leading-relaxed mb-6 max-w-md">
                   {latestIssue.description}
                 </p>
 
@@ -341,7 +341,7 @@ export default function PublicationPage() {
                   {stats.map((s, i) => (
                     <div key={i} className="flex flex-col">
                       <span className="text-primary font-heading font-extrabold text-lg leading-tight">{s.value}</span>
-                      <span className="text-muted text-[11px] font-semibold uppercase tracking-wider mt-1">{s.label}</span>
+                      <span className="text-muted text-sm font-semibold uppercase tracking-wider mt-1">{s.label}</span>
                     </div>
                   ))}
                 </div>
@@ -364,10 +364,10 @@ export default function PublicationPage() {
                       />
                     </div>
 
-                    <h3 className="font-heading font-extrabold text-[14px] text-primary leading-tight mb-2">
+                    <h3 className="font-heading font-semibold text-xl text-primary leading-tight mb-2">
                       Personalized Health Plans
                     </h3>
-                    <p className="text-secondary text-[12px] leading-relaxed mb-4">
+                    <p className="text-secondary text-base leading-relaxed mb-4">
                       Unlock tailored nutrition, circadian alignment, and somatic reset coaching from certified wellness experts.
                     </p>
                   </div>
@@ -392,7 +392,7 @@ export default function PublicationPage() {
           <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16">
             {trustBadges.map((b, i) => (
               <div key={i} className="flex items-center gap-2.5">
-                <span className="text-[#2a5a52] text-[11px] font-bold uppercase tracking-wider">{b.label}</span>
+                <span className="text-[#2a5a52] text-sm font-bold uppercase tracking-wider">{b.label}</span>
               </div>
             ))}
           </div>
@@ -403,7 +403,7 @@ export default function PublicationPage() {
       <section id="recent-issues" className="py-20 bg-white rounded-t-[40px] shadow-[0_-20px_40px_rgba(0,0,0,0.01)] relative">
         <div className="container">
           <div className="flex flex-col items-center text-center max-w-xl mx-auto mb-14 reveal-slide">
-            <span className="section-tag text-[10px] font-extrabold tracking-[3px] text-accent uppercase mb-2 bg-[#0f7c85]/10 px-3.5 py-1.5 rounded-full">
+            <span className="section-tag text-sm font-extrabold tracking-[3px] text-accent uppercase mb-2 bg-[#0f7c85]/10 px-3.5 py-1.5 rounded-full">
               BACK JOURNAL
             </span>
             <h2 className="text-primary font-heading font-extrabold text-3xl md:text-4xl tracking-[-0.5px] mt-2 mb-3">
@@ -457,8 +457,8 @@ export default function PublicationPage() {
                               />
                             </div>
                             <div className="flex flex-col gap-1 mt-auto">
-                              <p className="text-accent text-[11px] font-extrabold uppercase tracking-[1.5px] mb-1">{issue.magazineId || issue.season}</p>
-                              <p className="text-primary font-heading font-extrabold text-[15px] leading-snug tracking-[-0.3px] group-hover:text-accent transition-colors duration-300">{issue.title}</p>
+                              <p className="text-accent text-sm font-extrabold uppercase tracking-[1.5px] mb-1">{issue.magazineId || issue.season}</p>
+                              <p className="text-primary font-heading font-semibold text-xl leading-snug tracking-[-0.3px] group-hover:text-accent transition-colors duration-300">{issue.title}</p>
                             </div>
                           </div>
 
@@ -466,14 +466,14 @@ export default function PublicationPage() {
                           <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)] bg-[#0f7c85] rounded-2xl p-6 text-white flex flex-col justify-between shadow-2xl border border-white/20 select-none">
                             <div className="flex flex-col gap-4.5 text-left">
                               <div className="border-b border-white/20 pb-3">
-                                <span className="text-[10px] font-extrabold text-[#4FC0C3] uppercase tracking-[1.5px] block mb-0.5">{issue.magazineId || issue.season}</span>
-                                <h4 className="font-heading font-extrabold text-[15px] md:text-[17px] text-white leading-tight tracking-tight">{issue.title}</h4>
+                                <span className="text-sm font-extrabold text-[#4FC0C3] uppercase tracking-[1.5px] block mb-0.5">{issue.magazineId || issue.season}</span>
+                                <h4 className="font-heading font-semibold text-xl text-white leading-tight tracking-tight">{issue.title}</h4>
                               </div>
 
                               <div className="flex flex-col gap-2.5">
-                                <span className="text-[11px] text-white/50 font-bold uppercase tracking-[1px] block">Inside:</span>
+                                <span className="text-sm text-white/50 font-bold uppercase tracking-[1px] block">Inside:</span>
                                 {issue.description ? (
-                                  <p className="text-[12px] leading-relaxed text-white/90 font-medium line-clamp-6 overflow-hidden text-ellipsis">
+                                  <p className="text-base leading-relaxed text-white/90 font-medium line-clamp-6 overflow-hidden text-ellipsis">
                                     {issue.description}
                                   </p>
                                 ) : (
@@ -607,7 +607,7 @@ export default function PublicationPage() {
                     )}
                   </form>
                 )}
-                <p className="text-[#3a2520]/60 text-[11px] mt-3">
+                <p className="text-[#3a2520]/60 text-sm mt-3">
                   By subscribing, you agree to our{' '}
                   <Link href="/info?tab=legal&doc=privacy" className="underline hover:text-primary">Privacy Policy</Link>.
                 </p>
@@ -628,7 +628,7 @@ export default function PublicationPage() {
                   </div>
                   <div className="flex-1 flex flex-col justify-center py-2 text-center">
                     <span className="text-lg block mb-1">🌿</span>
-                    <h5 className="text-[10px] font-heading font-extrabold text-primary leading-tight tracking-tight mb-1">Mindful Space</h5>
+                    <h5 className="text-sm font-heading font-extrabold text-primary leading-tight tracking-tight mb-1">Mindful Space</h5>
                     <p className="text-[6.5px] text-secondary leading-snug">Tap into curated micro-meditation audio tracks every week.</p>
                   </div>
                   <button className="w-full text-center bg-[#0f7c85] text-white font-extrabold text-[8px] py-1.5 rounded-lg border-none shadow-sm cursor-pointer">

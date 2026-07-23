@@ -147,10 +147,10 @@ export default async function DashboardPage() {
     <div className="space-y-8 w-full">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold md:text-3xl ">
+        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold ">
           Dashboard
         </h1>
-        <p className="text-gray-500 text-sm mt-0.5 flex flex-wrap items-center gap-1.5">
+        <p className="text-gray-500 text-base mt-0.5 flex flex-wrap items-center gap-1.5">
           Overview for:{" "}
           <span className="font-semibold text-gray-800">{site.name}</span>{" "}
           {site.domain ? `(${site.domain})` : ""} | Site ID:{" "}
@@ -164,14 +164,14 @@ export default async function DashboardPage() {
       <div className="bg-gradient-to-r from-slate-50 to-indigo-50/30 dark:from-slate-800/40 dark:to-indigo-950/10 border border-slate-200/80 dark:border-slate-700/80 rounded-2xl p-5 shadow-xs transition-colors duration-200">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
           <div>
-            <h2 className="text-sm font-bold text-slate-800 dark:text-slate-200">
+            <h2 className="text-xl lg:text-2xl font-semibold text-slate-800 dark:text-slate-200">
               Quick Actions
             </h2>
-            <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">
+            <p className="text-base text-slate-400 dark:text-slate-500 mt-0.5">
               Available tools and controls based on your <span className="font-semibold text-slate-650 dark:text-slate-400">{globalRole}</span> role
             </p>
           </div>
-          <span className="shrink-0 inline-flex items-center rounded-full bg-indigo-50 dark:bg-indigo-950/40 px-2.5 py-0.5 text-[10px] font-semibold text-indigo-700 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-900/40 w-fit">
+          <span className="shrink-0 inline-flex items-center rounded-full bg-indigo-50 dark:bg-indigo-950/40 px-2.5 py-0.5 text-base font-semibold text-indigo-700 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-900/40 w-fit">
             {globalRole}
           </span>
         </div>
@@ -193,10 +193,10 @@ export default async function DashboardPage() {
                       <Icon size={16} />
                     </div>
                     <div>
-                      <h3 className="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                      <h3 className="text-xl lg:text-2xl font-semibold text-slate-800 dark:text-slate-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                         {action.label}
                       </h3>
-                      <p className="text-[10px] text-slate-450 dark:text-slate-400 mt-1 leading-normal line-clamp-2">
+                      <p className="text-base text-slate-450 dark:text-slate-400 mt-1 leading-normal line-clamp-2">
                         {action.desc}
                       </p>
                     </div>
@@ -221,7 +221,7 @@ export default async function DashboardPage() {
         {/* Recent Leads */}
         <div className="rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-4 sm:p-6 shadow-sm flex flex-col justify-between">
           <div>
-            <h2 className="mb-4 text-base font-bold text-gray-900 dark:text-white border-b border-gray-100 dark:border-slate-700 pb-2">
+            <h2 className="mb-4 text-xl lg:text-2xl font-semibold text-gray-900 dark:text-white border-b border-gray-100 dark:border-slate-700 pb-2">
               Recent CRM Leads
             </h2>
             <div className="space-y-3">
@@ -239,12 +239,12 @@ export default async function DashboardPage() {
                       <span className="font-semibold text-gray-900 dark:text-slate-200">
                         {item.name}
                       </span>
-                      <p className="text-[10px] text-gray-400 dark:text-slate-400 mt-0.5">
+                      <p className="text-base text-gray-400 dark:text-slate-400 mt-0.5">
                         {item.serviceInterest || "General inquiry"}
                       </p>
                     </div>
                     <span
-                      className={`px-2 py-0.5 rounded text-[10px] font-semibold border ${item.status === "new"
+                      className={`px-2 py-0.5 rounded text-base font-semibold border ${item.status === "new"
                         ? "bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-900/40"
                         : "bg-yellow-50 dark:bg-yellow-950/40 text-yellow-700 dark:text-yellow-300 border-yellow-250 dark:border-yellow-900/40"
                         }`}
@@ -259,7 +259,7 @@ export default async function DashboardPage() {
           <div className="mt-4 pt-3 border-t border-gray-100 dark:border-slate-700">
             <Link
               href="/crm/leads"
-              className="text-xs text-blue-600 dark:text-indigo-400 font-semibold hover:underline flex items-center gap-1"
+              className="text-sm md:text-base text-blue-600 dark:text-indigo-400 font-semibold hover:underline flex items-center gap-1"
             >
               View Leads CRM <Play size={10} fill="currentColor" />
             </Link>
@@ -269,7 +269,7 @@ export default async function DashboardPage() {
         {/* Recent Submissions */}
         <div className="rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-4 sm:p-6 shadow-sm flex flex-col justify-between">
           <div>
-            <h2 className="mb-4 text-base font-bold text-gray-900 dark:text-white border-b border-gray-100 dark:border-slate-700 pb-2">
+            <h2 className="mb-4 text-xl lg:text-2xl font-semibold text-gray-900 dark:text-white border-b border-gray-100 dark:border-slate-700 pb-2">
               Recent Inquiries
             </h2>
             <div className="space-y-3">
@@ -287,11 +287,11 @@ export default async function DashboardPage() {
                       <span className="font-semibold text-gray-900 dark:text-slate-200">
                         {item.name}
                       </span>
-                      <span className="text-[10px] text-gray-400 dark:text-slate-400">
+                      <span className="text-base text-gray-400 dark:text-slate-400">
                         {new Date(item.createdAt).toLocaleDateString()}
                       </span>
                     </div>
-                    <p className="text-[11px] text-gray-500 dark:text-slate-400 italic truncate">
+                    <p className="text-base text-gray-500 dark:text-slate-400 italic truncate">
                       &quot;{item.message}&quot;
                     </p>
                   </div>
@@ -302,7 +302,7 @@ export default async function DashboardPage() {
           <div className="mt-4 pt-3 border-t border-gray-100 dark:border-slate-700">
             <Link
               href="/crm/leads"
-              className="text-xs text-blue-600 dark:text-indigo-400 font-semibold hover:underline flex items-center gap-1"
+              className="text-sm md:text-base text-blue-600 dark:text-indigo-400 font-semibold hover:underline flex items-center gap-1"
             >
               View Inbox Submissions <Play size={10} fill="currentColor" />
             </Link>
@@ -312,7 +312,7 @@ export default async function DashboardPage() {
         {/* System & Operations */}
         <div className="rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-4 sm:p-6 shadow-sm flex flex-col justify-between">
           <div>
-            <h2 className="mb-4 text-base font-bold text-gray-900 dark:text-white border-b border-gray-100 dark:border-slate-700 pb-2">
+            <h2 className="mb-4 text-xl lg:text-2xl font-semibold text-gray-900 dark:text-white border-b border-gray-100 dark:border-slate-700 pb-2">
               System Integrations
             </h2>
             <div className="space-y-3 text-xs text-gray-600 dark:text-slate-300">

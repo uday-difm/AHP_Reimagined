@@ -498,3 +498,69 @@
 [2026-07-22T09:15:41.063Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
 [2026-07-22T09:15:41.064Z] [Auth] Authenticating against authService for: admin@example.com
 [2026-07-22T09:15:41.718Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrvk5h4m0000uhc4xpgo0tkd
+[2026-07-22T10:34:29.318Z] [Auth] Attempt started. Email: divya.joshi@difm.tech
+[2026-07-22T10:34:29.319Z] [Auth] Request Host: localhost:3000
+[2026-07-22T10:34:29.319Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
+[2026-07-22T10:34:29.320Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-22T10:34:29.321Z] [Auth] Authenticating against authService for: divya.joshi@difm.tech
+[2026-07-22T10:34:29.418Z] [Auth] Admin authentication failed for: divya.joshi@difm.tech
+[2026-07-22T10:34:37.195Z] [Auth] Attempt started. Email: divya.joshi@difm.tech
+[2026-07-22T10:34:37.195Z] [Auth] Request Host: localhost:3000
+[2026-07-22T10:34:37.196Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
+[2026-07-22T10:34:37.196Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-22T10:34:37.196Z] [Auth] Authenticating against authService for: divya.joshi@difm.tech
+[2026-07-22T10:34:37.245Z] [Auth] Admin authentication failed for: divya.joshi@difm.tech
+[2026-07-22T10:34:39.458Z] [Auth] Attempt started. Email: divya.joshi@difm.tech
+[2026-07-22T10:34:39.458Z] [Auth] Request Host: localhost:3000
+[2026-07-22T10:34:39.459Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
+[2026-07-22T10:34:39.459Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-22T10:34:39.459Z] [Auth] Authenticating against authService for: divya.joshi@difm.tech
+[2026-07-22T10:34:39.508Z] [Auth] Admin authentication failed for: divya.joshi@difm.tech
+[2026-07-22T10:34:46.116Z] [Auth] Attempt started. Email: divya.joshi@difm.tech
+[2026-07-22T10:34:46.117Z] [Auth] Request Host: localhost:3000
+[2026-07-22T10:34:46.117Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
+[2026-07-22T10:34:46.117Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-22T10:34:46.118Z] [Auth] Authenticating against authService for: divya.joshi@difm.tech
+[2026-07-22T10:34:46.166Z] [Auth] Admin authentication failed for: divya.joshi@difm.tech
+[2026-07-22T10:34:53.495Z] [Auth] Attempt started. Email: divya.joshi@difm.tech
+[2026-07-22T10:34:53.495Z] [Auth] Request Host: localhost:3000
+[2026-07-22T10:34:53.496Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
+[2026-07-22T10:34:53.496Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-22T10:34:53.497Z] [Auth] Authenticating against authService for: divya.joshi@difm.tech
+[2026-07-22T10:34:53.547Z] [Auth] Admin authentication failed for: divya.joshi@difm.tech
+[2026-07-22T10:34:57.687Z] [Auth] Attempt started. Email: Divya joshi
+[2026-07-22T10:34:57.687Z] [Auth] Request Host: localhost:3000
+[2026-07-22T10:34:57.688Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
+[2026-07-22T10:34:57.688Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-22T10:34:57.688Z] [Auth] Authenticating against authService for: Divya joshi
+[2026-07-22T10:34:57.739Z] [Auth] Admin authentication failed for: Divya joshi
+[2026-07-22T10:35:00.900Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-22T10:35:00.901Z] [Auth] Request Host: localhost:3000
+[2026-07-22T10:35:00.901Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
+[2026-07-22T10:35:00.902Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-22T10:35:00.902Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-22T10:35:01.588Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrvk5h4m0000uhc4xpgo0tkd
+[2026-07-23T04:27:27.922Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-23T04:27:27.924Z] [Auth] Request Host: localhost:3000
+[2026-07-23T04:27:27.924Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
+[2026-07-23T04:27:27.925Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-23T04:27:27.926Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-23T04:27:28.595Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrvk5h4m0000uhc4xpgo0tkd
+[2026-07-23T06:13:34.959Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-23T06:13:34.961Z] [Auth] Request Host: localhost:3000
+[2026-07-23T06:13:34.961Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
+[2026-07-23T06:13:34.961Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-23T06:13:34.962Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-23T06:13:35.591Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrvk5h4m0000uhc4xpgo0tkd
+[2026-07-23T07:14:29.659Z] [Auth] Attempt started. Email: admin@example.com
+[2026-07-23T07:14:29.661Z] [Auth] Request Host: localhost:3000
+[2026-07-23T07:14:29.662Z] [Auth] Detected local, IP, Ngrok, or Vercel host. Skipping reCAPTCHA entirely.
+[2026-07-23T07:14:29.662Z] [Auth] Skipping reCAPTCHA verification (no secret key configured).
+[2026-07-23T07:14:29.663Z] [Auth] Authenticating against authService for: admin@example.com
+[2026-07-23T07:14:30.331Z] [Auth] Authentication successful for: admin@example.com. User ID: cmrvk5h4m0000uhc4xpgo0tkd
+[2026-07-23T08:55:37.600Z] [Frontend Auth] Attempt started. Email: admin@example.com
+[2026-07-23T08:55:37.764Z] [Frontend Auth] All authentication methods failed for: admin@example.com
+[2026-07-23T08:55:40.907Z] [Frontend Auth] Attempt started. Email: admin@example.com
+[2026-07-23T08:55:40.976Z] [Frontend Auth] All authentication methods failed for: admin@example.com
+[2026-07-23T08:55:43.957Z] [Frontend Auth] Attempt started. Email: divya.joshi@difm.tech
+[2026-07-23T08:55:44.027Z] [Frontend Auth] Frontend user authenticated successfully: divya.joshi@difm.tech

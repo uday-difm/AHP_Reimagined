@@ -29,11 +29,11 @@ export default function ServicesBanner() {
               <Sparkles size={11} className="shrink-0" /> PR & Editorial Placements
             </span>
 
-            <h2 className="font-heading font-extrabold text-3xl md:text-5xl text-white tracking-[-1px] leading-[1.15] mb-4">
+            <h2 className="main-heading text-white mb-4">
               Want to get featured in AHealthPlace?
             </h2>
 
-            <p className="text-white/80 text-base md:text-lg leading-relaxed">
+            <p className="description text-white/80">
               Unlock authority status and reach our highly engaged, health-conscious readers. Align your expertise with a publication vetted by a medical review board.
             </p>
 

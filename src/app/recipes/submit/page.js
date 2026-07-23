@@ -102,7 +102,7 @@ export default function SubmitRecipe() {
     <div className="min-h-screen bg-slate-50  pt-24 pb-12 px-4 sm:px-6 lg:px-8 font-sans">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-10">
-          <h2 className="text-4xl font-extrabold text-slate-900  mb-3">Share Your Recipe</h2>
+          <h2 className="main-heading text-slate-900 mb-3">Share Your Recipe</h2>
           <p className="text-slate-500  text-lg">Inspire others with your delicious and healthy creations.</p>
         </div>
 
@@ -146,24 +146,24 @@ export default function SubmitRecipe() {
             
             {/* STEP 1 */}
             <div className={`transition-all duration-500 ${step === 1 ? "opacity-100 translate-x-0 block" : "opacity-0 translate-x-8 hidden"}`}>
-              <h3 className="text-xl font-bold text-slate-800  mb-6 flex items-center gap-2">
+              <h3 className="section-heading text-slate-800 mb-6 flex items-center gap-2">
                 <span className="bg-emerald-100 text-emerald-600 p-2 rounded-xl"><Info size={20}/></span> 
                 Basic Overview
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="col-span-1 md:col-span-2 group">
-                  <label className="block text-sm font-semibold text-slate-700  mb-2 transition-colors group-focus-within:text-emerald-500">Recipe Title</label>
-                  <input required type="text" value={form.title} onChange={e => setForm({...form, title: e.target.value})} className="w-full bg-slate-50  border border-slate-200  rounded-xl px-4 py-3 text-slate-800  focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all hover:border-slate-300" placeholder="e.g. Avocado Toast with Poached Egg" />
+                  <label className="block text-sm font-medium text-slate-700  mb-2 transition-colors group-focus-within:text-emerald-500">Recipe Title</label>
+                  <input required type="text" value={form.title} onChange={e => setForm({...form, title: e.target.value})} className="w-full bg-slate-50  border border-slate-200  rounded-xl px-4 py-3 text-base placeholder:text-sm text-slate-800  focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all hover:border-slate-300" placeholder="e.g. Avocado Toast with Poached Egg" />
                 </div>
                 <div className="col-span-1 md:col-span-2 group">
-                  <label className="block text-sm font-semibold text-slate-700  mb-2 transition-colors group-focus-within:text-emerald-500">Description</label>
-                  <textarea required value={form.description} onChange={e => setForm({...form, description: e.target.value})} className="w-full bg-slate-50  border border-slate-200  rounded-xl px-4 py-3 text-slate-800  focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all hover:border-slate-300 resize-none" rows={3} placeholder="Tell us a bit about this recipe..."></textarea>
+                  <label className="block text-sm font-medium text-slate-700  mb-2 transition-colors group-focus-within:text-emerald-500">Description</label>
+                  <textarea required value={form.description} onChange={e => setForm({...form, description: e.target.value})} className="w-full bg-slate-50  border border-slate-200  rounded-xl px-4 py-3 text-base placeholder:text-sm text-slate-800  focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all hover:border-slate-300 resize-none" rows={3} placeholder="Tell us a bit about this recipe..."></textarea>
                 </div>
                 
                 <div className="group">
-                  <label className="block text-sm font-semibold text-slate-700  mb-2 transition-colors group-focus-within:text-emerald-500">Recipe Image</label>
+                  <label className="block text-sm font-medium text-slate-700  mb-2 transition-colors group-focus-within:text-emerald-500">Recipe Image</label>
                   <div className="flex gap-2">
-                    <input type="text" value={form.imageUrl} onChange={e => setForm({...form, imageUrl: e.target.value})} className="flex-1 min-w-0 bg-slate-50  border border-slate-200  rounded-xl px-4 py-3 text-slate-800  focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all hover:border-slate-300" placeholder="URL or Upload ->" />
+                    <input type="text" value={form.imageUrl} onChange={e => setForm({...form, imageUrl: e.target.value})} className="flex-1 min-w-0 bg-slate-50  border border-slate-200  rounded-xl px-4 py-3 text-base placeholder:text-sm text-slate-800  focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all hover:border-slate-300" placeholder="URL or Upload ->" />
                     <label className="bg-white shrink-0 border-2 border-slate-200  hover:border-emerald-500 hover:text-emerald-600 text-slate-600  px-4 sm:px-5 py-3 rounded-xl font-bold text-sm flex items-center justify-center transition-all shadow-sm cursor-pointer whitespace-nowrap">
                       {uploadingImage ? <Loader2 size={18} className="mr-1 sm:mr-2 animate-spin shrink-0" /> : <Upload size={18} className="mr-1 sm:mr-2 shrink-0" />} 
                       <span className="hidden sm:inline">{uploadingImage ? "Uploading..." : "Upload"}</span>
@@ -173,59 +173,59 @@ export default function SubmitRecipe() {
                 </div>
 
                 <div className="group">
-                  <label className="block text-sm font-semibold text-slate-700  mb-2 transition-colors group-focus-within:text-emerald-500">Category</label>
-                  <input type="text" value={form.category} onChange={e => setForm({...form, category: e.target.value})} className="w-full bg-slate-50  border border-slate-200  rounded-xl px-4 py-3 text-slate-800  focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all hover:border-slate-300" placeholder="e.g. Breakfast, Dinner, Vegan" />
+                  <label className="block text-sm font-medium text-slate-700  mb-2 transition-colors group-focus-within:text-emerald-500">Category</label>
+                  <input type="text" value={form.category} onChange={e => setForm({...form, category: e.target.value})} className="w-full bg-slate-50  border border-slate-200  rounded-xl px-4 py-3 text-base placeholder:text-sm text-slate-800  focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all hover:border-slate-300" placeholder="e.g. Breakfast, Dinner, Vegan" />
                 </div>
               </div>
             </div>
 
             {/* STEP 2 */}
             <div className={`transition-all duration-500 ${step === 2 ? "opacity-100 translate-x-0 block" : "opacity-0 translate-x-8 hidden"}`}>
-              <h3 className="text-xl font-bold text-slate-800  mb-6 flex items-center gap-2">
+              <h3 className="section-heading text-slate-800 mb-6 flex items-center gap-2">
                 <span className="bg-amber-100 text-amber-600 p-2 rounded-xl"><Utensils size={20}/></span> 
                 Details & Nutrition
               </h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-6">
                 <div className="group">
-                  <label className="block text-sm font-semibold text-slate-700  mb-2 transition-colors group-focus-within:text-emerald-500">Time (mins)</label>
-                  <input type="number" value={form.cookingTime} onChange={e => setForm({...form, cookingTime: e.target.value})} className="w-full bg-slate-50  border border-slate-200  rounded-xl px-4 py-3 text-slate-800  focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all hover:border-slate-300" />
+                  <label className="block text-sm font-medium text-slate-700  mb-2 transition-colors group-focus-within:text-emerald-500">Time (mins)</label>
+                  <input type="number" value={form.cookingTime} onChange={e => setForm({...form, cookingTime: e.target.value})} className="w-full bg-slate-50  border border-slate-200  rounded-xl px-4 py-3 text-base placeholder:text-sm text-slate-800  focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all hover:border-slate-300" />
                 </div>
                 <div className="group">
-                  <label className="block text-sm font-semibold text-slate-700  mb-2 transition-colors group-focus-within:text-emerald-500">Difficulty</label>
-                  <select value={form.difficulty} onChange={e => setForm({...form, difficulty: e.target.value})} className="w-full bg-slate-50  border border-slate-200  rounded-xl px-4 py-3 text-slate-800  focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all hover:border-slate-300">
+                  <label className="block text-sm font-medium text-slate-700  mb-2 transition-colors group-focus-within:text-emerald-500">Difficulty</label>
+                  <select value={form.difficulty} onChange={e => setForm({...form, difficulty: e.target.value})} className="w-full bg-slate-50  border border-slate-200  rounded-xl px-4 py-3 text-base text-slate-800  focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all hover:border-slate-300">
                     <option>Beginner</option><option>Intermediate</option><option>Advanced</option>
                   </select>
                 </div>
                 <div className="group">
-                  <label className="block text-sm font-semibold text-slate-700  mb-2 transition-colors group-focus-within:text-emerald-500">Calories</label>
-                  <input type="number" value={form.calories} onChange={e => setForm({...form, calories: e.target.value})} className="w-full bg-slate-50  border border-slate-200  rounded-xl px-4 py-3 text-slate-800  focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all hover:border-slate-300" />
+                  <label className="block text-sm font-medium text-slate-700  mb-2 transition-colors group-focus-within:text-emerald-500">Calories</label>
+                  <input type="number" value={form.calories} onChange={e => setForm({...form, calories: e.target.value})} className="w-full bg-slate-50  border border-slate-200  rounded-xl px-4 py-3 text-base placeholder:text-sm text-slate-800  focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all hover:border-slate-300" />
                 </div>
                 <div className="group">
-                  <label className="block text-sm font-semibold text-slate-700  mb-2 transition-colors group-focus-within:text-emerald-500">Protein (g)</label>
-                  <input type="number" value={form.protein} onChange={e => setForm({...form, protein: e.target.value})} className="w-full bg-slate-50  border border-slate-200  rounded-xl px-4 py-3 text-slate-800  focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all hover:border-slate-300" />
+                  <label className="block text-sm font-medium text-slate-700  mb-2 transition-colors group-focus-within:text-emerald-500">Protein (g)</label>
+                  <input type="number" value={form.protein} onChange={e => setForm({...form, protein: e.target.value})} className="w-full bg-slate-50  border border-slate-200  rounded-xl px-4 py-3 text-base placeholder:text-sm text-slate-800  focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all hover:border-slate-300" />
                 </div>
                 <div className="group">
-                  <label className="block text-sm font-semibold text-slate-700  mb-2 transition-colors group-focus-within:text-emerald-500">Carbs (g)</label>
-                  <input type="number" value={form.carbs} onChange={e => setForm({...form, carbs: e.target.value})} className="w-full bg-slate-50  border border-slate-200  rounded-xl px-4 py-3 text-slate-800  focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all hover:border-slate-300" />
+                  <label className="block text-sm font-medium text-slate-700  mb-2 transition-colors group-focus-within:text-emerald-500">Carbs (g)</label>
+                  <input type="number" value={form.carbs} onChange={e => setForm({...form, carbs: e.target.value})} className="w-full bg-slate-50  border border-slate-200  rounded-xl px-4 py-3 text-base placeholder:text-sm text-slate-800  focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all hover:border-slate-300" />
                 </div>
                 <div className="group">
-                  <label className="block text-sm font-semibold text-slate-700  mb-2 transition-colors group-focus-within:text-emerald-500">Fat (g)</label>
-                  <input type="number" value={form.fat} onChange={e => setForm({...form, fat: e.target.value})} className="w-full bg-slate-50  border border-slate-200  rounded-xl px-4 py-3 text-slate-800  focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all hover:border-slate-300" />
+                  <label className="block text-sm font-medium text-slate-700  mb-2 transition-colors group-focus-within:text-emerald-500">Fat (g)</label>
+                  <input type="number" value={form.fat} onChange={e => setForm({...form, fat: e.target.value})} className="w-full bg-slate-50  border border-slate-200  rounded-xl px-4 py-3 text-base placeholder:text-sm text-slate-800  focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all hover:border-slate-300" />
                 </div>
                 <div className="group">
-                  <label className="block text-sm font-semibold text-slate-700  mb-2 transition-colors group-focus-within:text-emerald-500">Fiber (g)</label>
-                  <input type="number" value={form.fiber} onChange={e => setForm({...form, fiber: e.target.value})} className="w-full bg-slate-50  border border-slate-200  rounded-xl px-4 py-3 text-slate-800  focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all hover:border-slate-300" />
+                  <label className="block text-sm font-medium text-slate-700  mb-2 transition-colors group-focus-within:text-emerald-500">Fiber (g)</label>
+                  <input type="number" value={form.fiber} onChange={e => setForm({...form, fiber: e.target.value})} className="w-full bg-slate-50  border border-slate-200  rounded-xl px-4 py-3 text-base placeholder:text-sm text-slate-800  focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all hover:border-slate-300" />
                 </div>
                 <div className="group">
-                  <label className="block text-sm font-semibold text-slate-700  mb-2 transition-colors group-focus-within:text-emerald-500">Sugar (g)</label>
-                  <input type="number" value={form.sugar} onChange={e => setForm({...form, sugar: e.target.value})} className="w-full bg-slate-50  border border-slate-200  rounded-xl px-4 py-3 text-slate-800  focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all hover:border-slate-300" />
+                  <label className="block text-sm font-medium text-slate-700  mb-2 transition-colors group-focus-within:text-emerald-500">Sugar (g)</label>
+                  <input type="number" value={form.sugar} onChange={e => setForm({...form, sugar: e.target.value})} className="w-full bg-slate-50  border border-slate-200  rounded-xl px-4 py-3 text-base placeholder:text-sm text-slate-800  focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all hover:border-slate-300" />
                 </div>
               </div>
             </div>
 
             {/* STEP 3 */}
             <div className={`transition-all duration-500 ${step === 3 ? "opacity-100 translate-x-0 block" : "opacity-0 translate-x-8 hidden"}`}>
-               <h3 className="text-xl font-bold text-slate-800  mb-6 flex items-center gap-2">
+               <h3 className="section-heading text-slate-800 mb-6 flex items-center gap-2">
                 <span className="bg-indigo-100 text-indigo-600 p-2 rounded-xl"><LayoutList size={20}/></span> 
                 Ingredients & Steps
               </h3>
@@ -233,13 +233,13 @@ export default function SubmitRecipe() {
                  {/* Ingredients */}
                  <div>
                     <div className="flex justify-between items-center mb-4">
-                      <label className="block text-sm font-semibold text-slate-700 ">Ingredients</label>
+                      <label className="block text-sm font-medium text-slate-700 ">Ingredients</label>
                       <button type="button" onClick={() => addField("ingredients")} className="text-xs text-emerald-600 bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-lg font-bold transition-colors">+ Add Item</button>
                     </div>
                     <div className="space-y-3">
                       {form.ingredients.map((ing, i) => (
                         <div key={i} className="flex gap-2 animate-in slide-in-from-left-4 fade-in">
-                          <input type="text" value={ing} onChange={e => handleArrayChange("ingredients", i, e.target.value)} placeholder="e.g. 1 cup quinoa" className="w-full bg-slate-50  border border-slate-200  rounded-xl px-4 py-2.5 text-slate-800  focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all" />
+                          <input type="text" value={ing} onChange={e => handleArrayChange("ingredients", i, e.target.value)} placeholder="e.g. 1 cup quinoa" className="w-full bg-slate-50  border border-slate-200  rounded-xl px-4 py-2.5 text-base placeholder:text-sm text-slate-800  focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all" />
                           <button type="button" onClick={() => removeField("ingredients", i)} className="p-2.5 text-slate-400 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all"><Trash2 size={18} /></button>
                         </div>
                       ))}
@@ -249,14 +249,14 @@ export default function SubmitRecipe() {
                  {/* Steps */}
                  <div>
                     <div className="flex justify-between items-center mb-4">
-                      <label className="block text-sm font-semibold text-slate-700 ">Instructions</label>
+                      <label className="block text-sm font-medium text-slate-700 ">Instructions</label>
                       <button type="button" onClick={() => addField("steps")} className="text-xs text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg font-bold transition-colors">+ Add Step</button>
                     </div>
                     <div className="space-y-3">
                       {form.steps.map((step, i) => (
                         <div key={i} className="flex gap-2 animate-in slide-in-from-left-4 fade-in">
                           <div className="w-8 h-10 flex items-center justify-center font-bold text-slate-400 shrink-0">{i + 1}.</div>
-                          <input type="text" value={step} onChange={e => handleArrayChange("steps", i, e.target.value)} placeholder="e.g. Boil water" className="w-full bg-slate-50  border border-slate-200  rounded-xl px-4 py-2.5 text-slate-800  focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all" />
+                          <input type="text" value={step} onChange={e => handleArrayChange("steps", i, e.target.value)} placeholder="e.g. Boil water" className="w-full bg-slate-50  border border-slate-200  rounded-xl px-4 py-2.5 text-base placeholder:text-sm text-slate-800  focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all" />
                           <button type="button" onClick={() => removeField("steps", i)} className="p-2.5 text-slate-400 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all"><Trash2 size={18} /></button>
                         </div>
                       ))}
@@ -280,7 +280,7 @@ export default function SubmitRecipe() {
                   Next Step <ChevronRight size={16} />
                 </button>
               ) : (
-                <button type="submit" disabled={loading} className="bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-3 rounded-xl font-bold text-sm flex items-center gap-2 transition-all shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:shadow-emerald-500/40 hover:-translate-y-0.5 disabled:opacity-70 disabled:hover:translate-y-0">
+                <button type="submit" disabled={loading} className="bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-3 rounded-xl font-bold text-sm md:text-base flex items-center gap-2 transition-all shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:shadow-emerald-500/40 hover:-translate-y-0.5 disabled:opacity-70 disabled:hover:translate-y-0">
                   {loading ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
                   Submit Recipe
                 </button>

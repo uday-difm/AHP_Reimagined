@@ -16,10 +16,10 @@ export default function CommunityEvents() {
             
             <div className="mb-8">
               <span className="text-[11px] font-extrabold tracking-[2px] text-[#0f7c85] uppercase mb-4 block">COMMUNITY CONNECTION</span>
-              <h2 className="font-heading font-extrabold text-4xl md:text-[42px] text-slate-800 tracking-tight leading-[1.1] mb-5">
+              <h2 className="main-heading text-slate-800 mb-5">
                 Our Community <br className="hidden md:block"/>& Events
               </h2>
-              <p className="text-slate-600 text-sm md:text-[15px] leading-relaxed max-w-sm">
+              <p className="description text-slate-600 max-w-sm">
                 We host regular group nature walks, online yoga sessions, and stress management seminars created by wellness experts to keep you connected and inspired.
               </p>
             </div>
@@ -109,8 +109,8 @@ export default function CommunityEvents() {
               
               <div className="p-8 pt-4">
                 <span className="text-[11px] font-bold tracking-wider text-[#0f7c85] uppercase mb-2 block">MINDFULNESS WALK</span>
-                <h3 className="font-heading font-extrabold text-[22px] text-slate-800 leading-tight mb-3">Restorative Walk: Managing Stress in Nature</h3>
-                <p className="text-[13px] font-medium text-slate-500 leading-relaxed mb-5">
+                <h3 className="card-title text-slate-800 mb-3">Restorative Walk: Managing Stress in Nature</h3>
+                <p className="description text-slate-500 mb-5">
                   Join us for a refreshing morning walk in nature to reduce stress, clear your mind and boost your overall well-being.
                 </p>
 

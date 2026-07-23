@@ -4,8 +4,8 @@
 @variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-heading: 'Outfit', sans-serif;
-  --font-body: 'Inter', sans-serif;
+  --font-heading: 'Poppins', sans-serif;
+  --font-body: 'Poppins', sans-serif;
   --font-serif: 'Playfair Display', serif;
 
   --color-primary: #1a1a2e;
@@ -109,9 +109,58 @@
     font-family: var(--font-body);
     background-color: var(--color-bg-light);
     color: var(--color-secondary);
-    line-height: 1.6;
+    line-height: 1.625; /* leading-relaxed */
+    letter-spacing: 0em; /* tracking-normal */
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
+  }
+
+  h1, .hero-title {
+    @apply text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight;
+  }
+
+  h2, .main-heading {
+    @apply text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-tight;
+  }
+
+  h3, .section-heading {
+    @apply text-2xl md:text-3xl lg:text-4xl font-semibold tracking-tight leading-tight;
+  }
+
+  h4, .card-title {
+    @apply text-xl lg:text-2xl font-semibold tracking-tight leading-tight;
+  }
+
+  body, p, .body-text {
+    @apply text-base;
+  }
+
+  .description, .paragraph {
+    @apply text-base md:text-lg leading-relaxed;
+  }
+  
+  button, .btn {
+    @apply text-sm md:text-base;
+  }
+
+  label, .footer-text {
+    @apply text-sm;
+  }
+
+  small, .small-notes {
+    @apply text-xs lg:text-sm;
+  }
+
+  p, .description, .paragraph {
+    line-height: 1.625; /* leading-relaxed */
+  }
+
+  .blog-content, article, .blog-post {
+    line-height: 2rem; /* leading-8 */
+  }
+
+  .recipe-step, .recipe-instructions {
+    line-height: 1.75rem; /* leading-7 */
   }
 
   .blob {

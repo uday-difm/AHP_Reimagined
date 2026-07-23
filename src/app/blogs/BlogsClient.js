@@ -141,10 +141,10 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
       <section className="bg-[#f0f6f3]/60 pt-[140px] pb-8 rounded-b-[40px] border-b border-slate-200/20 text-center relative overflow-hidden">
         <div className="container">
           <span className="text-accent text-[11px] font-bold uppercase tracking-[2px] mb-3 block reveal-slide">WELLNESS LIBRARY</span>
-          <h1 className="text-primary font-heading font-extrabold text-4xl md:text-5xl tracking-[-1.5px] leading-tight mb-4 reveal-slide">
+          <h1 className="main-heading text-primary tracking-[-1.5px] mb-4 reveal-slide">
             Explore Wellness Guides
           </h1>
-          <p className="text-secondary text-[15px] max-w-xl mx-auto mb-8 reveal-slide">
+          <p className="description text-secondary max-w-xl mx-auto mb-8 reveal-slide">
             Read our medically vetted blogs and health guides created to keep you informed about physical and emotional wellness.
           </p>
 
@@ -155,7 +155,7 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
               <button
                 key={cat}
                 onClick={() => handleCategoryFilter(cat)}
-                className={`px-5 py-3.5 rounded-xl font-bold text-[13px] transition-all cursor-pointer whitespace-nowrap ${categoryFilter === cat
+                className={`px-5 py-3.5 rounded-xl font-bold text-sm transition-all cursor-pointer whitespace-nowrap ${categoryFilter === cat
                   ? 'bg-[#0f7c85] text-white shadow-sm font-extrabold'
                   : 'bg-white text-secondary hover:bg-slate-100 border border-slate-200/60'
                   }`}
@@ -175,7 +175,7 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
                       handleCategoryFilter(selectedVal);
                     }
                   }}
-                  className={`appearance-none bg-white text-secondary font-bold text-[13px] px-5 py-3.5 pr-10 rounded-xl border focus:outline-none focus:ring-2 focus:ring-accent/50 cursor-pointer shadow-sm hover:bg-slate-100/50 transition-all ${!primaryCategories.includes(categoryFilter)
+                  className={`appearance-none bg-white text-secondary font-bold text-sm px-5 py-3.5 pr-10 rounded-xl border focus:outline-none focus:ring-2 focus:ring-accent/50 cursor-pointer shadow-sm hover:bg-slate-100/50 transition-all ${!primaryCategories.includes(categoryFilter)
                     ? 'border-[#0f7c85] bg-[#0f7c85]/5 text-[#0f7c85] font-extrabold'
                     : 'border-slate-200/60'
                     }`}
@@ -204,11 +204,11 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
         <div className="space-y-10 reveal-fade">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-slate-200">
             <div className="flex flex-col gap-1 text-center md:text-left">
-              <h2 className="text-primary font-heading font-extrabold text-2xl tracking-[-0.5px]">
+              <h2 className="section-heading text-primary tracking-[-0.5px]">
                 {categoryFilter === 'All' ? 'Most Recent Blogs' : categoryFilter}
               </h2>
               {categoryFilter === 'All' && (
-                <p className="text-secondary font-bold text-[13.5px]">
+                <p className="text-sm font-bold text-secondary">
                   Uncover the most popular reads across various life categories
                 </p>
               )}
@@ -258,16 +258,16 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
                           </svg>
                         </div>
-                        <h3 className="font-heading font-extrabold text-xl text-primary mb-3">
+                        <h3 className="card-title text-primary mb-3">
                           Advertise With Us
                         </h3>
-                        <p className="text-secondary font-medium text-[13.5px] leading-relaxed max-w-xs mb-6">
+                        <p className="text-sm font-medium text-secondary max-w-xs mb-6">
                           Showcase your brand to our engaged audience of nature enthusiasts and environmental advocates
                         </p>
                       </div>
                       <Link
                         href="/info?tab=contact"
-                        className="w-max mx-auto bg-[#0f7c85] hover:bg-[#0c646b] text-white font-extrabold text-[12px] py-3.5 px-8 rounded-full transition-all duration-300 no-underline shadow-sm hover:shadow-[0_6px_20px_rgba(15,124,133,0.3)] hover:-translate-y-0.5 transform inline-flex items-center gap-1.5"
+                        className="w-max mx-auto bg-[#0f7c85] hover:bg-[#0c646b] text-white font-extrabold text-sm py-3.5 px-8 rounded-full transition-all duration-300 no-underline shadow-sm hover:shadow-[0_6px_20px_rgba(15,124,133,0.3)] hover:-translate-y-0.5 transform inline-flex items-center gap-1.5"
                       >
                         Get Started →
                       </Link>
@@ -290,16 +290,16 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                         unoptimized={true}
                       />
-                      <span className="absolute top-4 left-4 z-10 bg-[#e8f4ff] text-[#0f7c85] px-3 py-1.5 rounded-full text-[9.5px] font-bold uppercase tracking-[0.5px]">
+                      <span className="absolute top-4 left-4 z-10 bg-[#e8f4ff] text-[#0f7c85] px-3 py-1.5 rounded-full text-sm font-bold uppercase tracking-[0.5px]">
                         {art.category}
                       </span>
                       <SaveArticleButton postId={art.id} />
                     </div>
                     <div className="p-6 flex flex-col gap-2 flex-grow">
-                      <h3 className="font-heading font-bold text-base text-primary leading-snug group-hover:text-accent transition-colors">
+                      <h3 className="card-title text-primary group-hover:text-accent transition-colors">
                         {art.title}
                       </h3>
-                      <p className="text-[12.5px] text-secondary leading-relaxed">
+                      <p className="description text-secondary">
                         {art.desc}
                       </p>
                       {art.tags && art.tags.length > 0 && (
@@ -313,7 +313,7 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
                                 e.stopPropagation();
                                 handleTagFilter(t.slug || t.name);
                               }}
-                              className="text-[9.5px] font-bold bg-[#e8f4ff] hover:bg-[#d4eaff] text-[#0f7c85] px-2 py-0.5 rounded-md uppercase tracking-[0.3px] transition cursor-pointer border-0"
+                              className="text-sm font-bold bg-[#e8f4ff] hover:bg-[#d4eaff] text-[#0f7c85] px-2 py-0.5 rounded-md uppercase tracking-[0.3px] transition cursor-pointer border-0"
                             >
                               #{t.name}
                             </button>
@@ -385,10 +385,10 @@ export default function BlogsClient({ initialCategories = [], initialPosts = [] 
               <span className="inline-block bg-[#0f7c85]/10 text-[#0f7c85] font-extrabold text-[10px] uppercase tracking-[2px] px-3.5 py-1.5 rounded-full mb-3">
                 PARTNERSHIPS
               </span>
-              <h2 className="text-primary font-heading font-extrabold text-2xl md:text-3xl tracking-[-0.5px] mb-3">
+              <h2 className="section-heading text-primary mb-3">
                 Advertise With Us
               </h2>
-              <p className="text-secondary text-[14px] leading-relaxed max-w-lg">
+              <p className="description text-secondary max-w-lg">
                 Promote your brand to our health-conscious audience of wellness readers. Custom editorial integration, newsletter sponsorships, and media kits available.
               </p>
             </div>

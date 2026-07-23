@@ -88,11 +88,11 @@ export default function ContactFormSection({ siteId = "", content = {}, recaptch
     <section className="py-16 bg-white text-slate-800 border-t border-b animate-fade-in">
       <div className="w-full px-6">
         <div className="text-center mb-10">
-          <h2 className="font-heading font-extrabold text-3xl md:text-5xl text-primary tracking-[-1px] leading-[1.15] mb-4">
+          <h2 className="main-heading text-primary mb-4">
             {content?.title || "Get In Touch"}
           </h2>
           {content?.description && (
-            <p className="text-secondary text-base md:text-lg leading-relaxed max-w-xl mx-auto">
+            <p className="description text-secondary max-w-xl mx-auto">
               {content.description}
             </p>
           )}

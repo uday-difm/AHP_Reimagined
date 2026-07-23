@@ -164,8 +164,8 @@ export default function RecipesDashboard() {
       </div>
 
       <div className="space-y-6">
-        <div className="flex flex-col sm:flex-row gap-4 items-center justify-between bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700">
-          <div className="flex items-center gap-2">
+        <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700">
+          <div className="flex flex-wrap items-center gap-2">
             {["PENDING", "APPROVED", "REJECTED", "ALL", "HEALTHY BITE"].map(status => (
               <button
                 key={status}

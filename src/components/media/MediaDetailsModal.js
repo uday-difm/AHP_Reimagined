@@ -169,7 +169,7 @@ export default function MediaDetailsModal({ mediaId, onClose, onUpdate, onDelete
                 <div className="bg-white border rounded-xl p-4 flex flex-col items-center justify-center shadow-sm min-h-[220px]">
                   {item.mimeType?.startsWith("image/") ? (
                     <img
-                      src={`/api/media/proxy?url=${encodeURIComponent(item.url)}`}
+                      src={item.url.startsWith("/") ? item.url : `/api/media/proxy?url=${encodeURIComponent(item.url)}`}
                       alt={item.altText || item.fileName}
                       className="max-h-[240px] max-w-full rounded-lg object-contain border bg-slate-50 shadow-sm"
                     />

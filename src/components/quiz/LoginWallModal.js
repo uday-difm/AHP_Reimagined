@@ -56,14 +56,14 @@ export default function LoginWallModal({ quizTitle, onAfterLogin }) {
           </div>
 
           {/* Heading */}
-          <h2 className="font-heading font-extrabold text-2xl text-primary leading-tight tracking-tight mb-2">
+          <h2 className="section-heading text-primary mb-2">
             You're halfway there!
           </h2>
 
-          <p className="text-secondary text-sm leading-relaxed mb-1 max-w-[300px]">
+          <p className="description text-secondary mb-1 max-w-[300px]">
             Sign in to unlock the rest of the
           </p>
-          <p className="font-heading font-bold text-base mb-5" style={{ color: '#0f7c85' }}>
+          <p className="card-title mb-5" style={{ color: '#0f7c85' }}>
             "{quizTitle}"
           </p>
 
@@ -93,7 +93,7 @@ export default function LoginWallModal({ quizTitle, onAfterLogin }) {
           <button
             id="quiz-wall-signin-btn"
             onClick={handleSignIn}
-            className="w-full py-3.5 rounded-full font-heading font-bold text-[14.5px] text-white mb-3 shadow-lg transition-all duration-300 hover:opacity-90 hover:shadow-xl hover:-translate-y-0.5"
+            className="w-full py-3.5 rounded-full text-sm md:text-base font-bold text-white mb-3 shadow-lg transition-all duration-300 hover:opacity-90 hover:shadow-xl hover:-translate-y-0.5"
             style={{ background: 'linear-gradient(135deg, #0f7c85, #0c646b)' }}
           >
             Sign In to Continue
@@ -102,7 +102,7 @@ export default function LoginWallModal({ quizTitle, onAfterLogin }) {
           <a
             id="quiz-wall-register-btn"
             href={`/login?tab=register&callbackUrl=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '/quizzes')}`}
-            className="w-full py-3.5 rounded-full font-heading font-bold text-[14.5px] text-center no-underline transition-all duration-300 hover:bg-slate-100 border border-slate-200 block"
+            className="w-full py-3.5 rounded-full text-sm md:text-base font-bold text-center no-underline transition-all duration-300 hover:bg-slate-100 border border-slate-200 block"
             style={{ color: '#0f7c85' }}
           >
             Create Free Account

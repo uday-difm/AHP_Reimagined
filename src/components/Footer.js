@@ -200,7 +200,7 @@ export default function Footer({ className = "" }) {
           <div className="footer-links-group grid grid-cols-1 sm:grid-cols-3 gap-12 lg:gap-8 pt-4">
             {remainingColumns.map((col, idx) => (
               <div key={idx} className="footer-col">
-                <h4 className="footer-title font-heading text-[12px] font-extrabold uppercase tracking-[2.5px] text-teal-300 mb-6">
+                <h4 className="footer-title font-heading text-lg font-semibold text-teal-300 mb-6">
                   {col.title || "Block"}
                 </h4>
 
@@ -216,7 +216,7 @@ export default function Footer({ className = "" }) {
                       </div>
                     )}
                     {col.description && (
-                      <p className="text-[14px] text-white/60 leading-relaxed font-body">
+                      <p className="text-sm text-white/60 leading-relaxed font-body">
                         {col.description}
                       </p>
                     )}
@@ -232,7 +232,7 @@ export default function Footer({ className = "" }) {
                       <li key={linkIdx}>
                         <Link
                           href={linkItem.url || "#"}
-                          className="footer-link text-[14px] text-white/85 no-underline transition-all duration-300 hover:text-teal-300 hover:pl-2 flex items-center group font-body"
+                          className="footer-link text-sm text-white/85 no-underline transition-all duration-300 hover:text-teal-300 hover:pl-2 flex items-center group font-body"
                         >
                           <span className="w-1.5 h-1.5 rounded-full bg-teal-300 mr-2 opacity-0 group-hover:opacity-100 transition-all duration-300"></span>
                           {linkItem.label}
@@ -247,7 +247,7 @@ export default function Footer({ className = "" }) {
                     {col.phone && (
                       <a
                         href={`tel:${col.phone}`}
-                        className="footer-link text-[14px] text-white/85 no-underline transition-all duration-300 hover:text-teal-300 flex items-center group font-body"
+                        className="footer-link text-sm text-white/85 no-underline transition-all duration-300 hover:text-teal-300 flex items-center group font-body"
                       >
                         <span className="mr-2">📞</span>
                         {col.phone}
@@ -256,14 +256,14 @@ export default function Footer({ className = "" }) {
                     {col.email && (
                       <a
                         href={`mailto:${col.email}`}
-                        className="footer-link text-[14px] text-white/85 no-underline transition-all duration-300 hover:text-teal-300 flex items-center group font-body"
+                        className="footer-link text-sm text-white/85 no-underline transition-all duration-300 hover:text-teal-300 flex items-center group font-body"
                       >
                         <span className="mr-2">✉️</span>
                         {col.email}
                       </a>
                     )}
                     {col.address && (
-                      <div className="text-[14px] text-white/70 flex items-start font-body">
+                      <div className="text-sm text-white/70 flex items-start font-body">
                         <span className="mr-2">📍</span>
                         <span>{col.address}</span>
                       </div>
@@ -281,16 +281,16 @@ export default function Footer({ className = "" }) {
                         type="email"
                         required
                         placeholder={col.newsletterPlaceholder || "your@email.com"}
-                        className="bg-transparent border-none text-[13.5px] w-full px-3 text-white placeholder-white/40 outline-none"
+                        className="bg-transparent border-none text-sm w-full px-3 text-white placeholder-white/40 outline-none"
                       />
                       <button
                         type="submit"
-                        className="bg-teal-600 hover:bg-teal-500 text-white rounded-lg text-[13px] px-4.5 py-2 font-bold transition whitespace-nowrap"
+                        className="bg-teal-600 hover:bg-teal-500 text-white rounded-lg text-sm px-4.5 py-2 font-bold transition whitespace-nowrap"
                       >
                         {col.newsletterButtonText || "Join"}
                       </button>
                     </form>
-                    <p className="text-[12px] text-white/50 leading-relaxed">
+                    <p className="text-sm text-white/50 leading-relaxed">
                       Subscribe to receive regular updates.
                     </p>
                   </div>
@@ -302,7 +302,7 @@ export default function Footer({ className = "" }) {
 
         {/* Footer Bottom */}
         <div className="footer-bottom flex flex-col sm:flex-row justify-between items-center pt-10 mt-6 gap-6 text-center sm:text-left border-t border-white/5">
-          <p className="copyright text-[12px] text-white/40 leading-relaxed font-body">
+          <p className="copyright text-sm text-white/40 leading-relaxed font-body">
             {footerConfig?.copyright || "© 2026 A Health Place. All rights reserved. Professional medical advice should be sought for any health concerns."}
           </p>
           <div className="footer-bottom-links flex gap-6 flex-wrap justify-center sm:justify-end">
@@ -311,17 +311,17 @@ export default function Footer({ className = "" }) {
                 <Link
                   key={idx}
                   href={item.url || '#'}
-                  className="footer-bottom-link text-[12.5px] text-white/40 no-underline hover:text-teal-300 transition-colors duration-300 font-body"
+                  className="footer-bottom-link text-sm text-white/40 no-underline hover:text-teal-300 transition-colors duration-300 font-body"
                 >
                   {item.label}
                 </Link>
               ))
             ) : (
               <>
-                <Link href="/info?tab=legal&doc=privacy" className="footer-bottom-link text-[12.5px] text-white/40 no-underline hover:text-teal-300 transition-colors duration-300 font-body">
+                <Link href="/info?tab=legal&doc=privacy" className="footer-bottom-link text-sm text-white/40 no-underline hover:text-teal-300 transition-colors duration-300 font-body">
                   Privacy Policy
                 </Link>
-                <Link href="/info?tab=legal&doc=terms" className="footer-bottom-link text-[12.5px] text-white/40 no-underline hover:text-teal-300 transition-colors duration-300 font-body">
+                <Link href="/info?tab=legal&doc=terms" className="footer-bottom-link text-sm text-white/40 no-underline hover:text-teal-300 transition-colors duration-300 font-body">
                   Terms & Conditions
                 </Link>
               </>
